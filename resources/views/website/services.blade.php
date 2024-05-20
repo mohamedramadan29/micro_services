@@ -1,0 +1,525 @@
+@extends('website.layouts.master')
+@section('title')
+    الخدمات
+@endsection
+@section('content')
+    <!-- ============================ Page Title Start================================== -->
+    <div class="page-title" style="height: 350px;text-align: right">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+
+                    <h2 class="ipt-title"> الخدمات </h2>
+                    <span class="ipn-subtitle"> مشاهدة جميع الخدمات  </span>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================ Page Title End ================================== -->
+
+    <!-- ============================ Main Section Start ================================== -->
+    <section class="gray-bg text-right" dir="rtl">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-4 col-md-12 col-sm-12">
+                    <div class="simple-sidebar sm-sidebar">
+
+                        <div class="search-sidebar_header">
+                            <h4 class="ssh_heading"> البحث </h4>
+
+                        </div>
+
+                        <!-- Find New Property -->
+                        <div class="sidebar-widgets collapse miz_show" id="search_open" data-parent="#search_open">
+
+                            <div class="search-inner p-0">
+
+                                <div class="filter-search-box pb-0">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder=" ابحث عن الخدمة ... ">
+                                    </div>
+                                </div>
+
+                                <div class="filter_wraps">
+
+                                    <!-- Job categories Search -->
+                                    <div class="single_search_boxed">
+                                        <div class="widget-boxed-header">
+                                            <h4>
+                                                <a href="#categories" data-toggle="collapse" aria-expanded="true"
+                                                   role="button"> حدد القسم </a>
+                                            </h4>
+                                        </div>
+                                        <div class="widget-boxed-body collapse show" id="categories"
+                                             data-parent="#categories">
+                                            <div class="side-list no-border">
+                                                <!-- Single Filter Card -->
+                                                <div class="single_filter_card">
+                                                    <div class="card-body pt-0">
+                                                        <div class="inner_widget_link">
+                                                            <ul class="no-ul-list filter-list">
+                                                                <li>
+                                                                    <input id="a1" class="checkbox-custom" name="ADA"
+                                                                           type="checkbox" checked="">
+                                                                    <label for="a1" class="checkbox-custom-label">
+                                                                        تصاميم سوشيال ميديا (62)</label>
+                                                                    <ul class="no-ul-list filter-list">
+                                                                        <li>
+                                                                            <input id="aa1" class="checkbox-custom"
+                                                                                   name="ADA" type="checkbox">
+                                                                            <label for="aa1"
+                                                                                   class="checkbox-custom-label">
+                                                                                منشورات سوشيال ميديا (31)</label>
+                                                                        </li>
+                                                                        <li>
+                                                                            <input id="aa2" class="checkbox-custom"
+                                                                                   name="Parking" type="checkbox">
+                                                                            <label for="aa2"
+                                                                                   class="checkbox-custom-label">إعلانات
+                                                                                سوشيال ميديا (20)</label>
+                                                                        </li>
+                                                                        <li>
+                                                                            <input id="aa3" class="checkbox-custom"
+                                                                                   name="Coffee" type="checkbox">
+                                                                            <label for="aa3"
+                                                                                   class="checkbox-custom-label"> صور
+                                                                                مصغّرة (43)</label>
+                                                                        </li>
+                                                                    </ul>
+                                                                </li>
+                                                                <li>
+                                                                    <input id="a2" class="checkbox-custom"
+                                                                           name="Parking" type="checkbox">
+                                                                    <label for="a2" class="checkbox-custom-label"> غلاف
+                                                                        سوشيال ميديا (16)</label>
+                                                                </li>
+                                                                <li>
+                                                                    <input id="a3" class="checkbox-custom" name="Coffee"
+                                                                           type="checkbox">
+                                                                    <label for="a3" class="checkbox-custom-label">تصميم
+                                                                        مواقع وتطبيقات (22)</label>
+                                                                </li>
+
+
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Job Locations Search -->
+                                    <div class="single_search_boxed">
+                                        <div class="widget-boxed-header">
+                                            <h4>
+                                                <a href="#locations" data-toggle="collapse" aria-expanded="false"
+                                                   role="button" class="collapsed"> مستوي البائع </a>
+                                            </h4>
+
+                                        </div>
+                                        <div class="widget-boxed-body collapse show" id="locations"
+                                             data-parent="#locations">
+                                            <div class="side-list no-border">
+                                                <!-- Single Filter Card -->
+                                                <div class="single_filter_card">
+                                                    <div class="card-body pt-0">
+                                                        <div class="inner_widget_link">
+                                                            <ul class="no-ul-list filter-list">
+                                                                <li>
+                                                                    <input id="b1" class="checkbox-custom" name="ADA"
+                                                                           type="checkbox" checked="">
+                                                                    <label for="b1" class="checkbox-custom-label"> بائع
+                                                                        موثوق / مميز </label>
+                                                                </li>
+                                                                <li>
+                                                                    <input id="b2" class="checkbox-custom"
+                                                                           name="Parking" type="checkbox">
+                                                                    <label for="b2" class="checkbox-custom-label"> بائع
+                                                                        نشيط </label>
+                                                                </li>
+                                                                <li>
+                                                                    <input id="b2" class="checkbox-custom"
+                                                                           name="Parking" type="checkbox">
+                                                                    <label for="b2" class="checkbox-custom-label"> بائع
+                                                                        جديد </label>
+                                                                </li>
+
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="form-group filter_button pt-2">
+                                    <button type="submit" class="btn btn btn-theme-2 rounded full-width"> بحث</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sidebar End -->
+
+                </div>
+
+                <!-- Item Wrap Start -->
+                <div class="col-lg-8 col-md-12 col-sm-12">
+                    <div class="row">
+                        <!-- Single Item -->
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="ser_110 shadow_0">
+                                <div class="ser_110_thumb">
+                                    <a href="{{url('service-details')}}" class="ser_100_link"><img
+                                            src="{{asset('assets/website/img/co-2.jpg')}}" class="img-fluid" alt=""></a>
+                                </div>
+                                <div class="ser_110_footer bott">
+                                    <div class="_110_foot_left">
+                                        <div class="_autho098"><img src="{{asset('assets/website/img/team-1.jpg')}}"
+                                                                    class="img-fluid circle" alt=""><img
+                                                src="{{asset('assets/website/img/verify.svg')}}" class="verified"
+                                                width="12" alt=""></div>
+                                        <div class="_autho097"><h5><a href="{{url('user/dashboard')}}">Admin User</a></h5>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="ser_110_caption">
+                                    <div class="ser_rev098">
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <div class="ser_title098">
+                                        <h4 class="_ser_title"><a href="{{url('service-details')}}"> تصميم بوستات سوشل ميديا
+                                                احترافية وجذابة </a></h4>
+                                    </div>
+                                    <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong class="theme-cl">140.00$ </strong>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Single Item -->
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="ser_110 shadow_0">
+                                <div class="ser_110_thumb">
+                                    <a href="{{url('service-details')}}" class="ser_100_link"><img
+                                            src="{{asset('assets/website/img/co-3.jpg')}}" class="img-fluid" alt=""></a>
+                                </div>
+                                <div class="ser_110_footer bott">
+                                    <div class="_110_foot_left">
+                                        <div class="_autho098"><img src="{{asset('assets/website/img/team-1.jpg')}}"
+                                                                    class="img-fluid circle" alt=""><img
+                                                src="{{asset('assets/website/img/verify.svg')}}" class="verified"
+                                                width="12" alt=""></div>
+                                        <div class="_autho097"><h5><a href="{{url('user/dashboard')}}">Admin User</a></h5>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="ser_110_caption">
+                                    <div class="ser_rev098">
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <div class="ser_title098">
+                                        <h4 class="_ser_title"><a href="{{url('service-details')}}"> تصميم بوستات سوشل ميديا
+                                                احترافية وجذابة </a></h4>
+                                    </div>
+                                    <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong class="theme-cl">140.00$ </strong>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Single Item -->
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="ser_110 shadow_0">
+                                <div class="ser_110_thumb">
+                                    <a href="{{url('service-details')}}" class="ser_100_link"><img
+                                            src="{{asset('assets/website/img/co-4.jpg')}}" class="img-fluid" alt=""></a>
+                                </div>
+                                <div class="ser_110_footer bott">
+                                    <div class="_110_foot_left">
+                                        <div class="_autho098"><img src="{{asset('assets/website/img/team-1.jpg')}}"
+                                                                    class="img-fluid circle" alt=""><img
+                                                src="{{asset('assets/website/img/verify.svg')}}" class="verified"
+                                                width="12" alt=""></div>
+                                        <div class="_autho097"><h5><a href="{{url('user/dashboard')}}">Admin User</a></h5>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="ser_110_caption">
+                                    <div class="ser_rev098">
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <div class="ser_title098">
+                                        <h4 class="_ser_title"><a href="{{url('service-details')}}"> تصميم بوستات سوشل ميديا
+                                                احترافية وجذابة </a></h4>
+                                    </div>
+                                    <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong class="theme-cl">140.00$ </strong>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Single Item -->
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="ser_110 shadow_0">
+                                <div class="ser_110_thumb">
+                                    <a href="{{url('service-details')}}" class="ser_100_link"><img
+                                            src="{{asset('assets/website/img/co-5.jpg')}}" class="img-fluid" alt=""></a>
+                                </div>
+                                <div class="ser_110_footer bott">
+                                    <div class="_110_foot_left">
+                                        <div class="_autho098"><img src="{{asset('assets/website/img/team-1.jpg')}}"
+                                                                    class="img-fluid circle" alt=""><img
+                                                src="{{asset('assets/website/img/verify.svg')}}" class="verified"
+                                                width="12" alt=""></div>
+                                        <div class="_autho097"><h5><a href="{{url('user/dashboard')}}">Admin User</a></h5>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="ser_110_caption">
+                                    <div class="ser_rev098">
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <div class="ser_title098">
+                                        <h4 class="_ser_title"><a href="{{url('service-details')}}"> تصميم بوستات سوشل ميديا
+                                                احترافية وجذابة </a></h4>
+                                    </div>
+                                    <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong class="theme-cl">140.00$ </strong>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Single Item -->
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="ser_110 shadow_0">
+                                <div class="ser_110_thumb">
+                                    <a href="{{url('service-details')}}" class="ser_100_link"><img
+                                            src="{{asset('assets/website/img/co-6.jpg')}}" class="img-fluid" alt=""></a>
+                                </div>
+                                <div class="ser_110_footer bott">
+                                    <div class="_110_foot_left">
+                                        <div class="_autho098"><img src="{{asset('assets/website/img/team-1.jpg')}}"
+                                                                    class="img-fluid circle" alt=""><img
+                                                src="{{asset('assets/website/img/verify.svg')}}" class="verified"
+                                                width="12" alt=""></div>
+                                        <div class="_autho097"><h5><a href="{{url('user/dashboard')}}">Admin User</a></h5>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="ser_110_caption">
+                                    <div class="ser_rev098">
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <div class="ser_title098">
+                                        <h4 class="_ser_title"><a href="{{url('service-details')}}"> تصميم بوستات سوشل ميديا
+                                                احترافية وجذابة </a></h4>
+                                    </div>
+                                    <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong class="theme-cl">140.00$ </strong>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Single Item -->
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="ser_110 shadow_0">
+                                <div class="ser_110_thumb">
+                                    <a href="{{url('service-details')}}" class="ser_100_link"><img
+                                            src="{{asset('assets/website/img/co-7.jpg')}}" class="img-fluid" alt=""></a>
+                                </div>
+                                <div class="ser_110_footer bott">
+                                    <div class="_110_foot_left">
+                                        <div class="_autho098"><img src="{{asset('assets/website/img/team-1.jpg')}}"
+                                                                    class="img-fluid circle" alt=""><img
+                                                src="{{asset('assets/website/img/verify.svg')}}" class="verified"
+                                                width="12" alt=""></div>
+                                        <div class="_autho097"><h5><a href="{{url('user/dashboard')}}">Admin User</a></h5>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="ser_110_caption">
+                                    <div class="ser_rev098">
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <div class="ser_title098">
+                                        <h4 class="_ser_title"><a href="{{url('service-details')}}"> تصميم بوستات سوشل ميديا
+                                                احترافية وجذابة </a></h4>
+                                    </div>
+                                    <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong class="theme-cl">140.00$ </strong>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Single Item -->
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="ser_110 shadow_0">
+                                <div class="ser_110_thumb">
+                                    <a href="{{url('service-details')}}" class="ser_100_link"><img
+                                            src="{{asset('assets/website/img/co-2.jpg')}}" class="img-fluid" alt=""></a>
+                                </div>
+                                <div class="ser_110_footer bott">
+                                    <div class="_110_foot_left">
+                                        <div class="_autho098"><img src="{{asset('assets/website/img/team-1.jpg')}}"
+                                                                    class="img-fluid circle" alt=""><img
+                                                src="{{asset('assets/website/img/verify.svg')}}" class="verified"
+                                                width="12" alt=""></div>
+                                        <div class="_autho097"><h5><a href="{{url('user/dashboard')}}">Admin User</a></h5>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="ser_110_caption">
+                                    <div class="ser_rev098">
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <div class="ser_title098">
+                                        <h4 class="_ser_title"><a href="{{url('service-details')}}"> تصميم بوستات سوشل ميديا
+                                                احترافية وجذابة </a></h4>
+                                    </div>
+                                    <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong class="theme-cl">140.00$ </strong>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Single Item -->
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="ser_110 shadow_0">
+                                <div class="ser_110_thumb">
+                                    <a href="{{url('service-details')}}" class="ser_100_link"><img
+                                            src="{{asset('assets/website/img/co-2.jpg')}}" class="img-fluid" alt=""></a>
+                                </div>
+                                <div class="ser_110_footer bott">
+                                    <div class="_110_foot_left">
+                                        <div class="_autho098"><img src="{{asset('assets/website/img/team-1.jpg')}}"
+                                                                    class="img-fluid circle" alt=""><img
+                                                src="{{asset('assets/website/img/verify.svg')}}" class="verified"
+                                                width="12" alt=""></div>
+                                        <div class="_autho097"><h5><a href="{{url('user/dashboard')}}">Admin User</a></h5>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="ser_110_caption">
+                                    <div class="ser_rev098">
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star filled"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <div class="ser_title098">
+                                        <h4 class="_ser_title"><a href="{{url('service-details')}}"> تصميم بوستات سوشل ميديا
+                                                احترافية وجذابة </a></h4>
+                                    </div>
+                                    <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong class="theme-cl">140.00$ </strong>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span class="ti-arrow-left"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item active"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">...</a></li>
+                                <li class="page-item"><a class="page-link" href="#">18</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span class="ti-arrow-right"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Main Section End ================================== -->
+
+    <!-- ============================ Call To Action Start ================================== -->
+    <section class="call-to-act"
+             style="background:#0b85ec url({{asset('assets/website/img/landing-bg.png')}}) no-repeat">
+        <div class="container">
+            <div class="row justify-content-center">
+
+                <div class="col-lg-7 col-md-8">
+                    <div class="clt-caption text-center mb-4">
+                        <h2 class="text-light"> هل أنت جاهز لبدء مشروعك الخاص ؟ </h2>
+                    </div>
+                    <div class="inner-flexible-box subscribe-box">
+                        <div class="input-group">
+                            <button class="btn btn-primary start_job"> ابدا الان</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Call To Action End ================================== -->
+@endsection
