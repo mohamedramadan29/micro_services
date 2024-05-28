@@ -7,7 +7,7 @@
         <div class="container">
             <h1> أنجز مشاريعك عبر الإنترنت بسهولة وأمان </h1>
             <p class="lead">وظّف مستقلين محترفين لإنجاز أعمالك </p>
-            <form class="mt-4">
+            <form class="mt-4" dir="rtl">
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-md-10 col-sm-12">
                         <div class="banner-search style-2">
