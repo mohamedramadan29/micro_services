@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-    تفاصيل الخدمة
+    {{$service['name']}}
 @endsection
 @section('content')
     <!-- ============================ Page Title Start================================== -->
@@ -29,40 +29,20 @@
                             <div class="_job_detail_single">
 
                                 <p>
-                                    أهلاً بك في خدمتي،
-                                    <br>
-                                    إعلانات السوشل ميديا الاحترافية، من أهم الطرق التسويقية الفعالة و الجذابة في وقتنا
-                                    الحاضر..
-                                    <br>
-                                    في خدمتي هذه سأقدم لك تصاميم سوشل ميديا.
-                                    <br>
-                                    ستكون التصاميم كالتالي: <br>
-                                    • احترافية و عصرية و جاذبة للعملاء. <br>
-                                    • التسليم بصيغتي JPG / PNG. <br>
-                                    • إمكانية التعديل 3 مرات. <br>
-                                    • التسليم بدقة عالية. <br>
-                                    • إمكانية التصميم بالمقاسات المناسبة لجميع المنصات. <br>
-                                    • السعر لـ 1 تصميم. <br>
-                                    • المدة تعتمد على مقدار العمل المُسلَّم. <br>
-                                    • بالإمكان التعامل بشكل شهري بعد الاتفاق على السعر. <br>
-
-                                    لا تتردد بالاستفسار. <br>
-                                    يوجد العديد من التطويرات في الأسفل. <br>
-                                    يسعدني خدمتكم. <br>
+                                    {{$service['description']}}
                                 </p>
                             </div>
 
 
                             <div class="_job_detail_single">
                                 <h4> المهارات </h4>
+                                @php
+                                $skills = explode(',',$service['tags']);
+                                @endphp
                                 <ul class="skilss">
-                                    <li><a href="javascript:void(0);">IOS Developer</a></li>
-                                    <li><a href="javascript:void(0);">WordPress</a></li>
-                                    <li><a href="javascript:void(0);">SEO Specialist</a></li>
-                                    <li><a href="javascript:void(0);">JavaScript</a></li>
-                                    <li><a href="javascript:void(0);">Photoshop</a></li>
-                                    <li><a href="javascript:void(0);">Joomla</a></li>
-                                    <li><a href="javascript:void(0);">Magento</a></li>
+                                    @foreach($skills as $skill)
+                                        <li><a href="javascript:void(0);"> {{$skill}} </a></li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -72,134 +52,40 @@
                             <div class="_job_detail_single">
                                 <h4> خدمات مقترحة </h4>
                                 <div class="row">
-                                    <!-- Single Item -->
-                                    <div class="col-lg-4 col-md-6 col-sm-12">
-                                        <div class="ser_110 shadow_0">
-                                            <div class="ser_110_thumb">
-                                                <a href="{{url('service-details')}}" class="ser_100_link"><img
-                                                        src="{{asset('assets/website/img/co-2.jpg')}}" class="img-fluid"
-                                                        alt=""></a>
-                                            </div>
-                                            <div class="ser_110_footer bott">
-                                                <div class="_110_foot_left">
-                                                    <div class="_autho098"><img
-                                                            src="{{asset('assets/website/img/team-1.jpg')}}"
-                                                            class="img-fluid circle" alt=""><img
-                                                            src="{{asset('assets/website/img/verify.svg')}}"
-                                                            class="verified"
-                                                            width="12" alt=""></div>
-                                                    <div class="_autho097"><h5><a href="{{url('user/dashboard')}}">Admin
-                                                                User</a></h5>
+                                    @foreach($more_servicess as $serv)
+                                        <!-- Single Item -->
+                                        <div class="col-lg-4 col-md-6 col-sm-12">
+                                            <div class="ser_110">
+                                                <div class="ser_110_thumb">
+                                                    <a href="{{url('service/'.$serv['id'].'-'.$serv['slug'])}}" class="ser_100_link"><img
+                                                            src=" {{asset('assets/uploads/services/'.$serv['image'])}}"
+                                                            class="img-fluid" alt=""></a>
+                                                </div>
+                                                <div class="ser_110_footer bott">
+                                                    <div class="_110_foot_left">
+                                                        <div>
+                                                            <h5>
+                                                                <a href="{{url('service-details')}}"> {{$serv['name']}} </a>
+                                                            </h5>
+                                                            <span> {{$serv['category']['name']}}  <span>
+                                                              <div class="_dash_usr_rates mb-1">
+															<span class="good"> {{$serv['rate']}} </span>
+                                                                  @for($i = 0 ; $i < 5 ; $i++ )
+                                                                      @if($i < $serv['rate'])
+                                                                          <i class="fa fa-star"></i>
+                                                                      @else
+                                                                          <i class="fa fa-star-o"></i>
+                                                                      @endif
+                                                                  @endfor
+														       </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-
                                             </div>
-                                            <div class="ser_110_caption">
-                                                <div class="ser_rev098">
-                                                    <i class="fa fa-star filled"></i>
-                                                    <i class="fa fa-star filled"></i>
-                                                    <i class="fa fa-star filled"></i>
-                                                    <i class="fa fa-star filled"></i>
-                                                    <i class="fa fa-star"></i>
-                                                </div>
-                                                <div class="ser_title098">
-                                                    <h4 class="_ser_title"><a href="{{url('service-details')}}"> تصميم
-                                                            بوستات سوشل ميديا
-                                                            احترافية وجذابة </a></h4>
-                                                </div>
-                                                <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong
-                                                        class="theme-cl">140.00$ </strong>
-                                                </div>
-                                            </div>
-
                                         </div>
-                                    </div>
+                                    @endforeach
 
-                                    <!-- Single Item -->
-                                    <div class="col-lg-4 col-md-6 col-sm-12">
-                                        <div class="ser_110 shadow_0">
-                                            <div class="ser_110_thumb">
-                                                <a href="{{url('service-details')}}" class="ser_100_link"><img
-                                                        src="{{asset('assets/website/img/co-2.jpg')}}" class="img-fluid"
-                                                        alt=""></a>
-                                            </div>
-                                            <div class="ser_110_footer bott">
-                                                <div class="_110_foot_left">
-                                                    <div class="_autho098"><img
-                                                            src="{{asset('assets/website/img/team-1.jpg')}}"
-                                                            class="img-fluid circle" alt=""><img
-                                                            src="{{asset('assets/website/img/verify.svg')}}"
-                                                            class="verified"
-                                                            width="12" alt=""></div>
-                                                    <div class="_autho097"><h5><a href="{{url('user/dashboard')}}">Admin
-                                                                User</a></h5>
-                                                    </div>
-                                                </div>
 
-                                            </div>
-                                            <div class="ser_110_caption">
-                                                <div class="ser_rev098">
-                                                    <i class="fa fa-star filled"></i>
-                                                    <i class="fa fa-star filled"></i>
-                                                    <i class="fa fa-star filled"></i>
-                                                    <i class="fa fa-star filled"></i>
-                                                    <i class="fa fa-star"></i>
-                                                </div>
-                                                <div class="ser_title098">
-                                                    <h4 class="_ser_title"><a href="{{url('service-details')}}"> تصميم
-                                                            بوستات سوشل ميديا
-                                                            احترافية وجذابة </a></h4>
-                                                </div>
-                                                <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong
-                                                        class="theme-cl">140.00$ </strong>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <!-- Single Item -->
-                                    <div class="col-lg-4 col-md-6 col-sm-12">
-                                        <div class="ser_110 shadow_0">
-                                            <div class="ser_110_thumb">
-                                                <a href="{{url('service-details')}}" class="ser_100_link"><img
-                                                        src="{{asset('assets/website/img/co-2.jpg')}}" class="img-fluid"
-                                                        alt=""></a>
-                                            </div>
-                                            <div class="ser_110_footer bott">
-                                                <div class="_110_foot_left">
-                                                    <div class="_autho098"><img
-                                                            src="{{asset('assets/website/img/team-1.jpg')}}"
-                                                            class="img-fluid circle" alt=""><img
-                                                            src="{{asset('assets/website/img/verify.svg')}}"
-                                                            class="verified"
-                                                            width="12" alt=""></div>
-                                                    <div class="_autho097"><h5><a href="{{url('user/dashboard')}}">Admin
-                                                                User</a></h5>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="ser_110_caption">
-                                                <div class="ser_rev098">
-                                                    <i class="fa fa-star filled"></i>
-                                                    <i class="fa fa-star filled"></i>
-                                                    <i class="fa fa-star filled"></i>
-                                                    <i class="fa fa-star filled"></i>
-                                                    <i class="fa fa-star"></i>
-                                                </div>
-                                                <div class="ser_title098">
-                                                    <h4 class="_ser_title"><a href="{{url('service-details')}}"> تصميم
-                                                            بوستات سوشل ميديا
-                                                            احترافية وجذابة </a></h4>
-                                                </div>
-                                                <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong
-                                                        class="theme-cl">140.00$ </strong>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
 
                                 </div>
                             </div>
@@ -212,36 +98,39 @@
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="_jb_summary light_box">
                         <div class="_jb_summary_largethumb">
-                            <img src="{{asset('assets/website/img/avater.jpg')}}" class="img-fluid" alt="">
+                            <img src="{{asset('assets/uploads/services/'.$service['image'])}}" class="img-fluid" alt="">
                         </div>
                         <div class="_jb_summary_thumb">
-                            <img src="{{asset('assets/website/img/team-2.jpg')}}" class="img-fluid circle" alt="">
+                            <img src="{{asset('assets/uploads/users_image/'.$service['user']['image'])}}" class="img-fluid circle" alt="">
                         </div>
                         <div class="_jb_summary_caption">
-                            <h4>Adam Mils Malhotra</h4>
-                            <span>IOS Developer</span>
+                            <h4> {{$service['user']['name']}} </h4>
+                            <span>{{$service['user']['job_title']}}</span>
                         </div>
                         <div class="_jb_summary_body">
                             <div class="_view_dis_908">
-                                <a href="#" class="btn flw_btn"> اضف الي السلة </a>
-                                <a href="#" class="btn msg_btn"> تواصل معي </a>
+                                <a href="{{url('cart/add/'.$service['id'])}}" class="btn flw_btn"> اضف الي السلة </a>
+                                <a href="{{url('user/chat')}}" class="btn msg_btn"> تواصل معي </a>
                             </div>
 
                             <div class="_view_dis_908">
                                 <ul class="exlio_list">
                                     <li>  <span class="text-success">
                                                <div class="ser_rev098">
-                                        <i class="fa fa-star filled"></i>
-                                        <i class="fa fa-star filled"></i>
-                                        <i class="fa fa-star filled"></i>
-                                        <i class="fa fa-star filled"></i>
-                                        <i class="fa fa-star"></i>
+                                                   @for($i = 0 ; $i < 5; $i++)
+                                                       @if($service['rate'] > $i)
+                                                           <i class="fa fa-star filled"></i>
+                                                       @else
+                                                           <i class="fa fa-star"></i>
+                                                       @endif
+                                                   @endfor
+
                                     </div>
-                                            11  </span> التقييمات
+                                      </span> التقييمات
                                     </li>
-                                    <li>المشترين <span class="text-warning"> 10 </span></li>
+                                    <li>المشترين <span class="text-warning"> {{$service['users_num_buy']}} </span></li>
                                     <li> طلبات جاري تنفيذها <span class="text-info">1</span></li>
-                                    <li> سعر الخدمة يبدأ من <span class="text-danger">100 $</span></li>
+                                    <li> سعر الخدمة يبدأ من <span class="text-danger"> {{$service['price']}} $</span></li>
                                 </ul>
                             </div>
                         </div>
@@ -249,12 +138,17 @@
 
                     <div class="_jb_summary light_box p-4">
                         <h4> مشاركة الخدمة  </h4>
-                        <ul class="shares_jobs">
-                            <li><a href="#" class="share fb"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#" class="share tw"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#" class="share gp"><i class="fa fa-google"></i></a></li>
-                            <li><a href="#" class="share ln"><i class="fa fa-linkedin"></i></a></li>
-                        </ul>
+                        <!-- AddToAny BEGIN -->
+                        <div class="a2a_kit a2a_kit_size_32 a2a_default_style" style="float: right">
+                            <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+                            <a class="a2a_button_facebook"></a>
+                            <a class="a2a_button_linkedin"></a>
+                            <a class="a2a_button_whatsapp"></a>
+                            <a class="a2a_button_telegram"></a>
+                            <a class="a2a_button_x"></a>
+                        </div>
+                        <script async src="https://static.addtoany.com/menu/page.js"></script>
+                        <!-- AddToAny END -->
                     </div>
 
                 </div>

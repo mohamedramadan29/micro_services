@@ -47,8 +47,9 @@
                                         <div class="col-md-9">
                                             <select required class="form-control select2" name="cat_id">
                                                 <option> -- حدد القسم --</option>
-                                                 @foreach($categories as $category) @endforeach
+                                                 @foreach($categories as $category)
                                                 <option @if($service['cat_id'] == $category['id']) selected @endif value="{{$category['id']}}"> {{$category['name']}} </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>

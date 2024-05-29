@@ -12,25 +12,32 @@
                         <div class="nav-toggle"></div>
                     </div>
                     <div class="nav-menus-wrapper">
-                        <ul class="nav-menu nav-menu-social">
+                        @if(\Illuminate\Support\Facades\Auth::user())
+                            <ul class="nav-menu nav-menu-social">
+                            <li><a href="{{url('service/add')}}"> اضف خدمة </a></li>
+                                <li><a href="{{url('dashboard')}}"> حسابي </a></li>
+                            </ul>
+                        @else
+                            <ul class="nav-menu nav-menu-social">
+                                <li>
+                                    <a href="{{url('register')}}">
+                                        <i class="ti-user mr-1"></i> حساب جديد
+                                    </a>
+                                </li>
+                                <li class="add-listing dark-bg">
+                                    <a href="{{url('login')}}">
+                                        <i class=" fa fa-sign-in   mr-1"></i> تسجيل دخول
+                                    </a>
+                                </li>
+                            </ul>
+                        @endif
 
-                            <li>
-                                <a href="{{url('register')}}">
-                                    <i class="ti-user mr-1"></i> حساب جديد
-                                </a>
-                            </li>
-                            <li class="add-listing dark-bg">
-                                <a href="{{url('login')}}">
-                                    <i class=" fa fa-sign-in   mr-1"></i> تسجيل دخول
-                                </a>
-                            </li>
-                        </ul>
                         <ul class="nav-menu">
                             <li><a href="{{url('/')}}"> الرئيسية </a></li>
-                            <li><a href="{{url('service/add')}}"> اضف خدمة </a></li>
+
                             <li><a href="{{url('categories')}}"> الاقسام </a></li>
                             <li><a href="{{url('services')}}"> الخدمات </a></li>
-                            <li><a href="{{url('user/dashboard')}}"> حسابي  </a></li>
+
                         </ul>
 
                     </div>

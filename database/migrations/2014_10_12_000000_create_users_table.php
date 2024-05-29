@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->text('info')->nullable();
             $table->string('image')->nullable();
+            $table->string('job_title')->nullable();
             $table->double('balance')->nullable();
             $table->string('account_type')->nullable();
             $table->integer('rate')->nullable();

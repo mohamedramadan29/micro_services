@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\Message_Trait;
 use App\Http\Traits\Upload_Images;
+use App\Models\admin\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,8 @@ class UserController extends Controller
 
     public function index()
     {
-        return view('website.user.dashboard');
+        $services = Service::with('category')->where('user_id',Auth::id())->get();
+        return view('website.user.dashboard',compact('services'));
     }
 
     public function reviews()
@@ -59,7 +61,7 @@ class UserController extends Controller
 //                            'user_id' => $user_id
 //                        ]);
 //                    }
-                    return \redirect('user/dashboard');
+                    return \redirect('dashboard');
                 } else {
                     return Redirect::back()->withInput()->withErrors('لا يوجد حساب بهذه البيانات  ');
                 }
@@ -175,7 +177,7 @@ class UserController extends Controller
                 if ($request->hasFile('image')) {
                     $rules['image'] = 'image|mimes:jpeg,png,jpg,webp,gif|max:2048';
                 }
-                if ($request->has('new_password')) {
+                if ($request->has('old_password') && $request['old_password'] !='') {
                     // التحقق من صحة كلمة المرور القديمة
                     if (!Hash::check($data['old_password'], $user->password)) {
                         return Redirect::back()->withInput()->withErrors(['كلمة المرور القديمة غير صحيحة']);
@@ -218,6 +220,7 @@ class UserController extends Controller
                     'phone' => $data['phone'],
                     'info' => $data['info'],
                     'account_type' => $data['account_type'],
+                    'job_title'=>$data['job_title']
 
                 ]);
 
@@ -230,6 +233,18 @@ class UserController extends Controller
         return view('website.user.update');
     }
 
+    public function show_profile($username)
+    {
+        $user = User::where('user_name',$username)->first();
+        $services = Service::with('category')->where('user_id',$user->id)->get();
+        return view('website.user_profiles.index',compact('user','services'));
+    }
+    public function user_services($username)
+    {
+        $user = User::where('user_name',$username)->first();
+        $services = Service::with('category')->where('user_id',$user->id)->get();
+        return view('website.user_profiles.services',compact('user','services'));
+    }
 
     public function chat()
     {

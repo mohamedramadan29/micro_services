@@ -20,7 +20,7 @@ Route::controller(FrontController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('categories', 'categories');
     Route::get('services', 'services');
-    Route::get('service-details', 'service_details');
+    Route::get('service/{id}-{slug}', 'service_details');
 
 });
 
@@ -28,22 +28,24 @@ Route::controller(FrontController::class)->group(function () {
 Route::controller(UserController::class)->group(function () {
     Route::match(['get', 'post'], 'login', 'login');
     Route::match(['get', 'post'], 'register', 'register');
-    Route::post('logout', 'logout');
+    Route::get('logout', 'logout');
+    Route::get('user/{username}','show_profile');
+    Route::get('user/{username}/services','user_services');
     Route::group(['middleware' => ['auth']], function () {
-        Route::get('user/dashboard', 'index');
+        Route::get('dashboard', 'index');
         Route::get('user/reviews', 'reviews');
-        Route::match(['post','get'],'user/update','update');
+        Route::match(['post', 'get'], 'user/update', 'update');
         Route::get('user/chat', 'chat');
-        Route::get('user/balance','balance');
+        Route::get('user/balance', 'balance');
     });
 });
 // Start User Service
 Route::group(['middleware' => ['auth']], function () {
     Route::controller(serviceController::class)->group(function () {
         Route::get('service/index', 'index');
-        Route::match(['post','get'],'service/add','add');
-        Route::match(['post','get'],'service/update/{id}','update');
-        Route::match(['post','get'],'service/delete/{id}','delete');
+        Route::match(['post', 'get'], 'service/add', 'add');
+        Route::match(['post', 'get'], 'service/update/{id}', 'update');
+        Route::match(['post', 'get'], 'service/delete/{id}', 'delete');
     });
 });
 

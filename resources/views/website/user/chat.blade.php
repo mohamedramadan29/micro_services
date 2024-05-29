@@ -28,15 +28,15 @@
 
                         <div class="d-navigation">
                             <ul id="metismenu">
-                                <li><a href="{{url('user/dashboard')}}"><i class="ti-dashboard"></i> الملف الشخصي </a>
+                                <li><a href="{{url('dashboard')}}"><i class="ti-dashboard"></i> الملف الشخصي </a>
                                 </li>
                                 <li><a href="{{url('service/index')}}"><i class="ti-user"></i> الخدمات </a></li>
                                 <li><a href="{{url('service/add')}}"><i class="ti-plus"></i> اضف خدمة جديدة   </a></li>
                                 <li><a href="{{url('user/chat')}}"><i class="ti-email"></i>  المحادثات </a></li>
                                 <li><a href="{{url('user/reviews')}}"><i class="ti-email"></i> التقيمات </a></li>
                                 <li><a href="{{url('user/update')}}"><i class="ti-email"></i> تعديل الملف الشخصي </a></li>
-                                <li><a href="#"><i class="ti-email"></i> الرصيد </a></li>
-                                <li><a href="#"><i class="ti-power-off"></i> تسجيل خروج </a></li>
+                                <li><a href="{{url('user/balance')}}"><i class="ti-email"></i> الرصيد </a></li>
+                                <li><a href="{{url('logout')}}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
                             </ul>
                         </div>
 

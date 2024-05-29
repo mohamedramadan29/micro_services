@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('rate')->default('0');
             $table->string('price');
             $table->tinyInteger('status')->default('0');
+            $table->integer('users_num_buy')->default('0');
             $table->timestamps();
         });
     }
