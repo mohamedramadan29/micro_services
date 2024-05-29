@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-    اضف خدمة جديدة
+    {{$service['name']}}
 @endsection
 @section('content')
     <!-- ============================================================== -->
@@ -60,7 +60,7 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="#"> الرئيسية </a></li>
                                         <li class="breadcrumb-item"><a href="#"> لوحة التحكم </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"> اضف خدمة جديدة</li>
+                                        <li class="breadcrumb-item active" aria-current="page"> تعديل الخدمة</li>
                                     </ol>
                                 </nav>
                             </div>
@@ -82,7 +82,7 @@
                                 </ul>
                             </div>
                         @endif
-                        <form method="post" action="{{url('service/add')}}" enctype="multipart/form-data">
+                        <form method="post" action="{{url('service/update/'.$service['id'])}}" enctype="multipart/form-data">
                             @csrf
                             <div class="col-lg-12 col-md-12 col-sm-12">
 
@@ -103,7 +103,7 @@
                                                     <label> العنوان </label>
                                                     <input type="text" class="form-control with-light" name="name"
                                                            required
-                                                           value="{{old('name')}}">
+                                                           value="{{$service['name']}}">
                                                 </div>
                                             </div>
 
@@ -114,7 +114,8 @@
                                                             name="cat_id">
                                                         <option> -- حدد القسم --</option>
                                                         @foreach($categories as $category)
-                                                        <option value="{{$category['id']}}"> {{$category['name']}} </option>
+                                                            <option @if($category['id'] == $service['cat_id']) selected @endif
+                                                                value="{{$category['id']}}"> {{$category['name']}} </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -124,7 +125,7 @@
                                                     <label> السعر </label>
                                                     <input type="number" min="5" class="form-control with-light"
                                                            required
-                                                           name="price" value="{{old('price')}}">
+                                                           name="price" value="{{$service['price']}}">
                                                 </div>
                                             </div>
 
@@ -132,7 +133,7 @@
                                                 <div class="form-group">
                                                     <label> وصف الخدمة </label>
                                                     <textarea class="form-control with-light" required
-                                                              name="description">{{old('description')}}</textarea>
+                                                              name="description">{{$service['description']}}</textarea>
                                                 </div>
                                             </div>
 
@@ -141,7 +142,7 @@
                                                     <label> الكلمات المفتاحية <span class="badge badge-danger"> افصل بين كل كلمة والاخري ب (,) </span></label>
                                                     <div class="tg_grouping">
                                                         <input type="text" id="lg-input" name="tags"
-                                                               class="form-control with-light"
+                                                               class="form-control with-light" value="{{$service['tags']}}"
                                                                placeholder="برمجة , تصميم , ... ">
                                                     </div>
                                                 </div>
@@ -149,8 +150,9 @@
                                             <div class="col-xl-12 col-lg-12">
                                                 <div class="form-group">
                                                     <label> صورة الخدمة </label>
-                                                    <input type="file" class="form-control with-light" required
+                                                    <input type="file" class="form-control with-light"
                                                            name="image">
+                                                    <img width="100px" style="margin-top: 10px;border-radius: 5px" src="{{asset('assets/uploads/services/'.$service['image'])}}">
                                                 </div>
                                             </div>
 
@@ -160,7 +162,7 @@
                                 </div>
                                 <!-- Single Wrap End -->
 
-                                <button type="submit" class="btn btn-sm btn-save">  اضف الخدمة <i class="fa fa-save"></i>  </button>
+                                <button type="submit" class="btn btn-sm btn-save">  تعديل الخدمة <i class="fa fa-save"></i>  </button>
                         </form>
                     </div>
                 </div>

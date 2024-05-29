@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('image');
             $table->text('description');
             $table->string('tags');
+            $table->integer('rate')->default('0');
             $table->string('price');
             $table->tinyInteger('status')->default('0');
             $table->timestamps();

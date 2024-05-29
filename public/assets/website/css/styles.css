@@ -5179,6 +5179,7 @@ a._5gt9:hover img {
     display: flex;
     align-items: center;
     flex: 1;
+    justify-content:center;
 }
 
 .categories ._110_foot_left {

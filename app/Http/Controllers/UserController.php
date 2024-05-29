@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\Message_Trait;
+use App\Http\Traits\Upload_Images;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     use Message_Trait;
+    use Upload_Images;
 
     public function index()
     {
@@ -24,15 +26,6 @@ class UserController extends Controller
     public function reviews()
     {
         return view('website.user.reviews');
-    }
-
-    public function update(Request $request)
-    {
-        $data = $request->all();
-        if ($request->isMethod('post')) {
-
-        }
-        return view('website.user.update');
     }
 
     public function login(Request $request)
@@ -73,6 +66,9 @@ class UserController extends Controller
             } catch (\Exception $e) {
                 return $this->exception_message($e);
             }
+        }
+        if (Auth::user()) {
+            return \redirect('user/dashboard');
         }
         return view('website.login');
     }
@@ -129,6 +125,9 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return $this->exception_message($e);
         }
+        if (Auth::user()) {
+            return \redirect('user/dashboard');
+        }
         return view('website.register');
     }
 
@@ -159,6 +158,78 @@ class UserController extends Controller
         Auth::logout();
         return redirect('/');
     }
+
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+        try {
+            if ($request->isMethod('post')) {
+                $data = $request->all();
+                $rules = [
+                    'name' => 'required',
+                    'account_type' => 'required',
+                    'email' => 'required|email|unique:users,email,' . $user->id,
+                    'info' => 'required',
+                    'phone' => 'required|unique:users,phone,' . $user->id,
+                ];
+                if ($request->hasFile('image')) {
+                    $rules['image'] = 'image|mimes:jpeg,png,jpg,webp,gif|max:2048';
+                }
+                if ($request->has('new_password')) {
+                    // التحقق من صحة كلمة المرور القديمة
+                    if (!Hash::check($data['old_password'], $user->password)) {
+                        return Redirect::back()->withInput()->withErrors(['كلمة المرور القديمة غير صحيحة']);
+                    }
+                    $rules['new_password'] = 'required|min:8';
+                    $rules['confirm_password'] = 'required|same:new_password';
+
+                    $user->update(['password' => Hash::make($data['new_password'])]);
+                }
+                $messages = [
+                    'name.required' => 'من فضلك ادخل الاسم',
+                    'account_type.required' => 'من فضلك حدد نوع الحساب',
+                    'email.required' => 'من فضلك ادخل البريد الالكتروني',
+                    'email.email' => 'من فضلك ادخل البريد الالكتروني بشكل صحيح',
+                    'email.unique' => 'البريد الالكتروني متواجد من قبل من فضلك ادخل بريد الكتروني جديد',
+                    'info.required' => 'من فضلك ادخل نبذة مختصرة عنك',
+                    'phone.required' => 'من فضلك ادخل رقم الهاتف',
+                    'phone.unique' => 'رقم الهاتف مستخدم بالفعل من فضلك ادخل رقم هاتف جديد',
+                    'image.image' => 'من فضلك اختر ملف صورة صالح',
+                    'image.mimes' => 'نوع الصورة يجب أن يكون jpeg, png, jpg,webp, gif',
+                    'image.max' => 'حجم الصورة يجب ان لا يتجاوز ال2m ',
+                    'new_password.required' => 'من فضلك ادخل كلمة المرور الجديدة',
+                    'new_password.min' => 'كلمة المرور يجب ان تكون اكثر من 8 احرف ',
+                    'confirm_password.same' => 'من فضلك يجب تاكيد كلمة المرور بشكل صحيح '
+                ];
+                if ($request->hasFile('image')) {
+                    $fileimage = $this->saveImage($request->image, public_path('assets/uploads/users_image'));
+                    $user->update([
+                        'image' => $fileimage,
+                    ]);
+                }
+                $validator = Validator::make($data, $rules, $messages);
+                if ($validator->fails()) {
+                    return Redirect::back()->withInput()->withErrors($validator);
+                }
+
+                $user->update([
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'phone' => $data['phone'],
+                    'info' => $data['info'],
+                    'account_type' => $data['account_type'],
+
+                ]);
+
+                return $this->success_message('تم تحديث بياناتك بنجاح');
+            }
+        } catch (\Exception $e) {
+            return $this->exception_message($e);
+        }
+
+        return view('website.user.update');
+    }
+
 
     public function chat()
     {

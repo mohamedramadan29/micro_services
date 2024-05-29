@@ -43,8 +43,5 @@ Route::group(['prefix' => 'admin'], function () {
             Route::match(['get','post'],'service/update/{id}','update');
             Route::post('service/destroy/{id}','destroy');
         });
-
-
-
     });
 });

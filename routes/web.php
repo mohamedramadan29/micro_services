@@ -8,6 +8,7 @@ use  \App\Http\Controllers\FrontController;
 Route::get('/', function () {
     return view('website.index');
 });
+Route::get('/index', [FrontController::class, 'index'])->name('index');
 Route::get('about', function () {
     return view('website.about');
 });
@@ -28,16 +29,25 @@ Route::controller(UserController::class)->group(function () {
     Route::match(['get', 'post'], 'login', 'login');
     Route::match(['get', 'post'], 'register', 'register');
     Route::post('logout', 'logout');
-    Route::get('user/dashboard', 'index');
-    Route::get('user/reviews', 'reviews');
-    Route::get('user/update', 'update');
-    Route::get('user/chat', 'chat');
+    Route::group(['middleware' => ['auth']], function () {
+        Route::get('user/dashboard', 'index');
+        Route::get('user/reviews', 'reviews');
+        Route::match(['post','get'],'user/update','update');
+        Route::get('user/chat', 'chat');
+        Route::get('user/balance','balance');
+    });
 });
+// Start User Service
+Route::group(['middleware' => ['auth']], function () {
+    Route::controller(serviceController::class)->group(function () {
+        Route::get('service/index', 'index');
+        Route::match(['post','get'],'service/add','add');
+        Route::match(['post','get'],'service/update/{id}','update');
+        Route::match(['post','get'],'service/delete/{id}','delete');
+    });
+});
+
 // Confirm User Email
 Route::get('user/confirm/{code}', [UserController::class, 'UserConfirm']);
-// Start User Service
-Route::controller(serviceController::class)->group(function () {
-    Route::get('service/index', 'index');
-    Route::get('service/add', 'add');
-});
+
 include 'admin.php';

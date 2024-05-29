@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-    الملف الشخصي
+    {{\Illuminate\Support\Facades\Auth::user()->name}}
 @endsection
 @section('content')
     <!-- ============================ Page Title Start================================== -->
@@ -22,9 +22,14 @@
                     <div class="dashboard-navbar overlio-top">
 
                         <div class="d-user-avater">
-                            <img src="{{asset('assets/website/img/avatar.png')}}" class="img-fluid rounded" alt="">
-                            <h4> Mohamed Ramadan </h4>
-                            <span>mohamedramadan2930@gmail.com</span>
+                            @if(Auth::user()->image !='')
+                                <img src="{{asset('assets/uploads/users_image/'.Auth::user()->image)}}" class="img-fluid rounded" alt="">
+                            @else
+                                <img src="{{asset('assets/website/img/avatar.png')}}" class="img-fluid rounded" alt="">
+                            @endif
+
+                            <h4> {{Auth::user()->user_name}} </h4>
+                            <span> {{Auth::user()->email}} </span>
                         </div>
 
                         <div class="d-navigation">
@@ -76,26 +81,7 @@
                                             <div class="col-xl-12 col-lg-12">
                                                 <div class="form-group">
                                                     <label> نبذة عني </label>
-                                                    <textarea class="form-control with-light">السلام عليكم ورحمة الله
-انا اخوكم محمد
-مهندس برمجة وعلوم الحاسب
-خبرة فى مجال البرمجة وبناء المواقع الالكترونية من الصفر
-خبرة اكثر من 6 اعوام
-خبرة فى بناء المتاجر الالكترونية بمواصفات عالمية
-احتراف الوردبريس واستخدام الووكومرس
-html / css / javascript
-bootstrap / jquery /
-sass/ php / wordpress / sql /
-photoshop / woocommerce /
-*لماذا أنا:
-1_أكمل كل شيء في موعد التسليم
-2_وقت استجابة سريع
-3_اهتمام كبير بالتفاصيل والاستماع الى طلب الزبون
-4_التعديلات بكل سرور خلال وبعد انجاز العمل
-5_كما اقدم دعماً اضافياً لعملائي وارشدهم خلال مراحل العمل وبعد التسليم أيضاً(المتابعة مع العملاء بشكل مستمر)
-يشرفنى العمل معكم
-اتمنى التوفيق
-                                                </textarea>
+                                                    <textarea class="form-control with-light">{{Auth::user()->info}}</textarea>
                                                 </div>
                                             </div>
 

@@ -1,6 +1,7 @@
 @extends('website.layouts.master')
 @section('title') من نحن  @endsection
 @section('content')
+
     <!-- ============================ Page Title Start================================== -->
     <div class="hero-banner bg-cover side-effect"
          style="background:red url({{asset('assets/website/img/background3.webp')}})no-repeat;"
