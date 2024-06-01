@@ -21,6 +21,8 @@ Route::controller(FrontController::class)->group(function () {
     Route::get('categories', 'categories');
     Route::get('services', 'services');
     Route::get('service/{id}-{slug}', 'service_details');
+    Route::get('category/{slug}','sub_categories');
+    Route::get('services/{slug}','category_services');
 
 });
 

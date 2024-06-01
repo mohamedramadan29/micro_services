@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-    اقسام الخدمات
+    {{$category['name']}}
 @endsection
 @section('content')
     <!-- ============================ Page Title Start================================== -->
@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12">
 
-                    <h2 class="ipt-title"> الاقسام </h2>
+                    <h2 class="ipt-title"> {{$category['name']}} </h2>
                     <span class="ipn-subtitle"> مشاهدة جميع الاقسام  </span>
 
                 </div>
@@ -29,18 +29,18 @@
                             <!-- Filter Search -->
                             <div class="_filt_tag786">
                                 <div class="_tag782">
-                                    <div class="_tag780"> {{count($categories)}} اقسام رئيسية</div>
+                                    <div class="_tag780"> {{count($sub_categories)}} اقسام فرعيه</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <!-- Single Item -->
-                        @foreach($categories as $category)
+                        @foreach($sub_categories as $category)
                             <div class="col-lg-3 col-md-6 col-sm-12">
                                 <div class="ser_110">
                                     <div class="ser_110_thumb">
-                                        <a href="{{url('category/'.$category['slug'])}}" class="ser_100_link">
+                                        <a href="{{url('services/'.$category['slug'])}}" class="ser_100_link">
                                             <img src=" {{asset('assets/uploads/service_category/'.$category['image'])}}"
                                                  class="img-fluid" alt="">
                                         </a>
@@ -49,10 +49,10 @@
                                         <div class="_110_foot_left">
                                             <div>
                                                 <h5>
-                                                    <a href="{{url('category/'.$category['slug'])}}"> {{$category['name']}} </a>
+                                                    <a href="{{url('services/'.$category['slug'])}}"> {{$category['name']}} </a>
                                                 </h5>
-                                         </span>
-                                    </span>
+                                                </span>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -62,7 +62,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
-                            {{$categories->links()}}
+                            {{$sub_categories->links()}}
                         </div>
                     </div>
 
