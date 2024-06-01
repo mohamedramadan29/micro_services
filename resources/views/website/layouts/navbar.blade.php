@@ -14,7 +14,8 @@
                     <div class="nav-menus-wrapper">
                         @if(\Illuminate\Support\Facades\Auth::user())
                             <ul class="nav-menu nav-menu-social">
-                            <li><a href="{{url('service/add')}}"> اضف خدمة </a></li>
+                                <li><a href="{{url('service/add')}}"> اضف خدمة </a></li>
+                                <li><a href="{{url('cart')}}"> سلة المشتريات   </a></li>
                                 <li><a href="{{url('dashboard')}}"> حسابي </a></li>
                             </ul>
                         @else

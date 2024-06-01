@@ -20,24 +20,32 @@
     <section class="gray-bg text-right" dir="rtl">
         <div class="container">
             <div class="row">
-
                 <!-- Item Wrap Start -->
                 <div class="col-lg-8 col-md-12 col-sm-12">
                     <div class="_job_detail_box">
-
+                        @if(Session::has('Success_message'))
+                            <div
+                                class="alert alert-success"> {{Session::get('Success_message')}} <span> <a href="{{url('cart')}}"> مشاهدة السلة  </a> </span></div>
+                        @endif
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="_wrap_box_slice">
                             <div class="_job_detail_single">
-
                                 <p>
                                     {{$service['description']}}
                                 </p>
                             </div>
-
-
                             <div class="_job_detail_single">
                                 <h4> المهارات </h4>
                                 @php
-                                $skills = explode(',',$service['tags']);
+                                    $skills = explode(',',$service['tags']);
                                 @endphp
                                 <ul class="skilss">
                                     @foreach($skills as $skill)
@@ -46,7 +54,6 @@
                                 </ul>
                             </div>
                         </div>
-
                         <!-- Award & Experience -->
                         <div class="_wrap_box_slice">
                             <div class="_job_detail_single">
@@ -57,7 +64,8 @@
                                         <div class="col-lg-4 col-md-6 col-sm-12">
                                             <div class="ser_110">
                                                 <div class="ser_110_thumb">
-                                                    <a href="{{url('service/'.$serv['id'].'-'.$serv['slug'])}}" class="ser_100_link"><img
+                                                    <a href="{{url('service/'.$serv['id'].'-'.$serv['slug'])}}"
+                                                       class="ser_100_link"><img
                                                             src=" {{asset('assets/uploads/services/'.$serv['image'])}}"
                                                             class="img-fluid" alt=""></a>
                                                 </div>
@@ -84,14 +92,9 @@
                                             </div>
                                         </div>
                                     @endforeach
-
-
-
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
 
@@ -101,18 +104,24 @@
                             <img src="{{asset('assets/uploads/services/'.$service['image'])}}" class="img-fluid" alt="">
                         </div>
                         <div class="_jb_summary_thumb">
-                            <img src="{{asset('assets/uploads/users_image/'.$service['user']['image'])}}" class="img-fluid circle" alt="">
+                            <img src="{{asset('assets/uploads/users_image/'.$service['user']['image'])}}"
+                                 class="img-fluid circle" alt="">
                         </div>
                         <div class="_jb_summary_caption">
                             <h4> {{$service['user']['name']}} </h4>
                             <span>{{$service['user']['job_title']}}</span>
                         </div>
                         <div class="_jb_summary_body">
-                            <div class="_view_dis_908">
-                                <a href="{{url('cart/add/'.$service['id'])}}" class="btn flw_btn"> اضف الي السلة </a>
+                            <div class="_view_dis_908 d-flex">
+                                <form method="post" action="{{url('cart/add')}}">
+                                    <input type="hidden" name="service_id" value="{{$service['id']}}">
+                                    <input type="hidden" name="qty" value="1">
+                                    <input type="hidden" name="user_serv" value="{{$service['user_id']}}">
+                                    @csrf
+                                    <button type="submit" class="btn flw_btn"> اضف الي السلة</button>
+                                </form>
                                 <a href="{{url('user/chat')}}" class="btn msg_btn"> تواصل معي </a>
                             </div>
-
                             <div class="_view_dis_908">
                                 <ul class="exlio_list">
                                     <li>  <span class="text-success">
@@ -130,14 +139,15 @@
                                     </li>
                                     <li>المشترين <span class="text-warning"> {{$service['users_num_buy']}} </span></li>
                                     <li> طلبات جاري تنفيذها <span class="text-info">1</span></li>
-                                    <li> سعر الخدمة يبدأ من <span class="text-danger"> {{$service['price']}} $</span></li>
+                                    <li> سعر الخدمة يبدأ من <span class="text-danger"> {{$service['price']}} $</span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
 
                     <div class="_jb_summary light_box p-4">
-                        <h4> مشاركة الخدمة  </h4>
+                        <h4> مشاركة الخدمة </h4>
                         <!-- AddToAny BEGIN -->
                         <div class="a2a_kit a2a_kit_size_32 a2a_default_style" style="float: right">
                             <a class="a2a_dd" href="https://www.addtoany.com/share"></a>

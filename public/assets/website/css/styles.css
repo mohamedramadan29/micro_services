@@ -12649,3 +12649,39 @@ footer.skin-dark-footer ul.footer-bottom-social li a:hover, footer.skin-dark-foo
     @media (max-width: 420px) {
     }
 }
+
+
+/******************* Start Cart ************************/
+.cart_details {
+
+}
+.cart_details .quantity select{
+    width: 60px;
+    border-color: #ccc;
+    background-color: #f7f9fc;
+    border: 1px solid #8e9198;
+    border-radius: 2px;
+}
+.cart_details .serv_data{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.cart_details .serv_data .image{}
+.cart_details .serv_data .image img{
+    width: 165px;
+    height: 150px;
+    border-radius: 5px;
+    margin-left: 10px;
+    border: 1px solid #efefef;
+    padding: 2px;
+}
+.cart_details .serv_data .info{}
+.cart_details .serv_data .info h4{
+    font-size: 16px;
+}
+.cart_details .serv_data .info h4 a{
+    text-decoration: none;
+}
+.cart_details .serv_data .info p{}
+.cart_details .serv_data .info p a{}
