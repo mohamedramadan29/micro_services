@@ -73,7 +73,7 @@
                                                     <div class="_110_foot_left">
                                                         <div>
                                                             <h5>
-                                                                <a href="{{url('service-details')}}"> {{$serv['name']}} </a>
+                                                                <a href="{{url('service/'.$serv['id'].'-'.$serv['slug'])}}"> {{$serv['name']}} </a>
                                                             </h5>
                                                             <span> {{$serv['category']['name']}}  <span>
                                                               <div class="_dash_usr_rates mb-1">
@@ -112,6 +112,7 @@
                             <span>{{$service['user']['job_title']}}</span>
                         </div>
                         <div class="_jb_summary_body">
+                            @if($service['user_id'] != \Illuminate\Support\Facades\Auth::id())
                             <div class="_view_dis_908 d-flex">
                                 <form method="post" action="{{url('cart/add')}}">
                                     <input type="hidden" name="service_id" value="{{$service['id']}}">
@@ -120,8 +121,19 @@
                                     @csrf
                                     <button type="submit" class="btn flw_btn"> اضف الي السلة</button>
                                 </form>
-                                <a href="{{url('user/chat')}}" class="btn msg_btn"> تواصل معي </a>
+                                @if(\Illuminate\Support\Facades\Auth::id())
+                                    <form action="{{url('conversation/start')}}" method="post">
+                                        @csrf
+                                       <input type="hidden" name="service_id" value="{{$service['id']}}">
+                                        <input type="hidden" name="sender_id" value="{{Auth::id()}}">
+                                        <input type="hidden" name="receiver_id" value="{{$service['user_id']}}">
+                                        <button type="submit" class="btn msg_btn"> تواصل معي </button>
+                                    </form>
+                                @else
+                                    <a href="{{url('register')}}" class="btn msg_btn"> تواصل معي </a>
+                                @endif
                             </div>
+                            @endif
                             <div class="_view_dis_908">
                                 <ul class="exlio_list">
                                     <li>  <span class="text-success">

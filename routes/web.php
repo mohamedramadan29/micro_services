@@ -6,6 +6,7 @@ use \App\Http\Controllers\UserController;
 use  \App\Http\Controllers\FrontController;
 use \App\Http\Controllers\CartController;
 use \App\Http\Controllers\CheckOutController;
+use \App\Http\Controllers\ConversationController;
 Route::get('/', function () {
     return view('website.index');
 });
@@ -68,4 +69,10 @@ Route::group(['middleware' => ['auth']], function () {
     });
 });
 
+///////////////////////////// Start Conversation ////////////////////
+Route::controller(ConversationController::class)->group(function (){
+   Route::post('conversation/start','start_conversation');
+});
+//////////////////////// Start Chats /////////////////
+///
 include 'admin.php';

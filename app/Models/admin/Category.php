@@ -16,6 +16,7 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
+
     // Get the Services Number
     public function services()
     {

@@ -40,19 +40,31 @@
                             <div class="col-lg-3 col-md-6 col-sm-12">
                                 <div class="ser_110">
                                     <div class="ser_110_thumb">
-                                        <a href="{{url('category/'.$category['slug'])}}" class="ser_100_link">
-                                            <img src=" {{asset('assets/uploads/service_category/'.$category['image'])}}"
-                                                 class="img-fluid" alt="">
-                                        </a>
+                                        @if(count($category['parents']) > 0)
+                                            <a href="{{url('category/'.$category['slug'])}}" class="ser_100_link">
+                                                <img src=" {{asset('assets/uploads/service_category/'.$category['image'])}}"
+                                                     class="img-fluid" alt="">
+                                            </a>
+                                        @else
+                                            <a href="{{url('services/'.$category['slug'])}}" class="ser_100_link">
+                                                <img src=" {{asset('assets/uploads/service_category/'.$category['image'])}}"
+                                                     class="img-fluid" alt="">
+                                            </a>
+                                        @endif
+
                                     </div>
                                     <div class="ser_110_footer bott">
                                         <div class="_110_foot_left">
                                             <div>
                                                 <h5>
+                                                    @if(count($category['parents']) > 0)
                                                     <a href="{{url('category/'.$category['slug'])}}"> {{$category['name']}} </a>
+                                                    @else
+                                                        <a href="{{url('services/'.$category['slug'])}}"> {{$category['name']}} </a>
+                                                    @endif
                                                 </h5>
-                                         </span>
-                                    </span>
+                                                </span>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>

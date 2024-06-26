@@ -33,7 +33,8 @@ class FrontController extends Controller
 
     public function categories()
     {
-        $categories = Category::where('parent_id', '0')->paginate(12);
+        $categories = Category::with('parents')->where('parent_id', '0')->paginate(12);
+      //  dd($categories);
         return view('website.categories', compact('categories'));
     }
 

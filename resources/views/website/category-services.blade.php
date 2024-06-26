@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12">
 
-                    <h2 class="ipt-title">  الخدمات - {{$category['name']}}الخدمات </h2>
+                    <h2 class="ipt-title"> الخدمات - {{$category['name']}}  </h2>
                     <span class="ipn-subtitle"> مشاهدة جميع الخدمات  </span>
 
                 </div>
@@ -60,40 +60,40 @@
                                                     <div class="card-body pt-0">
                                                         <div class="inner_widget_link">
                                                             <ul class="no-ul-list filter-list">
-{{--                                                                @foreach($categories as $category)--}}
-{{--                                                                    @if(count($category['parents']) > 0 )--}}
-{{--                                                                        <li>--}}
-{{--                                                                            <input id="a1" class="checkbox-custom"--}}
-{{--                                                                                   name="ADA" type="checkbox"--}}
-{{--                                                                                   checked="">--}}
-{{--                                                                            <label for="a1"--}}
-{{--                                                                                   class="checkbox-custom-label"> {{$category['name']}}  ({{$category->services_count}})</label>--}}
-{{--                                                                            <ul class="no-ul-list filter-list"--}}
-{{--                                                                                style="padding-right: 25px">--}}
-{{--                                                                                @foreach($category['parents'] as $child)--}}
-{{--                                                                                    <li>--}}
-{{--                                                                                        <input id="aa1"--}}
-{{--                                                                                               class="checkbox-custom"--}}
-{{--                                                                                               name="ADA" type="checkbox">--}}
-{{--                                                                                        <label for="aa1"--}}
-{{--                                                                                               class="checkbox-custom-label"> {{$child['name']}} ({{$category->services_count}})</label>--}}
-{{--                                                                                    </li>--}}
-{{--                                                                                @endforeach--}}
+                                                                {{--                                                                @foreach($categories as $category)--}}
+                                                                {{--                                                                    @if(count($category['parents']) > 0 )--}}
+                                                                {{--                                                                        <li>--}}
+                                                                {{--                                                                            <input id="a1" class="checkbox-custom"--}}
+                                                                {{--                                                                                   name="ADA" type="checkbox"--}}
+                                                                {{--                                                                                   checked="">--}}
+                                                                {{--                                                                            <label for="a1"--}}
+                                                                {{--                                                                                   class="checkbox-custom-label"> {{$category['name']}}  ({{$category->services_count}})</label>--}}
+                                                                {{--                                                                            <ul class="no-ul-list filter-list"--}}
+                                                                {{--                                                                                style="padding-right: 25px">--}}
+                                                                {{--                                                                                @foreach($category['parents'] as $child)--}}
+                                                                {{--                                                                                    <li>--}}
+                                                                {{--                                                                                        <input id="aa1"--}}
+                                                                {{--                                                                                               class="checkbox-custom"--}}
+                                                                {{--                                                                                               name="ADA" type="checkbox">--}}
+                                                                {{--                                                                                        <label for="aa1"--}}
+                                                                {{--                                                                                               class="checkbox-custom-label"> {{$child['name']}} ({{$category->services_count}})</label>--}}
+                                                                {{--                                                                                    </li>--}}
+                                                                {{--                                                                                @endforeach--}}
 
-{{--                                                                            </ul>--}}
-{{--                                                                        </li>--}}
-{{--                                                                    @else--}}
-{{--                                                                        @if($category['parent_id'] == 0)--}}
-{{--                                                                            <li>--}}
-{{--                                                                                <input id="a2" class="checkbox-custom"--}}
-{{--                                                                                       name="Parking" type="checkbox">--}}
-{{--                                                                                <label for="a2"--}}
-{{--                                                                                       class="checkbox-custom-label"> {{$category['name']}} ({{$category->services_count}})</label>--}}
-{{--                                                                            </li>--}}
-{{--                                                                        @endif--}}
+                                                                {{--                                                                            </ul>--}}
+                                                                {{--                                                                        </li>--}}
+                                                                {{--                                                                    @else--}}
+                                                                {{--                                                                        @if($category['parent_id'] == 0)--}}
+                                                                {{--                                                                            <li>--}}
+                                                                {{--                                                                                <input id="a2" class="checkbox-custom"--}}
+                                                                {{--                                                                                       name="Parking" type="checkbox">--}}
+                                                                {{--                                                                                <label for="a2"--}}
+                                                                {{--                                                                                       class="checkbox-custom-label"> {{$category['name']}} ({{$category->services_count}})</label>--}}
+                                                                {{--                                                                            </li>--}}
+                                                                {{--                                                                        @endif--}}
 
-{{--                                                                    @endif--}}
-{{--                                                                @endforeach--}}
+                                                                {{--                                                                    @endif--}}
+                                                                {{--                                                                @endforeach--}}
 
                                                             </ul>
                                                         </div>
@@ -175,10 +175,20 @@
                                     </div>
                                     <div class="ser_110_footer bott">
                                         <div class="_110_foot_left">
-                                            <div class="_autho098"><img
-                                                    src="{{asset('assets/uploads/users_image/'.$serv['user']['image'])}}"
-                                                    class="img-fluid circle" alt=""><img
-                                                    src="{{asset('assets/website/img/verify.svg')}}" class="verified"
+                                            <div class="_autho098">
+                                                @if($serv['user']['image'] !='' || $serv['user']['image'] == null)
+                                                    <img
+                                                        src="{{asset('assets/website/img/avatar.png')}}"
+                                                        class="img-fluid circle" alt="">
+                                                @else
+                                                    <img
+                                                        src="{{asset('assets/uploads/users_image/'.$serv['user']['image'])}}"
+                                                        class="img-fluid circle" alt="">
+
+                                                @endif
+                                                <img
+                                                    src="{{asset('assets/website/img/verify.svg')}}"
+                                                    class="verified"
                                                     width="12" alt=""></div>
                                             <div class="_autho097"><h5><a
                                                         href="{{url('user/'.$serv['user']['user_name'])}}">{{$serv['user']['user_name']}}</a>
