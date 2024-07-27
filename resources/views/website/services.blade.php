@@ -33,134 +33,140 @@
 
                         <!-- Find New Property -->
                         <div class="sidebar-widgets collapse miz_show" id="search_open" data-parent="#search_open">
+                            <form action="{{url('services')}}" method="get">
+                                @csrf
+                                <div class="search-inner p-0">
 
-                            <div class="search-inner p-0">
-
-                                <div class="filter-search-box pb-0">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder=" ابحث عن الخدمة ... ">
-                                    </div>
-                                </div>
-
-                                <div class="filter_wraps">
-
-                                    <!-- Job categories Search -->
-                                    <div class="single_search_boxed">
-                                        <div class="widget-boxed-header">
-                                            <h4>
-                                                <a href="#categories" data-toggle="collapse" aria-expanded="true"
-                                                   role="button"> حدد القسم </a>
-                                            </h4>
+                                    <div class="filter-search-box pb-0">
+                                        <div class="form-group">
+                                            <input type="text" name="search" class="form-control"
+                                                   placeholder=" ابحث عن الخدمة ... ">
                                         </div>
-                                        <div class="widget-boxed-body collapse show" id="categories"
-                                             data-parent="#categories" dir="rtl">
-                                            <div class="side-list no-border">
-                                                <!-- Single Filter Card -->
-                                                <div class="single_filter_card">
-                                                    <div class="card-body pt-0">
-                                                        <div class="inner_widget_link">
-                                                            <ul class="no-ul-list filter-list">
-                                                                @foreach($categories as $category)
-                                                                    @if(count($category['parents']) > 0 )
-                                                                        <li>
-                                                                            <input id="a1" class="checkbox-custom"
-                                                                                   name="ADA" type="checkbox"
-                                                                                   checked="">
-                                                                            <label for="a1"
-                                                                                   class="checkbox-custom-label"> {{$category['name']}}
-                                                                                ({{$category->services_count}})</label>
-                                                                            <ul class="no-ul-list filter-list"
-                                                                                style="padding-right: 25px">
-                                                                                @foreach($category['parents'] as $child)
-                                                                                    <li>
-                                                                                        <input id="aa1"
-                                                                                               class="checkbox-custom"
-                                                                                               name="ADA"
-                                                                                               type="checkbox">
-                                                                                        <label for="aa1"
-                                                                                               class="checkbox-custom-label"> {{$child['name']}}
-                                                                                            ({{$category->services_count}}
-                                                                                            )</label>
-                                                                                    </li>
-                                                                                @endforeach
+                                    </div>
 
-                                                                            </ul>
-                                                                        </li>
-                                                                    @else
-                                                                        @if($category['parent_id'] == 0)
+                                    <div class="filter_wraps">
+                                        <!-- Job categories Search -->
+                                        <div class="single_search_boxed">
+                                            <div class="widget-boxed-header">
+                                                <h4>
+                                                    <a href="#categories" data-toggle="collapse" aria-expanded="true"
+                                                       role="button"> حدد القسم </a>
+                                                </h4>
+                                            </div>
+                                            <div class="widget-boxed-body collapse show" id="categories"
+                                                 data-parent="#categories" dir="rtl">
+                                                <div class="side-list no-border">
+                                                    <!-- Single Filter Card -->
+                                                    <div class="single_filter_card">
+                                                        <div class="card-body pt-0">
+                                                            <div class="inner_widget_link">
+                                                                <ul class="no-ul-list filter-list">
+                                                                    @foreach($categories as $category)
+                                                                        @if(count($category['parents']) > 0 )
                                                                             <li>
-                                                                                <input id="a2" class="checkbox-custom"
-                                                                                       name="Parking" type="checkbox">
-                                                                                <label for="a2"
+                                                                                <input id="a1" class="checkbox-custom"
+                                                                                       name="cat_ids[]" type="checkbox"
+                                                                                      >
+                                                                                <label for="a1"
                                                                                        class="checkbox-custom-label"> {{$category['name']}}
-                                                                                    ({{$category->services_count}}
-                                                                                    )</label>
+                                                                                </label>
+                                                                                <ul class="no-ul-list filter-list"
+                                                                                    style="padding-right: 25px">
+                                                                                    @foreach($category['parents'] as $child)
+                                                                                        <li>
+                                                                                            <input id="aa1"
+                                                                                                   class="checkbox-custom"
+                                                                                                   name="ADA"
+                                                                                                   type="checkbox">
+                                                                                            <label for="aa1"
+                                                                                                   class="checkbox-custom-label"> {{$child['name']}}
+
+                                                                                            </label>
+                                                                                        </li>
+                                                                                    @endforeach
+
+                                                                                </ul>
                                                                             </li>
+                                                                        @else
+                                                                            @if($category['parent_id'] == 0)
+                                                                                <li>
+                                                                                    <input id="a2"
+                                                                                           class="checkbox-custom"
+                                                                                           name="Parking"
+                                                                                           type="checkbox">
+                                                                                    <label for="a2"
+                                                                                           class="checkbox-custom-label"> {{$category['name']}}</label>
+                                                                                </li>
+                                                                            @endif
+
                                                                         @endif
+                                                                    @endforeach
 
-                                                                    @endif
-                                                                @endforeach
-
-                                                            </ul>
+                                                                </ul>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Job Locations Search -->
-                                    <div class="single_search_boxed">
-                                        <div class="widget-boxed-header">
-                                            <h4>
-                                                <a href="#locations" data-toggle="collapse" aria-expanded="false"
-                                                   role="button" class="collapsed"> مستوي البائع </a>
-                                            </h4>
+                                        <!-- Job Locations Search -->
+                                        <div class="single_search_boxed">
+                                            {{--                                        <div class="widget-boxed-header">--}}
+                                            {{--                                            <h4>--}}
+                                            {{--                                                <a href="#locations" data-toggle="collapse" aria-expanded="false"--}}
+                                            {{--                                                   role="button" class="collapsed"> مستوي البائع </a>--}}
+                                            {{--                                            </h4>--}}
 
+                                            {{--                                        </div>--}}
+                                            {{--                                        <div class="widget-boxed-body collapse show" id="locations"--}}
+                                            {{--                                             data-parent="#locations">--}}
+                                            {{--                                            <div class="side-list no-border">--}}
+                                            {{--                                                <!-- Single Filter Card -->--}}
+                                            {{--                                                <div class="single_filter_card">--}}
+                                            {{--                                                    <div class="card-body pt-0">--}}
+                                            {{--                                                        <div class="inner_widget_link">--}}
+                                            {{--                                                            <ul class="no-ul-list filter-list">--}}
+                                            {{--                                                                <li>--}}
+                                            {{--                                                                    <input id="b1" class="checkbox-custom" name="ADA"--}}
+                                            {{--                                                                           type="checkbox" checked="">--}}
+                                            {{--                                                                    <label for="b1" class="checkbox-custom-label"> بائع--}}
+                                            {{--                                                                        موثوق / مميز </label>--}}
+                                            {{--                                                                </li>--}}
+                                            {{--                                                                <li>--}}
+                                            {{--                                                                    <input id="b2" class="checkbox-custom"--}}
+                                            {{--                                                                           name="Parking" type="checkbox">--}}
+                                            {{--                                                                    <label for="b2" class="checkbox-custom-label"> بائع--}}
+                                            {{--                                                                        نشيط </label>--}}
+                                            {{--                                                                </li>--}}
+                                            {{--                                                                <li>--}}
+                                            {{--                                                                    <input id="b2" class="checkbox-custom"--}}
+                                            {{--                                                                           name="Parking" type="checkbox">--}}
+                                            {{--                                                                    <label for="b2" class="checkbox-custom-label"> بائع--}}
+                                            {{--                                                                        جديد </label>--}}
+                                            {{--                                                                </li>--}}
+
+                                            {{--                                                            </ul>--}}
+                                            {{--                                                        </div>--}}
+                                            {{--                                                    </div>--}}
+                                            {{--                                                </div>--}}
+                                            {{--                                            </div>--}}
+                                            {{--                                        </div>--}}
                                         </div>
-                                        <div class="widget-boxed-body collapse show" id="locations"
-                                             data-parent="#locations">
-                                            <div class="side-list no-border">
-                                                <!-- Single Filter Card -->
-                                                <div class="single_filter_card">
-                                                    <div class="card-body pt-0">
-                                                        <div class="inner_widget_link">
-                                                            <ul class="no-ul-list filter-list">
-                                                                <li>
-                                                                    <input id="b1" class="checkbox-custom" name="ADA"
-                                                                           type="checkbox" checked="">
-                                                                    <label for="b1" class="checkbox-custom-label"> بائع
-                                                                        موثوق / مميز </label>
-                                                                </li>
-                                                                <li>
-                                                                    <input id="b2" class="checkbox-custom"
-                                                                           name="Parking" type="checkbox">
-                                                                    <label for="b2" class="checkbox-custom-label"> بائع
-                                                                        نشيط </label>
-                                                                </li>
-                                                                <li>
-                                                                    <input id="b2" class="checkbox-custom"
-                                                                           name="Parking" type="checkbox">
-                                                                    <label for="b2" class="checkbox-custom-label"> بائع
-                                                                        جديد </label>
-                                                                </li>
-
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
-
-
+                                    <div class="form-group filter_button pt-2">
+                                        <button type="submit" class="btn btn btn-theme-2 rounded full-width"> بحث
+                                        </button>
+                                    </div>
                                 </div>
 
-                                <div class="form-group filter_button pt-2">
-                                    <button type="submit" class="btn btn btn-theme-2 rounded full-width"> بحث</button>
-                                </div>
-                            </div>
+
+                            </form>
+
+
                         </div>
+
+
                     </div>
                     <!-- Sidebar End -->
 
@@ -190,7 +196,6 @@
                                                     <img
                                                         src="{{asset('assets/uploads/users_image/'.$serv['user']['image'])}}"
                                                         class="img-fluid circle" alt="">
-
 
                                                 @endif
 

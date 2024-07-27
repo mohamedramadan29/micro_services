@@ -7,7 +7,7 @@
                         type="button"><span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="post" action="{{url('admin.php/users/edit')}}" autocomplete="off">
+            <form method="post" action="{{url('admin/users/edit')}}" autocomplete="off">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">

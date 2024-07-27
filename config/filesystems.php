@@ -39,14 +39,21 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+        'services' => [
+            'driver' => 'local',
+            'root' => base_path('public/assets/uploads/services'), // Use base_path() directly with the path
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
         'service_category' => [
             'driver' => 'local',
             'root' => base_path('public/assets/uploads/service_category'), // Use base_path() directly with the path
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
         ],

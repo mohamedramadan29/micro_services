@@ -55,7 +55,8 @@
                         <span class="side-menu__label">   اقسام الخدمات  </span><i
                             class="angle fe fe-chevron-down"></i></a>
                     <ul class="slide-menu">
-                        <li><a class="slide-item" href="{{url('admin/categories')}}">  مشاهدة الاقسام  </a></li>
+                        <li><a class="slide-item" href="{{url('admin/categories')}}">  الاقسام الرئيسية  </a></li>
+                        <li><a class="slide-item" href="{{url('admin/sub-categories')}}">   الاقسام الفرعية   </a></li>
                     </ul>
                 </li>
                 <li class="side-item side-item-category">   الخدمات  </li>

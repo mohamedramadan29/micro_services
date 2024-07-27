@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->integer('cat_id');
+            $table->integer('sub_cat_id')->nullable();
             $table->integer('user_id');
             $table->string('image');
             $table->text('description');

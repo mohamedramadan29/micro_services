@@ -7,14 +7,14 @@
         <div class="container">
             <h1> أنجز مشاريعك عبر الإنترنت بسهولة وأمان </h1>
             <p class="lead">وظّف مستقلين محترفين لإنجاز أعمالك </p>
-            <form class="mt-4 " dir="rtl" >
+            <form class="mt-4" dir="rtl" method="get" action="{{url('search')}}">
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-md-10 col-sm-12">
                         <div class="banner-search style-2">
                             <div class="input-group">
-                                <input type="text" class="form-control lio-rad" placeholder=" ابحث عن الخدمة  ">
+                                <input type="text" name="search" class="form-control lio-rad" placeholder=" ابحث عن الخدمة  ">
                                 <div class="input-group-append">
-                                    <button type="button" class="btn bt-round btn--2"><i class="ti-search"></i></button>
+                                    <button type="submit" class="btn bt-round btn--2"><i class="ti-search"></i></button>
                                 </div>
                             </div>
                         </div>

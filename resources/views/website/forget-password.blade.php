@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-    تسجيل دخول
+     نسيت كلمة المرور
 @endsection
 @section('content')
     <!-- ============================ Page Title Start================================== -->
@@ -9,8 +9,7 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12">
 
-                    <h2 class="ipt-title"> تسجيل دخول </h2>
-                    <span class="ipn-subtitle"> سجل دخولك الان   </span>
+                    <h2 class="ipt-title">   نسيت كلمة المرور  </h2>
 
                 </div>
             </div>
@@ -26,7 +25,7 @@
                 <div class="col-lg-8 col-12">
                     <div class="modal-content" id="registermodal">
                         <div class="modal-header">
-                            <h4> تسجيل دخول </h4>
+                            <h4> نسيت كلمة المرور  </h4>
 
                         </div>
                         <div class="modal-body">
@@ -43,7 +42,7 @@
                                 @endforeach
                             @endif
                             <div class="login-form">
-                                <form method="post" action="{{url('login')}}">
+                                <form action="{{url('forget-password')}}" method="post">
                                     @csrf
                                     <div class="form-group">
                                         <label>  البريد الالكتروني </label>
@@ -52,37 +51,13 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label> كلمة المرور </label>
-                                        <input type="password" class="form-control" placeholder="*******"
-                                               name="password">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <button type="submit" class="btn dark-2 btn-md full-width pop-login"> تسجيل
-                                            دخول
+                                        <button type="submit" class="btn dark-2 btn-md full-width pop-login">
+                                            ارسال
                                         </button>
                                     </div>
 
                                 </form>
                             </div>
-
-                            <div class="form-group text-center">
-                                <span> او سجل دخولك ب  </span>
-                            </div>
-
-                            <div class="social_logs mb-4">
-                                <ul class="shares_jobs text-center">
-                                    <li><a href="#" class="share fb"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#" class="share gp"><i class="fa fa-google"></i></a></li>
-                                </ul>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <div class="mf-link"><i class="ti-user"></i> ليس لديك حساب ؟ <a href="{{url('register')}}"
-                                                                                            class="theme-cl"> حساب
-                                    جديد </a></div>
-                            <div class="mf-forget"><a href="{{url('forget-password')}}"> نسيت كلمة المرور ؟ </a></div>
                         </div>
                     </div>
                 </div>

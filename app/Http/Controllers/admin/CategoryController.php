@@ -54,15 +54,19 @@ class CategoryController extends Controller
             $rules = [];
             $messages = [];
             $this->validate($request, $rules, $messages);
+
+
             if ($request->hasFile('image')) {
                 $filename = $this->saveImage($request->image, public_path('assets/uploads/service_category'));
-                if ($category['image'] != '') {
-                    unlink(public_path('assets/uploads/service_category/' . $category['image']));
+                $old_image = public_path('assets/uploads/service_category/' . $category->image);
+                if (file_exists($old_image) && isset($category->image)) {
+                    unlink($old_image);
                 }
                 $category->update([
                     'image' => $filename
                 ]);
             }
+
             $category->update([
                 'name' => $data['name'],
                 'slug' => $this->CustomeSlug($data['name']),

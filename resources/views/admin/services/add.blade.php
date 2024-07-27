@@ -42,21 +42,65 @@
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label"> القسم </label>
+                                            <label class="form-label"> القسم الرئيسي </label>
                                         </div>
                                         <div class="col-md-9">
-                                            <select required class="form-control select2" name="cat_id">
-                                                <option> -- حدد القسم --</option>
-                                                @foreach($categories as $category) @endforeach
-                                                <option value="{{$category['id']}}"> {{$category['name']}} </option>
+                                            <select required class="form-control select2" name="cat_id"
+                                                    id="mainCategory">
+                                                <option> -- حدد القسم الرئيسي --</option>
+                                                @foreach($categories as $category)
+                                                    <option value="{{$category['id']}}"> {{$category['name']}} </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label"> المستخدم  </label>
+                                            <label class="form-label"> حدد القسم الفرعي </label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <select required class="form-control select2" name="sub_cat_id"
+                                                    id="subCategory">
+                                                <option> -- حدد القسم الفرعي --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#mainCategory').on('change', function () {
+                                            var categoryId = $(this).val();
+                                            if (categoryId) {
+                                                $.ajax({
+                                                    url: 'http://127.0.0.1:8000/admin/service/get-subcategories/' + categoryId,
+                                                    type: 'GET',
+                                                    dataType: 'json',
+                                                    success: function (data) {
+                                                        $('#subCategory').empty();
+                                                        $('#subCategory').append('<option> -- حدد القسم الفرعي --</option>');
+                                                        $.each(data, function (key, value) {
+                                                            $('#subCategory').append('<option value="' + value.id + '">' + value.name + '</option>');
+                                                        });
+                                                    }
+                                                });
+                                            } else {
+                                                $('#subCategory').empty();
+                                                $('#subCategory').append('<option> -- حدد القسم الفرعي --</option>');
+                                            }
+                                        });
+                                    });
+                                </script>
+
+
+                                <div class="form-group ">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label"> المستخدم </label>
                                         </div>
                                         <div class="col-md-9">
                                             <input required type="hidden" class="form-control" name="user_id"
@@ -69,7 +113,7 @@
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label"> اسم الخدمة  </label>
+                                            <label class="form-label"> اسم الخدمة </label>
                                         </div>
                                         <div class="col-md-9">
                                             <input required type="text" class="form-control" name="name"
@@ -81,17 +125,18 @@
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label"> السعر  </label>
+                                            <label class="form-label"> السعر </label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input required type="number" class="form-control" name="price" value="{{old('price')}}">
+                                            <input required type="number" class="form-control" name="price"
+                                                   value="{{old('price')}}">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label"> صورة الخدمة  </label>
+                                            <label class="form-label"> صورة الخدمة </label>
                                         </div>
                                         <div class="col-md-9">
                                             <input required type="file" class="form-control" name="image">
@@ -105,23 +150,38 @@
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label">  وصف الخدمة  </label>
+                                            <label class="form-label"> وصف الخدمة </label>
                                         </div>
                                         <div class="col-md-9">
-                                            <textarea cols="" rows="10" class="form-control" required name="description">{{old('description')}}</textarea>
+                                            <textarea cols="" rows="10" class="form-control" required
+                                                      name="description">{{old('description')}}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group ">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label"> الكلمات المفتاحية <span
+                                                    class="badge badge-danger"> افصل بين كل كلمة والاخري ب (,) </span>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input required type="text" class="form-control" name="tags"
+                                                   value="{{old('tags')}}">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label"> حالة الخدمة  </label>
+                                            <label class="form-label"> حالة الخدمة </label>
                                         </div>
                                         <div class="col-md-9">
                                             <select required class="form-control select" name="status">
                                                 <option> -- حدد --</option>
-                                                <option value="1"> فعالة  </option>
-                                                <option value="0">  غير فعالة </option>
+                                                <option value="1"> فعالة</option>
+                                                <option value="0"> غير فعالة</option>
                                             </select>
                                         </div>
                                     </div>
@@ -131,7 +191,7 @@
 
 
                         <div class="card-footer text-left">
-                            <button type="submit" class="btn btn-primary waves-effect waves-light">  اضافة خدمة
+                            <button type="submit" class="btn btn-primary waves-effect waves-light"> اضافة خدمة
                             </button>
                         </div>
                     </form>

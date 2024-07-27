@@ -7,6 +7,7 @@ use  \App\Http\Controllers\FrontController;
 use \App\Http\Controllers\CartController;
 use \App\Http\Controllers\CheckOutController;
 use \App\Http\Controllers\ConversationController;
+
 Route::get('/', function () {
     return view('website.index');
 });
@@ -17,7 +18,6 @@ Route::get('about', function () {
 Route::get('faq', function () {
     return view('website.faq');
 });
-
 Route::controller(FrontController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('categories', 'categories');
@@ -25,7 +25,12 @@ Route::controller(FrontController::class)->group(function () {
     Route::get('service/{id}-{slug}', 'service_details');
     Route::get('category/{slug}', 'sub_categories');
     Route::get('services/{slug}', 'category_services');
-
+    Route::match(['post', 'get'], 'forget-password', 'forget_password');
+    Route::match(['post', 'get'], 'user/change-forget-password/{code}', 'change_forget_password');
+    Route::post('user/update_forget_password', 'update_forget_password');
+    Route::get('terms', 'terms');
+    Route::get('privacy-policy', 'privacy_policy');
+    Route::get('search','search');
 });
 // Confirm User Email
 Route::get('user/confirm/{code}', [UserController::class, 'UserConfirm']);
@@ -65,13 +70,13 @@ Route::controller(CartController::class)->group(function () {
 Route::group(['middleware' => ['auth']], function () {
     Route::controller(CheckOutController::class)->group(function () {
         Route::get('checkout', 'index');
-        Route::post('checkout/order','order');
+        Route::post('checkout/order', 'order');
     });
 });
 
 ///////////////////////////// Start Conversation ////////////////////
-Route::controller(ConversationController::class)->group(function (){
-   Route::post('conversation/start','start_conversation');
+Route::controller(ConversationController::class)->group(function () {
+    Route::post('conversation/start', 'start_conversation');
 });
 //////////////////////// Start Chats /////////////////
 ///

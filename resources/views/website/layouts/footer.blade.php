@@ -24,8 +24,8 @@
                         <ul class="footer-menu">
                             <li><a href="{{'/about'}}"> من نحن  </a></li>
                             <li><a href="{{'/faq'}}"> الاسئلة الشائعة  </a></li>
-                            <li><a href="#"> سياسة الاستخدام  </a></li>
-                            <li><a href="#"> سياسة الخصوصية  </a></li>
+                            <li><a href="{{'/terms'}}"> سياسة الاستخدام  </a></li>
+                            <li><a href="{{'/privacy-policy'}}"> سياسة الخصوصية  </a></li>
                         </ul>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
 <script src="{{asset('assets/website/js/materialize.min.js')}}"></script>
 <script src="{{asset('assets/website/js/metisMenu.min.js')}}"></script>
 <script src="{{asset('assets/website/js/custom.js')}}"></script>
-
+@notifyJs
 <script>
     var vChipsList =  [{
         tag: 'Photoshop',

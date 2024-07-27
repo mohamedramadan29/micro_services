@@ -123,7 +123,7 @@ class UserController extends Controller
                     $message->to($email)->subject(' تفعيل الحساب الخاص بك  ');
                 });
                 DB::commit();
-                return $this->success_message('تم التسجيل بنجاح  :: من فضلك فعل الحساب تبعك من خلال البريد الالكتروني ');
+                 return $this->success_message('تم التسجيل بنجاح  :: من فضلك فعل الحساب تبعك من خلال البريد الالكتروني ');
                 //return $this->success_message('تم انشاء حسابك بنجاح من فضلك سجل دخولك الان ');
             }
         } catch (\Exception $e) {

@@ -39,21 +39,74 @@
                         @csrf
                         <div class="row">
                             <div class="col-lg-6">
-                                <div class="form-group ">
+                                <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label class="form-label"> القسم </label>
                                         </div>
                                         <div class="col-md-9">
-                                            <select required class="form-control select2" name="cat_id">
+                                            <select required class="form-control select2" name="cat_id" id="mainCategory">
                                                 <option> -- حدد القسم --</option>
-                                                 @foreach($categories as $category)
-                                                <option @if($service['cat_id'] == $category['id']) selected @endif value="{{$category['id']}}"> {{$category['name']}} </option>
+                                                @foreach($categories as $category)
+                                                    <option @if($service['cat_id'] == $category['id']) selected @endif value="{{$category['id']}}"> {{$category['name']}} </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label"> القسم الفرعي </label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <select required class="form-control select2" name="sub_cat_id" id="subCategory">
+                                                <option> -- القسم الفرعي --</option>
+                                                @foreach($subCategories as $subcategory)
+                                                    <option @if($service['sub_cat_id'] == $subcategory['id']) selected @endif value="{{$subcategory['id']}}"> {{$subcategory['name']}} </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                <script>
+                                    $(document).ready(function() {
+                                        var selectedCategoryId = $('#mainCategory').val();
+                                        if (selectedCategoryId) {
+                                            loadSubCategories(selectedCategoryId, "{{ $service['sub_cat_id'] }}");
+                                        }
+
+                                        $('#mainCategory').on('change', function() {
+                                            var categoryId = $(this).val();
+                                            if (categoryId) {
+                                                loadSubCategories(categoryId, null);
+                                            } else {
+                                                $('#subCategory').empty();
+                                                $('#subCategory').append('<option> -- حدد القسم الفرعي --</option>');
+                                            }
+                                        });
+
+                                        function loadSubCategories(categoryId, selectedSubCatId) {
+                                            $.ajax({
+
+                                                url: 'http://127.0.0.1:8000/admin/service/get-subcategories/' + categoryId,
+                                                type: 'GET',
+                                                dataType: 'json',
+                                                success: function(data) {
+                                                    $('#subCategory').empty();
+                                                    $('#subCategory').append('<option> -- حدد القسم الفرعي --</option>');
+                                                    $.each(data, function(key, value) {
+                                                        var isSelected = (selectedSubCatId && selectedSubCatId == value.id) ? 'selected' : '';
+                                                        $('#subCategory').append('<option value="' + value.id + '" ' + isSelected + '>' + value.name + '</option>');
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                                </script>
 
                                 <div class="form-group ">
                                     <div class="row">
@@ -99,6 +152,16 @@
                                         </div>
                                         <div class="col-md-9">
                                             <textarea cols="" rows="10" class="form-control" required name="description">{{$service['description']}}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label"> الكلمات المفتاحية <span class="badge badge-danger"> افصل بين كل كلمة والاخري ب (,) </span> </label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input required type="text" class="form-control" name="tags" value="{{$service['tags']}}">
                                         </div>
                                     </div>
                                 </div>

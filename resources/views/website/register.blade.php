@@ -30,20 +30,18 @@
 
                         </div>
                         <div class="modal-body">
-                            @if(Session::has('Success_message'))
-                                <div
-                                    class="alert alert-success"> {{Session::get('Success_message')}} </div>
-                            @endif
-
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
+                                @if (Session::has('Success_message'))
+                                    @php
+                                        emotify('success', \Illuminate\Support\Facades\Session::get('Success_message'));
+                                    @endphp
+                                @endif
+                                @if ($errors->any())
+                                    @foreach ($errors->all() as $error)
+                                        @php
+                                            emotify('error', $error);
+                                        @endphp
+                                    @endforeach
+                                @endif
                             <div class="login-form">
                                 <form method="post" action="{{url('/register')}}">
                                     @csrf

@@ -34,6 +34,7 @@
 -------------------------------------------------------------*/
 * {
     outline: none;
+    --main-color: #007bff;
 }
 
 body {
@@ -6253,6 +6254,8 @@ ul.applieded_list li .nore_applied span {
 
 .page-title .ipt-title {
     color: #ffffff;
+    font-size: 30px;
+    text-align: center;
 }
 
 .ipt-title {
@@ -6267,6 +6270,13 @@ ul.applieded_list li .nore_applied span {
 
 .ipn-subtitle {
     color: #add1ff;
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+    font-style: normal;
+    font-family: 'Noto Kufi Arabic';
+    font-size: 17px;
+    margin-top: 10px;
 }
 
 /*------------------ Accordion Style -----------------*/
@@ -12684,3 +12694,51 @@ footer.skin-dark-footer ul.footer-bottom-social li a:hover, footer.skin-dark-foo
 }
 .cart_details .serv_data .info p{}
 .cart_details .serv_data .info p a{}
+
+
+[type=button], [type=reset], [type=submit], button{
+    background-color:var(--main-color)!important;
+}
+
+
+/********************** start Privacy Page *********/
+
+.privacy_page{
+    background-color: #ffffff;
+    padding: 50px;
+}
+.privacy_page .data p{
+    line-height: 2;
+}
+.privacy_page .data h2{
+    font-weight: bold;
+    margin: 15px 0;
+}
+/************* end Privacy Page **********/
+/*********** Start BreadCrump **********/
+
+
+.breadcrumb
+{
+    justify-content: center;
+flex-direction: row-reverse;
+    background: transparent;
+}
+.breadcrumb-item+.breadcrumb-item::before{
+    float: right;
+    padding-left: .5rem;
+}
+.breadcrumb a{
+    color:#fff;
+}
+.breadcrumb-item.active {
+    color: #dfdfdf;
+}
+.breadcrumb-item+.breadcrumb-item {
+    padding-right: .5rem;
+}
+
+
+
+
+/************* End BreadCrump *************/
