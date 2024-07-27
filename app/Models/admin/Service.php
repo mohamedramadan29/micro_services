@@ -16,6 +16,12 @@ class Service extends Model
     {
         return $this->belongsTo(Category::class,'cat_id');
     }
+    public function subcategory()
+    {
+
+        return $this->belongsTo(SubCategory::class,'sub_cat_id');
+
+    }
 
     // Get user
     public function user()
