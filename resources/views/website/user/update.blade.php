@@ -38,11 +38,11 @@
                                 </li>
                                 <li><a href="{{url('service/index')}}"><i class="ti-user"></i> الخدمات </a></li>
                                 <li><a href="{{url('service/add')}}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
-                                <li><a href="{{url('user/chat')}}"><i class="ti-email"></i> المحادثات </a></li>
-                                <li><a href="{{url('user/reviews')}}"><i class="ti-email"></i> التقيمات </a></li>
-                                <li><a href="{{url('user/update')}}"><i class="ti-email"></i> تعديل الملف الشخصي </a>
-                                </li>
-                                <li><a href="{{url('user/balance')}}"><i class="ti-email"></i> الرصيد </a></li>
+                                <li><a href="{{url('chat-main')}}"><i class="ti-email"></i> المحادثات </a></li>
+                                <li><a href="{{url('reviews')}}"><i class="ti-email"></i> التقيمات </a></li>
+                                <li><a href="{{url('update-account')}}"><i class="ti-email"></i> تعديل الملف الشخصي
+                                    </a></li>
+                                <li><a href="{{url('balance')}}"><i class="ti-email"></i> الرصيد </a></li>
                                 <li><a href="{{url('logout')}}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
                             </ul>
                         </div>
@@ -66,21 +66,19 @@
                             </div>
                         </div>
                     </div>
-                    @if(Session::has('Success_message'))
-                        <div
-                            class="alert alert-success"> {{Session::get('Success_message')}} </div>
+                    @if (Session::has('Success_message'))
+                        @php
+                            emotify('success', \Illuminate\Support\Facades\Session::get('Success_message'));
+                        @endphp
                     @endif
-
                     @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                        @foreach ($errors->all() as $error)
+                            @php
+                                emotify('error', $error);
+                            @endphp
+                        @endforeach
                     @endif
-                    <form method="post" enctype="multipart/form-data" action="{{url('user/update')}}">
+                    <form method="post" enctype="multipart/form-data" action="{{url('update-account')}}">
                         @csrf
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12">

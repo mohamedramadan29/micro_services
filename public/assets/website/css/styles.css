@@ -10939,13 +10939,23 @@ button.btn.btn-save {
 
 .messages-headline {
     font-size: 16px;
-    margin: 0;
-    padding: 22px 30px;
+    padding: 11px 3px;
     background-color: #fff;
-    display: block;
-    border-bottom: 1px solid #edf1f9;
+
+    border-bottom: 1px solid #d7d8d9;
     border-radius: 4px 4px 0 0;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+.messages-headline img{
+    width:50px;
+    height:50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    margin-left: 15px;
 }
 
 .messages-headline h4 {
@@ -10981,8 +10991,13 @@ button.btn.btn-save {
 
 .messages-container-inner .dash-msg-content {
     padding: 30px;
-}
+    border:1px solid #f1f0f0;
 
+}
+.messages_area{
+    height:500px;
+    overflow: scroll;
+}
 .messages-container-inner .dash-msg-inbox, .messages-container-inner .dash-msg-content {
     flex: 1;
 }
@@ -11113,7 +11128,15 @@ button.btn.btn-save {
     padding: 20px;
     position: relative;
 }
-
+.message-plunch .date{
+      display: flex;
+      font-size: 12px;
+    color:#737171;
+    margin-top:7px;
+}
+.message-plunch.me .date{
+    justify-content: flex-end;
+}
 .message-plunch .dash-msg-text:before {
     position: absolute;
     top: 12px;
@@ -12718,27 +12741,42 @@ footer.skin-dark-footer ul.footer-bottom-social li a:hover, footer.skin-dark-foo
 /*********** Start BreadCrump **********/
 
 
-.breadcrumb
+.hero_breadcrumb .breadcrumb
 {
     justify-content: center;
 flex-direction: row-reverse;
     background: transparent;
 }
-.breadcrumb-item+.breadcrumb-item::before{
+.hero_breadcrumb .breadcrumb-item+.breadcrumb-item::before{
     float: right;
     padding-left: .5rem;
 }
-.breadcrumb a{
+.hero_breadcrumb .breadcrumb a{
     color:#fff;
 }
-.breadcrumb-item.active {
+.hero_breadcrumb .breadcrumb-item.active {
     color: #dfdfdf;
 }
-.breadcrumb-item+.breadcrumb-item {
+.hero_breadcrumb .breadcrumb-item+.breadcrumb-item {
     padding-right: .5rem;
 }
 
 
-
-
 /************* End BreadCrump *************/
+.category_page {
+
+}
+.category_page .category_data{
+
+}
+
+
+.dashboard-navbar{
+
+}
+.dashboard-navbar .d-user-avater{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

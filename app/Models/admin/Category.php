@@ -23,6 +23,28 @@ class Category extends Model
         return $this->hasMany(Service::class,'cat_id');
     }
 
+//    public function subCategories()
+//    {
+//        return $this->belongsTo(SubCategory::class,'parent_id');
+//    }
+    // Get the subcategories
+    public function subCategories()
+    {
+        return $this->hasMany(SubCategory::class, 'parent_id');
+    }
+
+    // Get the count of subcategories
+    public function countSubCategories()
+    {
+        return $this->subCategories()->count();
+    }
+
+
+//    public function countsubcategories($parent_category)
+//    {
+//        $countSubCategories = SubCategory::where('parent_id',$parent_category)->count();
+//        return $countSubCategories;
+//    }
 
 
 }

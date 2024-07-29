@@ -19,7 +19,7 @@
     <!-- ============================ Page Title End ================================== -->
 
     <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg text-right" dir="rtl">
+    <section class="gray-bg text-right category_page" dir="rtl">
         <div class="container">
             <div class="row">
                 <!-- Item Wrap Start -->
@@ -38,33 +38,21 @@
                         <!-- Single Item -->
                         @foreach($categories as $category)
                             <div class="col-lg-3 col-md-6 col-sm-12">
-                                <div class="ser_110">
+                                <div class="ser_110 category_data">
                                     <div class="ser_110_thumb">
-                                        @if(count($category['parents']) > 0)
-                                            <a href="{{url('category/'.$category['slug'])}}" class="ser_100_link">
-                                                <img src=" {{asset('assets/uploads/service_category/'.$category['image'])}}"
-                                                     class="img-fluid" alt="">
-                                            </a>
-                                        @else
-                                            <a href="{{url('services/'.$category['slug'])}}" class="ser_100_link">
-                                                <img src=" {{asset('assets/uploads/service_category/'.$category['image'])}}"
-                                                     class="img-fluid" alt="">
-                                            </a>
-                                        @endif
-
+                                        <a href="{{url('category/'.$category['slug'])}}" class="ser_100_link">
+                                            <img src=" {{asset('assets/uploads/service_category/'.$category['image'])}}"
+                                                 class="img-fluid" alt="">
+                                        </a>
                                     </div>
                                     <div class="ser_110_footer bott">
                                         <div class="_110_foot_left">
                                             <div>
                                                 <h5>
-                                                    @if(count($category['parents']) > 0)
                                                     <a href="{{url('category/'.$category['slug'])}}"> {{$category['name']}} </a>
-                                                    @else
-                                                        <a href="{{url('services/'.$category['slug'])}}"> {{$category['name']}} </a>
-                                                    @endif
                                                 </h5>
-                                                </span>
-                                                </span>
+                                                <br>
+                                                <span> {{ $category->countSubCategories() }}  اقسام فرعية  </span>
                                             </div>
                                         </div>
                                     </div>

@@ -50,6 +50,13 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+        'services_tmp_folder' => [
+            'driver' => 'local',
+            'root' => base_path('public/assets/uploads/services/services_tmp_folder'), // Use base_path() directly with the path
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
         'service_category' => [
             'driver' => 'local',
             'root' => base_path('public/assets/uploads/service_category'), // Use base_path() directly with the path

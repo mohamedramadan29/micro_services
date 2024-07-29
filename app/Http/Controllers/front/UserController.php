@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\front;
 
+use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
 use App\Http\Traits\Upload_Images;
 use App\Models\admin\Service;
@@ -23,8 +24,8 @@ class UserController extends Controller
 
     public function index()
     {
-        $services = Service::with('category')->where('user_id',Auth::id())->get();
-        return view('website.user.dashboard',compact('services'));
+        $services = Service::with('category')->where('user_id', Auth::id())->get();
+        return view('website.user.dashboard', compact('services'));
     }
 
     public function reviews()
@@ -123,7 +124,7 @@ class UserController extends Controller
                     $message->to($email)->subject(' تفعيل الحساب الخاص بك  ');
                 });
                 DB::commit();
-                 return $this->success_message('تم التسجيل بنجاح  :: من فضلك فعل الحساب تبعك من خلال البريد الالكتروني ');
+                return $this->success_message('تم التسجيل بنجاح  :: من فضلك فعل الحساب تبعك من خلال البريد الالكتروني ');
                 //return $this->success_message('تم انشاء حسابك بنجاح من فضلك سجل دخولك الان ');
             }
         } catch (\Exception $e) {
@@ -166,8 +167,9 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-        try {
-            if ($request->isMethod('post')) {
+        if ($request->isMethod('post')) {
+            try {
+
                 $data = $request->all();
                 $rules = [
                     'name' => 'required',
@@ -176,10 +178,8 @@ class UserController extends Controller
                     'info' => 'required',
                     'phone' => 'required|unique:users,phone,' . $user->id,
                 ];
-                if ($request->hasFile('image')) {
-                    $rules['image'] = 'image|mimes:jpeg,png,jpg,webp,gif|max:2048';
-                }
-                if ($request->has('old_password') && $request['old_password'] !='') {
+
+                if ($request->has('old_password') && $request['old_password'] != '') {
                     // التحقق من صحة كلمة المرور القديمة
                     if (!Hash::check($data['old_password'], $user->password)) {
                         return Redirect::back()->withInput()->withErrors(['كلمة المرور القديمة غير صحيحة']);
@@ -198,14 +198,24 @@ class UserController extends Controller
                     'info.required' => 'من فضلك ادخل نبذة مختصرة عنك',
                     'phone.required' => 'من فضلك ادخل رقم الهاتف',
                     'phone.unique' => 'رقم الهاتف مستخدم بالفعل من فضلك ادخل رقم هاتف جديد',
-                    'image.image' => 'من فضلك اختر ملف صورة صالح',
-                    'image.mimes' => 'نوع الصورة يجب أن يكون jpeg, png, jpg,webp, gif',
-                    'image.max' => 'حجم الصورة يجب ان لا يتجاوز ال2m ',
                     'new_password.required' => 'من فضلك ادخل كلمة المرور الجديدة',
                     'new_password.min' => 'كلمة المرور يجب ان تكون اكثر من 8 احرف ',
                     'confirm_password.same' => 'من فضلك يجب تاكيد كلمة المرور بشكل صحيح '
                 ];
                 if ($request->hasFile('image')) {
+                    $rules['image'] = 'image|mimes:jpeg,png,jpg,webp,gif|max:2048';
+                    $messages['image.image'] = 'من فضلك اختر ملف صورة صالح';
+                    $messages['image.mimes'] = 'نوع الصورة يجب أن يكون jpeg, png, jpg,webp, gif';
+                    $messages['image.max'] = ' حجم   الصورة يجب ان لا يتجاوز ال2m ';
+                }
+
+                if ($request->hasFile('image')) {
+                    /////// Delete Old Image
+                    ///
+                    $oldImage = public_path('assets/uploads/users_image/' . $user['image']);
+                    if (isset($oldImage) && $oldImage !='') {
+                     //   unlink($oldImage);
+                    }
                     $fileimage = $this->saveImage($request->image, public_path('assets/uploads/users_image'));
                     $user->update([
                         'image' => $fileimage,
@@ -222,30 +232,33 @@ class UserController extends Controller
                     'phone' => $data['phone'],
                     'info' => $data['info'],
                     'account_type' => $data['account_type'],
-                    'job_title'=>$data['job_title']
+                    'job_title' => $data['job_title']
 
                 ]);
-
                 return $this->success_message('تم تحديث بياناتك بنجاح');
+            } catch
+            (\Exception $e) {
+                return $this->exception_message($e);
             }
-        } catch (\Exception $e) {
-            return $this->exception_message($e);
+        } else {
+            return view('website.user.update');
         }
 
-        return view('website.user.update');
     }
 
-    public function show_profile($username)
+    public function show_profile()
     {
-        $user = User::where('user_name',$username)->first();
-        $services = Service::with('category')->where('user_id',$user->id)->get();
-        return view('website.user_profiles.index',compact('user','services'));
+        $user = User::where('id', Auth::user()->id)->first();
+
+        $services = Service::with('category')->where('user_id', Auth::id())->get();
+        return view('website.user_profiles.index', compact('user', 'services'));
     }
+
     public function user_services($username)
     {
-        $user = User::where('user_name',$username)->first();
-        $services = Service::with('category')->where('user_id',$user->id)->get();
-        return view('website.user_profiles.services',compact('user','services'));
+        $user = User::where('user_name', $username)->first();
+        $services = Service::with('category')->where('user_id', $user->id)->get();
+        return view('website.user_profiles.services', compact('user', 'services'));
     }
 
     public function chat()

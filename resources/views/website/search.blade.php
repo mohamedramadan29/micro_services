@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-     نتائج البحث
+    نتائج البحث
 @endsection
 @section('content')
     <!-- ============================ Page Title Start================================== -->
@@ -9,15 +9,15 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12">
 
-                    <h2 class="ipt-title">  نتائج البحث عن خدمة :: {{ $search}} </h2>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{url('/')}}"> الرئيسية  </a></li>
-                            <li class="breadcrumb-item active" aria-current="page"> نتائج البحث  </li>
-                        </ol>
-                    </nav>
-
-
+                    <h2 class="ipt-title"> نتائج البحث عن خدمة :: {{ $search}} </h2>
+                    <div class="hero_breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{url('/')}}"> الرئيسية </a></li>
+                                <li class="breadcrumb-item active" aria-current="page"> نتائج البحث</li>
+                            </ol>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </div>
@@ -196,7 +196,6 @@
                                                     <img
                                                         src="{{asset('assets/uploads/users_image/'.$serv['user']['image'])}}"
                                                         class="img-fluid circle" alt="">
-
 
                                                 @endif
 

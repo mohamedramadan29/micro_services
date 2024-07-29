@@ -51,8 +51,7 @@
                                                 <h5>
                                                     <a href="{{url('services/'.$category['slug'])}}"> {{$category['name']}} </a>
                                                 </h5>
-                                                </span>
-                                                </span>
+                                               <span> عدد الخدمات :: {{ $category->CountServices() }} </span>
                                             </div>
                                         </div>
                                     </div>

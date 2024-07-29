@@ -8,8 +8,10 @@
     <title> @yield('title')  </title>
     <link href="{{asset('assets/website/css/plugins.css')}}" rel="stylesheet">
     <link href="{{asset('assets/website/css/styles.css')}}" rel="stylesheet">
+
     @notifyCss
     @yield('css')
+    @livewireStyles
 </head>
 
 

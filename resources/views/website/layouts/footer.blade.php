@@ -1,4 +1,3 @@
-
 <footer class="dark-footer skin-dark-footer text-right" dir="rtl">
     <div>
         <div class="container">
@@ -6,9 +5,11 @@
 
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-widget">
-                        <img src="{{asset('assets/website/img/khamsat.png')}}" class="img-fluid f-logo" width="120" alt="">
+                        <img src="{{asset('assets/website/img/khamsat.png')}}" class="img-fluid f-logo" width="120"
+                             alt="">
                         <p>
-                            خمسات هو السوق العربي الأول لبيع وشراء الخدمات المصغرة، يجمع خمسات بين الشباب العربي المستعد لتقديم الخدمات وبين فئة المشترين المستعدين لشراء هذه الخدمات
+                            خمسات هو السوق العربي الأول لبيع وشراء الخدمات المصغرة، يجمع خمسات بين الشباب العربي المستعد
+                            لتقديم الخدمات وبين فئة المشترين المستعدين لشراء هذه الخدمات
                         </p>
                         <ul class="footer-bottom-social">
                             <li><a href="#"><i class="ti-facebook"></i></a></li>
@@ -20,20 +21,20 @@
                 </div>
                 <div class="col-lg-4 col-md-4">
                     <div class="footer-widget">
-                        <h4 class="widget-title"> روابط  </h4>
+                        <h4 class="widget-title"> روابط </h4>
                         <ul class="footer-menu">
-                            <li><a href="{{'/about'}}"> من نحن  </a></li>
-                            <li><a href="{{'/faq'}}"> الاسئلة الشائعة  </a></li>
-                            <li><a href="{{'/terms'}}"> سياسة الاستخدام  </a></li>
-                            <li><a href="{{'/privacy-policy'}}"> سياسة الخصوصية  </a></li>
+                            <li><a href="{{'/about'}}"> من نحن </a></li>
+                            <li><a href="{{'/faq'}}"> الاسئلة الشائعة </a></li>
+                            <li><a href="{{'/terms'}}"> سياسة الاستخدام </a></li>
+                            <li><a href="{{'/privacy-policy'}}"> سياسة الخصوصية </a></li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="col-lg-4 col-md-4">
                     <div class="footer-widget">
-                        <h4 class="widget-title"> وسائل الدفع  </h4>
-                         <img style="max-width:100%;" src="{{asset('assets/website/img/pay.png')}}">
+                        <h4 class="widget-title"> وسائل الدفع </h4>
+                        <img style="max-width:100%;" src="{{asset('assets/website/img/pay.png')}}">
                     </div>
                 </div>
             </div>
@@ -45,7 +46,7 @@
             <div class="row align-items-center">
 
                 <div class="col-lg-12 col-md-12 text-center">
-                    <p class="mb-0"> مروة @ 2024 جميع الحقوق محفوظة  <a href="#"> Mr </a> بواسطة </p>
+                    <p class="mb-0"> مروة @ 2024 جميع الحقوق محفوظة <a href="#"> Mr </a> بواسطة </p>
                 </div>
 
             </div>
@@ -53,8 +54,6 @@
     </div>
 </footer>
 <!-- =========================== Footer End ========================================= -->
-
-
 </div>
 
 <script src="{{asset('assets/website/js/jquery.min.js')}}"></script>
@@ -67,9 +66,24 @@
 <script src="{{asset('assets/website/js/materialize.min.js')}}"></script>
 <script src="{{asset('assets/website/js/metisMenu.min.js')}}"></script>
 <script src="{{asset('assets/website/js/custom.js')}}"></script>
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 @notifyJs
+@livewireScripts
+
+
 <script>
-    var vChipsList =  [{
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('0b5767cf97c2b0e3dc9a', {
+        cluster: 'eu'
+    });
+
+</script>
+<script>
+    var vChipsList = [{
         tag: 'Photoshop',
     }, {
         tag: 'WordPress',
@@ -78,7 +92,7 @@
     }];
 
     // INITIALIZATION OF AUTOCOMPLETE LIST
-    var vTagList =  {
+    var vTagList = {
         design: null,
         html: null,
         css: null,
@@ -88,7 +102,7 @@
         java: null,
         joomla: null,
         css3: null,
-        bootstrap: null,photoshop:null
+        bootstrap: null, photoshop: null
     };
 
     function fDisplayChips() {
@@ -100,27 +114,27 @@
 
 
     // ADDING A NEW CHIP
-    function fChipAdd(lChipName){
+    function fChipAdd(lChipName) {
         lChipName = lChipName.toLowerCase();
         // test1 : minimum word size
-        if (!(lChipName.length > 2)){
+        if (!(lChipName.length > 2)) {
             return 0;
         }
         // test2 :  no duplicates
-        for(i=0;i<vChipsList.length;i++) {
-            if(lChipName == vChipsList[i].tag){
+        for (i = 0; i < vChipsList.length; i++) {
+            if (lChipName == vChipsList[i].tag) {
                 return 0;
             }
         }
         // tests Okay => add the chip and refresh the view
-        vChipsList.push({"tag":lChipName});
+        vChipsList.push({"tag": lChipName});
         fDisplayChips();
         return 1;
     };
 
-    $(function() {
+    $(function () {
         // delete chip command
-        $('#lg-Chips').on('chip.delete', function(e, chip){
+        $('#lg-Chips').on('chip.delete', function (e, chip) {
             vChipsList = $("#lg-Chips").material_chip('data');
         });
 
@@ -135,7 +149,7 @@
 
         // NEW CHIP COMMAND
         $("#cmd-ChipsAjout").click(function () {
-            fChipAdd($("#lg-input").val()) ;
+            fChipAdd($("#lg-input").val());
             $("#lg-input").val("");
         });
 
@@ -145,6 +159,8 @@
 
     });
 </script>
+
+
 </body>
 
 </html>

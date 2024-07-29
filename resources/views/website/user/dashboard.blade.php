@@ -4,7 +4,8 @@
 @endsection
 @section('content')
     <!-- ============================ Page Title Start================================== -->
-    <div class="page-title bg-cover" style="background:url({{asset('assets/website/img/bn-1.jpg')}})no-repeat;" data-overlay="5">
+    <div class="page-title bg-cover" style="background:url({{asset('assets/website/img/bn-1.jpg')}})no-repeat;"
+         data-overlay="5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 col-md-12"></div>
@@ -23,7 +24,8 @@
 
                         <div class="d-user-avater">
                             @if(Auth::user()->image !='')
-                                <img src="{{asset('assets/uploads/users_image/'.Auth::user()->image)}}" class="img-fluid rounded" alt="">
+                                <img src="{{asset('assets/uploads/users_image/'.Auth::user()->image)}}"
+                                     class="img-fluid rounded" alt="">
                             @else
                                 <img src="{{asset('assets/website/img/avatar.png')}}" class="img-fluid rounded" alt="">
                             @endif
@@ -37,11 +39,12 @@
                                 <li><a href="{{url('dashboard')}}"><i class="ti-dashboard"></i> الملف الشخصي </a>
                                 </li>
                                 <li><a href="{{url('service/index')}}"><i class="ti-user"></i> الخدمات </a></li>
-                                <li><a href="{{url('service/add')}}"><i class="ti-plus"></i> اضف خدمة جديدة   </a></li>
-                                <li><a href="{{url('user/chat')}}"><i class="ti-email"></i>  المحادثات </a></li>
-                                <li><a href="{{url('user/reviews')}}"><i class="ti-email"></i> التقيمات </a></li>
-                                <li><a href="{{url('user/update')}}"><i class="ti-email"></i> تعديل الملف الشخصي </a></li>
-                                <li><a href="{{url('user/balance')}}"><i class="ti-email"></i> الرصيد </a></li>
+                                <li><a href="{{url('service/add')}}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
+                                <li><a href="{{url('chat-main')}}"><i class="ti-email"></i> المحادثات </a></li>
+                                <li><a href="{{url('reviews')}}"><i class="ti-email"></i> التقيمات </a></li>
+                                <li><a href="{{url('update-account')}}"><i class="ti-email"></i> تعديل الملف الشخصي
+                                    </a></li>
+                                <li><a href="{{url('balance')}}"><i class="ti-email"></i> الرصيد </a></li>
                                 <li><a href="{{url('logout')}}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
                             </ul>
                         </div>
@@ -81,7 +84,8 @@
                                             <div class="col-xl-12 col-lg-12">
                                                 <div class="form-group">
                                                     <label> نبذة عني </label>
-                                                    <textarea class="form-control with-light">{{Auth::user()->info}}</textarea>
+                                                    <textarea
+                                                        class="form-control with-light">{{Auth::user()->info}}</textarea>
                                                 </div>
                                             </div>
 
@@ -106,7 +110,8 @@
                                                     <div class="col-lg-4 col-md-6 col-sm-12">
                                                         <div class="ser_110">
                                                             <div class="ser_110_thumb">
-                                                                <a href="{{url('service/'.$serv['id'].'-'.$serv['slug'])}}" class="ser_100_link"><img
+                                                                <a href="{{url('service/'.$serv['id'].'-'.$serv['slug'])}}"
+                                                                   class="ser_100_link"><img
                                                                         src=" {{asset('assets/uploads/services/'.$serv['image'])}}"
                                                                         class="img-fluid" alt=""></a>
                                                             </div>
@@ -130,9 +135,15 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="buttons" style="text-align: center;padding:10px">
-                                                                <a href="{{url('service/update/'.$serv['id'])}}" class="btn btn-primary btn-sm"> تعديل  <i class="fa fa-edit"></i> </a>
-                                                                <a href="{{ url('service/delete/' . $serv['id']) }}" class="btn btn-danger btn-sm" onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')"> حذف <i class="fa fa-trash"></i> </a>
+                                                            <div class="buttons"
+                                                                 style="text-align: center;padding:10px">
+                                                                <a href="{{url('service/update/'.$serv['id'])}}"
+                                                                   class="btn btn-primary btn-sm"> تعديل <i
+                                                                        class="fa fa-edit"></i> </a>
+                                                                <a href="{{ url('service/delete/' . $serv['id']) }}"
+                                                                   class="btn btn-danger btn-sm"
+                                                                   onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')">
+                                                                    حذف <i class="fa fa-trash"></i> </a>
                                                             </div>
                                                         </div>
                                                     </div>

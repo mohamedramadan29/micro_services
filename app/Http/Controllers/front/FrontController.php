@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\front;
 
+use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
 use App\Models\admin\Category;
 use App\Models\admin\Service;
+use App\Models\admin\SubCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -25,20 +26,17 @@ class FrontController extends Controller
 
     public function services(Request $request)
     {
-        $query = Service::with('category', 'user');
+        $query = Service::with('category', 'user','subcategory');
         if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }
         if ($request->has('cat_ids')){
             $cat_ids = $request->get('cat_ids');
-            $query->whereIn('cat_id',$cat_ids);
+            $query->whereIn('sub_cat_id',$cat_ids);
         }
-        // $services = Service::with('category', 'user')->where('status', '1')->paginate(12);
         $services = $query->where('status', '1')->paginate(12);
-        $categories = Category::with('parents')->withCount('services')->where('status', '1')->get();
+        $categories = Category::with('subCategories')->where('status',1)->get();
         return view('website.services', compact('services', 'categories'));
-
-
     }
 
     public function service_details($id, $slug)
@@ -50,8 +48,8 @@ class FrontController extends Controller
 
     public function categories()
     {
-        $categories = Category::with('parents')->where('parent_id', '0')->paginate(12);
-        //  dd($categories);
+        $categories = Category::with('subCategories')->where('status',1)->paginate(12);
+       // dd($categories);
         return view('website.categories', compact('categories'));
     }
 
@@ -60,19 +58,25 @@ class FrontController extends Controller
         $category = Category::where('slug', $slug)->first();
         $category_id = $category['id'];
         if ($category) {
-            $sub_categories = Category::where('parent_id', $category_id)->paginate(12);
+            $sub_categories = SubCategory::where('parent_id', $category_id)->paginate(12);
             return view('website.sub-categories', compact('category', 'sub_categories'));
         } else {
             abort(404);
         }
     }
 
-    public function category_services($slug)
+    public function category_services(Request $request,$slug)
     {
-        $category = Category::where('slug', $slug)->first();
+        $category = SubCategory::where('slug', $slug)->first();
+
         $category_id = $category['id'];
+
+        $query = Service::where('sub_cat_id',$category_id);
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
         if ($category) {
-            $services = Service::where('cat_id', $category_id)->paginate(12);
+            $services = $query->paginate(12);
             return view('website.category-services', compact('services', 'category'));
         } else {
             abort(404);

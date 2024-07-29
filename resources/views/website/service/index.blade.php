@@ -40,11 +40,11 @@
                                 </li>
                                 <li><a href="{{url('service/index')}}"><i class="ti-user"></i> الخدمات </a></li>
                                 <li><a href="{{url('service/add')}}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
-                                <li><a href="{{url('user/chat')}}"><i class="ti-email"></i> المحادثات </a></li>
-                                <li><a href="{{url('user/reviews')}}"><i class="ti-email"></i> التقيمات </a></li>
-                                <li><a href="{{url('user/update')}}"><i class="ti-email"></i> تعديل الملف الشخصي </a>
-                                </li>
-                                <li><a href="{{url('user/balance')}}"><i class="ti-email"></i> الرصيد </a></li>
+                                <li><a href="{{url('chat-main')}}"><i class="ti-email"></i> المحادثات </a></li>
+                                <li><a href="{{url('reviews')}}"><i class="ti-email"></i> التقيمات </a></li>
+                                <li><a href="{{url('update-account')}}"><i class="ti-email"></i> تعديل الملف الشخصي
+                                    </a></li>
+                                <li><a href="{{url('balance')}}"><i class="ti-email"></i> الرصيد </a></li>
                                 <li><a href="{{url('logout')}}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
                             </ul>
                         </div>

@@ -1,12 +1,12 @@
 <?php
 
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckOutController;
+use App\Http\Controllers\front\ConversationController;
+use App\Http\Controllers\front\FrontController;
+use App\Http\Controllers\front\serviceController;
+use App\Http\Controllers\front\UserController;
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\serviceController;
-use \App\Http\Controllers\UserController;
-use  \App\Http\Controllers\FrontController;
-use \App\Http\Controllers\CartController;
-use \App\Http\Controllers\CheckOutController;
-use \App\Http\Controllers\ConversationController;
 
 Route::get('/', function () {
     return view('website.index');
@@ -30,7 +30,7 @@ Route::controller(FrontController::class)->group(function () {
     Route::post('user/update_forget_password', 'update_forget_password');
     Route::get('terms', 'terms');
     Route::get('privacy-policy', 'privacy_policy');
-    Route::get('search','search');
+    Route::get('search', 'search');
 });
 // Confirm User Email
 Route::get('user/confirm/{code}', [UserController::class, 'UserConfirm']);
@@ -44,11 +44,14 @@ Route::controller(UserController::class)->group(function () {
     Route::get('user/{username}/services', 'user_services');
     Route::group(['middleware' => ['auth']], function () {
         Route::get('dashboard', 'index');
-        Route::get('user/reviews', 'reviews');
-        Route::match(['post', 'get'], 'user/update', 'update');
-        Route::get('user/chat', 'chat');
-        Route::get('user/balance', 'balance');
+        Route::get('reviews', 'reviews');
+        Route::match(['post', 'get'], 'update-account', 'update');
+
+        Route::get('chat', 'chat');
+        Route::get('balance', 'balance');
+        Route::get('chat-main', \App\Livewire\Chat\Main::class);
     });
+
 });
 // Start User Service
 Route::group(['middleware' => ['auth']], function () {
@@ -57,6 +60,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::match(['post', 'get'], 'service/add', 'add');
         Route::match(['post', 'get'], 'service/update/{id}', 'update');
         Route::match(['post', 'get'], 'service/delete/{id}', 'delete');
+        Route::post('/tmp-upload', 'tmpUpload');
+        Route::delete('/tmp-delete', 'tmpDelete');
     });
 });
 
@@ -80,4 +85,6 @@ Route::controller(ConversationController::class)->group(function () {
 });
 //////////////////////// Start Chats /////////////////
 ///
+
+
 include 'admin.php';
