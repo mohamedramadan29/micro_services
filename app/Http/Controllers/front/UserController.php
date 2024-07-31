@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
 use App\Http\Traits\Upload_Images;
 use App\Models\admin\Service;
-use App\Models\Cart;
+use App\Models\front\Cart;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

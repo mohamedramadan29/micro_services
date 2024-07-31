@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\CheckOutController;
+use App\Http\Controllers\front\CartController;
+use App\Http\Controllers\front\CheckOutController;
 use App\Http\Controllers\front\ConversationController;
 use App\Http\Controllers\front\FrontController;
 use App\Http\Controllers\front\serviceController;

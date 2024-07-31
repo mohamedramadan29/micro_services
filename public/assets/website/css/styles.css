@@ -12719,7 +12719,7 @@ footer.skin-dark-footer ul.footer-bottom-social li a:hover, footer.skin-dark-foo
 .cart_details .serv_data .info p a{}
 
 
-[type=button], [type=reset], [type=submit], button{
+.btn-primary{
     background-color:var(--main-color)!important;
 }
 
@@ -12779,4 +12779,25 @@ flex-direction: row-reverse;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+.cart_navbar_icon{
+    position: relative;
+}
+
+.cart_navbar_icon i{
+
+}
+.cart_navbar_icon .counter_num{
+    background: #f70a0a;
+    color: #fff;
+    width: 20px;
+    display: inline-block;
+    position: absolute;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 50%;
+    top: 19px;
+    left: 25px;
 }

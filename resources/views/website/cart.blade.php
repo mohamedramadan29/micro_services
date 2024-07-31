@@ -96,7 +96,8 @@
                                         <form method="post" action="{{url('cart/delete')}}">
                                             @csrf
                                             <input type="hidden" name="cartId" value="{{$item['id']}}">
-                                            <button type="submit" onclick="confirm(' هل انت متاكد من حذف الخدمة !! ')"
+                                            <button type="submit"
+                                                    onclick="return confirm(' هل انت متاكد من حذف الخدمة !!  ')"
                                                     class="btn btn-outline-danger btn-sm"> حذف
                                             </button>
                                         </form>
@@ -135,9 +136,18 @@
                             <tr>
                                 <th></th>
                                 <td>
-                                    <a href="{{url('checkout')}}" style="padding: 10px" type="submit" class="btn btn-primary btn-sm"> اتمام
-                                        الشراء
-                                    </a>
+                                    @if(\Illuminate\Support\Facades\Auth::check())
+                                        <a href="{{url('checkout')}}" style="padding: 10px" type="submit"
+                                           class="btn btn-primary btn-sm"> اتمام
+                                            الشراء
+                                        </a>
+                                    @else
+                                        <a href="{{url('login')}}" style="padding: 10px" type="submit"
+                                           class="btn btn-primary btn-sm"> اتمام
+                                            الشراء
+                                        </a>
+                                    @endif
+
                                 </td>
                             </tr>
                             </thead>

@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\front;
 
+use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
-use App\Models\Cart;
+use App\Models\front\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -51,6 +52,8 @@ class CartController extends Controller
         $item->session_id = $session_id;
         $item->user_id = $user_id;
         $item->service_id = $cartData['service_id'];
+        $item->service_name = $cartData['service_name'];
+        $item->price = $cartData['service_price'];
         $item->user_serv = $cartData['user_serv'];
         $item->quantity = $cartData['qty'];
         $item->save();

@@ -23,18 +23,17 @@
                 <!-- Item Wrap Start -->
                 <div class="col-lg-8 col-md-12 col-sm-12">
                     <div class="_job_detail_box">
-                        @if(Session::has('Success_message'))
-                            <div
-                                class="alert alert-success"> {{Session::get('Success_message')}} <span> <a href="{{url('cart')}}"> مشاهدة السلة  </a> </span></div>
+                        @if (Session::has('Success_message'))
+                            @php
+                                emotify('success', \Illuminate\Support\Facades\Session::get('Success_message'));
+                            @endphp
                         @endif
                         @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                            @foreach ($errors->all() as $error)
+                                @php
+                                    emotify('error', $error);
+                                @endphp
+                            @endforeach
                         @endif
                         <div class="_wrap_box_slice">
                             <div class="_job_detail_single">
@@ -116,6 +115,8 @@
                             <div class="_view_dis_908 d-flex">
                                 <form method="post" action="{{url('cart/add')}}">
                                     <input type="hidden" name="service_id" value="{{$service['id']}}">
+                                    <input type="hidden" name="service_name" value="{{$service['name']}}">
+                                    <input type="hidden" name="service_price" value="{{$service['price']}}">
                                     <input type="hidden" name="qty" value="1">
                                     <input type="hidden" name="user_serv" value="{{$service['user_id']}}">
                                     @csrf
