@@ -93,6 +93,17 @@
                         <li><a class="slide-item" href="{{url('admin/update_admin_details')}}"> تعديل البيانات </a></li>
                     </ul>
                 </li>
+                <li class="side-item side-item-category"> الاعدادت العامة  </li>
+                <li class="slide">
+                    <a class="side-menu__item" data-toggle="slide" href="">
+                        <i style="font-size: 22px;margin-left: 10px" class="bx bx-cog"></i>
+                        <span class="side-menu__label">  الاعدادات العامة للموقع  </span><i
+                            class="angle fe fe-chevron-down"></i></a>
+                    <ul class="slide-menu">
+                        <li><a class="slide-item" href="{{url('admin/public_settings')}}"> الاعدادات العامه للموقع  </a>
+                        </li>
+                    </ul>
+                </li>
             @endif
 
         </ul>

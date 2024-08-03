@@ -39,6 +39,10 @@
 
                             <li><a href="{{url('categories')}}"> الاقسام </a></li>
                             <li><a href="{{url('services')}}"> الخدمات </a></li>
+                            @if(\Illuminate\Support\Facades\Auth::check())
+                                <li><a href="{{url('purches')}}"> مشترياتي  </a></li>
+                                <li><a href="{{url('orders')}}">  الطلبات الواردة  </a></li>
+                            @endif
                             @php
                                 $count_items = count(\App\Models\front\Cart::getCartItems());
                             @endphp

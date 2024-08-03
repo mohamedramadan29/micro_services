@@ -22,18 +22,17 @@
     <section class="gray-bg text-right" dir="rtl">
         <div class="container">
             <div class="card">
-                @if(Session::has('Success_message'))
-                    <div
-                        class="alert alert-success"> {{Session::get('Success_message')}} </div>
+                @if (Session::has('Success_message'))
+                    @php
+                        emotify('success', \Illuminate\Support\Facades\Session::get('Success_message'));
+                    @endphp
                 @endif
                 @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+                    @foreach ($errors->all() as $error)
+                        @php
+                            emotify('error', $error);
+                        @endphp
+                    @endforeach
                 @endif
                 <div class="card-body cart_details">
                     @if($count_items > 0)
@@ -41,7 +40,7 @@
                             <thead>
                             <tr>
                                 <th> الخدمة</th>
-                                <th> مرات الطلب</th>
+{{--                                <th> مرات الطلب</th>--}}
                                 <th> التكلفة</th>
                                 <th></th>
                             </tr>
@@ -49,7 +48,6 @@
                             <tbody>
                             @php
                                 $sub_total = 0;
-                                $tax_price = 5;
                             @endphp
                             @foreach($items as $item)
                                 @php
@@ -61,8 +59,8 @@
                                             <div class="image">
                                                 <a href="{{url('service/'.$item['serviceData']['id'].'-'.$item['serviceData']['slug'])}}">
                                                     <img
-                                                        src="{{asset('assets/uploads/services/'.$item['serviceData']['image'])}}"
-                                                        alt="">
+                                                            src="{{asset('assets/uploads/services/'.$item['serviceData']['image'])}}"
+                                                            alt="">
                                                 </a>
                                             </div>
                                             <div class="info">
@@ -70,25 +68,25 @@
                                                     <a href="{{url('service/'.$item['serviceData']['id'].'-'.$item['serviceData']['slug'])}}"> {{$item['serviceData']['name']}} </a>
                                                 </h4>
                                                 <p><a href="{{url('user/'.$item['userData']['user_name'])}}"> <i
-                                                            class="fa fa-user"></i> {{$item['userData']['name']}}
+                                                                class="fa fa-user"></i> {{$item['userData']['name']}}
                                                     </a></p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>
-                                        <select class="" name="quantity">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
-                                        </select>
-                                    </td>
+{{--                                    <td>--}}
+{{--                                        <select class="" name="quantity">--}}
+{{--                                            <option value="1">1</option>--}}
+{{--                                            <option value="2">2</option>--}}
+{{--                                            <option value="3">3</option>--}}
+{{--                                            <option value="4">4</option>--}}
+{{--                                            <option value="5">5</option>--}}
+{{--                                            <option value="6">6</option>--}}
+{{--                                            <option value="7">7</option>--}}
+{{--                                            <option value="8">8</option>--}}
+{{--                                            <option value="9">9</option>--}}
+{{--                                            <option value="10">10</option>--}}
+{{--                                        </select>--}}
+{{--                                    </td>--}}
                                     <td>
                                         {{ number_format($item['serviceData']['price'],2)}} $
                                     </td>
@@ -119,6 +117,11 @@
                                 <th>
                                     الرسوم
                                 </th>
+                                @php
+                                    $website_setting  = \App\Models\admin\Setting::first();
+                                       $website_commsion = $website_setting['website_commission'];
+                                        $tax_price = $sub_total * ($website_commsion / 100);
+                                @endphp
                                 <th> {{$tax_price}} $</th>
                             </tr>
                             <tr>

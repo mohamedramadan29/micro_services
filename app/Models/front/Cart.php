@@ -36,4 +36,9 @@ class Cart extends Model
 
         return $getcartItems;
     }
+
+    public static function clear()
+    {
+        Cart::where('user_id',Auth::id())->delete();
+    }
 }

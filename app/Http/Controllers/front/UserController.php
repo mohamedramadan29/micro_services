@@ -4,9 +4,11 @@ namespace App\Http\Controllers\front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
+use App\Http\Traits\Slug_Trait;
 use App\Http\Traits\Upload_Images;
 use App\Models\admin\Service;
 use App\Models\front\Cart;
+use App\Models\front\OrderDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +23,7 @@ class UserController extends Controller
 {
     use Message_Trait;
     use Upload_Images;
+    use Slug_Trait;
 
     public function index()
     {
@@ -213,8 +216,8 @@ class UserController extends Controller
                     /////// Delete Old Image
                     ///
                     $oldImage = public_path('assets/uploads/users_image/' . $user['image']);
-                    if (isset($oldImage) && $oldImage !='') {
-                     //   unlink($oldImage);
+                    if (isset($oldImage) && $oldImage != '') {
+                        //   unlink($oldImage);
                     }
                     $fileimage = $this->saveImage($request->image, public_path('assets/uploads/users_image'));
                     $user->update([
@@ -246,9 +249,9 @@ class UserController extends Controller
 
     }
 
-    public function show_profile()
+    public function show_profile($username)
     {
-        $user = User::where('id', Auth::user()->id)->first();
+        $user = User::where('user_name', $username)->first();
 
         $services = Service::with('category')->where('user_id', Auth::id())->get();
         return view('website.user_profiles.index', compact('user', 'services'));
@@ -264,5 +267,30 @@ class UserController extends Controller
     public function chat()
     {
         return view('website.user.chat');
+    }
+
+    public function purches()
+    {
+
+        ////////// Get The Pruches
+        ///
+        $purches = OrderDetail::with('seller')->where('user_buyer',Auth::id())->get();
+        // Generate slugs for each purchase
+        foreach ($purches as $purche) {
+            $purche->slug = $this->CustomeSlug($purche->service_name);
+        }
+        return view('website.user.purches',compact('purches'));
+    }
+
+    public function orders ()
+    {
+        $orders = OrderDetail::with('buyer')->where('user_seller',Auth::id())->get();
+
+        // Generate slugs for each purchase
+        foreach ($orders as $order) {
+            $order->slug = $this->CustomeSlug($order->service_name);
+        }
+        return view('website.user.orders',compact('orders'));
+
     }
 }

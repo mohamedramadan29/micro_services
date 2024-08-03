@@ -20,6 +20,18 @@
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-light min-sec text-right" dir="rtl">
         <div class="container">
+            @if (Session::has('Success_message'))
+                @php
+                    emotify('success', \Illuminate\Support\Facades\Session::get('Success_message'));
+                @endphp
+            @endif
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    @php
+                        emotify('error', $error);
+                    @endphp
+                @endforeach
+            @endif
             <div class="row form-submit">
                 <div class="col-lg-8 col-md-12 col-sm-12">
                     <!-- row -->

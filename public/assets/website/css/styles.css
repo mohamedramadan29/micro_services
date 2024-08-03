@@ -361,7 +361,7 @@ html body .db {
 }
 
 .dark-2 {
-    background: #0b85ec;
+    background: #0b85ec !important;
 }
 
 .dark-3 {

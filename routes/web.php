@@ -44,6 +44,8 @@ Route::controller(UserController::class)->group(function () {
     Route::get('user/{username}/services', 'user_services');
     Route::group(['middleware' => ['auth']], function () {
         Route::get('dashboard', 'index');
+        Route::get('purches','purches');
+        Route::get('orders','orders');
         Route::get('reviews', 'reviews');
         Route::match(['post', 'get'], 'update-account', 'update');
 

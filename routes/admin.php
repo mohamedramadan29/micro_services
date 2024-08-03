@@ -6,6 +6,7 @@ use \App\Http\Controllers\admin\ServiceController;
 use \App\Http\Controllers\admin\UserController;
 use \App\Http\Controllers\admin\CategoryController;
 use \App\Http\Controllers\admin\SubCategoryController;
+use \App\Http\Controllers\admin\SettingController;
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
     Route::post('admin_login', [AdminController::class, 'admin_login']);
@@ -47,6 +48,11 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('sub-category/store','store');
             Route::post('sub-category/update/{id}','update');
             Route::post('sub-category/destroy/{id}','destroy');
+        });
+
+        Route::controller(SettingController::class)->group(function (){
+            Route::get('public_settings','index');
+            Route::post('public_settings/update','update');
         });
     });
 });
