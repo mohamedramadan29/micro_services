@@ -9,8 +9,11 @@ use App\Http\Traits\Upload_Images;
 use App\Models\admin\Category;
 use App\Models\admin\Service;
 use App\Models\admin\SubCategory;
+use App\Models\User;
+use App\Notifications\AcceptJobFromAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,14 +25,14 @@ class ServiceController extends Controller
 
     public function index()
     {
-        $services = Service::with('category','subcategory')->orderBy('id','desc')->get();
+        $services = Service::with('category', 'subcategory')->orderBy('id', 'desc')->get();
         return view('admin.services.index', compact('services'));
     }
 
     public function store(Request $request)
     {
         $categories = Category::where('status', '1')->get();
-        $subCategories = SubCategory::where('status','1')->get();
+        $subCategories = SubCategory::where('status', '1')->get();
         try {
             if ($request->isMethod('post')) {
                 $data = $request->all();
@@ -63,22 +66,24 @@ class ServiceController extends Controller
                     'description' => $data['description'],
                     'price' => $data['price'],
                     'status' => $data['status'],
-                    'tags'=>$data['tags'],
+                    'tags' => $data['tags'],
                 ]);
                 return $this->success_message('تم اضافة خدمة جديدة بنجاح');
             }
         } catch (\Exception $e) {
             return $this->exception_message($e);
         }
-        return view('admin.services.add', compact('categories','subCategories'));
+        return view('admin.services.add', compact('categories', 'subCategories'));
 
     }
 
     public function update(Request $request, $id)
     {
         $categories = Category::where('status', '1')->get();
-        $subCategories = SubCategory::where('status','1')->get();
+        $subCategories = SubCategory::where('status', '1')->get();
         $service = Service::findOrFail($id);
+       // $user = User::where('id',$service['user_id'])->get();
+        $user = User::find($service['user_id']);
         try {
             if ($request->isMethod('post')) {
                 $data = $request->all();
@@ -86,7 +91,7 @@ class ServiceController extends Controller
                     'name' => 'required', 'cat_id' => 'required',
                     'description' => 'required', 'price' => 'required'
                 ];
-                if ($request->hasFile('image')){
+                if ($request->hasFile('image')) {
                     $rules['image'] = 'image|required';
                 }
                 $messages = [
@@ -113,23 +118,37 @@ class ServiceController extends Controller
                     'sub_cat_id' => $data['sub_cat_id'],
                     'description' => $data['description'],
                     'price' => $data['price'],
-                    'status' => $data['status'],
-                    'tags'=>$data['tags'],
+                    'tags' => $data['tags'],
                 ]);
+                if ($service->status == 0) {
+                    if ($data['status'] == 1) {
+                        //// Update Db
+                        /// And Send Notification
+                        $service->update([
+                            'status' => $data['status'],
+                        ]);
+                        Notification::send($user, new AcceptJobFromAdmin($service['user_id'], $id, $this->CustomeSlug($data['name']), $data['name']));
+                    }
+                } else {
+                    $service->update([
+                        'status' => $data['status'],
+                    ]);
+                }
                 return $this->success_message('تم تعديل  الخدمة بنجاح ');
             }
         } catch (\Exception $e) {
             return $this->exception_message($e);
         }
-        return view('admin.services.edit', compact('service', 'categories','subCategories'));
+        return view('admin.services.edit', compact('service', 'categories', 'subCategories'));
     }
 
 
     public function getSubCategories($category_id)
     {
-        $subCategories = SubCategory::where('parent_id',$category_id)->get();
+        $subCategories = SubCategory::where('parent_id', $category_id)->get();
         return response()->json($subCategories);
     }
+
     public function destroy($id)
     {
         try {

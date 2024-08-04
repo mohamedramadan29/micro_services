@@ -70,6 +70,16 @@ class Chatbox extends Component
         Message::where('conversation_id',$this->selectedConversation->id)
             ->where('receiver_id',auth()->user()->id)->update(['red'=> 1]);
 
+        ///////Make the Message Notitifcation IS Read
+
+
+        /////// Make Notification Is Read
+        ///
+        $notification_type = 'App\Notifications\NewMessage';
+        $notifications = Auth::user()->unreadNotifications->where('type', $notification_type);
+        foreach ($notifications as $notification){
+            $notification->markAsRead();
+        }
     }
 
     public function pushMessage($messageId)

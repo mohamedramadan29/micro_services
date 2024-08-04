@@ -9,6 +9,7 @@ use App\Models\admin\Service;
 use App\Models\admin\SubCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -43,6 +44,15 @@ class FrontController extends Controller
     {
         $service = Service::with('user')->where('id', $id)->first();
         $more_servicess = Service::where('cat_id', $service['cat_id'])->where('id', '!=', $service['id'])->OrderBy('id')->limit('6')->get();
+
+        /////// Make Notification Is Read
+        ///
+        $notification_type = 'App\Notifications\AcceptJobFromAdmin';
+        $notifications = Auth::user()->unreadNotifications->where('type', $notification_type);
+        foreach ($notifications as $notification){
+            $notification->markAsRead();
+        }
+
         return view('website.service-details', compact('service', 'more_servicess'));
     }
 

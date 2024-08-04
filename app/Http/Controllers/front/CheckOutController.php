@@ -4,18 +4,23 @@ namespace App\Http\Controllers\front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
+use App\Http\Traits\Slug_Trait;
 use App\Models\admin\Setting;
 use App\Models\front\Cart;
 use App\Models\front\Order;
 use App\Models\front\OrderDetail;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 
 class CheckOutController extends Controller
 {
     use Message_Trait;
+    use Slug_Trait;
 
     public function index()
     {
@@ -30,7 +35,6 @@ class CheckOutController extends Controller
 
     public function order(Request $request)
     {
-
         // Get The Public Setting To GEt Commision
         $public_setting = Setting::first();
         $website_commission = $public_setting['website_commission'] / 100;
@@ -68,6 +72,7 @@ class CheckOutController extends Controller
                 foreach ($items as $item) {
                     $item_total_price = $item['price'] * $item['quantity'];
                     $orderDetails = new OrderDetail();
+                    $user = User::find($item['user_serv']);
                     $orderDetails->order_id = $order->id;
                     $orderDetails->order_number = $new_order_number;
                     $orderDetails->user_seller = $item['user_serv'];
@@ -79,8 +84,10 @@ class CheckOutController extends Controller
                     $orderDetails->website_commission = $item_total_price * $website_commission;
                     $orderDetails->seller_commission = $item_total_price - $orderDetails->website_commission;
                     $orderDetails->save();
+                    /////// Send Notification To Seller New Order
+                    ///
+                    Notification::send($user, new NewOrderNotification(Auth::id(),Auth::user()->name,Auth::user()->user_name,$item['service_id'],$this->CustomeSlug($item['service_name']),$item['service_name']));
                 }
-
 
                 DB::commit();
                 /////// Delte The Cart Items And Got Purches Section

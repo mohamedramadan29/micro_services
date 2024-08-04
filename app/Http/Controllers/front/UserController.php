@@ -284,11 +284,18 @@ class UserController extends Controller
 
     public function orders ()
     {
-        $orders = OrderDetail::with('buyer')->where('user_seller',Auth::id())->get();
+        $orders = OrderDetail::with('buyer')->where('user_seller',Auth::id())->orderBy('id','DESC')->get();
 
         // Generate slugs for each purchase
         foreach ($orders as $order) {
             $order->slug = $this->CustomeSlug($order->service_name);
+        }
+        /////// Make Notification Is Read
+        ///
+        $notification_type = 'App\Notifications\NewOrderNotification';
+        $notifications = Auth::user()->unreadNotifications->where('type', $notification_type);
+        foreach ($notifications as $notification){
+            $notification->markAsRead();
         }
         return view('website.user.orders',compact('orders'));
 

@@ -84,7 +84,8 @@
                                 <div class="_dashboard_content">
                                     <div class="_dashboard_content_body">
                                         <div class="_dashboard_list_group">
-                                            @if($orders->count() > 0))
+                                            @if($orders->count() > 0)
+
                                                 @foreach($orders as $order)
                                                     <div class="_list_jobs_wraps mng_list shadow_0 border">
                                                         <div class="_list_jobs_f1ex first">

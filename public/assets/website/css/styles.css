@@ -4684,7 +4684,7 @@ a.btn._loonking_job {
 .small_head_clics h1 {
     font-size: 44px;
     line-height: 1.2;
-    font-family: initial;
+    font-family:  "Noto Kufi Arabic", sans-serif;
     margin-bottom: 1rem;
 }
 
@@ -6264,7 +6264,7 @@ ul.applieded_list li .nore_applied span {
 
 .ipn-subtitle {
     font-size: 20px;
-    font-family: initial;
+    font-family:  "Noto Kufi Arabic", sans-serif;
     font-style: italic;
 }
 
@@ -12659,7 +12659,7 @@ footer.skin-dark-footer ul.footer-bottom-social li a:hover, footer.skin-dark-foo
     .small_head_clics h1 {
         font-size: 30px;
         line-height: 1.2;
-        font-family: initial;
+        font-family:  "Noto Kufi Arabic", sans-serif;
         margin-bottom: 1rem;
     }
 
@@ -12801,3 +12801,82 @@ flex-direction: row-reverse;
     top: 19px;
     left: 25px;
 }
+
+
+/***** Start NotificationAlerts ********/
+.notificaion-alerts {
+padding:30px 12px;
+    position: relative !important;
+}
+.notificaion-alerts .dropdown-toggle::after {
+    display: none;
+}
+
+.notificaion-alerts .dropdown-menu.show {
+    margin-top: 15px !important;
+    max-height: 235px;
+    overflow-y: scroll;
+    min-height: 200px;
+}
+
+.notificaion-alerts .dropdown-item {
+    padding: 10px;
+    color: #4a4a4a;
+    text-wrap: wrap;
+    width: 310px;
+    font-size: 15px;
+}
+
+.notificaion-alerts hr {
+    color: #ccc;
+}
+
+.notificaion-alerts .counter {
+    background-color: #e60d0d;
+    position: absolute;
+    min-width: 24px;
+    display: inline-block;
+    min-height: 24px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 12px;
+    line-height: 24px;
+    top: 12px;
+    left: 22px;
+}
+
+.notificaion-alerts .dropdown-item .timer {
+    margin-top: 10px;
+    display: block;
+    font-size: 13px;
+    color: #656565;
+}
+
+.notificaion-alerts .dropdown-item .timer i {
+    color: #656565;
+}
+
+@media (max-width: 991px) {
+    .notificaion-alerts {
+        margin-right: 8px;
+        margin-left: 8px;
+    }
+
+    .notificaion-alerts .counter {
+        font-size: 11px;
+        min-width: 22px;
+        min-height: 22px;
+        line-height: 22px;
+    }
+}
+
+.header .dropdown .bi-bell-fill,
+.header .dropdown  .bi-envelope-fill{
+    color:#fff;
+}
+.header.header-transparent.header-fixed .dropdown .bi-bell-fill,
+.header.header-transparent.header-fixed .dropdown .bi-envelope-fill{
+    color:#00305c;
+}
+
+/********* End NotificationAlerts **********/
