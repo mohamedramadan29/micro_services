@@ -91,7 +91,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group filter_button pt-2">
-                                        <button type="submit" class="btn btn btn-theme-2 rounded full-width"> بحث
+                                        <button type="submit" class="btn btn-primary btn btn-theme-2 rounded full-width"> بحث
                                         </button>
                                     </div>
                                 </div>

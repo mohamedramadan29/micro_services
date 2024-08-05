@@ -48,7 +48,6 @@ Route::controller(UserController::class)->group(function () {
         Route::get('orders','orders');
         Route::get('reviews', 'reviews');
         Route::match(['post', 'get'], 'update-account', 'update');
-
         Route::get('chat', 'chat');
         Route::get('balance', 'balance');
         Route::get('chat-main', \App\Livewire\Chat\Main::class);

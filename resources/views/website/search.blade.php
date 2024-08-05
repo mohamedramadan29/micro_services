@@ -114,56 +114,13 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Job Locations Search -->
-                                    <div class="single_search_boxed">
-                                        <div class="widget-boxed-header">
-                                            <h4>
-                                                <a href="#locations" data-toggle="collapse" aria-expanded="false"
-                                                   role="button" class="collapsed"> مستوي البائع </a>
-                                            </h4>
-
-                                        </div>
-                                        <div class="widget-boxed-body collapse show" id="locations"
-                                             data-parent="#locations">
-                                            <div class="side-list no-border">
-                                                <!-- Single Filter Card -->
-                                                <div class="single_filter_card">
-                                                    <div class="card-body pt-0">
-                                                        <div class="inner_widget_link">
-                                                            <ul class="no-ul-list filter-list">
-                                                                <li>
-                                                                    <input id="b1" class="checkbox-custom" name="ADA"
-                                                                           type="checkbox" checked="">
-                                                                    <label for="b1" class="checkbox-custom-label"> بائع
-                                                                        موثوق / مميز </label>
-                                                                </li>
-                                                                <li>
-                                                                    <input id="b2" class="checkbox-custom"
-                                                                           name="Parking" type="checkbox">
-                                                                    <label for="b2" class="checkbox-custom-label"> بائع
-                                                                        نشيط </label>
-                                                                </li>
-                                                                <li>
-                                                                    <input id="b2" class="checkbox-custom"
-                                                                           name="Parking" type="checkbox">
-                                                                    <label for="b2" class="checkbox-custom-label"> بائع
-                                                                        جديد </label>
-                                                                </li>
-
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
 
 
                                 </div>
 
                                 <div class="form-group filter_button pt-2">
-                                    <button type="submit" class="btn btn btn-theme-2 rounded full-width"> بحث</button>
+                                    <button type="submit" class="btn btn-primary btn-theme-2 rounded full-width"> بحث</button>
                                 </div>
                             </div>
                         </div>

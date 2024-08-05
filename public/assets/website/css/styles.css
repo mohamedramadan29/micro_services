@@ -41,7 +41,8 @@ body {
     background: #ffffff;
     color: #102A51;
     font-size: 15px;
-    font-family: "Noto Kufi Arabic", sans-serif;
+    font-family: "Noto Kufi Arabic", sans-serif !important;
+
     margin: 0;
     overflow-x: hidden;
     font-weight: 400;
@@ -8976,6 +8977,7 @@ h5.qa-subtitle {
     border-radius: 4px;
     background: #edf2fb;
     border: 1px solid #e0e7f3;
+    direction: rtl;
 }
 
 .modal-body {
@@ -9781,6 +9783,7 @@ h3.pa-name {
     background: #102234;
     margin-bottom: 30px;
     margin-top: 10px;
+    padding:10px;
 }
 
 .bredcrumb_wrap nav .breadcrumb a {
@@ -12721,6 +12724,7 @@ footer.skin-dark-footer ul.footer-bottom-social li a:hover, footer.skin-dark-foo
 
 .btn-primary{
     background-color:var(--main-color)!important;
+    color:#fff !important;
 }
 
 
@@ -12805,7 +12809,7 @@ flex-direction: row-reverse;
 
 /***** Start NotificationAlerts ********/
 .notificaion-alerts {
-padding:30px 12px;
+padding:20px 12px;
     position: relative !important;
 }
 .notificaion-alerts .dropdown-toggle::after {
@@ -12879,4 +12883,50 @@ padding:30px 12px;
     color:#00305c;
 }
 
-/********* End NotificationAlerts **********/
+/********* End NotificationAlerts ******/
+
+/********* start Balance Page *********/
+
+.balance_page{
+
+}
+.balance_page .info{
+    text-align: center;
+    background: #fbfbfb;
+    padding: 30px;
+    border-radius: 5px;
+    border: 1px solid #eee;
+    margin-bottom: 20px;
+}
+.balance_page .info h4{
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.balance_page .info span{
+    font-weight: bold;
+    font-size: 20px;
+
+}
+
+.balance_page .orders_payments{}
+.balance_page .orders_payments .count_add_balance{
+    margin-left: 20px;
+    color: #0e850e;
+    font-weight: bold;
+    font-size: 20px;
+}
+.balance_page .orders_payments .minues_balance{
+    margin-left: 20px;
+    color: red;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+@media(max-width: 991px){
+    .balance_page .info{
+        padding:15px;
+    }
+}
+
+/************** End Balance Page ********/

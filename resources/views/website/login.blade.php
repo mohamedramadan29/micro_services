@@ -58,7 +58,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <button type="submit" class="btn dark-2 btn-md full-width pop-login"> تسجيل
+                                        <button type="submit" class="btn btn-primary  dark-2 btn-md full-width pop-login"> تسجيل
                                             دخول
                                         </button>
                                     </div>

@@ -73,7 +73,7 @@
                                                name="confirm-password">
                                     </div>
                                     <div class="form-group">
-                                        <button type="submit" class="btn dark-2 btn-md full-width pop-login">
+                                        <button type="submit" class="btn btn-primary dark-2 btn-md full-width pop-login">
                                             حساب جديد
                                         </button>
                                     </div>

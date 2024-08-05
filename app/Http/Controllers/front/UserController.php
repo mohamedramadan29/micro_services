@@ -300,4 +300,9 @@ class UserController extends Controller
         return view('website.user.orders',compact('orders'));
 
     }
+
+    public function balance()
+    {
+        return view('website.user.balance');
+    }
 }
