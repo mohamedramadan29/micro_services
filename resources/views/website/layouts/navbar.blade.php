@@ -6,9 +6,9 @@
                 <nav id="navigation" class="navigation navigation-landscape">
                     <div class="nav-header">
                         <a class="nav-brand static-logo" href="{{url('/')}}"><img
-                                src="{{asset('assets/website/img/khamsat.png')}}" class="logo" alt=""/></a>
+                                src="{{asset('assets/website/img/logo.png')}}" class="logo" alt=""/></a>
                         <a class="nav-brand fixed-logo" href="{{url('/')}}"><img
-                                src="{{asset('assets/website/img/khamsat.png')}}" class="logo" alt=""/></a>
+                                src="{{asset('assets/website/img/logo.png')}}" class="logo" alt=""/></a>
                         <div class="nav-toggle"></div>
                     </div>
                     <div class="nav-menus-wrapper">

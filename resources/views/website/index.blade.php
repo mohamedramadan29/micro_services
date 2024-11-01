@@ -1,5 +1,5 @@
 @extends('website.layouts.master')
-@section('title')   مروة للخدمات  @endsection
+@section('title')  نفذها   @endsection
 @section('content')
     <!-- ============================ Hero Banner  Start================================== -->
     <div class="hero-banner full bg-cover center"
@@ -14,7 +14,7 @@
                             <div class="input-group">
                                 <input type="text" name="search" class="form-control lio-rad" placeholder=" ابحث عن الخدمة  ">
                                 <div class="input-group-append">
-                                    <button type="submit" class="btn bt-round btn--2"><i class="ti-search"></i></button>
+                                    <button type="submit" class="btn bt-round btn--2"> بحث <i class="ti-search"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -83,131 +83,28 @@
 
             <div class="row">
                 <!-- Single Item -->
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <div class="ser_110">
-                        <div class="ser_110_thumb">
-                            <a href="#" class="ser_100_link"><img src=" {{asset('assets/website/img/co-2.jpg')}}"
-                                                                  class="img-fluid" alt=""></a>
-                        </div>
-                        <div class="ser_110_footer bott">
-                            <div class="_110_foot_left">
-                                <div>
-                                    <h5>
-                                        <a href="#"> تصميم </a>
-                                    </h5>
-                                    <span> 10 خدمات  <span>
-                                         </span>
-                                    </span>
-                                </div>
+                @foreach($main_categories as $category)
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="ser_110">
+                            <div class="ser_110_thumb">
+                                <a href="{{url('category/'.$category['slug'])}}" class="ser_100_link"><img src=" {{asset('assets/uploads/service_category/'.$category['image'])}}"
+                                                                      class="img-fluid" alt=""></a>
                             </div>
-                        </div>
-                    </div>
-                </div>
+                            <div class="ser_110_footer bott">
+                                <div class="_110_foot_left">
+                                    <div>
+                                        <h5>
+                                            <a href="{{url('category/'.$category['slug'])}}"> {{$category['name']}} </a>
+                                        </h5>
 
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <div class="ser_110">
-                        <div class="ser_110_thumb">
-                            <a href="#" class="ser_100_link"><img src=" {{asset('assets/website/img/co-3.jpg')}}"
-                                                                  class="img-fluid" alt=""></a>
-                        </div>
-                        <div class="ser_110_footer bott">
-                            <div class="_110_foot_left">
-                                <div>
-                                    <h5>
-                                        <a href="#"> برمجة  </a>
-                                    </h5>
-                                    <span> 15 خدمات  <span>
-                                         </span>
                                     </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
 
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <div class="ser_110">
-                        <div class="ser_110_thumb">
-                            <a href="#" class="ser_100_link"><img src=" {{asset('assets/website/img/co-4.jpg')}}"
-                                                                  class="img-fluid" alt=""></a>
-                        </div>
-                        <div class="ser_110_footer bott">
-                            <div class="_110_foot_left">
-                                <div>
-                                    <h5>
-                                        <a href="#">  تفريغ صوتي  </a>
-                                    </h5>
-                                    <span> 50 خدمات  <span>
-                                         </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <div class="ser_110">
-                        <div class="ser_110_thumb">
-                            <a href="#" class="ser_100_link"><img src=" {{asset('assets/website/img/co-5.jpg')}}"
-                                                                  class="img-fluid" alt=""></a>
-                        </div>
-                        <div class="ser_110_footer bott">
-                            <div class="_110_foot_left">
-                                <div>
-                                    <h5>
-                                        <a href="#"> هندسة وعمارة  </a>
-                                    </h5>
-                                    <span> 10 خدمات  <span>
-                                         </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <div class="ser_110">
-                        <div class="ser_110_thumb">
-                            <a href="#" class="ser_100_link"><img src=" {{asset('assets/website/img/co-6.jpg')}}"
-                                                                  class="img-fluid" alt=""></a>
-                        </div>
-                        <div class="ser_110_footer bott">
-                            <div class="_110_foot_left">
-                                <div>
-                                    <h5>
-                                        <a href="#"> تعليم عن بعد  </a>
-                                    </h5>
-                                    <span> 16 خدمات  <span>
-                                         </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <div class="ser_110">
-                        <div class="ser_110_thumb">
-                            <a href="#" class="ser_100_link"><img src=" {{asset('assets/website/img/co-7.jpg')}}"
-                                                                  class="img-fluid" alt=""></a>
-                        </div>
-                        <div class="ser_110_footer bott">
-                            <div class="_110_foot_left">
-                                <div>
-                                    <h5>
-                                        <a href="#"> ذكاء اصطناعي  </a>
-                                    </h5>
-                                    <span> 19 خدمات  <span>
-                                         </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
         </div>

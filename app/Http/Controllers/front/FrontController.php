@@ -22,7 +22,10 @@ class FrontController extends Controller
 
     public function index()
     {
-        return view('website.index');
+
+        $main_categories = Category::where('status',1)->where('home_page',1)->limit(6)->get();
+        //dd($main_categories);
+        return view('website.index',compact('main_categories'));
     }
 
     public function services(Request $request)
