@@ -22,15 +22,16 @@
     <section class="gray-bg text-right" dir="rtl">
         <div class="container">
             <div class="card">
+
                 @if (Session::has('Success_message'))
                     @php
-                        emotify('success', \Illuminate\Support\Facades\Session::get('Success_message'));
+                        toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
                     @endphp
                 @endif
                 @if ($errors->any())
                     @foreach ($errors->all() as $error)
                         @php
-                            emotify('error', $error);
+                            toastify()->error($error);
                         @endphp
                     @endforeach
                 @endif
@@ -40,7 +41,7 @@
                             <thead>
                             <tr>
                                 <th> الخدمة</th>
-{{--                                <th> مرات الطلب</th>--}}
+                                {{--                                <th> مرات الطلب</th>--}}
                                 <th> التكلفة</th>
                                 <th></th>
                             </tr>
@@ -73,20 +74,20 @@
                                             </div>
                                         </div>
                                     </td>
-{{--                                    <td>--}}
-{{--                                        <select class="" name="quantity">--}}
-{{--                                            <option value="1">1</option>--}}
-{{--                                            <option value="2">2</option>--}}
-{{--                                            <option value="3">3</option>--}}
-{{--                                            <option value="4">4</option>--}}
-{{--                                            <option value="5">5</option>--}}
-{{--                                            <option value="6">6</option>--}}
-{{--                                            <option value="7">7</option>--}}
-{{--                                            <option value="8">8</option>--}}
-{{--                                            <option value="9">9</option>--}}
-{{--                                            <option value="10">10</option>--}}
-{{--                                        </select>--}}
-{{--                                    </td>--}}
+                                    {{--                                    <td>--}}
+                                    {{--                                        <select class="" name="quantity">--}}
+                                    {{--                                            <option value="1">1</option>--}}
+                                    {{--                                            <option value="2">2</option>--}}
+                                    {{--                                            <option value="3">3</option>--}}
+                                    {{--                                            <option value="4">4</option>--}}
+                                    {{--                                            <option value="5">5</option>--}}
+                                    {{--                                            <option value="6">6</option>--}}
+                                    {{--                                            <option value="7">7</option>--}}
+                                    {{--                                            <option value="8">8</option>--}}
+                                    {{--                                            <option value="9">9</option>--}}
+                                    {{--                                            <option value="10">10</option>--}}
+                                    {{--                                        </select>--}}
+                                    {{--                                    </td>--}}
                                     <td>
                                         {{ number_format($item['serviceData']['price'],2)}} $
                                     </td>
@@ -96,7 +97,7 @@
                                             <input type="hidden" name="cartId" value="{{$item['id']}}">
                                             <button type="submit"
                                                     onclick="return confirm(' هل انت متاكد من حذف الخدمة !!  ')"
-                                                    class="btn btn-outline-danger btn-sm"> حذف
+                                                    class="btn btn-danger btn-sm"> حذف
                                             </button>
                                         </form>
 
@@ -146,7 +147,7 @@
                                         </a>
                                     @else
                                         <a href="{{url('login')}}" style="padding: 10px" type="submit"
-                                           class="btn btn-primary btn-sm"> اتمام
+                                           class="btn global_button btn-sm"> اتمام
                                             الشراء
                                         </a>
                                     @endif
@@ -156,9 +157,12 @@
                             </thead>
                         </table>
                     @else
-                        <div class="alert alert-info">
-                            لا يوجد اي خدمات في سلة المشتريات <a href="{{url('services')}}"
-                                                                 class="btn btn-primary btn-sm"> مشاهدة الخدمات </a>
+                        <div class="empty_cart">
+                            <img src="{{asset('assets/website/img/cart.png')}}">
+                            <h4> لا يوجد اي خدمات في سلة المشتريات </h4>
+                            <a href="{{url('services')}}" class="btn btn-primary"> مشاهدة الخدمات </a>
+
+
                         </div>
                     @endif
 

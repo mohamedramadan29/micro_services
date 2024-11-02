@@ -11,6 +11,17 @@
                                 src="{{asset('assets/website/img/logo.png')}}" class="logo" alt=""/></a>
                         <div class="nav-toggle"></div>
                     </div>
+                    @if(! Auth::check())
+                    <div class="mobile_account">
+                        <ul class="nav-menu nav-menu-social">
+                            <li class="add-listing dark-bg">
+                                <a href="{{url('login')}}">
+                                    <i class=" fa fa-sign-in   mr-1"></i>   دخول
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    @endif
                     <div class="nav-menus-wrapper">
                         @if(\Illuminate\Support\Facades\Auth::user())
                             <ul class="nav-menu nav-menu-social">
@@ -59,7 +70,6 @@
                                 </div>
                                 <!------------------------ Notification Alerts For Users  --------------->
                                 <div class="dropdown notificaion-alerts">
-
                                     <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                         @php
@@ -119,7 +129,7 @@
                                 <li><a href="{{url('dashboard')}}"> حسابي </a></li>
                             </ul>
                         @else
-                            <ul class="nav-menu nav-menu-social">
+                            <ul class="nav-menu nav-menu-social logins_button">
                                 <li>
                                     <a href="{{url('register')}}">
                                         <i class="ti-user mr-1"></i> حساب جديد

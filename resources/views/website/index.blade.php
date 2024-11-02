@@ -126,100 +126,101 @@
 
             <div class="row justify-content-center">
 
-                <!-- Single Category -->
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="urip_cated shadow">
-                        <div class="urip_cated_avater">
-                            <i class="ti-bar-chart"></i>
-                        </div>
-                        <div class="urip_cated_caps">
-                            <h3 class="cats_urip_title"><a href="#"> تصميم شعار  </a></h3>
+                @foreach($sub_categories as $sub_category)
+                    <!-- Single Category -->
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="urip_cated shadow">
+                            <div class="urip_cated_avater">
+                                <i class="ti-bar-chart"></i>
+                            </div>
+                            <div class="urip_cated_caps">
+                                <h3 class="cats_urip_title"><a href="{{url('services/'.$sub_category['slug'])}}"> {{$sub_category['name']}}  </a></h3>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
+{{--                <!-- Single Category -->--}}
+{{--                <div class="col-lg-3 col-md-4 col-sm-6">--}}
+{{--                    <div class="urip_cated shadow">--}}
+{{--                        <div class="urip_cated_avater">--}}
+{{--                            <i class="ti-palette"></i>--}}
+{{--                        </div>--}}
+{{--                        <div class="urip_cated_caps">--}}
+{{--                            <h3 class="cats_urip_title"><a href="#"> مونتاج فيديو  </a></h3>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                <!-- Single Category -->
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="urip_cated shadow">
-                        <div class="urip_cated_avater">
-                            <i class="ti-palette"></i>
-                        </div>
-                        <div class="urip_cated_caps">
-                            <h3 class="cats_urip_title"><a href="#"> مونتاج فيديو  </a></h3>
-                        </div>
-                    </div>
-                </div>
+{{--                <!-- Single Category -->--}}
+{{--                <div class="col-lg-3 col-md-4 col-sm-6">--}}
+{{--                    <div class="urip_cated shadow">--}}
+{{--                        <div class="urip_cated_avater">--}}
+{{--                            <i class="ti-car"></i>--}}
+{{--                        </div>--}}
+{{--                        <div class="urip_cated_caps">--}}
+{{--                            <h3 class="cats_urip_title"><a href="#"> انشاء تطبيق جوال  </a></h3>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                <!-- Single Category -->
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="urip_cated shadow">
-                        <div class="urip_cated_avater">
-                            <i class="ti-car"></i>
-                        </div>
-                        <div class="urip_cated_caps">
-                            <h3 class="cats_urip_title"><a href="#"> انشاء تطبيق جوال  </a></h3>
-                        </div>
-                    </div>
-                </div>
+{{--                <!-- Single Category -->--}}
+{{--                <div class="col-lg-3 col-md-4 col-sm-6">--}}
+{{--                    <div class="urip_cated shadow">--}}
+{{--                        <div class="urip_cated_avater">--}}
+{{--                            <i class="ti-home"></i>--}}
+{{--                        </div>--}}
+{{--                        <div class="urip_cated_caps">--}}
+{{--                            <h3 class="cats_urip_title"><a href="#"> انشاء متجر الكتروني  </a></h3>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                <!-- Single Category -->
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="urip_cated shadow">
-                        <div class="urip_cated_avater">
-                            <i class="ti-home"></i>
-                        </div>
-                        <div class="urip_cated_caps">
-                            <h3 class="cats_urip_title"><a href="#"> انشاء متجر الكتروني  </a></h3>
-                        </div>
-                    </div>
-                </div>
+{{--                <!-- Single Category -->--}}
+{{--                <div class="col-lg-3 col-md-4 col-sm-6">--}}
+{{--                    <div class="urip_cated shadow">--}}
+{{--                        <div class="urip_cated_avater">--}}
+{{--                            <i class="ti-desktop"></i>--}}
+{{--                        </div>--}}
+{{--                        <div class="urip_cated_caps">--}}
+{{--                            <h3 class="cats_urip_title"><a href="#"> موشن جرافيك  </a></h3>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                <!-- Single Category -->
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="urip_cated shadow">
-                        <div class="urip_cated_avater">
-                            <i class="ti-desktop"></i>
-                        </div>
-                        <div class="urip_cated_caps">
-                            <h3 class="cats_urip_title"><a href="#"> موشن جرافيك  </a></h3>
-                        </div>
-                    </div>
-                </div>
+{{--                <!-- Single Category -->--}}
+{{--                <div class="col-lg-3 col-md-4 col-sm-6">--}}
+{{--                    <div class="urip_cated shadow">--}}
+{{--                        <div class="urip_cated_avater">--}}
+{{--                            <i class="ti-brush-alt"></i>--}}
+{{--                        </div>--}}
+{{--                        <div class="urip_cated_caps">--}}
+{{--                            <h3 class="cats_urip_title"><a href="#"> تحسين محركات البحث  </a></h3>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                <!-- Single Category -->
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="urip_cated shadow">
-                        <div class="urip_cated_avater">
-                            <i class="ti-brush-alt"></i>
-                        </div>
-                        <div class="urip_cated_caps">
-                            <h3 class="cats_urip_title"><a href="#"> تحسين محركات البحث  </a></h3>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Single Category -->
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="urip_cated shadow">
-                        <div class="urip_cated_avater">
-                            <i class="ti-car"></i>
-                        </div>
-                        <div class="urip_cated_caps">
-                            <h3 class="cats_urip_title"><a href="#"> ترجمة  </a></h3>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single Category -->
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="urip_cated shadow">
-                        <div class="urip_cated_avater">
-                            <i class="ti-bar-chart-alt"></i>
-                        </div>
-                        <div class="urip_cated_caps">
-                            <h3 class="cats_urip_title"><a href="#"> ادارة حسابات التواصل الاجتماعي  </a></h3>
-                        </div>
-                    </div>
-                </div>
+{{--                <!-- Single Category -->--}}
+{{--                <div class="col-lg-3 col-md-4 col-sm-6">--}}
+{{--                    <div class="urip_cated shadow">--}}
+{{--                        <div class="urip_cated_avater">--}}
+{{--                            <i class="ti-car"></i>--}}
+{{--                        </div>--}}
+{{--                        <div class="urip_cated_caps">--}}
+{{--                            <h3 class="cats_urip_title"><a href="#"> ترجمة  </a></h3>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <!-- Single Category -->--}}
+{{--                <div class="col-lg-3 col-md-4 col-sm-6">--}}
+{{--                    <div class="urip_cated shadow">--}}
+{{--                        <div class="urip_cated_avater">--}}
+{{--                            <i class="ti-bar-chart-alt"></i>--}}
+{{--                        </div>--}}
+{{--                        <div class="urip_cated_caps">--}}
+{{--                            <h3 class="cats_urip_title"><a href="#"> ادارة حسابات التواصل الاجتماعي  </a></h3>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
             </div>
         </div>
@@ -237,8 +238,8 @@
                     </div>
                     <div class="inner-flexible-box subscribe-box">
                         <div class="input-group">
-                            <button class="btn btn-primary start_job"> ابدا الان  </button>
 
+                            <a href="{{url('login')}}" class="btn btn-primary start_job">   ابدا الان   </a>
                         </div>
                     </div>
                 </div>

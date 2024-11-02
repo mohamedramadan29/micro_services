@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\AdminController;
 use \App\Http\Controllers\admin\ServiceController;
@@ -53,6 +54,16 @@ Route::group(['prefix' => 'admin'], function () {
         Route::controller(SettingController::class)->group(function (){
             Route::get('public_settings','index');
             Route::post('public_settings/update','update');
+        });
+        ////////////////////// Start Products ///////////////////////////////
+        Route::controller(ProductController::class)->group(function () {
+            Route::get('products', 'index');
+            Route::match(['post', 'get'], 'product/add', 'store');
+            Route::match(['post', 'get'], 'product/update/{slug}', 'update')->name('product.update');
+            Route::post('product/delete/{id}', 'delete');
+            Route::get('/get-attribute-values/{attributeId}', 'getAttributeValues');
+            Route::get('/get-subcategories', 'getSubCategories')->name('get.subcategories');
+            Route::post('product/gallary/delete/{id}', 'delete_image_gallary');
         });
     });
 });

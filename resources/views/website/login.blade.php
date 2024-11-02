@@ -32,13 +32,13 @@
                         <div class="modal-body">
                             @if (Session::has('Success_message'))
                                 @php
-                                    emotify('success', \Illuminate\Support\Facades\Session::get('Success_message'));
+                                    toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
                                 @endphp
                             @endif
                             @if ($errors->any())
                                 @foreach ($errors->all() as $error)
                                     @php
-                                        emotify('error', $error);
+                                        toastify()->error($error);
                                     @endphp
                                 @endforeach
                             @endif
@@ -72,7 +72,6 @@
 
                             <div class="social_logs mb-4">
                                 <ul class="shares_jobs text-center">
-                                    <li><a href="#" class="share fb"><i class="fa fa-facebook"></i></a></li>
                                     <li><a href="#" class="share gp"><i class="fa fa-google"></i></a></li>
                                 </ul>
                             </div>

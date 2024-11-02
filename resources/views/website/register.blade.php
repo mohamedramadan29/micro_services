@@ -30,18 +30,18 @@
 
                         </div>
                         <div class="modal-body">
-                                @if (Session::has('Success_message'))
+                            @if (Session::has('Success_message'))
+                                @php
+                                    toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
+                                @endphp
+                            @endif
+                            @if ($errors->any())
+                                @foreach ($errors->all() as $error)
                                     @php
-                                        emotify('success', \Illuminate\Support\Facades\Session::get('Success_message'));
+                                        toastify()->error($error);
                                     @endphp
-                                @endif
-                                @if ($errors->any())
-                                    @foreach ($errors->all() as $error)
-                                        @php
-                                            emotify('error', $error);
-                                        @endphp
-                                    @endforeach
-                                @endif
+                                @endforeach
+                            @endif
                             <div class="login-form">
                                 <form method="post" action="{{url('/register')}}">
                                     @csrf
@@ -87,7 +87,6 @@
 
                             <div class="social_logs mb-4">
                                 <ul class="shares_jobs text-center">
-                                    <li><a href="#" class="share fb"><i class="fa fa-facebook"></i></a></li>
                                     <li><a href="#" class="share gp"><i class="fa fa-google"></i></a></li>
                                 </ul>
                             </div>

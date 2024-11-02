@@ -5,18 +5,12 @@
 
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-widget">
-                        <img src="{{asset('assets/website/img/khamsat.png')}}" class="img-fluid f-logo" width="120"
+                        <img src="{{asset('assets/website/img/logo.png')}}" class="img-fluid f-logo" width="120"
                              alt="">
                         <p>
-                            خمسات هو السوق العربي الأول لبيع وشراء الخدمات المصغرة، يجمع خمسات بين الشباب العربي المستعد
-                            لتقديم الخدمات وبين فئة المشترين المستعدين لشراء هذه الخدمات
+                            "نفذها" هو منصة عربية للخدمات المصغّرة والمشاريع، تتيح لأصحاب الأفكار والأعمال فرصة الوصول إلى محترفين مستقلين من مختلف التخصصات. نسعى في "نفذها" إلى توفير بيئة مثالية تجمع بين مقدمي الخدمات الباحثين عن فرص عمل وأصحاب المشاريع
                         </p>
-                        <ul class="footer-bottom-social">
-                            <li><a href="#"><i class="ti-facebook"></i></a></li>
-                            <li><a href="#"><i class="ti-twitter"></i></a></li>
-                            <li><a href="#"><i class="ti-instagram"></i></a></li>
-                            <li><a href="#"><i class="ti-linkedin"></i></a></li>
-                        </ul>
+
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-4">
@@ -33,8 +27,13 @@
 
                 <div class="col-lg-4 col-md-4">
                     <div class="footer-widget">
-                        <h4 class="widget-title"> وسائل الدفع </h4>
-                        <img style="max-width:100%;" src="{{asset('assets/website/img/pay.png')}}">
+                        <h4 class="widget-title">  تابعنا </h4>
+                        <ul class="footer-bottom-social">
+                            <li><a href="#"><i class="ti-facebook"></i></a></li>
+                            <li><a href="#"><i class="ti-twitter"></i></a></li>
+                            <li><a href="#"><i class="ti-instagram"></i></a></li>
+                            <li><a href="#"><i class="ti-linkedin"></i></a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -46,7 +45,7 @@
             <div class="row align-items-center">
 
                 <div class="col-lg-12 col-md-12 text-center">
-                    <p class="mb-0"> مروة @ 2024 جميع الحقوق محفوظة <a href="#"> Mr </a> بواسطة </p>
+                    <p class="mb-0">  جميع الحقوق محفوظة @ 2024 لدي نفذها  </p>
                 </div>
 
             </div>
@@ -69,6 +68,7 @@
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @notifyJs
+@toastifyJs
 @livewireScripts
 
 

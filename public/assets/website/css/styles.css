@@ -6278,7 +6278,7 @@ ul.applieded_list li .nore_applied span {
 }
 
 .ipn-subtitle {
-    color: #add1ff;
+    color: #f0f0f0;
     text-align: center;
     width: 100%;
     display: inline-block;
@@ -8986,6 +8986,7 @@ h5.qa-subtitle {
     background: #edf2fb;
     border: 1px solid #e0e7f3;
     direction: rtl;
+    box-shadow: none;
 }
 
 .modal-body {
@@ -8993,9 +8994,11 @@ h5.qa-subtitle {
 }
 
 .login-form .form-control:focus {
-    background: rgba(6, 159, 228, 0.1);
-    border-color: rgba(6, 159, 228, 0.2);
-    color: #069fe4;
+
+    color: #000;
+}
+.form-control:focus{
+    box-shadow: none !important;
 }
 
 .mf-link {
@@ -11546,7 +11549,7 @@ footer {
 }
 
 footer.dark-footer {
-    background: #19242b;
+    background: #fff;
 }
 
 footer.light-footer {
@@ -11631,6 +11634,8 @@ h4.widget-title {
 .footer-widget p {
     color: #60737f;
     font-size: 14px;
+    margin-bottom: 10px;
+    line-height: 2;
 }
 
 .footer-widget ul {
@@ -11661,7 +11666,7 @@ h4.widget-title {
 }
 
 footer.skin-dark-footer h4 {
-    color: #ffffff;
+    color: #3fb699;
     text-transform: uppercase;
 }
 
@@ -11669,10 +11674,14 @@ footer.skin-dark-footer .footer-widget ul li a, footer.skin-dark-footer, footer.
     color: #60737f;
     font-size: 14px;
     transition: all ease 0.4s;
+
+}
+footer.skin-dark-footer{
+    border-top: 4px solid #3fb699;
 }
 
 footer.skin-dark-footer .footer-widget ul li a:hover, footer.skin-dark-footer .footer-widget ul li a:focus {
-    color: #ffffff;
+    color: #3fb699;
 }
 
 .img-fluid.f-logo {
@@ -12938,3 +12947,111 @@ padding:20px 12px;
 }
 
 /************** End Balance Page ********/
+
+.mobile_account{
+    display: none;
+}
+.mobile_account .nav-menu.nav-menu-social > li.add-listing{
+    width: 107px;
+    margin-right: -13px;
+    top: 0;
+    padding: 0;
+    height: 35px;
+    margin-top: 10px;
+}
+@media(max-width: 991px){
+    .mobile_account{
+        display: block;
+    }
+    .nav-brand img{
+        max-width: 99px;
+        position: relative;
+        top: 0px;
+        right: -25px;
+    }
+    .navigation-portrait{
+        display: flex;
+        flex-direction: row-reverse;
+    }
+    .navigation-portrait .nav-menu.nav-menu-social > li{
+        width: 106px;
+
+        background: #3fb697;
+        margin-left: 15px;
+    }
+    .hero-banner h1{
+        margin-bottom:20px;
+    }
+    .banner-search.style-2 .form-control, .banner-search.style-2 .btn{
+        height:35px;
+    }
+    .header{
+        padding-bottom:10px;
+    }
+    .logins_button{
+        display: none;
+    }
+}
+.empty_cart{
+    text-align:center;
+}
+.empty_cart img{
+    width: 120px;
+    margin: auto;
+    margin-bottom: 30px;
+}
+.empty_cart h4{
+    margin-bottom:30px;font-weight: bold;line-height: 2;
+}
+.empty_cart .btn{
+    background-color: #3fb697 !important;
+    border-color: #3fb697 !important;
+}
+[type=button], [type=reset], [type=submit], button{
+    color:#fff !important;
+    height:45px
+}
+.btn-danger{
+    background-color:#dc3545 !important;
+
+    height:37px;
+}
+.global_button{
+    background-color: #3fb697 !important;
+    border-color: #3fb697 !important;
+}
+@media(max-width: 991px){
+    .cart_details .serv_data{
+        flex-direction: column;
+        text-align: right;
+        align-items:flex-start;
+    }
+    .cart_details .serv_data .image img{
+        width:100px;
+        height:100px;
+        margin-bottom:10px;
+    }
+    .cart_details .serv_data .info h4{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    #registermodal .mf-link{
+        display: block;
+        width:100%;
+    }
+    #registermodal .mf-forget{
+        display: block;
+        width:100%;
+        text-align: center;
+    }
+    .page-title .ipt-title{
+        font-size:25px;
+    }
+    .ipn-subtitle{
+        font-size: 15px;
+    }
+    .page-title{
+        height: 180px !important;
+    }
+
+}

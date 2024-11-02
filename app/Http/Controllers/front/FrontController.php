@@ -22,10 +22,10 @@ class FrontController extends Controller
 
     public function index()
     {
-
         $main_categories = Category::where('status',1)->where('home_page',1)->limit(6)->get();
+        $sub_categories = SubCategory::where('status',1)->where('home_page',1)->limit(6)->get();
         //dd($main_categories);
-        return view('website.index',compact('main_categories'));
+        return view('website.index',compact('main_categories','sub_categories'));
     }
 
     public function services(Request $request)
@@ -50,11 +50,14 @@ class FrontController extends Controller
 
         /////// Make Notification Is Read
         ///
-        $notification_type = 'App\Notifications\AcceptJobFromAdmin';
-        $notifications = Auth::user()->unreadNotifications->where('type', $notification_type);
-        foreach ($notifications as $notification){
-            $notification->markAsRead();
-        }
+       if (Auth::check()){
+           $notification_type = 'App\Notifications\AcceptJobFromAdmin';
+           $notifications = Auth::user()->unreadNotifications->where('type', $notification_type);
+           foreach ($notifications as $notification){
+               $notification->markAsRead();
+           }
+       }
+
 
         return view('website.service-details', compact('service', 'more_servicess'));
     }
