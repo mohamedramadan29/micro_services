@@ -148,6 +148,7 @@
 
                             <li><a href="{{url('categories')}}"> الاقسام </a></li>
                             <li><a href="{{url('services')}}"> الخدمات </a></li>
+                            <li><a href="{{url('products')}}"> منتجات نفذها  </a></li>
                             @if(\Illuminate\Support\Facades\Auth::check())
                                 <li><a href="{{url('purches')}}"> مشترياتي </a></li>
                                 <li><a href="{{url('orders')}}"> الطلبات الواردة </a></li>

@@ -7,7 +7,7 @@ use App\Http\Controllers\front\FrontController;
 use App\Http\Controllers\front\serviceController;
 use App\Http\Controllers\front\UserController;
 use Illuminate\Support\Facades\Route;
-
+use \App\Http\Controllers\front\ProductController;
 Route::get('/', function () {
     return view('website.index');
 });
@@ -87,5 +87,13 @@ Route::controller(ConversationController::class)->group(function () {
 //////////////////////// Start Chats /////////////////
 ///
 
+////////////////////////////////// Start Products //////////////////
+
+Route::controller(ProductController::class)->group(function (){
+    Route::get('products','index');
+    Route::get('product/{slug}','product_details');
+});
+
+/////////////////////////////////// End Products ////////////////////
 
 include 'admin.php';

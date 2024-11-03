@@ -12893,7 +12893,7 @@ padding:20px 12px;
 
 .header .dropdown .bi-bell-fill,
 .header .dropdown  .bi-envelope-fill{
-    color:#fff;
+    color:#00305c;
 }
 .header.header-transparent.header-fixed .dropdown .bi-bell-fill,
 .header.header-transparent.header-fixed .dropdown .bi-envelope-fill{
@@ -13055,3 +13055,29 @@ padding:20px 12px;
     }
 
 }
+/************************* Start Product Page ***************/
+
+.add_to_cart{
+    margin-top:15px
+}
+.add_to_cart button{
+    width: 100%;
+}
+
+/********************************* End Product Page *****************/
+/*************************************** Start Product Page ***************/
+.product_page{
+
+}
+.product_page .product_image{}
+.product_page .product_name{
+    font-weight: bold;
+    margin-top: 20px;
+}
+.product_page .price_section{
+    padding:10px;
+}
+.product_page .global_button{
+    width:100%;
+}
+/***********************End Product Page ****************************/
