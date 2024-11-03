@@ -31,7 +31,7 @@ class ProductController extends Controller
         if ($request->isMethod('post')) {
             try {
                 $data = $request->all();
-               // dd($data);
+                // dd($data);
                 $rules = [
                     'name' => 'required',
 
@@ -121,43 +121,44 @@ class ProductController extends Controller
                 // البحث عن المنتج للتعديل
                 // $product = Product::find();  // استبدال $productId بالمعرّف الخاص بالمنتج
 
+                if ($request->hasFile('image')) {
+                    $old_image = public_path('assets/uploads/product_images'.$product['image']);
+                    if(file_exists($old_image)){
+                        unlink($old_image);
+                    }
+                    $file_name = $this->saveImage($request->image, public_path('assets/uploads/product_images'));
+                    $product->update([
+                        'image'=>$file_name,
+                    ]);
+                }
                 // تحديث معلومات المنتج
-                $product->name = $data['name'];
                 if ($data['slug'] && $data['slug'] != '') {
                     $slug = $this->CustomeSlug($data['slug']);
                 } else {
                     $slug = $this->CustomeSlug($data['name']);
                 }
                 $product->update([
-                    'name'=>$data['name'],
-                    'slug'=>$slug,
-                    'status'=>$data['status'],
-                    'short_description'=>$data['short_description'],
-                    'description'=>$data['description'],
-                    'price'=>$data['price'],
-                    'meta_title'=>$data['meta_title'],
-                    'meta_keywords'=>$data['meta_keywords'],
-                    'meta_description'=>$data['meta_description']
-
+                    'name' => $data['name'],
+                    'slug' => $slug,
+                    'status' => $data['status'],
+                    'short_description' => $data['short_description'],
+                    'description' => $data['description'],
+                    'price' => $data['price'],
+                    'meta_title' => $data['meta_title'],
+                    'meta_keywords' => $data['meta_keywords'],
+                    'meta_description' => $data['meta_description']
                 ]);
 
-                // تحديث الصورة إذا تم رفع صورة جديدة
-//                if ($file_name) {
-//                    $product->image = $file_name;
-//                }
-
-                $product->save();
-
 //                ///////// تحديث معرض الصور إذا كان موجودًا
-//                if ($request->hasFile('gallery')) {
-//                    foreach ($request->file('gallery') as $gallery) {
-//                        $gallery_name = $this->saveImage($gallery, 'assets/uploads/product_gallery');
-//                        $gallery_image = new ProductGallary();
-//                        $gallery_image->product_id = $product->id;
-//                        $gallery_image->image = $gallery_name;
-//                        $gallery_image->save();
-//                    }
-//                }
+                if ($request->hasFile('gallery')) {
+                    foreach ($request->file('gallery') as $gallery) {
+                        $gallery_name = $this->saveImage($gallery, 'assets/uploads/product_gallery');
+                        $gallery_image = new ProductGallary();
+                        $gallery_image->product_id = $product->id;
+                        $gallery_image->image = $gallery_name;
+                        $gallery_image->save();
+                    }
+                }
 
 
                 DB::commit();
@@ -171,7 +172,7 @@ class ProductController extends Controller
 
         }
         // عرض صفحة التعديل
-        return view('admin.Products.update', compact('product',  'gallaries'));
+        return view('admin.Products.update', compact('product', 'gallaries'));
     }
 
 

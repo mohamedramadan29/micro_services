@@ -74,26 +74,17 @@
                                         <a href="{{url('admin/product/update/'.$product['slug'])}}"></a> {{$product['name']}}
                                     </td>
                                     <td> {{$product['price']}} </td>
-                                    <td> {{$product['price']}} </td>
                                     <td>
                                         <img class="img-thumbnail"
                                              src="{{asset('assets/uploads/product_images/'.$product['image'])}}"
                                              width="80" height="80px" alt="">
                                     </td>
                                     <td>
-                                        <div class="d-flex gap-2">
-                                            <a href="{{url('admin/product/update/'.$product['slug'])}}"
-                                               class="btn btn-soft-primary btn-sm">
-                                                <iconify-icon icon="solar:pen-2-broken"
-                                                              class="align-middle fs-18"></iconify-icon>
-                                            </a>
-                                            <button type="button" class="btn btn-soft-danger btn-sm"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#delete_category_{{$product['id']}}">
-                                                <iconify-icon icon="solar:trash-bin-minimalistic-2-broken"
-                                                              class="align-middle fs-18"></iconify-icon>
-                                            </button>
-                                        </div>
+                                        <a href="{{url('admin/product/update/'.$product['slug'])}}" class="btn btn-primary btn-sm">  تعديل <i class="fa fa-edit"></i> </a>
+                                        <button data-target="#delete_category_{{$product['id']}}"
+                                                data-toggle="modal" class="btn btn-danger btn-sm"> حذف <i
+                                                class="fa fa-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 <!-- Modal -->
