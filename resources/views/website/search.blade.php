@@ -127,7 +127,7 @@
                     </div>
                     <!-- Sidebar End -->
 
-                </div>
+
 
                 <!-- Item Wrap Start -->
                 <div class="col-lg-8 col-md-12 col-sm-12">
@@ -199,7 +199,8 @@
                     </div>
 
                 </div>
-
+            </div>
+        </div>
             </div>
         </div>
     </section>

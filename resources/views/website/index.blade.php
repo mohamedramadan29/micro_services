@@ -5,8 +5,8 @@
     <div class="hero-banner full bg-cover center"
          style="background:#00000057 url({{asset('assets/website/img/background3.webp')}}) no-repeat;" data-overlay="7">
         <div class="container">
-            <h1> أنجز مشاريعك عبر الإنترنت بسهولة وأمان </h1>
-            <p class="lead">وظّف مستقلين محترفين لإنجاز أعمالك </p>
+            <h1> دليلك الشامل لإنجاز المشاريع عبر الإنترنت بفاعلية وأمان </h1>
+            <p class="lead"> كيف توظّف أفضل المستقلين لإنجاز عملك بجودة عالية  </p>
             <form class="mt-4" dir="rtl" method="get" action="{{url('search')}}">
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-md-10 col-sm-12">
@@ -76,7 +76,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-7 col-md-9">
                     <div class="sec-heading">
-                        <h2> كافة الخدمات الاحترافية <span class="theme-cl-2">  لتطوير أعمالك </span></h2>
+                        <h2> أفضل الخدمات الاحترافية <span class="theme-cl-2">  لتطوير أعمالك وزيادة أرباحك </span></h2>
                     </div>
                 </div>
             </div>
@@ -119,7 +119,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-7 col-md-9">
                     <div class="sec-heading">
-                        <h2> خدمات  <span class="theme-cl-2"> شائعه  </span></h2>
+                        <h2> خدمات شائعة يحتاجها كل صاحب عمل   <span class="theme-cl-2"> لتنمية مشروعه  </span></h2>
                     </div>
                 </div>
             </div>
@@ -234,7 +234,7 @@
 
                 <div class="col-lg-7 col-md-8">
                     <div class="clt-caption text-center mb-4">
-                        <h2 class="text-light"> هل أنت جاهز لبدء مشروعك الخاص ؟ </h2>
+                        <h2 class="text-light"> هل أنت مستعد لبدء مشروعك الخاص؟ </h2>
                     </div>
                     <div class="inner-flexible-box subscribe-box">
                         <div class="input-group">

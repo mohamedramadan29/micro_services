@@ -21,91 +21,48 @@
     <!-- ============================ Page Title End ================================== -->
 
     <!-- ============================ Main Section Start ================================== -->
-    <section class="min-sec text-right" dir="rtl">
+    <!-- ============================ Main Section Start ================================== -->
+    <div class="text-right privacy_page" dir="rtl">
         <div class="container">
-            <div class="row">
+            <!-- Single blog Grid -->
+            <div class="data">
 
-                <!-- Single blog Grid -->
-                <div class="col-lg-10 col-md-11 col-sm-12">
-                    <div class="accordion" id="accordionExample">
-                        <div class="card">
-                            <div class="card-header" id="headingOne">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-right" type="button"
-                                            data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
-                                            aria-controls="collapseOne">
-                                        كيف يحمي خمسات معلوماتي الشخصية؟
-                                    </button>
-                                </h2>
-                            </div>
+                <h2> **سياسة الاستخدام:** </h2>
+                <p>
 
-                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                 data-parent="#accordionExample">
-                                <div class="card-body">
+                    تهدف سياسة الاستخدام إلى توضيح كيفية الاستفادة من خدماتنا وشروط الاستخدام التي يجب على جميع
+                    المستخدمين الالتزام بها لضمان تجربة آمنة ومثمرة للجميع. يرجى قراءة البنود التالية بعناية:
+                    <br>
+                    1. **استخدام الخدمات**: تتيح خدماتنا للمستخدمين الوصول إلى [وصف الخدمات المقدمة، مثل المنتجات،
+                    المحتوى، أو الميزات]. يمكن للمستخدمين الاستفادة منها لأغراض شخصية وغير تجارية. يجب على المستخدمين
+                    الالتزام بقوانين الاستخدام وألا يستغلوا الخدمات لأي أغراض غير قانونية أو غير مصرح بها.
+                    <br>
+                    2. **إنشاء الحساب**: قد يتطلب بعض أجزاء الخدمة إنشاء حساب خاص بك. يُشترط أن تكون المعلومات المقدمة
+                    عند التسجيل دقيقة ومحدثة. يُمنع مشاركة الحساب مع الآخرين، ويجب الحفاظ على سرية بيانات الدخول لضمان
+                    أمان حسابك.
+                    <br>
+                    3. **المحتوى والمشاركات**: قد تسمح خدماتنا للمستخدمين بنشر أو مشاركة محتوى، مثل التعليقات أو
+                    التقييمات. يجب أن يكون هذا المحتوى خاليًا من أي مواد غير لائقة أو مسيئة، أو تنتهك حقوق الآخرين.
+                    نحتفظ بالحق في إزالة أي محتوى يعتبر مخالفًا لهذه الشروط.
+                    <br>
+                    4. **حقوق الملكية**: جميع المحتوى والعلامات التجارية والمواد المقدمة ضمن خدماتنا محمية بموجب حقوق
+                    الملكية الفكرية. يُحظر نسخ أو إعادة توزيع أو تعديل المحتوى دون إذن كتابي مسبق.
+                    <br>
+                    5. **التعديلات على الخدمة**: قد نقوم بإجراء تحديثات أو تغييرات على الخدمة من وقت لآخر. تحتفظ [اسم
+                    الشركة] بالحق في تعديل أو إيقاف الخدمة مؤقتًا أو دائمًا، مع إعلام المستخدمين بالتغييرات الهامة.
+                    <br>
+                    6. **إخلاء المسؤولية**: نحرص على تقديم خدمات ذات جودة عالية، ولكننا لا نضمن أن تكون الخدمات خالية
+                    تمامًا من الأخطاء. الشركة غير مسؤولة عن أي أضرار ناتجة عن استخدام الخدمة بشكل غير صحيح أو عن الأعطال
+                    الفنية.
+                    <br>
+                    7. **إنهاء الخدمة**: نحتفظ بالحق في إنهاء أو تعليق حساب المستخدم في حال خرق الشروط أو إساءة استخدام
+                    الخدمة، أو إذا طلب المستخدم إغلاق حسابه.
 
-                                    نضمن لك في خمسات خصوصية معلوماتك ونحرص على حمايتها. لمعرفة المزيد عن ذلك في سياسة
-                                    الخصوصية.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header" id="headingTwo">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-right collapsed" type="button"
-                                            data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
-                                            aria-controls="collapseTwo">
-                                        كيف أعدل معلومات حسابي؟
-                                    </button>
-                                </h2>
-                            </div>
-                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                                 data-parent="#accordionExample">
-                                <div class="card-body">
-                                    تستطيع تغيير معلوماتك الشخصية في صفحة إعدادات حساب حسوب.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header" id="headingThree">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-right collapsed" type="button"
-                                            data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
-                                            aria-controls="collapseThree">
-                                        أين أجد رابط التسويق بالعمولة الخاص بي وكيف أربح من خلاله؟
-                                    </button>
-                                </h2>
-                            </div>
-                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-                                 data-parent="#accordionExample">
-                                <div class="card-body">
-                                    يساعدك برنامج خمسات للتسويق بالعمولة على تحقيق دخل أعلى عبر دعوة أصدقائك لشراء
-                                    الخدمات من موقع خمسات. بإمكانك معرفة رابط التسويق بالعمولة الخاص بك وباقي التفاصيل
-                                    عبر صفحة التسويق بالعمولة.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header" id="headingThree">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-right collapsed" type="button"
-                                            data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
-                                            aria-controls="collapseThree">
-                                        لماذا يظهر التوقيت في خمسات مختلفاً عن التوقيت لدي؟
-                                    </button>
-                                </h2>
-                            </div>
-                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-                                 data-parent="#accordionExample">
-                                <div class="card-body">
-                                    نعتمد في موقع خمسات توقيت غرينتش GMT كتوقيت افتراضي عالمي.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
+                </p>
             </div>
         </div>
-    </section>
+    </div>
+    <!-- ============================ Main Section End ================================== -->
     <!-- ============================ Main Section End ================================== -->
 @endsection

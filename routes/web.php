@@ -77,6 +77,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::controller(CheckOutController::class)->group(function () {
         Route::get('checkout', 'index');
         Route::post('checkout/order', 'order');
+        Route::post('create_order','create_order');
     });
 });
 
@@ -95,5 +96,11 @@ Route::controller(ProductController::class)->group(function (){
 });
 
 /////////////////////////////////// End Products ////////////////////
+///
+////////////// Start Product ORder /////////////
+///
+Route::controller(\App\Http\Controllers\front\ProductOrderController::class)->group(function (){
+   Route::post('product_order','store');
+});
 
 include 'admin.php';

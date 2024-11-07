@@ -161,7 +161,7 @@
                                                     href="{{url('service/'.$serv['id'].'-'.$serv['slug'])}}"> {{$serv['name']}} </a>
                                             </h4>
                                         </div>
-                                        <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong
+                                        <div class="_oi0po price_section"><i class="fa fa-bolt"></i> سعر الخدمة   <strong
                                                 class="theme-cl"> {{ number_format($serv['price'],2)}} $ </strong>
                                         </div>
                                     </div>

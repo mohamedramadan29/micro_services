@@ -46,16 +46,19 @@
                                             <h4 class="_ser_title"><a
                                                     href="{{url('product/'.$product['slug'])}}"> {{$product['name']}} </a>
                                             </h4>
+                                            <p style="color: #595656;font-size: 14px;padding-bottom: 10px;">
+                                                {{\Illuminate\Support\Str::words($product['description'],12)}}
+                                            </p>
                                         </div>
                                         <div class="_oi0po"><i class="fa fa-bolt"></i> السعر  <strong
                                                 class="theme-cl"> {{ number_format($product['price'],2)}} $ </strong>
                                         </div>
-                                        <div class="add_to_cart">
-                                            <form method="post" action="">
-                                                @csrf
-                                                <button class="global_button btn" type="submit"> اضف الي السلة  <i class="bi bi-bag"></i> </button>
-                                            </form>
-                                        </div>
+{{--                                        <div class="add_to_cart">--}}
+{{--                                            <form method="post" action="">--}}
+{{--                                                @csrf--}}
+{{--                                                <button class="global_button btn" type="submit"> اضف الي السلة  <i class="bi bi-bag"></i> </button>--}}
+{{--                                            </form>--}}
+{{--                                        </div>--}}
                                     </div>
 
                                 </div>

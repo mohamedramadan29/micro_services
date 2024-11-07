@@ -148,6 +148,7 @@
 
                             <li><a href="{{url('categories')}}"> الاقسام </a></li>
                             <li><a href="{{url('services')}}"> الخدمات </a></li>
+                            <li><a href="{{url('projects')}}"> المشاريع  </a></li>
                             <li><a href="{{url('products')}}"> منتجات نفذها  </a></li>
                             @if(\Illuminate\Support\Facades\Auth::check())
                                 <li><a href="{{url('purches')}}"> مشترياتي </a></li>
@@ -156,13 +157,13 @@
                             @php
                                 $count_items = count(\App\Models\front\Cart::getCartItems());
                             @endphp
-                            <li class="cart_navbar_icon"><a href="{{url('cart')}}"> <i style="font-size: 20px"
-                                                                                       class="bi bi-cart3"></i>
-                                    @if($count_items > 0)
-                                        <span class="counter_num"> {{$count_items}} </span>
-                                    @endif
-                                </a>
-                            </li>
+{{--                            <li class="cart_navbar_icon"><a href="{{url('cart')}}"> <i style="font-size: 20px"--}}
+{{--                                                                                       class="bi bi-cart3"></i>--}}
+{{--                                    @if($count_items > 0)--}}
+{{--                                        <span class="counter_num"> {{$count_items}} </span>--}}
+{{--                                    @endif--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
                         </ul>
 
                     </div>

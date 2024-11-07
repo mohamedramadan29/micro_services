@@ -5,6 +5,7 @@ namespace App\Http\Controllers\front;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
 use App\Http\Traits\Slug_Trait;
+use App\Models\admin\Service;
 use App\Models\admin\Setting;
 use App\Models\front\Cart;
 use App\Models\front\Order;
@@ -86,7 +87,7 @@ class CheckOutController extends Controller
                     $orderDetails->save();
                     /////// Send Notification To Seller New Order
                     ///
-                    Notification::send($user, new NewOrderNotification(Auth::id(),Auth::user()->name,Auth::user()->user_name,$item['service_id'],$this->CustomeSlug($item['service_name']),$item['service_name']));
+                    Notification::send($user, new NewOrderNotification(Auth::id(), Auth::user()->name, Auth::user()->user_name, $item['service_id'], $this->CustomeSlug($item['service_name']), $item['service_name']));
                 }
 
                 DB::commit();
@@ -95,6 +96,45 @@ class CheckOutController extends Controller
                 Cart::clear();
                 return \redirect()->to('purches');
             }
+        } catch (\Exception $e) {
+            return $this->exception_message($e);
+        }
+    }
+
+    ////////////////////////// Start Create Order /////////////////
+    ///
+    public function create_order(Request $request)
+    {
+        // Get The Public Setting To GEt Commision
+        $public_setting = Setting::first();
+        $website_commission = $public_setting['website_commission'] / 100;
+        try {
+            $data = $request->all();
+            $service = Service::findOrFail($data['service_id']);
+            $service_price = $service['price'];
+            $order = new Order();
+            $count_orders = Order::count();
+            if ($count_orders > 0) {
+                $last_order = Order::orderBy('order_number', 'desc')->first();
+                $new_order_number = $last_order->order_number + 1;
+            } else {
+                $new_order_number = 1;
+            }
+            /////////////// Stop Here Now In Make Orders
+            DB::beginTransaction();
+            $order->order_number = $new_order_number;
+            $order->user_buyer = Auth::id();
+            $order->user_seller = $service['user_id'];
+            $order->order_price = $service_price;
+            $order->website_commission = $service_price * $website_commission;
+            $order->seller_commission = $service_price - ($service_price * $website_commission);
+            $order->save();
+            /////// Send Notification To Seller New Order
+            ///
+            $user = User::find($service['user_id']);
+            Notification::send($user, new NewOrderNotification(Auth::id(), Auth::user()->name, Auth::user()->user_name, $service['id'], $this->CustomeSlug($service['name']), $service['name']));
+            DB::commit();
+            return $this->success_message(' تم طلب الخدمة بنجاح  ');
         } catch (\Exception $e) {
             return $this->exception_message($e);
         }

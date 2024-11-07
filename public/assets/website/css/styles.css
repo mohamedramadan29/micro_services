@@ -346,7 +346,7 @@ html body .db {
 }
 
 .theme-cl {
-    color: #df3411 !important;
+    color: #3fb699 !important;
 }
 
 .theme-cl-2 {
@@ -5227,7 +5227,7 @@ a._5gt9:hover img {
 }
 
 ._oi0po strong {
-    margin-left: 13px;
+    margin-right: 13px;
     font-size: 17px;
     color: #df3411;
 }
@@ -12752,7 +12752,9 @@ footer.skin-dark-footer ul.footer-bottom-social li a:hover, footer.skin-dark-foo
     padding: 50px;
 }
 .privacy_page .data p{
-    line-height: 2;
+    line-height: 3;
+    color: #515151;
+    font-size: 15px;
 }
 .privacy_page .data h2{
     font-weight: bold;
@@ -13081,3 +13083,58 @@ padding:20px 12px;
     width:100%;
 }
 /***********************End Product Page ****************************/
+.about_us_image{
+    max-width:60% !important;
+}
+.about-captione h4{
+    font-size:20px;
+    font-weight: bold;
+    color:#3fb697;
+}
+.about-captione p{
+    line-height:2;
+    color:#454545;
+
+}
+/*********************** Start Faq Section *************************/
+.faq_section{
+
+}
+
+.faq_section .accordion-button:not(.collapsed){
+    background-color:#3fb699;
+    color:#fff !important;
+}
+.faq_section .accordion-body {
+    padding: 1rem 1.25rem;
+    line-height: 2;
+    color: #636363;
+}
+.faq_section .accordion-button{
+    color:#444444 !important;
+}
+
+._job_detail_single p{
+    line-height: 2.4;
+}
+.price_section{
+    font-size:13px !important;
+}
+
+.service_details_section{
+
+}
+.service_details_section img{
+    width: 100%;
+    height: 250px;
+}
+.buy_services_model {
+
+}
+.buy_services_model ul{}
+.buy_services_model ul li{
+    font-size: 13px;
+    text-align: right;
+    border-bottom: 1px solid #f6f4f4;
+    padding-bottom: 9px;
+}
