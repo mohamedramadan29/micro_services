@@ -2533,7 +2533,7 @@ textarea.form-control {
 .form-control.with-light {
     border: 1px solid #e6eaf1;
     border-radius: 4px;
-    background: #f1f4f9;
+    background: #fff;
 }
 
 .with-light .select2-container--default .select2-selection--single {
@@ -13137,4 +13137,9 @@ padding:20px 12px;
     text-align: right;
     border-bottom: 1px solid #f6f4f4;
     padding-bottom: 9px;
+}
+.select2-container--default .select2-selection--multiple {
+    background-color: #fff !important;
+    border: 1px solid #e6eaf1 !important;
+
 }

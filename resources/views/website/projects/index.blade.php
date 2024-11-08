@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-    خدماتي
+    مشاريعي
 @endsection
 @section('content')
     <!-- ============================ Page Title Start================================== -->
@@ -63,7 +63,7 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="{{url("/")}}"> الرئيسية </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"> خدماتي</li>
+                                        <li class="breadcrumb-item active" aria-current="page">  مشاريعي  </li>
                                     </ol>
                                 </nav>
                             </div>
@@ -79,52 +79,40 @@
                                 <div class="_dashboard_content">
                                     <div class="_dashboard_content_header">
                                         <div class="_dashboard__header_flex">
-                                            <h4><i class="ti-lock mr-1"></i> خدماتي </h4>
+                                            <h4><i class="ti-lock mr-1"></i>  مشاريعي  </h4>
                                         </div>
                                     </div>
 
                                     <div class="_dashboard_content_body">
                                         <div class="row">
                                             <!-- Single Item -->
-                                            @if($services->count() > 0)
-                                                @foreach($services as $serv)
+                                            @if($projects->count() > 0)
+                                                @foreach($projects as $project)
                                                     <div class="col-lg-4 col-md-6 col-sm-12">
                                                         <div class="ser_110">
-                                                            <div class="ser_110_thumb">
-                                                                <a href="{{url('service/'.$serv['id'].'-'.$serv['slug'])}}" class="ser_100_link"><img
-                                                                        src=" {{asset('assets/uploads/services/'.$serv['image'])}}"
-                                                                        class="img-fluid" alt=""></a>
-                                                            </div>
+{{--                                                            <div class="ser_110_thumb">--}}
+{{--                                                                <a href="{{url('project/'.$project['id'].'-'.$project['slug'])}}" class="ser_100_link"><img--}}
+{{--                                                                        src=" {{asset('assets/uploads/services/'.$serv['image'])}}"--}}
+{{--                                                                        class="img-fluid" alt=""></a>--}}
+{{--                                                            </div>--}}
                                                             <div class="ser_110_footer bott">
                                                                 <div class="_110_foot_left">
                                                                     <div>
                                                                         <h5>
-                                                                            <a href="{{url('service/'.$serv['id'].'-'.$serv['slug'])}}"> {{$serv['name']}} </a>
+                                                                            <a href="{{url('project/'.$project['id'].'-'.$project['slug'])}}"> {{$project['title']}} </a>
                                                                         </h5>
-                                                                        <span> {{$serv['category']['name']}}  <span>
                                                               <div class="_dash_usr_rates mb-1">
-															<span class="good"> {{$serv['rate']}} </span>
-                                                                  @for($i = 0 ; $i < 5 ; $i++ )
-                                                                      @if($i < $serv['rate'])
-                                                                          <i class="fa fa-star"></i>
-                                                                      @else
-                                                                          <i class="fa fa-star-o"></i>
-                                                                      @endif
-                                                                  @endfor
-														       </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+
                                                             <div class="buttons" style="text-align: center;padding:10px">
-                                                                <a href="{{url('service/update/'.$serv['id'])}}" class="btn btn-primary btn-sm"> تعديل  <i class="fa fa-edit"></i> </a>
-                                                                <a href="{{ url('service/delete/' . $serv['id']) }}" class="btn btn-danger btn-sm" onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')"> حذف <i class="fa fa-trash"></i> </a>
+                                                                <a href="{{url('service/update/'.$project['id'])}}" class="btn btn-primary btn-sm"> تعديل  <i class="fa fa-edit"></i> </a>
+                                                                <a href="{{ url('service/delete/' . $project['id']) }}" class="btn btn-danger btn-sm" onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')"> حذف <i class="fa fa-trash"></i> </a>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 @endforeach
                                             @else
-                                                <div class="alert alert-info"> لا يوجد لديك اي خدمات :: ادخل خدمتك
-                                                    الاولي
+                                                <div class="alert alert-info">
+                                                    لا يوجد لديك مشاريع في الوقت الحالي
                                                 </div>
                                             @endif
                                         </div>

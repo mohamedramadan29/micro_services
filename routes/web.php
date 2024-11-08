@@ -8,6 +8,7 @@ use App\Http\Controllers\front\serviceController;
 use App\Http\Controllers\front\UserController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\front\ProductController;
+use \App\Http\Controllers\front\ProjectController;
 Route::get('/', function () {
     return view('website.index');
 });
@@ -103,4 +104,15 @@ Route::controller(\App\Http\Controllers\front\ProductOrderController::class)->gr
    Route::post('product_order','store');
 });
 
+////////////////// Start Projects Controller
+///
+///
+Route::group(['middleware' => ['auth']], function () {
+    Route::controller(ProjectController::class)->group(function () {
+        Route::get('project/index', 'index');
+        Route::match(['post', 'get'], 'project/add', 'store');
+        Route::match(['post', 'get'], 'project/update/{id}', 'update');
+        Route::match(['post', 'get'], 'project/delete/{id}', 'delete');
+    });
+});
 include 'admin.php';

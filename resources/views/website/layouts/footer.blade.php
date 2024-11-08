@@ -66,6 +66,7 @@
 <script src="{{asset('assets/website/js/materialize.min.js')}}"></script>
 <script src="{{asset('assets/website/js/metisMenu.min.js')}}"></script>
 <script src="{{asset('assets/website/js/custom.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @notifyJs
