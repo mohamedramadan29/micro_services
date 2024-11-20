@@ -13143,3 +13143,41 @@ padding:20px 12px;
     border: 1px solid #e6eaf1 !important;
 
 }
+/************************ Start User Profile Projects *****************/
+
+.project_page{
+
+}
+
+.project_page .project{
+
+    text-align: right;
+    padding: 10px;
+    border: 1px solid #f1f1f1;
+    border-radius: 5px;
+}
+.project_page .project .project_data{
+
+}
+.project_page .project .project_data .buttons{
+    text-align: right;
+}
+.project_page .project .project_data h5{
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+.project_page .project .project_data h5 a{}
+.project_page .project .project_data p {
+    margin-bottom: 10px;
+}
+.project_page .project .project_info_person{}
+.project_page .project .project_info_person ul {}
+.project_page .project .project_info_person ul li{
+    font-size: 14px;
+    margin-bottom: 9px;
+    color: #474646;
+}
+.project_page .project .project_info_person ul li i{
+    color: #3fb699;
+}
