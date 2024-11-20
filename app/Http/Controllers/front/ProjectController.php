@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-
+use App\Models\admin\Category;
 class ProjectController extends Controller
 {
     use Message_Trait;
@@ -176,4 +176,20 @@ class ProjectController extends Controller
         }
         abort(404);
     }
+
+        ////////////////////////////////// Start Project In Front ///////////
+
+        public function website_project(){
+            $projects = Project::with('User')->paginate(10);
+            $categories = Category::where('status', 1)->get();
+            return view('website.projects',compact('projects','categories'));
+        }
+
+        public function ProjectDetails($id,$slug){
+            $project = Project::with('User')->where('id',$id)->where('slug',$slug)->first();
+            if($project){
+                return view('website.project_details',compact('project'));
+            }
+            abort(404);
+        }
 }

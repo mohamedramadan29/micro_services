@@ -9,6 +9,7 @@ use App\Http\Controllers\front\UserController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\front\ProductController;
 use \App\Http\Controllers\front\ProjectController;
+
 Route::get('/', function () {
     return view('website.index');
 });
@@ -45,15 +46,14 @@ Route::controller(UserController::class)->group(function () {
     Route::get('user/{username}/services', 'user_services');
     Route::group(['middleware' => ['auth']], function () {
         Route::get('dashboard', 'index');
-        Route::get('purches','purches');
-        Route::get('orders','orders');
+        Route::get('purches', 'purches');
+        Route::get('orders', 'orders');
         Route::get('reviews', 'reviews');
         Route::match(['post', 'get'], 'update-account', 'update');
         Route::get('chat', 'chat');
         Route::get('balance', 'balance');
         Route::get('chat-main', \App\Livewire\Chat\Main::class);
     });
-
 });
 // Start User Service
 Route::group(['middleware' => ['auth']], function () {
@@ -78,7 +78,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::controller(CheckOutController::class)->group(function () {
         Route::get('checkout', 'index');
         Route::post('checkout/order', 'order');
-        Route::post('create_order','create_order');
+        Route::post('create_order', 'create_order');
     });
 });
 
@@ -91,17 +91,17 @@ Route::controller(ConversationController::class)->group(function () {
 
 ////////////////////////////////// Start Products //////////////////
 
-Route::controller(ProductController::class)->group(function (){
-    Route::get('products','index');
-    Route::get('product/{slug}','product_details');
+Route::controller(ProductController::class)->group(function () {
+    Route::get('products', 'index');
+    Route::get('product/{slug}', 'product_details');
 });
 
 /////////////////////////////////// End Products ////////////////////
 ///
 ////////////// Start Product ORder /////////////
 ///
-Route::controller(\App\Http\Controllers\front\ProductOrderController::class)->group(function (){
-   Route::post('product_order','store');
+Route::controller(\App\Http\Controllers\front\ProductOrderController::class)->group(function () {
+    Route::post('product_order', 'store');
 });
 
 ////////////////// Start Projects Controller
@@ -109,10 +109,16 @@ Route::controller(\App\Http\Controllers\front\ProductOrderController::class)->gr
 ///
 Route::group(['middleware' => ['auth']], function () {
     Route::controller(ProjectController::class)->group(function () {
-        Route::get('project/index', 'index');
-        Route::match(['post', 'get'], 'project/add', 'store');
-        Route::match(['post', 'get'], 'project/update/{id}', 'update');
-        Route::match(['post', 'get'], 'project/delete/{id}', 'delete');
+        Route::get('my/project/index', 'index');
+        Route::match(['post', 'get'], 'my/project/add', 'store');
+        Route::match(['post', 'get'], 'my/project/update/{id}', 'update');
+        Route::match(['post', 'get'], 'my/project/delete/{id}', 'delete');
     });
+});
+
+///////////////////////////////// Start Projects IN Front
+Route::controller(ProjectController::class)->group(function () {
+    Route::get('projects', 'website_project');
+    Route::get('project/{id}-{slug}', 'ProjectDetails');
 });
 include 'admin.php';

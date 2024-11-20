@@ -22,24 +22,24 @@ class FrontController extends Controller
 
     public function index()
     {
-        $main_categories = Category::where('status',1)->where('home_page',1)->limit(6)->get();
-        $sub_categories = SubCategory::where('status',1)->where('home_page',1)->limit(6)->get();
+        $main_categories = Category::where('status', 1)->where('home_page', 1)->limit(6)->get();
+        $sub_categories = SubCategory::where('status', 1)->where('home_page', 1)->limit(6)->get();
         //dd($main_categories);
-        return view('website.index',compact('main_categories','sub_categories'));
+        return view('website.index', compact('main_categories', 'sub_categories'));
     }
 
     public function services(Request $request)
     {
-        $query = Service::with('category', 'user','subcategory');
+        $query = Service::with('category', 'user', 'subcategory');
         if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }
-        if ($request->has('cat_ids')){
+        if ($request->has('cat_ids')) {
             $cat_ids = $request->get('cat_ids');
-            $query->whereIn('sub_cat_id',$cat_ids);
+            $query->whereIn('sub_cat_id', $cat_ids);
         }
         $services = $query->where('status', '1')->paginate(12);
-        $categories = Category::with('subCategories')->where('status',1)->get();
+        $categories = Category::with('subCategories')->where('status', 1)->get();
         return view('website.services', compact('services', 'categories'));
     }
 
@@ -50,13 +50,13 @@ class FrontController extends Controller
 
         /////// Make Notification Is Read
         ///
-       if (Auth::check()){
-           $notification_type = 'App\Notifications\AcceptJobFromAdmin';
-           $notifications = Auth::user()->unreadNotifications->where('type', $notification_type);
-           foreach ($notifications as $notification){
-               $notification->markAsRead();
-           }
-       }
+        if (Auth::check()) {
+            $notification_type = 'App\Notifications\AcceptJobFromAdmin';
+            $notifications = Auth::user()->unreadNotifications->where('type', $notification_type);
+            foreach ($notifications as $notification) {
+                $notification->markAsRead();
+            }
+        }
 
 
         return view('website.service-details', compact('service', 'more_servicess'));
@@ -64,8 +64,8 @@ class FrontController extends Controller
 
     public function categories()
     {
-        $categories = Category::with('subCategories')->where('status',1)->paginate(12);
-       // dd($categories);
+        $categories = Category::with('subCategories')->where('status', 1)->paginate(12);
+        // dd($categories);
         return view('website.categories', compact('categories'));
     }
 
@@ -81,13 +81,13 @@ class FrontController extends Controller
         }
     }
 
-    public function category_services(Request $request,$slug)
+    public function category_services(Request $request, $slug)
     {
         $category = SubCategory::where('slug', $slug)->first();
 
         $category_id = $category['id'];
 
-        $query = Service::where('sub_cat_id',$category_id);
+        $query = Service::where('sub_cat_id', $category_id);
         if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }
@@ -106,8 +106,7 @@ class FrontController extends Controller
 
     public function forget_password(Request $request)
     {
-        if
-        ($request->isMethod('post')) {
+        if ($request->isMethod('post')) {
             $data = $request->all();
             // dd($data);
             $email = $data['email'];
@@ -195,4 +194,5 @@ class FrontController extends Controller
             return view('website.search', compact('services', 'search', 'categories'));
         }
     }
+
 }

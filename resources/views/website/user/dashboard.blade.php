@@ -38,8 +38,8 @@
                             <ul id="metismenu">
                                 <li><a href="{{url('dashboard')}}"><i class="ti-dashboard"></i> الملف الشخصي </a>
                                 </li>
-                                <li><a href="{{url('project/index')}}"><i class="ti-user"></i> المشاريع </a></li>
-                                <li><a href="{{url('project/add')}}"><i class="ti-plus"></i> اضف مشروع جديد </a></li>
+                                <li><a href="{{url('my/project/index')}}"><i class="ti-user"></i> المشاريع </a></li>
+                                <li><a href="{{url('my/project/add')}}"><i class="ti-plus"></i> اضف مشروع جديد </a></li>
                                 <li><a href="{{url('service/index')}}"><i class="ti-user"></i> الخدمات </a></li>
                                 <li><a href="{{url('service/add')}}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
                                 <li><a href="{{url('chat-main')}}"><i class="ti-email"></i> المحادثات </a></li>
