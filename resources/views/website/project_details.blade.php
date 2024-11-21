@@ -4,6 +4,18 @@
 @endsection
 @section('content')
     <section class="gray-bg text-right" dir="rtl">
+        @if (Session::has('Success_message'))
+            @php
+                toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
+            @endphp
+        @endif
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                @php
+                    toastify()->error($error);
+                @endphp
+            @endforeach
+        @endif
         <div class="container">
             <div class="main_hero_section">
                 <div>
@@ -70,106 +82,114 @@
                         </div>
                         <div class="offer-form">
                             <h3> اضف عرضك الان </h3>
-                            <form action="#" method="POST">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="execution_time">مدة التنفيذ (بالأيام)</label>
-                                        <input class="form-control" type="number" id="execution_time" name="execution_time"
-                                            placeholder="أدخل عدد الأيام" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="offer_value">قيمة عرضك (بالدولار)</label>
-                                        <input class="form-control" type="number" id="offer_value" name="offer_value"
-                                            placeholder="أدخل القيمة" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="earnings">سوف تحصل على (بالدولار)</label>
-                                        <input class="form-control" type="text" id="earnings" name="earnings" disabled
-                                            value="0">
-                                    </div>
-                                </div>
+                            @php
+                                $public_setting = App\Models\admin\Setting::first();
+                                $website_commission = floatval($public_setting['website_commission']);
+                            @endphp
+                            @if (Auth::check())
+                                <form action="{{ url('project/add-offer') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <input type="hidden" name="project_id" value="{{ $project['id'] }}">
+                                            <label for="execution_time">مدة التنفيذ (بالأيام)</label>
+                                            <input required max="90" min="1" class="form-control"
+                                                type="number" id="execution_time" name="execution_time"
+                                                placeholder="أدخل عدد الأيام">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="offer_value">قيمة عرضك (بالدولار)</label>
+                                            <input required min="10" max="5000" class="form-control"
+                                                type="number" id="offer_value" name="offer_value"
+                                                placeholder="أدخل القيمة">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="earnings">سوف تحصل على (بالدولار)</label>
+                                            <input class="form-control" type="text" id="earnings" name="earnings"
+                                                disabled value="0">
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="offer_details">تفاصيل عرضك</label>
-                                    <textarea class="form-control" id="offer_details" name="offer_details" rows="5" placeholder="تفاصيل العرض"
-                                        required></textarea>
-                                </div>
+                                    </div>
 
-                                <div class="form-group">
-                                    <label for="file_upload">إرفاق ملفات</label>
-                                    <input class="form-control" type="file" id="file_upload" name="file_upload">
-                                </div>
+                                    <div class="form-group">
+                                        <label for="offer_details">تفاصيل عرضك</label>
+                                        <textarea required class="form-control" id="offer_details" name="offer_details" rows="5"
+                                            placeholder="تفاصيل العرض" required></textarea>
+                                    </div>
 
-                                <button type="submit" class="submit-btn btn global_button">تقديم عرضك</button>
-                                <ul class="form-tips">
-                                    <li>لا تستخدم وسائل تواصل خارجية.</li>
-                                    <li>لا تضع روابط خارجية، قم بالاهتمام بعرض أعمالك بدلاً منها.</li>
-                                    <li><a href="#">اقرأ هنا كيفية تقديم عرض مميز على أي مشروع</a></li>
-                                </ul>
-                            </form>
+                                    <div class="form-group">
+                                        <label for="file_upload">إرفاق ملفات</label>
+                                        <input class="form-control" type="file" id="file_upload" name="file_upload">
+                                    </div>
+                                    <button type="submit" class="submit-btn btn global_button">تقديم عرضك</button>
+                                    <ul class="form-tips">
+                                        <li>لا تستخدم وسائل تواصل خارجية.</li>
+                                        <li>لا تضع روابط خارجية، قم بالاهتمام بعرض أعمالك بدلاً منها.</li>
+                                        <li><a href="#">اقرأ هنا كيفية تقديم عرض مميز على أي مشروع</a></li>
+                                    </ul>
+                                </form>
+                                <script>
+                                    // نسبة العمولة
+                                    const websiteCommission = {{ $website_commission }};
+
+                                    // عناصر الحقول
+                                    const offerValueInput = document.getElementById('offer_value');
+                                    const earningsInput = document.getElementById('earnings');
+
+                                    // تحديث الأرباح ديناميكيًا
+                                    offerValueInput.addEventListener('input', function() {
+                                        const offerValue = parseFloat(this.value) || 0; // الحصول على قيمة العرض
+                                        const websiteCommissionValue = (offerValue * websiteCommission) / 100; // حساب عمولة الموقع
+                                        const userEarnings = offerValue - websiteCommissionValue; // الأرباح للمستخدم
+
+                                        // تحديث حقل الأرباح
+                                        earningsInput.value = userEarnings.toFixed(2); // تعيين القيمة مع تنسيق عشري
+                                    });
+                                </script>
+                            @else
+                                <div class="logins_buttons">
+                                    <a href="{{ url('register') }}" class="btn btn-primary"> حساب جديد </a>
+                                    <a href="{{ url('login') }}" class="btn btn-outline-primary"> تسجيل دخول </a>
+                                </div>
+                            @endif
+
                         </div>
                         <div class="project_offers">
                             <h3> العروض المقدمة </h3>
-                            <div class="offer">
-                                <div class="user_info">
-                                    <div>
-                                        <img src="{{ asset('assets/uploads/users_image/' . $project['User']['image']) }}">
+                            @foreach ($project['Offers'] as $offer)
+                                <div class="offer">
+                                    <div class="user_info">
+                                        <div>
+                                            @if ($offer['User']['image'] != '')
+                                                <img
+                                                    src="{{ asset('assets/uploads/users_image/' . $offer['User']['image']) }}">
+                                            @else
+                                                <img src="{{ asset('assets/uploads/user.png') }}" alt="">
+                                            @endif
+
+                                        </div>
+                                        <div>
+                                            <a href="{{ url('user/' . $offer['User']['user_name']) }}">
+                                                <p> {{ $offer['User']['name'] }} </p>
+                                                <span>
+                                                    {{ optional($offer->User)->job_title }}
+                                                </span>
+                                                <span style="display: block"> <i class="bi bi-calendar-fill"></i>
+                                                    {{ $project['created_at']->diffForHumans() }} </span>
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p> {{ $project['User']['name'] }} </p>
-                                        <span>
-                                            {{ optional($project->User)->job_title }}
-                                        </span>
-                                        <span> {{ $project['created_at']->diffForHumans() }} </span>
-                                    </div>
-                                </div>
-                                <div class="proposal">
-                                    <p>
-                                        مرحبا اخي Younis Kanaan لقد قرأت طلبك و انا جاهز لمساعدتك في تنفيذ طلبك بكل احترافية
-                                        و مصدقية تواصل معي عبر قسم الرسائل.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="offer">
-                                <div class="user_info">
-                                    <div>
-                                        <img src="{{ asset('assets/uploads/users_image/' . $project['User']['image']) }}">
-                                    </div>
-                                    <div>
-                                        <p> {{ $project['User']['name'] }} </p>
-                                        <span>
-                                            {{ optional($project->User)->job_title }}
-                                        </span>
-                                        <span> {{ $project['created_at']->diffForHumans() }} </span>
-                                    </div>
-                                </div>
-                                <div class="proposal">
-                                    <p>
-                                        مرحبا اخي Younis Kanaan لقد قرأت طلبك و انا جاهز لمساعدتك في تنفيذ طلبك بكل احترافية
-                                        و مصدقية تواصل معي عبر قسم الرسائل.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="offer">
-                                <div class="user_info">
-                                    <div>
-                                        <img src="{{ asset('assets/uploads/users_image/' . $project['User']['image']) }}">
-                                    </div>
-                                    <div>
-                                        <p> {{ $project['User']['name'] }} </p>
-                                        <span>
-                                            {{ optional($project->User)->job_title }}
-                                        </span>
-                                        <span> {{ $project['created_at']->diffForHumans() }} </span>
+                                    <div class="proposal">
+                                        <p>
+                                            @if (Auth::check() && Auth::user()->id == $project['user_id'])
+                                                {{ $offer['proposal'] }}
+                                            @else
+                                                {{ Str::limit($offer['proposal'], 150, '...') }}
+                                            @endif
+                                        </p>
                                     </div>
                                 </div>
-                                <div class="proposal">
-                                    <p>
-                                        مرحبا اخي Younis Kanaan لقد قرأت طلبك و انا جاهز لمساعدتك في تنفيذ طلبك بكل احترافية
-                                        و مصدقية تواصل معي عبر قسم الرسائل.
-                                    </p>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
 
                     </div>

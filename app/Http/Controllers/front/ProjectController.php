@@ -186,7 +186,9 @@ class ProjectController extends Controller
         }
 
         public function ProjectDetails($id,$slug){
-            $project = Project::with('User')->where('id',$id)->where('slug',$slug)->first();
+            $project = Project::with('User','Offers.User')->where('id',$id)->where('slug',$slug)->first();
+
+           // dd($project);
             if($project){
                 return view('website.project_details',compact('project'));
             }

@@ -9,6 +9,8 @@ use App\Http\Controllers\front\UserController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\front\ProductController;
 use \App\Http\Controllers\front\ProjectController;
+use App\Http\Controllers\front\ProjectOfferController;
+
 
 Route::get('/', function () {
     return view('website.index');
@@ -39,7 +41,7 @@ Route::get('user/confirm/{code}', [UserController::class, 'UserConfirm']);
 
 // Start User Dashboard
 Route::controller(UserController::class)->group(function () {
-    Route::match(['get', 'post'], 'login', 'login');
+    Route::match(['get', 'post'], 'login', 'login')->name('user_login');
     Route::match(['get', 'post'], 'register', 'register');
     Route::get('logout', 'logout');
     Route::get('user/{username}', 'show_profile');
@@ -120,5 +122,12 @@ Route::group(['middleware' => ['auth']], function () {
 Route::controller(ProjectController::class)->group(function () {
     Route::get('projects', 'website_project');
     Route::get('project/{id}-{slug}', 'ProjectDetails');
+});
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::controller(ProjectOfferController::class)->group(function () {
+        Route::post('project/add-offer', 'store');
+        Route::post('project/update-offer', 'update');
+    });
 });
 include 'admin.php';
