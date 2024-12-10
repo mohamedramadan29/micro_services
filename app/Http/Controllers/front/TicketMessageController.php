@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\front;
 
-use App\Http\Traits\Message_Trait;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\admin\TicketMessage;
 use App\Http\Controllers\Controller;
-use App\Models\admin\Ticket;
+use App\Http\Traits\Message_Trait;
+use App\Models\admin\TicketMessage;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class TicketMessageController extends Controller

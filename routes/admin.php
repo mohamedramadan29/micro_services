@@ -8,6 +8,7 @@ use \App\Http\Controllers\admin\UserController;
 use \App\Http\Controllers\admin\CategoryController;
 use \App\Http\Controllers\admin\SubCategoryController;
 use \App\Http\Controllers\admin\SettingController;
+use \App\Http\Controllers\admin\TicketController;
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
     Route::post('admin_login', [AdminController::class, 'admin_login']);
@@ -64,6 +65,13 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/get-attribute-values/{attributeId}', 'getAttributeValues');
             Route::get('/get-subcategories', 'getSubCategories')->name('get.subcategories');
             Route::post('product/gallary/delete/{id}', 'delete_image_gallary');
+        });
+        ################ Start Ticket Controller #############
+
+        Route::controller(TicketController::class)->group(function (){
+           Route::get('tickets','index');
+           Route::get('ticket/details/{id}','details');
+           Route::post('message/create/{id}','create');
         });
     });
 });

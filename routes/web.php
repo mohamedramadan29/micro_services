@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\Controllers\admin\TicketMessageController;
-use App\Http\Controllers\admin\TicketsController;
 use App\Http\Controllers\Auth\SocialMediaController;
 use App\Http\Controllers\front\CartController;
 use App\Http\Controllers\front\CheckOutController;
 use App\Http\Controllers\front\ConversationController;
 use App\Http\Controllers\front\FrontController;
+use App\Http\Controllers\front\ProductController;
+use App\Http\Controllers\front\ProjectController;
+use App\Http\Controllers\front\ProjectOfferController;
 use App\Http\Controllers\front\serviceController;
+use App\Http\Controllers\front\TicketMessageController;
+use App\Http\Controllers\front\TicketsController;
 use App\Http\Controllers\front\UserController;
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\front\ProductController;
-use \App\Http\Controllers\front\ProjectController;
-use App\Http\Controllers\front\ProjectOfferController;
 
 
 Route::get('/', function () {
