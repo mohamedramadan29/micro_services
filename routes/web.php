@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\admin\TicketMessageController;
+use App\Http\Controllers\admin\TicketsController;
+use App\Http\Controllers\Auth\SocialMediaController;
 use App\Http\Controllers\front\CartController;
 use App\Http\Controllers\front\CheckOutController;
 use App\Http\Controllers\front\ConversationController;
@@ -47,7 +50,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('user/{username}', 'show_profile');
     Route::get('user/{username}/services', 'user_services');
     Route::group(['middleware' => ['auth']], function () {
-        Route::get('dashboard', 'index');
+        Route::get('dashboard', 'index')->name('dashboard');
         Route::get('purches', 'purches');
         Route::get('orders', 'orders');
         Route::get('reviews', 'reviews');
@@ -130,4 +133,28 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('project/update-offer', 'update');
     });
 });
+
+#################### Start Tickets Controller ###########################
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::controller(TicketsController::class)->group(function () {
+        Route::get('tickets', 'index')->name('tickets');
+        Route::match(['post', 'get'], 'ticket/create', 'store');
+    });
+    #################### Start Ticket Messages ########################
+    Route::controller(TicketMessageController::class)->group(function () {
+        Route::get('ticket/{id}', 'index');
+        Route::post('message/create/{ticket_id}','store');
+    });
+});
+
+
+
+
+
+Route::get('auth/{provider}/redirect', [SocialMediaController::class, 'redirect'])->name('auth.google.redirect');
+Route::get('auth/{provider}/callback', [SocialMediaController::class, 'callback'])->name('auth.google.callback');
+
+
+
 include 'admin.php';

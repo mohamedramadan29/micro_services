@@ -3,23 +3,9 @@
     حساب جديد
 @endsection
 @section('content')
-    <!-- ============================ Page Title Start================================== -->
-    <div class="page-title" style="height: 350px;text-align: right">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-
-                    <h2 class="ipt-title"> حساب جديد </h2>
-                    <span class="ipn-subtitle">  انشاء حسابك الان بشكل مجاني   </span>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ============================ Page Title End ================================== -->
 
     <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg text-right" dir="rtl">
+    <section class="gray-bg text-right register_page" dir="rtl">
         <div class="container">
             <div class="row">
                 <div class="col-lg-2 col-0"></div>
@@ -27,7 +13,6 @@
                     <div class="modal-content" id="registermodal">
                         <div class="modal-header">
                             <h4> انشاء حساب جديد </h4>
-
                         </div>
                         <div class="modal-body">
                             @if (Session::has('Success_message'))
@@ -42,35 +27,42 @@
                                     @endphp
                                 @endforeach
                             @endif
+                            <div class="social_login">
+                                <h4> يمكنك التسجيل بإستخدام </h4>
+                                <a class="google_login" href="{{route('auth.google.redirect','google')}}"> <i class="bi bi-google"></i> </a>
+                                <a class="facebook_login" href="{{route('auth.google.redirect','facebook')}}"> <i class="bi bi-facebook"></i> </a>
+                            </div>
+                            <hr>
+                            <br>
                             <div class="login-form">
-                                <form method="post" action="{{url('/register')}}">
+                                <form method="post" action="{{ url('/register') }}">
                                     @csrf
                                     <div class="form-group">
                                         <label> الاسم </label>
-                                        <input type="text" class="form-control" name="name"
-                                               value="{{old('name')}}">
+                                        <input required type="text" class="form-control" name="name"
+                                            value="{{ old('name') }}">
                                     </div>
                                     <div class="form-group">
                                         <label> اسم المستخدم </label>
-                                        <input type="text" class="form-control" name="username"
-                                               value="{{old('username')}}">
+                                        <input required type="text" class="form-control" name="username"
+                                            value="{{ old('username') }}">
                                     </div>
                                     <div class="form-group">
                                         <label> البريد الالكتروني </label>
-                                        <input type="email" class="form-control" name="email"
-                                               value="{{old('email')}}">
+                                        <input required type="email" class="form-control" name="email"
+                                            value="{{ old('email') }}">
                                     </div>
 
                                     <div class="form-group">
                                         <label> كلمة المرور </label>
-                                        <input type="password" class="form-control" placeholder="*******"
-                                               name="password">
+                                        <input required type="password" class="form-control" placeholder="*******"
+                                            name="password">
                                     </div>
 
                                     <div class="form-group">
                                         <label>تاكيد كلمة المرور </label>
-                                        <input type="password" class="form-control" placeholder="*******"
-                                               name="confirm-password">
+                                        <input required type="password" class="form-control" placeholder="*******"
+                                            name="confirm-password">
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary dark-2 btn-md full-width pop-login">
@@ -80,21 +72,10 @@
 
                                 </form>
                             </div>
-
-                            <div class="form-group text-center">
-                                <span>  او سجل حسابك ب  </span>
-                            </div>
-
-                            <div class="social_logs mb-4">
-                                <ul class="shares_jobs text-center">
-                                    <li><a href="#" class="share gp"><i class="fa fa-google"></i></a></li>
-                                </ul>
-                            </div>
-
                         </div>
                         <div class="modal-footer">
-                            <div class="mf-link"><i class="ti-user"></i> لديك حساب ؟ <a href="{{url('login')}}"
-                                                                                        class="theme-cl"> تسجيل
+                            <div class="mf-link"><i class="ti-user"></i> لديك حساب ؟ <a href="{{ url('login') }}"
+                                    class="theme-cl"> تسجيل
                                     دخول </a></div>
                         </div>
                     </div>
