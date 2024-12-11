@@ -18,7 +18,7 @@ class Chatbox extends Component
 
     public $message_count;
     public $messages;
-
+    public $conversation_id;
     //public $listeners = ['loadconversation','pushMessage'];
 
     public function getListeners()
@@ -26,8 +26,43 @@ class Chatbox extends Component
         $auth_id = Auth::id();
         return [
             "echo-private:chat.{$auth_id},MessageSend" => 'MessageReceived',
-            'loadconversation', 'pushMessage'
+            'loadconversation', 'pushMessage','conversationSelected'
         ];
+    }
+
+    //protected $listeners = ['conversationSelected'];
+
+
+    public function mount($conversation_id)
+    {
+        $this->conversation_id = $conversation_id;
+
+       // $this->selectedConversation = Conversation::find($id);
+
+        // العثور على المحادثة بناءً على المعرف
+        $this->selectedConversation = Conversation::findOrFail($conversation_id);
+
+        // العثور على المستخدم الآخر في المحادثة
+        $this->reciever_user = User::find($this->selectedConversation->receiver_id === Auth::id()
+            ? $this->selectedConversation->sender_id
+            : $this->selectedConversation->receiver_id);
+
+        // تحميل الرسائل
+        $this->message_count = Message::where('conversation_id', $this->selectedConversation->id)->count();
+        $this->messages = Message::where('conversation_id', $this->selectedConversation->id)->get();
+
+        // تحديث حالة الرسائل إلى "مقروءة"
+        Message::where('conversation_id', $this->selectedConversation->id)
+            ->where('receiver_id', Auth::id())
+            ->update(['red' => 1]);
+
+
+        // تحديث الإشعارات إلى "مقروءة"
+        $notification_type = 'App\Notifications\NewMessage';
+        $notifications = Auth::user()->unreadNotifications->where('type', $notification_type);
+        foreach ($notifications as $notification) {
+            $notification->markAsRead();
+        }
     }
     function MessageReceived($event)
     {
@@ -58,29 +93,7 @@ class Chatbox extends Component
 
         }
     }
-    public function loadconversation(Conversation $conversation,User $reciever)
-    {
-        $this->selectedConversation = $conversation;
-        $this->reciever_user = $reciever;
-        $this->message_count = Message::where('conversation_id', $this->selectedConversation->id)->count();
-        $this->messages = Message::where('conversation_id', $this->selectedConversation->id)->get();
-        //$this->dispatch('chatSelected');
 
-        /// Make Update Red status to Readed
-        Message::where('conversation_id',$this->selectedConversation->id)
-            ->where('receiver_id',auth()->user()->id)->update(['red'=> 1]);
-
-        ///////Make the Message Notitifcation IS Read
-
-
-        /////// Make Notification Is Read
-        ///
-        $notification_type = 'App\Notifications\NewMessage';
-        $notifications = Auth::user()->unreadNotifications->where('type', $notification_type);
-        foreach ($notifications as $notification){
-            $notification->markAsRead();
-        }
-    }
 
     public function pushMessage($messageId)
     {
@@ -88,9 +101,10 @@ class Chatbox extends Component
         $this->messages->push($newMessage);
     }
 
-
     public function render()
     {
         return view('livewire.chat.chatbox');
     }
+
+
 }

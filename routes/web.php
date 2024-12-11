@@ -57,7 +57,7 @@ Route::controller(UserController::class)->group(function () {
         Route::match(['post', 'get'], 'update-account', 'update');
         Route::get('chat', 'chat');
         Route::get('balance', 'balance');
-        Route::get('chat-main', \App\Livewire\Chat\Main::class);
+        Route::get('chat-main/{conversation_id}', \App\Livewire\Chat\Main::class)->name('chat.main');
     });
 });
 // Start User Service
@@ -90,6 +90,7 @@ Route::group(['middleware' => ['auth']], function () {
 ///////////////////////////// Start Conversation ////////////////////
 Route::controller(ConversationController::class)->group(function () {
     Route::post('conversation/start', 'start_conversation');
+    Route::post('conversation/start/project', 'project_start_conversation');
 });
 //////////////////////// Start Chats /////////////////
 ///
@@ -131,6 +132,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::controller(ProjectOfferController::class)->group(function () {
         Route::post('project/add-offer', 'store');
         Route::post('project/update-offer', 'update');
+        Route::post('accept_offer/{offer_id}','accept_offer');
     });
 });
 

@@ -23,4 +23,9 @@ class Project extends Model
     {
         return $this->hasMany(ProjectOffer::class, 'project_id');
     }
+
+    public function freelancer()
+    {
+        return $this->belongsTo(User::class,'freelancer_id');
+    }
 }

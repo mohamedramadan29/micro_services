@@ -1,26 +1,15 @@
 <div>
-
     @section('title')
         المحادثات
     @endsection
     @section('content')
-        <!-- ============================ Page Title Start================================== -->
-        <div class="page-title bg-cover" style="background:url({{asset('assets/website/img/bn-1.jpg')}})no-repeat;"
-             data-overlay="5">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12"></div>
-                </div>
-            </div>
-        </div>
-        <!-- ============================ Page Title End ================================== -->
 
         <!-- ============================ Main Section Start ================================== -->
-        <section class="gray-bg pt-4 text-right" dir="rtl">
+        <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
             <div class="container-fluid">
                 <div class="row m-0">
                     <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
-                        <div class="dashboard-navbar overlio-top">
+                        <div class="dashboard-navbar">
 
                             <div class="d-user-avater">
                                 @if(Auth::user()->image !='')
@@ -78,19 +67,18 @@
                                     <div class="messages-container-inner">
 
                                         <!-- Messages -->
-                                        <div class="dash-msg-inbox">
-                                            <!------------- Start Chat List ------------------->
-                                            @livewire('chat.chatlist')
-
-                                        </div>
+{{--                                        <div class="dash-msg-inbox">--}}
+{{--                                            <!------------- Start Chat List ------------------->--}}
+{{--                                            @livewire('chat.chatlist')--}}
+{{--                                        </div>--}}
                                         <!-- Messages / End -->
 
                                         <!-- Message Content -->
                                         <div class="dash-msg-content">
-                                            @livewire('chat.chatbox')
+                                            @livewire('chat.chatbox', ['conversation_id' => $conversation_id])
                                             <!-- Reply Area -->
                                             <div class="clearfix"></div>
-                                            @livewire('chat.sendmessage')
+                                            @livewire('chat.sendmessage', ['conversation_id' => $conversation_id])
                                         </div>
                                         <!-- Message Content -->
 

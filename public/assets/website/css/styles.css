@@ -2613,9 +2613,6 @@ select.form-control.fc-lg:not([size]):not([multiple]) {
     height: 62px;
 }
 
-textarea.form-control {
-    height: 180px;
-}
 
 .form-control.with-border {
     border-radius: 4px;
@@ -9908,6 +9905,7 @@ h3.pa-name {
     border-radius: 6px;
     margin-bottom: 30px;
     width: 100%;
+    padding-bottom: 30px;
 }
 
 ._dashboard_content_header {
@@ -13410,7 +13408,8 @@ button {
     font-size: 13px;
     text-align: right;
     border-bottom: 1px solid #f6f4f4;
-    padding-bottom: 9px;
+    padding-bottom: 6px;
+    padding-top: 6px;
 }
 
 .select2-container--default .select2-selection--multiple {
@@ -13643,8 +13642,9 @@ button {
 }
 
 .project-details p {
-    color: #444;
-    line-height: 1.5;
+    color: #5b5959;
+    line-height: 2;
+    margin-top: 10px;
 }
 
 .project_details .project-file {
@@ -13713,6 +13713,14 @@ button {
 
 .project-status .sharing {
     margin-top: 20px;
+}
+.project_details .project-status .project_owner{
+    margin-bottom: 15px;
+}
+.project_details .project-status .project_owner h6{
+    font-size: 15px;
+    margin-bottom: 10px;
+    margin-top: 15px;
 }
 
 .a2a_default_style:not(.a2a_flex_style) a {
@@ -13821,7 +13829,24 @@ textarea {
 .project_offers .offer {
     border-bottom: 1px solid #f1f1f1;
 }
-
+.project_offers .offer .offer_head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.project_offers .offer .offer_head .offer_details{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.project_offers .offer .offer_head .offer_details button{
+    height:35px;
+    margin:10px
+}
+.project_offers .offer .offer_head .offer_details p{
+    margin:10px;
+    font-weight: bold;
+}
 .project_offers .proposal {
     padding-bottom: 30px;
     padding-top: 10px;
@@ -14031,4 +14056,41 @@ textarea {
     font-weight: bold;
     margin-bottom: 10px;
     text-transform: capitalize;
+}
+
+input.form-control{
+    height:45px
+}
+.select2-container .select2-selection--multiple{
+    height:45px;
+}
+
+.select2-container .select2-search--inline .select2-search__field{
+    margin-top:0 !important;
+}
+textarea.form-control{
+    min-height: 130px !important;
+}
+.form-select{
+    height:45px !important;
+}
+.span_info{
+    font-size: 13px;
+}
+
+
+.btn-outline-primary{
+    color: #3fb697 !important;
+    border-color: #3fb697 !important;
+}
+.btn-outline-primary:hover{
+    background-color:#3fb697 !important;
+    color:#fff !important;
+}
+.modal-header .btn-close {
+    padding: .5rem .5rem;
+    margin: -.5rem auto -.5rem -.5rem;
+    color: #000 !important;
+    border: 1px solid #ccc;
+    line-height: 18px;
 }

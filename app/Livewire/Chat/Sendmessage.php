@@ -20,35 +20,64 @@ class Sendmessage extends Component
 
     public $createMessage;
 
+    public $conversation_id;
+
     public $listeners = ['UpdateSendMessage','dispatchMessageSend'];
-    public function UpdateSendMessage(Conversation $converstion, User $reciever)
+
+    public function mount($conversation_id)
     {
-        $this->selectedConversation = $converstion;
-        $this->reciever_user = $reciever;
+        $this->conversation_id = $conversation_id;
+        $this->loadConversationDetails();
     }
+
+    private function loadConversationDetails()
+    {
+        $conversation = Conversation::findOrFail($this->conversation_id);
+
+        // تحديد المستخدم المستلم
+        $this->reciever_user = $conversation->sender_id === Auth::id()
+            ? User::findOrFail($conversation->receiver_id)
+            : User::findOrFail($conversation->sender_id);
+    }
+
+
+    public function updateConversationDetails($conversation_id)
+    {
+        $this->conversation_id = $conversation_id;
+
+        // إعادة تحميل بيانات المحادثة
+        $this->loadConversationDetails();
+    }
+
     public function SendMessage()
     {
-        if ($this->body == null) {
-            return null;
+        // التأكد من أن الرسالة ليست فارغة
+        if (empty($this->body)) {
+            return;
         }
-        $this->createMessage = Message::create([
-            'conversation_id' => $this->selectedConversation->id,
+
+        // إنشاء الرسالة
+        $message = Message::create([
+            'conversation_id' => $this->conversation_id,
             'sender_id' => Auth::id(),
             'receiver_id' => $this->reciever_user->id,
             'body' => $this->body,
         ]);
-        $user = User::where('id', $this->reciever_user->id)->first();
-        $this->selectedConversation->last_time_message = $this->createMessage->created_at;
-        $this->selectedConversation->save();
-        $this->body = '';
-        $this->dispatch('pushMessage',$this->createMessage->id)->to('chat.Chatbox');
-        $this->dispatch('refresh')->to('chat.chat-list');
         $this->reset('body');
-        unset($this->body);
-        $this->dispatch('dispatchMessageSend')->self();
-        // Send Notification New Message To Reciever
-        Notification::send($user, new NewMessage($this->selectedConversation->id, Auth::user()->user_name));
-
+        $this->dispatch('clearMessageInput');
+        $this->dispatch('scrollMessages');
+        // تحديث وقت آخر رسالة في المحادثة
+        $conversation = Conversation::findOrFail($this->conversation_id);
+        $conversation->last_time_message = $message->created_at;
+        $conversation->save();
+        // إرسال الإشعار للمستلم
+        Notification::send($this->reciever_user, new NewMessage($this->conversation_id, Auth::user()->user_name));
+        // إرسال الحدث عبر الـ Broadcast
+        broadcast(new MessageSend(Auth::user(), $conversation, $message, $this->reciever_user));
+        // إعادة تعيين الرسالة
+        $this->reset('body');
+        // تحديث المكونات الأخرى
+        $this->dispatch('pushMessage',$message->id)->to('chat.chatbox');
     }
 
     public function dispatchMessageSend()

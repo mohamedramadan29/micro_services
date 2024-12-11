@@ -3,25 +3,13 @@
     اضافة مشروع جديد
 @endsection
 @section('content')
-    <!-- ============================================================== -->
-    <!-- Top header  -->
-    <!-- ============================================================== -->
-    <!-- ============================ Page Title Start================================== -->
-    <div class="page-title bg-cover" style="background:url({{asset('assets/website/img/bn-1.jpg')}})no-repeat;"
-         data-overlay="5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12"></div>
-            </div>
-        </div>
-    </div>
-    <!-- ============================ Page Title End ================================== -->
+
     <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg pt-4 text-right" dir="rtl">
+    <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
         <div class="container-fluid">
             <div class="row m-0">
                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
-                    <div class="dashboard-navbar overlio-top">
+                    <div class="dashboard-navbar">
                         <div class="d-user-avater">
                             @if(Auth::user()->image !='')
                                 <img src="{{asset('assets/uploads/users_image/'.Auth::user()->image)}}"
@@ -82,11 +70,10 @@
                                 @endphp
                             @endforeach
                         @endif
-                        <form method="post" action="{{url('project/add')}}" enctype="multipart/form-data"
+                        <form method="post" action="{{url('my/project/add')}}" enctype="multipart/form-data"
                               id="uploadService">
                             @csrf
                             <div class="col-lg-12 col-md-12 col-sm-12">
-
                                 <!-- Single Wrap -->
                                 <div class="_dashboard_content">
                                     <div class="_dashboard_content_header">
@@ -96,9 +83,7 @@
                                     </div>
 
                                     <div class="_dashboard_content_body">
-
                                         <div class="row">
-
                                             <div class="col-xl-12 col-lg-12">
                                                 <div class="form-group">
                                                     <label> عنوان المشروع </label>
@@ -110,7 +95,8 @@
                                             <div class="col-xl-12 col-lg-12">
                                                 <div class="form-group">
                                                     <label> مهارات متعلقة بالمشروع </label>
-                                                    <select required class="form-control select2" multiple name="skills[]">
+                                                    <select required class="form-control select2" multiple
+                                                            name="skills[]">
                                                         <option>-- حدد من القائمة --</option>
                                                         <option value="برمجة">برمجة</option>
                                                         <option value="تصميم جرافيك">تصميم جرافيك</option>
@@ -156,7 +142,7 @@
                                             <div class="col-xl-6 col-lg-6">
                                                 <div class="form-group">
                                                     <label> الميزانية المتوقعة </label>
-                                                    <select style="height:55px" required class="form-select"
+                                                    <select required class="form-select"
                                                             name="price">
                                                         <option disabled selected> -- حدد الميزانية --</option>
                                                         <option value="10 - 25">10 - 25</option>
@@ -181,9 +167,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-xl-12 col-lg-12">
-
-
+                                            <div class="col-xl-6 col-lg-6">
                                                 <div class="form-group">
                                                     <br>
                                                     <input type="file" name="files[]"
@@ -200,18 +184,13 @@
                                             </div>
 
                                         </div>
-
                                     </div>
-
-                                    <!-- Single Wrap End -->
-                                    {{--                                <button type="submit" class="btn btn-sm btn-save"> اضف الخدمة <i class="fa fa-save"></i>--}}
-                                    {{--                                </button>--}}
-
                                     <button style="margin: auto;display: block" type="submit" class="btn btn-save"
                                             id="submitBtn"> اضافة المشروع <i class="fa fa-save"></i></button>
                                     <span id="loader"
                                           style="display: none;">جاري الإرسال...</span>
                                 </div>
+                            </div>
                         </form>
 
                         <script>
@@ -272,7 +251,6 @@
 
             </div>
 
-        </div>
         </div>
     </section>
     <!-- ============================ Main Section End ================================== -->

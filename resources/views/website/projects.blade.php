@@ -145,7 +145,7 @@
                                                             ايام
                                                         </li>
                                                         <li> <i class="bi bi-calendar-check"></i>
-                                                            {{ $project['created_at'] }}
+                                                            {{ $project['created_at']->diffForHumans() }}
                                                         </li>
                                                         <li> <i class="bi bi-patch-check"></i>
                                                             {{ $project['status'] }} </li>
