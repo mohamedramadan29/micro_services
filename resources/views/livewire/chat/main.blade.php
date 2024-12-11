@@ -6,6 +6,18 @@
 
         <!-- ============================ Main Section Start ================================== -->
         <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
+            @if (Session::has('Success_message'))
+                @php
+                    toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
+                @endphp
+            @endif
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    @php
+                        toastify()->error($error);
+                    @endphp
+                @endforeach
+            @endif
             <div class="container-fluid">
                 <div class="row m-0">
                     <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
@@ -65,13 +77,6 @@
                                 <div class="messages-container margin-top-0">
 
                                     <div class="messages-container-inner">
-
-                                        <!-- Messages -->
-{{--                                        <div class="dash-msg-inbox">--}}
-{{--                                            <!------------- Start Chat List ------------------->--}}
-{{--                                            @livewire('chat.chatlist')--}}
-{{--                                        </div>--}}
-                                        <!-- Messages / End -->
 
                                         <!-- Message Content -->
                                         <div class="dash-msg-content">

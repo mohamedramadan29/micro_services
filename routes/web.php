@@ -126,6 +126,7 @@ Route::group(['middleware' => ['auth']], function () {
 Route::controller(ProjectController::class)->group(function () {
     Route::get('projects', 'website_project');
     Route::get('project/{id}-{slug}', 'ProjectDetails');
+
 });
 
 Route::group(['middleware' => ['auth']], function () {
@@ -133,6 +134,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('project/add-offer', 'store');
         Route::post('project/update-offer', 'update');
         Route::post('accept_offer/{offer_id}','accept_offer');
+        Route::post('accept_project/{id}','accept_project');
     });
 });
 

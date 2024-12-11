@@ -23,8 +23,8 @@ class ConversationController extends Controller
         $service_data = $service['name'];
         $checkConversation = Conversation::where('sender_id', Auth::id())->where('receiver_id', $receiverId)
             ->Orwhere('sender_id', $receiverId)->where('receiver_id', Auth::id())
-            ->get();
-        if (count($checkConversation) == 0) {
+            ->where('project_id',$data['project_id'])->first();
+        if (!$checkConversation) {
             // //// Create Chat
             $createConversation = Conversation::create([
                 'sender_id' => Auth::id(),
@@ -50,18 +50,26 @@ class ConversationController extends Controller
     {
         $data = $request->all();
         $receiverId = $data['receiver_id'];
+
         // الحصول على بيانات المشروع
         $project = Project::findOrFail($data['project_id']);
         $project_title = $project->title;
 
-        // التحقق من وجود محادثة
-        $checkConversation = Conversation::where(function ($query) use ($receiverId) {
-            $query->where('sender_id', Auth::id())
-                ->where('receiver_id', $receiverId);
-        })->orWhere(function ($query) use ($receiverId) {
-            $query->where('sender_id', $receiverId)
-                ->where('receiver_id', Auth::id());
-        })->where('project_id', $data['project_id'])->first();
+        // التحقق من وجود محادثة بنفس المشروع ونفس الأطراف
+//        $checkConversation = Conversation::where('project_id', $data['project_id'])
+//            ->where(function ($query) use ($receiverId) {
+//                $query->where(function ($q) use ($receiverId) {
+//                    $q->where('sender_id', Auth::id())
+//                        ->where('receiver_id', $receiverId);
+//                })->orWhere(function ($q) use ($receiverId) {
+//                    $q->where('sender_id', $receiverId)
+//                        ->where('receiver_id', Auth::id());
+//                });
+//            })->first();
+
+        $checkConversation = Conversation::where('sender_id', Auth::id())->where('receiver_id', $receiverId)
+            ->Orwhere('sender_id', $receiverId)->where('receiver_id', Auth::id())
+            ->where('project_id',$data['project_id'])->first();
 
         if (!$checkConversation) {
             // إنشاء المحادثة الجديدة
@@ -91,4 +99,10 @@ class ConversationController extends Controller
         }
     }
 
+
+
+
 }
+
+
+

@@ -39,20 +39,28 @@
                         <div class="steps-container">
                             @php
                                 $steps = [
-                                    ['name' => 'نشر المشروع', 'status' => 'active'],
-                                    ['name' => 'تلقي العروض', 'status' => 'active'],
-                                    ['name' => 'تنفيذ المشروع', 'status' => $project['status'] == 'تنفيذ المشروع' ? 'active' : ''],
-                                    ['name' => 'استلام المشروع', 'status' => $project['status'] == 'تم الاستلام' ? 'active' : ''],
+                                    ['name' => 'نشر المشروع', 'key' => 'نشر المشروع'],
+                                    ['name' => 'تلقي العروض', 'key' => 'تلقي العروض'],
+                                    ['name' => 'تنفيذ المشروع', 'key' => 'تنفيذ المشروع'],
+                                    ['name' => 'استلام المشروع', 'key' => 'تم الاستلام'],
                                 ];
+
+                                $activeStepIndex = array_search($project['status'], array_column($steps, 'key'));
                             @endphp
-                            @foreach ($steps as $step)
-                                <div class="step {{ $step['status'] }}">
+
+                            @foreach ($steps as $index => $step)
+                                @php
+                                    // إذا كانت الخطوة ضمن أو قبل الحالة الحالية، اجعلها نشطة
+                                    $status = $index <= $activeStepIndex ? 'active' : '';
+                                @endphp
+                                <div class="step {{ $status }}">
                                     <div class="step-icon">
-                                        <i class="bi {{ $step['status'] == 'active' ? 'bi-check-circle' : 'bi-circle' }}"></i>
+                                        <i class="bi {{ $status == 'active' ? 'bi-check-circle' : 'bi-circle' }}"></i>
                                     </div>
                                     <p>{{ $step['name'] }}</p>
                                 </div>
                             @endforeach
+
                         </div>
 
                         <div class="project-details">
@@ -277,7 +285,18 @@
                                 <li><span>متوسط العروض:</span> {{ number_format($averageOffer, 2) }} $</li>
                             </ul>
                             <div class="project_owner">
+                                <div class="d-flex justify-content-between align-items-center">
                                 <h6> صاحب المشروع </h6>
+                                @if($project['freelancer_id'] == Auth::user()->id)
+                                    <form action="{{url('conversation/start/project')}}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="project_id" value="{{$project['id']}}">
+                                        <input type="hidden" name="sender_id" value="{{Auth::id()}}">
+                                        <input type="hidden" name="receiver_id" value="{{$project['user_id']}}">
+                                        <button type="submit" class="btn btn-primary btn-sm" style="height: 30px">  تواصل  <i class="bi bi-send"></i> </button>
+                                    </form>
+                                @endif
+                                </div>
                                 <div class="user_info">
                                     <div>
                                         @if ($project['User']['image'] != '')
@@ -302,13 +321,12 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h6> منفذ المشروع </h6>
                                         @if($project['user_id'] == Auth::user()->id)
-                                            <a class="btn btn-primary"> تواصل  <i class="bi bi-send"></i></a>
                                             <form action="{{url('conversation/start/project')}}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="project_id" value="{{$project['id']}}">
                                                 <input type="hidden" name="sender_id" value="{{Auth::id()}}">
                                                 <input type="hidden" name="receiver_id" value="{{$project['freelancer_id']}}">
-                                                <button type="submit" class="btn btn-danger msg_btn btn-sm"> تواصل معي</button>
+                                                <button type="submit" class="btn btn-primary btn-sm" style="height: 30px">  تواصل  <i class="bi bi-send"></i> </button>
                                             </form>
                                         @endif
                                     </div>

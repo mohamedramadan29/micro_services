@@ -8,6 +8,7 @@ use App\Http\Traits\Message_Trait;
 use App\Http\Traits\Upload_Images;
 use App\Models\front\Project;
 use App\Models\front\ProjectOffer;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\admin\Setting;
@@ -116,4 +117,62 @@ class ProjectOfferController extends Controller
         }
 
     }
+
+    public function accept_project($project_id)
+    {
+        try {
+            // جلب بيانات المشروع
+            $project = Project::findOrFail($project_id);
+
+            // التأكد من أن المشروع في حالة مناسبة للقبول
+            if ($project->status !== 'تنفيذ المشروع') {
+                //    return $this->error_message('');
+                return Redirect::back()->withErrors('لا يمكن تسليم هذا المشروع في الحالة الحالية.');
+            }
+
+            DB::beginTransaction();
+
+            // تحديث حالة المشروع
+            $project->update([
+                'status' => 'تم الاستلام',
+            ]);
+
+            // جلب العرض المقبول
+            $offer = ProjectOffer::find($project->offer_accept);
+            if (!$offer) {
+                DB::rollBack();
+                return Redirect::back()->withErrors('العرض المقبول غير موجود.');
+            }
+
+            $offer_user_get = $offer->user_get;
+            $website_get = $offer->website_get;
+
+            // تحديث رصيد المستخدم المستقل
+            $freelancer = User::find($project->freelancer_id);
+            if ($freelancer) {
+               // $freelancer->increment('balance', $offer_user_get);
+                $freelancer->balance = intval($freelancer['balance']) + intval($offer_user_get);
+                $freelancer->save();
+            } else {
+                DB::rollBack();
+                return Redirect::back()->withErrors('المستقل غير موجود.');
+            }
+            // تحديث رصيد صاحب المشروع
+            $project_owner = User::find($project->user_id);
+            if ($project_owner) {
+                $project_owner->balance = intval($project_owner['balance']) - intval($project['offer_budget']);
+                $project_owner->save();
+
+            } else {
+                DB::rollBack();
+                return Redirect::back()->withErrors('صاحب المشروع غير موجود.');
+            }
+            DB::commit();
+            return $this->success_message('تم تسليم المشروع بنجاح.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->exception_message($e->getMessage());
+        }
+    }
+
 }

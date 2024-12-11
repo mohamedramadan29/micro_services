@@ -14094,3 +14094,33 @@ textarea.form-control{
     border: 1px solid #ccc;
     line-height: 18px;
 }
+.message_headline_chatbox{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #efefef;
+    margin-bottom: 20px;
+}
+.message_headline_chatbox .messages-headline{
+    border-bottom: none;
+}
+.message_headline_chatbox .project_details{}
+.message_headline_chatbox .project_details ul{}
+.message_headline_chatbox .project_details ul li{
+    font-size: 14px;
+    color: #454343;
+    border-bottom: 1px solid #f1f1f1;
+    margin-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.message_headline_chatbox .project_details ul li span{}
+.message_headline_chatbox .project_details ul li span a{
+    color:var(--main-color);
+}
+.message_headline_chatbox .project_details ul li button{
+    height:30px
+}
