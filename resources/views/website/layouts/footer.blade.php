@@ -11,19 +11,19 @@
                         <img src="{{ asset('assets/website/img/logo.png') }}" class="img-fluid f-logo" width="120"
                             alt="">
                         <p>
-                            "نفذها": المنصة العربية الأمثل لربط أصحاب المشاريع بالمستقلين المحترفين
+                             {{ __('public.footer_about') }}
                         </p>
 
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-4">
                     <div class="footer-widget">
-                        <h4 class="widget-title"> روابط </h4>
+                        <h4 class="widget-title"> {{ __('public.links') }} </h4>
                         <ul class="footer-menu">
-                            <li><a href="{{ '/about' }}"> من نحن </a></li>
-                            <li><a href="{{ '/faq' }}"> الاسئلة الشائعة </a></li>
-                            <li><a href="{{ '/privacy-policy' }}"> سياسة الخصوصية </a></li>
-                            <li><a href="{{ '/terms' }}"> سياسة الاستخدام </a></li>
+                            <li><a href="{{ '/about' }}"> {{ __('public.about_us') }} </a></li>
+                            <li><a href="{{ '/faq' }}">  {{ __('public.faqs') }}  </a></li>
+                            <li><a href="{{ '/privacy-policy' }}">  {{ __('public.privacy') }}  </a></li>
+                            <li><a href="{{ '/terms' }}"> {{ __('public.terms') }}  </a></li>
 
                         </ul>
                     </div>
@@ -31,7 +31,7 @@
 
                 <div class="col-lg-4 col-md-4">
                     <div class="footer-widget">
-                        <h4 class="widget-title"> تابعنا </h4>
+                        <h4 class="widget-title"> {{ __('public.follow_us') }}  </h4>
                         <ul class="footer-bottom-social">
                             <li><a href="#"><i class="ti-facebook"></i></a></li>
                             <li><a href="#"><i class="ti-twitter"></i></a></li>
@@ -49,7 +49,7 @@
             <div class="row align-items-center">
 
                 <div class="col-lg-12 col-md-12 text-center">
-                    <p class="mb-0"> جميع الحقوق محفوظة @ 2024 لدي نفذها </p>
+                    <p class="mb-0">  {{ __('public.copy_right') }}  </p>
                 </div>
 
             </div>

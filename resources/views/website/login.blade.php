@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-    تسجيل دخول
+    {{ __('login.login') }}
 @endsection
 @section('content')
 
@@ -13,7 +13,7 @@
                 <div class="col-lg-8 col-12">
                     <div class="modal-content" id="registermodal">
                         <div class="modal-header">
-                            <h4> تسجيل دخول </h4>
+                            <h4> {{ __('login.login') }} </h4>
 
                         </div>
                         <div class="modal-body">
@@ -30,7 +30,7 @@
                                 @endforeach
                             @endif
                             <div class="social_login">
-                                <h4> يمكنك التسجيل بإستخدام </h4>
+                                <h4>  {{ __('login.login_socialmedia') }} </h4>
                                 <a class="google_login" href="{{ route('auth.google.redirect', 'google') }}"> <i
                                         class="bi bi-google"></i> </a>
                                 <a class="facebook_login" href="{{ route('auth.google.redirect', 'facebook') }}"> <i
@@ -42,20 +42,19 @@
                                 <form method="post" action="{{ url('login') }}">
                                     @csrf
                                     <div class="form-group">
-                                        <label> البريد الالكتروني </label>
+                                        <label> {{ __('login.email') }} </label>
                                         <input type="email" class="form-control" name="email"
                                             value="{{ old('email') }}">
                                     </div>
 
                                     <div class="form-group">
-                                        <label> كلمة المرور </label>
+                                        <label> {{ __('login.password') }} </label>
                                         <input type="password" class="form-control" placeholder="*******" name="password">
                                     </div>
 
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary  dark-2 btn-md full-width pop-login">
-                                            تسجيل
-                                            دخول
+                                          {{ __('login.login') }}
                                         </button>
                                     </div>
 
@@ -63,10 +62,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <div class="mf-link"><i class="ti-user"></i> ليس لديك حساب ؟ <a href="{{ url('register') }}"
-                                    class="theme-cl"> حساب
-                                    جديد </a></div>
-                            <div class="mf-forget"><a href="{{ url('forget-password') }}"> نسيت كلمة المرور ؟ </a></div>
+                            <div class="mf-link"><i class="ti-user"></i> {{ __('login.not_account') }} <a href="{{ url('register') }}"
+                                    class="theme-cl"> {{ __('login.new_account') }} </a></div>
+                            <div class="mf-forget"><a href="{{ url('forget-password') }}">  {{ __('login.forget_password') }} </a></div>
                         </div>
                     </div>
                 </div>

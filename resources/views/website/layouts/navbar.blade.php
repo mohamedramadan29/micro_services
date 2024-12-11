@@ -16,7 +16,7 @@
                         <ul class="nav-menu nav-menu-social">
                             <li class="add-listing dark-bg">
                                 <a href="{{url('login')}}">
-                                    <i class=" fa fa-sign-in   mr-1"></i>   دخول
+                                    <i class=" fa fa-sign-in   mr-1"></i>   {{ __('public.login_mobile') }}
                                 </a>
                             </li>
                         </ul>
@@ -123,35 +123,35 @@
                                         @endforelse
                                     </ul>
                                 </div>
- 
-                                <li><a href="{{url('dashboard')}}"> حسابي </a></li>
+
+                                <li><a href="{{url('dashboard')}}"> {{ __('public.account') }} </a></li>
                             </ul>
                         @else
                             <ul class="nav-menu nav-menu-social logins_button">
                                 <li>
                                     <a href="{{url('register')}}">
-                                        <i class="ti-user mr-1"></i> حساب جديد
+                                        <i class="ti-user mr-1"></i>  {{ __('public.register') }}
                                     </a>
                                 </li>
                                 <li class="add-listing dark-bg">
                                     <a href="{{url('login')}}">
-                                        <i class=" fa fa-sign-in   mr-1"></i> تسجيل دخول
+                                        <i class=" fa fa-sign-in   mr-1"></i>  {{ __('public.login') }}
                                     </a>
                                 </li>
                             </ul>
                         @endif
 
                         <ul class="nav-menu">
-                            <li><a href="{{url('/')}}"> الرئيسية </a></li>
+                            <li><a href="{{url('/')}}"> {{ __('public.home') }} </a></li>
 
-                            <li><a href="{{url('categories')}}"> الاقسام </a></li>
-                            <li><a href="{{url('services')}}"> الخدمات </a></li>
-                            <li><a href="{{url('projects')}}"> المشاريع  </a></li>
-                            <li><a href="{{url('courses')}}"> الكورسات   </a></li>
-                            <li><a href="{{url('products')}}"> منتجات نفذها  </a></li>
+                            <li><a href="{{url('categories')}}"> {{ __("public.categories") }} </a></li>
+                            <li><a href="{{url('services')}}">  {{ __('public.services') }} </a></li>
+                            <li><a href="{{url('projects')}}"> {{ __('public.projects') }}  </a></li>
+                            <li><a href="{{url('courses')}}"> {{ __('public.courses') }}   </a></li>
+                            <li><a href="{{url('products')}}">  {{ __('public.products') }} </a></li>
                             @if(\Illuminate\Support\Facades\Auth::check())
-                                <li><a href="{{url('purches')}}"> مشترياتي </a></li>
-                                <li><a href="{{url('orders')}}"> الطلبات الواردة </a></li>
+                                <li><a href="{{url('purches')}}"> {{ __('public.purches') }} </a></li>
+                                <li><a href="{{url('orders')}}"> {{ __('public.incomming_request') }} </a></li>
                             @endif
                             @php
                                 $count_items = count(\App\Models\front\Cart::getCartItems());

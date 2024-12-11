@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-    حساب جديد
+   {{ __('login.new_account') }}
 @endsection
 @section('content')
 
@@ -12,7 +12,7 @@
                 <div class="col-lg-8 col-12">
                     <div class="modal-content" id="registermodal">
                         <div class="modal-header">
-                            <h4> انشاء حساب جديد </h4>
+                            <h4>  {{ __('login.new_register') }} </h4>
                         </div>
                         <div class="modal-body">
                             @if (Session::has('Success_message'))
@@ -28,7 +28,7 @@
                                 @endforeach
                             @endif
                             <div class="social_login">
-                                <h4> يمكنك التسجيل بإستخدام </h4>
+                                <h4>  {{ __('login.login_socialmedia') }} </h4>
                                 <a class="google_login" href="{{route('auth.google.redirect','google')}}"> <i class="bi bi-google"></i> </a>
                                 <a class="facebook_login" href="{{route('auth.google.redirect','facebook')}}"> <i class="bi bi-facebook"></i> </a>
                             </div>
@@ -38,35 +38,35 @@
                                 <form method="post" action="{{ url('/register') }}">
                                     @csrf
                                     <div class="form-group">
-                                        <label> الاسم </label>
+                                        <label> {{ __('login.name') }} </label>
                                         <input required type="text" class="form-control" name="name"
                                             value="{{ old('name') }}">
                                     </div>
                                     <div class="form-group">
-                                        <label> اسم المستخدم </label>
+                                        <label>  {{ __('login.user_name') }}</label>
                                         <input required type="text" class="form-control" name="username"
                                             value="{{ old('username') }}">
                                     </div>
                                     <div class="form-group">
-                                        <label> البريد الالكتروني </label>
+                                        <label>  {{ __('login.email') }}</label>
                                         <input required type="email" class="form-control" name="email"
                                             value="{{ old('email') }}">
                                     </div>
 
                                     <div class="form-group">
-                                        <label> كلمة المرور </label>
+                                        <label> {{ __('login.password') }} </label>
                                         <input required type="password" class="form-control" placeholder="*******"
                                             name="password">
                                     </div>
 
                                     <div class="form-group">
-                                        <label>تاكيد كلمة المرور </label>
+                                        <label> {{ __('login.confirm_password') }} </label>
                                         <input required type="password" class="form-control" placeholder="*******"
                                             name="confirm-password">
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary dark-2 btn-md full-width pop-login">
-                                            حساب جديد
+                                             {{ __('login.new_account') }}
                                         </button>
                                     </div>
 
@@ -74,9 +74,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <div class="mf-link"><i class="ti-user"></i> لديك حساب ؟ <a href="{{ url('login') }}"
-                                    class="theme-cl"> تسجيل
-                                    دخول </a></div>
+                            <div class="mf-link"><i class="ti-user"></i> {{ __('login.have_account') }} <a href="{{ url('login') }}"
+                                    class="theme-cl">  {{ __('login.login') }} </a></div>
                         </div>
                     </div>
                 </div>
