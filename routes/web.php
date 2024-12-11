@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\SocialMediaController;
 use App\Http\Controllers\front\CartController;
 use App\Http\Controllers\front\CheckOutController;
 use App\Http\Controllers\front\ConversationController;
+use App\Http\Controllers\front\CourseController;
+use App\Http\Controllers\front\CourseRegisterController;
 use App\Http\Controllers\front\FrontController;
 use App\Http\Controllers\front\ProductController;
 use App\Http\Controllers\front\ProjectController;
@@ -150,6 +152,23 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('ticket/{id}', 'index');
         Route::post('message/create/{ticket_id}','store');
     });
+    ##################### Start User Courses ###################
+    Route::controller(CourseController::class)->group(function () {
+        Route::get('courses', 'index');
+        Route::get('course/{id}-{slug}','course_details');
+        ////////////////  User Course Route  //////////////////////////////
+        Route::get('my/courses',action: 'user_courses');
+        Route::match(['post','get'],'my/course/add','store');
+        Route::match(['post','get'],'my/course/update/{id}','update');
+    });
+      //////////////// Course Register ////////////////////////////////
+
+      Route::controller(CourseRegisterController::class)->group(function () {
+
+        Route::post('course_regitser/{id}','course_register');
+
+       });
+
 });
 
 

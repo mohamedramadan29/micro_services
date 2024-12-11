@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-    مشاريعي
+    كورساتي
 @endsection
 @section('content')
     @if (Session::has('Success_message'))
@@ -68,7 +68,7 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"> مشاريعي </li>
+                                        <li class="breadcrumb-item active" aria-current="page"> كورساتي  </li>
                                     </ol>
                                 </nav>
                             </div>
@@ -84,15 +84,15 @@
                                 <div class="_dashboard_content">
                                     <div class="_dashboard_content_header">
                                         <div class="_dashboard__header_flex">
-                                            <h4><i class="ti-lock mr-1"></i> مشاريعي </h4>
+                                            <h4><i class="ti-lock mr-1"></i> كورساتي  </h4>
                                         </div>
                                     </div>
 
                                     <div class="_dashboard_content_body project_page">
                                         <div class="row">
                                             <!-- Single Item -->
-                                            @if ($projects->count() > 0)
-                                                @foreach ($projects as $project)
+                                            @if ($courses->count() > 0)
+                                                @foreach ($courses as $course)
                                                     <div class="col-lg-12">
                                                         <div class="ser_110">
 
@@ -102,21 +102,21 @@
                                                                         <div class="project_data">
                                                                             <h5>
                                                                                 <a
-                                                                                    href="{{ url('project/' . $project['id'] . '-' . $project['slug']) }}">
-                                                                                    {{ $project['title'] }} </a>
+                                                                                    href="{{ url('course/' . $course['id'] . '-' . $course['slug']) }}">
+                                                                                    {{ $course['title'] }} </a>
                                                                             </h5>
                                                                             <p>
-                                                                                {{ Str::limit($project['desc'], 150, '...') }}
+                                                                                {{ Str::limit($course['desc'], 150, '...') }}
                                                                             </p>
-                                                                            @if ($project['approved'] == 0)
+                                                                            @if ($course['status'] == 0)
                                                                                 <div class="mb-1">
                                                                                     <div class="buttons"
                                                                                         style="padding:10px">
-                                                                                        <a href="{{ url('project/update/' . $project['id']) }}"
+                                                                                        <a href="{{ url('my/course/update/' . $course['id']) }}"
                                                                                             class="btn btn-primary btn-sm">
                                                                                             تعديل <i class="fa fa-edit"></i>
                                                                                         </a>
-                                                                                        <a href="{{ url('project/delete/' . $project['id']) }}"
+                                                                                        <a href="{{ url('my/course/delete/' . $course['id']) }}"
                                                                                             class="btn btn-warning btn-sm"
                                                                                             onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')">
                                                                                             حذف <i class="fa fa-trash"></i>
@@ -130,17 +130,17 @@
                                                                         <div class="project_info_person">
                                                                             <ul class="list-unstyled">
                                                                                 <li> <i class="bi bi-currency-dollar"></i>
-                                                                                    {{ $project['price'] }}
+                                                                                    {{ $course['price'] }}
                                                                                     دولار </li>
-                                                                                <li> <i class="bi bi-journal-code"></i>
-                                                                                    {{ $project['day_number'] }}
-                                                                                    ايام
+                                                                                <li> <i class="bi bi-pc-display-horizontal"></i>
+                                                                                    {{ $course['leason_numbers'] }}
+                                                                                    محاضرة
                                                                                 </li>
                                                                                 <li> <i class="bi bi-calendar-check"></i>
-                                                                                    {{ $project['created_at'] }}
+                                                                                    {{ $course['created_at']->diffForHumans() }}
                                                                                 </li>
-                                                                                <li> <i class="bi bi-patch-check"></i>
-                                                                                    {{ $project['status'] }} </li>
+                                                                                <li> <i class="bi bi-people-fill"></i>
+                                                                                    {{ $course['current_student_num'] }} </li>
                                                                             </ul>
                                                                         </div>
                                                                     </div>
@@ -154,7 +154,7 @@
                                                 @endforeach
                                             @else
                                                 <div class="alert alert-info">
-                                                    لا يوجد لديك مشاريع في الوقت الحالي
+                                                    لا يوجد لديك كورسات  في الوقت الحالي
                                                 </div>
                                             @endif
                                         </div>

@@ -64,23 +64,23 @@
                         </div>
 
                         <div class="project-details">
-                            <h3> {{$project['title']}} </h3>
-                            <p> {{$project['desc']}} </p>
-                            {{--                            <div class="project-file">--}}
-                            {{--                                <a href="#">--}}
-                            {{--                                    <i class="bi bi-file-earmark"></i>--}}
-                            {{--                                    <span>1732098919.png</span>--}}
-                            {{--                                </a>--}}
-                            {{--                            </div>--}}
+                            <h3> {{ $project['title'] }} </h3>
+                            <p> {{ $project['desc'] }} </p>
+                            {{--                            <div class="project-file"> --}}
+                            {{--                                <a href="#"> --}}
+                            {{--                                    <i class="bi bi-file-earmark"></i> --}}
+                            {{--                                    <span>1732098919.png</span> --}}
+                            {{--                                </a> --}}
+                            {{--                            </div> --}}
                         </div>
                         <div class="project-skills">
                             <h4>مهارات مطلوبة</h4>
                             <div class="skills">
                                 @php
-                                    $skills = explode(',',$project['skills']);
+                                    $skills = explode(',', $project['skills']);
                                 @endphp
-                                @foreach($skills as $skill)
-                                    <span> {{$skill}} </span>
+                                @foreach ($skills as $skill)
+                                    <span> {{ $skill }} </span>
                                 @endforeach
                             </div>
                         </div>
@@ -91,36 +91,34 @@
                                 $website_commission = floatval($public_setting['website_commission']);
                             @endphp
                             @if (Auth::check())
-                                <form action="{{ url('project/add-offer') }}" method="POST"
-                                      enctype="multipart/form-data">
+                                <form action="{{ url('project/add-offer') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-row">
                                         <div class="form-group">
                                             <input type="hidden" name="project_id" value="{{ $project['id'] }}">
                                             <label for="execution_time">مدة التنفيذ (بالأيام)</label>
                                             <input required max="90" min="1" class="form-control"
-                                                   type="number" id="execution_time" name="execution_time"
-                                                   placeholder="أدخل عدد الأيام">
+                                                type="number" id="execution_time" name="execution_time"
+                                                placeholder="أدخل عدد الأيام">
                                         </div>
                                         <div class="form-group">
                                             <label for="offer_value">قيمة عرضك (بالدولار)</label>
                                             <input required min="10" max="5000" class="form-control"
-                                                   type="number" id="offer_value" name="offer_value"
-                                                   placeholder="أدخل القيمة">
+                                                type="number" id="offer_value" name="offer_value"
+                                                placeholder="أدخل القيمة">
                                         </div>
                                         <div class="form-group">
                                             <label for="earnings">سوف تحصل على (بالدولار)</label>
                                             <input class="form-control" type="text" id="earnings" name="earnings"
-                                                   disabled value="0">
+                                                disabled value="0">
                                         </div>
 
                                     </div>
 
                                     <div class="form-group">
                                         <label for="offer_details">تفاصيل عرضك</label>
-                                        <textarea required class="form-control" id="offer_details" name="offer_details"
-                                                  rows="5"
-                                                  placeholder="تفاصيل العرض" required></textarea>
+                                        <textarea required class="form-control" id="offer_details" name="offer_details" rows="5"
+                                            placeholder="تفاصيل العرض" required></textarea>
                                     </div>
 
                                     <div class="form-group">
@@ -143,7 +141,7 @@
                                     const earningsInput = document.getElementById('earnings');
 
                                     // تحديث الأرباح ديناميكيًا
-                                    offerValueInput.addEventListener('input', function () {
+                                    offerValueInput.addEventListener('input', function() {
                                         const offerValue = parseFloat(this.value) || 0; // الحصول على قيمة العرض
                                         const websiteCommissionValue = (offerValue * websiteCommission) / 100; // حساب عمولة الموقع
                                         const userEarnings = offerValue - websiteCommissionValue; // الأرباح للمستخدم
@@ -179,27 +177,26 @@
                                                 <a href="{{ url('user/' . $offer['User']['user_name']) }}">
                                                     <p> {{ $offer['User']['name'] }} </p>
                                                     <span>
-                                                    {{ optional($offer->User)->job_title }}
-                                                </span>
+                                                        {{ optional($offer->User)->job_title }}
+                                                    </span>
                                                     <span style="display: block"> <i class="bi bi-calendar-fill"></i>
-                                                    {{ $offer['created_at']->diffForHumans() }} </span>
+                                                        {{ $offer['created_at']->diffForHumans() }} </span>
                                                 </a>
                                             </div>
                                         </div>
                                         @if (Auth::check() && Auth::user()->id == $project['user_id'])
-                                            @if($project['offer_accept'] !=null && $project['offer_accept'] == $offer['id'])
-                                                <p> عدد الايام : {{$offer['day_number']}} ايام </p>
-                                                <p> السعر : {{$offer['offer_price']}} $ </p>
+                                            @if ($project['offer_accept'] != null && $project['offer_accept'] == $offer['id'])
+                                                <p> عدد الايام : {{ $offer['day_number'] }} ايام </p>
+                                                <p> السعر : {{ $offer['offer_price'] }} $ </p>
                                                 <button class="btn btn-primary btn-sm"> تم قبول هذا العرض بنجاح <i
                                                         class="bi bi-check"></i></button>
                                             @else
                                                 <div class="offer_details">
-                                                    <p> عدد الايام : {{$offer['day_number']}} ايام </p>
-                                                    <p> السعر : {{$offer['offer_price']}} $ </p>
+                                                    <p> عدد الايام : {{ $offer['day_number'] }} ايام </p>
+                                                    <p> السعر : {{ $offer['offer_price'] }} $ </p>
                                                     <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                                            data-bs-target="#acceptOffer_{{$offer['id']}}"> قبول العرض
-                                                        <i
-                                                            class="bi bi-check"></i></button>
+                                                        data-bs-target="#acceptOffer_{{ $offer['id'] }}"> قبول العرض
+                                                        <i class="bi bi-check"></i></button>
                                                 </div>
                                             @endif
                                         @endif
@@ -215,16 +212,15 @@
                                     </div>
                                 </div>
                                 <!-- Modal -->
-                                <div class="modal fade buy_services_model" id="acceptOffer_{{$offer['id']}}"
-                                     tabindex="-1"
-                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade buy_services_model" id="acceptOffer_{{ $offer['id'] }}"
+                                    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h1 class="modal-title fs-5" id="exampleModalLabel"> قبول العرض علي
                                                     الشمروع </h1>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"> X
+                                                    aria-label="Close"> X
                                                 </button>
                                             </div>
                                             <div class="modal-body">
@@ -236,20 +232,20 @@
                                                 </ul>
                                             </div>
                                             <div class="modal-footer">
-                                                @if(Auth::check())
+                                                @if (Auth::check())
                                                     <form style="width: 100%" method="post"
-                                                          action="{{url('accept_offer/'.$offer['id'])}}">
+                                                        action="{{ url('accept_offer/' . $offer['id']) }}">
                                                         <div class="form-group">
                                                             <label> عدد الايام </label>
                                                             <input disabled readonly style="height: 45px"
-                                                                   value="{{$offer['day_number']}}" class="form-control"
-                                                                   name="country" required>
+                                                                value="{{ $offer['day_number'] }}" class="form-control"
+                                                                name="country" required>
                                                         </div>
                                                         <div class="form-group">
                                                             <label> السعر </label>
                                                             <input disabled readonly style="height: 45px"
-                                                                   value="{{$offer['offer_price']}}"
-                                                                   class="form-control" name="country" required>
+                                                                value="{{ $offer['offer_price'] }}" class="form-control"
+                                                                name="country" required>
                                                         </div>
                                                         @csrf
 
@@ -257,8 +253,8 @@
                                                                 class="bi bi-bag"></i></button>
                                                     </form>
                                                 @else
-                                                    <a href="{{url('login')}}" type="button"
-                                                       class="btn btn-primary"> سجل دخولك الان لتكملة الشراء </a>
+                                                    <a href="{{ url('login') }}" type="button"
+                                                        class="btn btn-primary"> سجل دخولك الان لتكملة الشراء </a>
                                                 @endif
                                             </div>
                                         </div>
@@ -272,11 +268,11 @@
                         <div class="project-status">
                             <h3>بطاقة المشروع</h3>
                             <ul>
-                                <li><span>حالة المشروع:</span> {{$project['status']}} </li>
-                                <li><span>تاريخ النشر:</span> {{$project->created_at->diffForHumans()}} </li>
-                                <li><span>المدة المتاحة:</span> {{$project['day_number']}} أيام</li>
-                                <li><span>الميزانية:</span> {{$project['price']}} $</li>
-                                <li><span>عدد المتقدمين:</span> {{count($project['Offers'])}}</li>
+                                <li><span>حالة المشروع:</span> {{ $project['status'] }} </li>
+                                <li><span>تاريخ النشر:</span> {{ $project->created_at->diffForHumans() }} </li>
+                                <li><span>المدة المتاحة:</span> {{ $project['day_number'] }} أيام</li>
+                                <li><span>الميزانية:</span> {{ $project['price'] }} $</li>
+                                <li><span>عدد المتقدمين:</span> {{ count($project['Offers']) }}</li>
                                 @php
                                     $totalOffers = collect($project['Offers'])->sum('offer_price');
                                     $applicantCount = count($project['Offers']);
@@ -286,16 +282,17 @@
                             </ul>
                             <div class="project_owner">
                                 <div class="d-flex justify-content-between align-items-center">
-                                <h6> صاحب المشروع </h6>
-                                @if($project['freelancer_id'] == Auth::user()->id)
-                                    <form action="{{url('conversation/start/project')}}" method="post">
-                                        @csrf
-                                        <input type="hidden" name="project_id" value="{{$project['id']}}">
-                                        <input type="hidden" name="sender_id" value="{{Auth::id()}}">
-                                        <input type="hidden" name="receiver_id" value="{{$project['user_id']}}">
-                                        <button type="submit" class="btn btn-primary btn-sm" style="height: 30px">  تواصل  <i class="bi bi-send"></i> </button>
-                                    </form>
-                                @endif
+                                    <h6> صاحب المشروع </h6>
+                                    @if ($project['freelancer_id'] == Auth::user()->id)
+                                        <form action="{{ url('conversation/start/project') }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="project_id" value="{{ $project['id'] }}">
+                                            <input type="hidden" name="sender_id" value="{{ Auth::id() }}">
+                                            <input type="hidden" name="receiver_id" value="{{ $project['user_id'] }}">
+                                            <button type="submit" class="btn btn-primary btn-sm" style="height: 30px">
+                                                تواصل <i class="bi bi-send"></i> </button>
+                                        </form>
+                                    @endif
                                 </div>
                                 <div class="user_info">
                                     <div>
@@ -304,29 +301,31 @@
                                                 src="{{ asset('assets/uploads/users_image/' . $project['User']['image']) }}">
                                         @else
                                             <img src="{{ asset('assets/website/img/favicon.png') }}"
-                                                 class="img-fluid rounded" alt="">
+                                                class="img-fluid rounded" alt="">
                                         @endif
                                     </div>
                                     <div>
                                         <p> {{ $project['User']['name'] }} </p>
                                         <span>
-                                        {{ optional($project->User)->job_title }}
-                                    </span>
+                                            {{ optional($project->User)->job_title }}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                             <hr>
-                            @if($project['freelancer_id'] !=null)
+                            @if ($project['freelancer_id'] != null)
                                 <div class="project_owner">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h6> منفذ المشروع </h6>
-                                        @if($project['user_id'] == Auth::user()->id)
-                                            <form action="{{url('conversation/start/project')}}" method="post">
+                                        @if ($project['user_id'] == Auth::user()->id)
+                                            <form action="{{ url('conversation/start/project') }}" method="post">
                                                 @csrf
-                                                <input type="hidden" name="project_id" value="{{$project['id']}}">
-                                                <input type="hidden" name="sender_id" value="{{Auth::id()}}">
-                                                <input type="hidden" name="receiver_id" value="{{$project['freelancer_id']}}">
-                                                <button type="submit" class="btn btn-primary btn-sm" style="height: 30px">  تواصل  <i class="bi bi-send"></i> </button>
+                                                <input type="hidden" name="project_id" value="{{ $project['id'] }}">
+                                                <input type="hidden" name="sender_id" value="{{ Auth::id() }}">
+                                                <input type="hidden" name="receiver_id"
+                                                    value="{{ $project['freelancer_id'] }}">
+                                                <button type="submit" class="btn btn-primary btn-sm"
+                                                    style="height: 30px"> تواصل <i class="bi bi-send"></i> </button>
                                             </form>
                                         @endif
                                     </div>
@@ -337,13 +336,13 @@
                                                     src="{{ asset('assets/uploads/users_image/' . $project['freelancer']['image']) }}">
                                             @else
                                                 <img src="{{ asset('assets/website/img/default_user.png') }}"
-                                                     class="img-fluid rounded" alt="">
+                                                    class="img-fluid rounded" alt="">
                                             @endif
                                         </div>
                                         <div>
                                             <p> {{ $project['freelancer']['name'] }} </p>
                                             <span>
-                                        {{ optional($project->freelancer)->job_title }}
+                                                {{ optional($project->freelancer)->job_title }}
                                             </span>
                                         </div>
                                     </div>

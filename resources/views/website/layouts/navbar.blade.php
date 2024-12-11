@@ -123,9 +123,7 @@
                                         @endforelse
                                     </ul>
                                 </div>
-
-
-                                <li><a href="{{url('service/add')}}"> اضف خدمة </a></li>
+ 
                                 <li><a href="{{url('dashboard')}}"> حسابي </a></li>
                             </ul>
                         @else
@@ -149,6 +147,7 @@
                             <li><a href="{{url('categories')}}"> الاقسام </a></li>
                             <li><a href="{{url('services')}}"> الخدمات </a></li>
                             <li><a href="{{url('projects')}}"> المشاريع  </a></li>
+                            <li><a href="{{url('courses')}}"> الكورسات   </a></li>
                             <li><a href="{{url('products')}}"> منتجات نفذها  </a></li>
                             @if(\Illuminate\Support\Facades\Auth::check())
                                 <li><a href="{{url('purches')}}"> مشترياتي </a></li>
