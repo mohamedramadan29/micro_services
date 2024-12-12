@@ -4,23 +4,8 @@
 @endsection
 @section('content')
 
-    <!-- ============================ Page Title Start================================== -->
-    <div class="page-title" style="height: 350px;text-align: right">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-
-                    <h2 class="ipt-title"> منتجاتنا </h2>
-                    <span class="ipn-subtitle"> مشاهدة جميع منتجات نفذها   </span>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ============================ Page Title End ================================== -->
-
     <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg text-right" dir="rtl">
+    <section class="gray-bg text-right profile_page" dir="rtl">
         <div class="container">
             <div class="row">
                 <!-- Item Wrap Start -->

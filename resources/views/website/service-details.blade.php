@@ -3,22 +3,18 @@
     {{$service['name']}}
 @endsection
 @section('content')
-    <!-- ============================ Page Title Start================================== -->
-    <div class="page-title bg-cover" style="background:url( {{asset('assets/website/img/bn-2.jpg')}})no-repeat;"
-         data-overlay="5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ============================ Page Title End ================================== -->
 
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg text-right" dir="rtl">
         <div class="container">
+            <div class="main_hero_section" style="margin-bottom: 30px">
+                <div>
+                    <h4>   {{$service['name']}} </h4>
+                </div>
+                <div>
+                    <a class="btn btn-global-button" href="{{url('service/add')}}">  اضف خدمتك الان  <i class="fa fa-plus"></i> </a>
+                </div>
+            </div>
             <div class="row">
                 <!-- Item Wrap Start -->
                 <div class="col-lg-8 col-md-12 col-sm-12">

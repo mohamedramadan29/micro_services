@@ -1,23 +1,24 @@
 @extends('website.layouts.master')
 @section('title')
-    الكورسات
+    {{ __('courses.courses') }}
 @endsection
 @section('content')
     <section class="gray-bg text-right" dir="rtl">
         <div class="container">
             <div class="main_hero_section">
                 <div>
-                    <h4> الكورسات  المعروضة </h4>
+                    <h4> {{ __('courses.courses_h1') }} </h4>
                 </div>
                 <div>
-                    <a class="btn btn-global-button" href="{{url('my/course/add')}}"> اضف كورس الان <i class="fa fa-plus"></i> </a>
+                    <a class="btn btn-global-button" href="{{ url('my/course/add') }}"> {{ __('courses.add_course') }} <i
+                            class="fa fa-plus"></i> </a>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="simple-sidebar sm-sidebar">
                         <div class="search-sidebar_header">
-                            <h4 class="ssh_heading"> البحث  </h4>
+                            <h4 class="ssh_heading"> {{ __('courses.the_search') }} </h4>
                         </div>
                         <!-- Find New Property -->
                         <div class="sidebar-widgets collapse miz_show" id="search_open" data-parent="#search_open">
@@ -28,7 +29,7 @@
                                     <div class="filter-search-box pb-0">
                                         <div class="form-group">
                                             <input type="text" name="search" class="form-control"
-                                                value="{{ request()->input('search') }}" placeholder=" ابحث عن مشروع  ... ">
+                                                value="{{ request()->input('search') }}" placeholder=" {{ __('courses.search_services') }} ">
                                         </div>
                                     </div>
                                     {{-- <div class="filter_wraps">
@@ -82,7 +83,7 @@
                                     </div> --}}
                                     <div class="form-group filter_button pt-2">
                                         <button type="submit" class="btn btn-primary btn btn-theme-2 rounded full-width">
-                                            بحث
+                                            {{ __('courses.search') }}
                                         </button>
                                     </div>
                                 </div>

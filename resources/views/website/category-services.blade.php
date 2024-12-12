@@ -3,24 +3,16 @@
     الخدمات - {{$category['name']}}
 @endsection
 @section('content')
-    <!-- ============================ Page Title Start================================== -->
-    <div class="page-title" style="height: 350px;text-align: right">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-
-                    <h2 class="ipt-title"> الخدمات - {{$category['name']}}  </h2>
-                    <span class="ipn-subtitle"> مشاهدة جميع الخدمات  </span>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ============================ Page Title End ================================== -->
 
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg text-right" dir="rtl">
         <div class="container">
+            <div class="main_hero_section" style="margin-bottom:20px">
+                <div>
+                    <h4> الخدمات - {{$category['name']}}  </h4>
+                </div>
+
+            </div>
             <div class="row">
 
                 <div class="col-lg-4 col-md-12 col-sm-12">

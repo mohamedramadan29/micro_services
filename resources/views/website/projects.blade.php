@@ -1,23 +1,23 @@
 @extends('website.layouts.master')
 @section('title')
-    المشاريع
+    {{ __('projects.projects') }}
 @endsection
 @section('content')
     <section class="gray-bg text-right" dir="rtl">
         <div class="container">
             <div class="main_hero_section">
                 <div>
-                    <h4> المشاريع المعروضة </h4>
+                    <h4> {{ __('projects.project_h1') }} </h4>
                 </div>
                 <div>
-                    <a class="btn btn-global-button" href="{{url('my/project/add')}}"> اضف مشروعك الان <i class="fa fa-plus"></i> </a>
+                    <a class="btn btn-global-button" href="{{url('my/project/add')}}"> {{ __('projects.project_add') }} <i class="fa fa-plus"></i> </a>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="simple-sidebar sm-sidebar">
                         <div class="search-sidebar_header">
-                            <h4 class="ssh_heading"> البحث  </h4>
+                            <h4 class="ssh_heading"> {{ __('projects.search') }}  </h4>
                         </div>
                         <!-- Find New Property -->
                         <div class="sidebar-widgets collapse miz_show" id="search_open" data-parent="#search_open">
@@ -82,7 +82,7 @@
                                     </div>
                                     <div class="form-group filter_button pt-2">
                                         <button type="submit" class="btn btn-primary btn btn-theme-2 rounded full-width">
-                                            بحث
+                                            {{ __('projects.search1') }}
                                         </button>
                                     </div>
                                 </div>
@@ -139,10 +139,10 @@
                                                     <ul class="list-unstyled">
                                                         <li> <i class="bi bi-currency-dollar"></i>
                                                             {{ $project['price'] }}
-                                                            دولار </li>
+                                                            $ </li>
                                                         <li> <i class="bi bi-journal-code"></i>
                                                             {{ $project['day_number'] }}
-                                                            ايام
+                                                            {{ __('projects.days') }}
                                                         </li>
                                                         <li> <i class="bi bi-calendar-check"></i>
                                                             {{ $project['created_at']->diffForHumans() }}
@@ -176,26 +176,4 @@
         </div>
     </section>
     <!-- ============================ Main Section End ================================== -->
-
-    <!-- ============================ Call To Action Start ================================== -->
-    <section class="call-to-act"
-        style="background:#0b85ec url({{ asset('assets/website/img/landing-bg.png') }}) no-repeat">
-        <div class="container">
-            <div class="row justify-content-center">
-
-                <div class="col-lg-7 col-md-8">
-                    <div class="clt-caption text-center mb-4">
-                        <h2 class="text-light"> هل أنت جاهز لبدء مشروعك الخاص ؟ </h2>
-                    </div>
-                    <div class="inner-flexible-box subscribe-box">
-                        <div class="input-group">
-                            <button class="btn btn-primary start_job"> ابدا الان</button>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- ============================ Call To Action End ================================== -->
 @endsection

@@ -3,53 +3,55 @@
     رصيد الحساب
 @endsection
 @section('content')
-    <!-- ============================ Page Title Start================================== -->
-    <div class="page-title bg-cover" style="background:url({{asset('assets/website/img/bn-1.jpg')}})no-repeat;"
-         data-overlay="5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12"></div>
-            </div>
-        </div>
-    </div>
-    <!-- ============================ Page Title End ================================== -->
-
     <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg pt-4 text-right" dir="rtl">
+    <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
+        @if (Session::has('Success_message'))
+            @php
+                toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
+            @endphp
+        @endif
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                @php
+                    toastify()->error($error);
+                @endphp
+            @endforeach
+        @endif
         <div class="container-fluid">
             <div class="row m-0">
 
                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
-                    <div class="dashboard-navbar overlio-top">
+                    <div class="dashboard-navbar">
 
                         <div class="d-user-avater">
-                            @if(Auth::user()->image !='')
-                                <img src="{{asset('assets/uploads/users_image/'.Auth::user()->image)}}"
-                                     class="img-fluid rounded" alt="">
+                            @if (Auth::user()->image != '')
+                                <img src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
+                                    class="img-fluid rounded" alt="">
                             @else
-                                <img src="{{asset('assets/website/img/avatar.png')}}" class="img-fluid rounded" alt="">
+                                <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
+                                    alt="">
                             @endif
 
-                            <h4> {{Auth::user()->user_name}} </h4>
-                            <span> {{Auth::user()->email}} </span>
+                            <h4> {{ Auth::user()->user_name }} </h4>
+                            <span> {{ Auth::user()->email }} </span>
                         </div>
 
                         <div class="d-navigation">
                             <ul id="metismenu">
-                                <li><a href="{{url('dashboard')}}"><i class="ti-dashboard"></i> الملف الشخصي </a>
+                                <li><a href="{{ url('dashboard') }}"><i class="ti-dashboard"></i> الملف الشخصي </a>
                                 </li>
-                                <li><a href="{{url('project/index')}}"><i class="ti-user"></i> المشاريع </a></li>
-                                <li><a href="{{url('project/add')}}"><i class="ti-plus"></i> اضف مشروع جديد </a></li>
-                                <li><a href="{{url('service/index')}}"><i class="ti-user"></i> الخدمات </a></li>
-                                <li><a href="{{url('service/add')}}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
-                                <li><a href="{{url('chat-main')}}"><i class="ti-email"></i> المحادثات </a></li>
-                                <li><a href="{{url('purches')}}"><i class="ti-email"></i> مشترياتي </a></li>
-                                <li><a href="{{url('orders')}}"><i class="ti-email"></i> الطلبات الواردة </a></li>
-                                <li><a href="{{url('reviews')}}"><i class="ti-email"></i> التقيمات </a></li>
-                                <li><a href="{{url('update-account')}}"><i class="ti-email"></i> تعديل الملف الشخصي
+                                <li><a href="{{ url('project/index') }}"><i class="ti-user"></i> المشاريع </a></li>
+                                <li><a href="{{ url('project/add') }}"><i class="ti-plus"></i> اضف مشروع جديد </a></li>
+                                <li><a href="{{ url('service/index') }}"><i class="ti-user"></i> الخدمات </a></li>
+                                <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
+                                <li><a href="{{ url('chat-main') }}"><i class="ti-email"></i> المحادثات </a></li>
+                                <li><a href="{{ url('purches') }}"><i class="ti-email"></i> مشترياتي </a></li>
+                                <li><a href="{{ url('orders') }}"><i class="ti-email"></i> الطلبات الواردة </a></li>
+                                <li><a href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li>
+                                <li><a href="{{ url('update-account') }}"><i class="ti-email"></i> تعديل الملف الشخصي
                                     </a></li>
-                                <li><a href="{{url('balance')}}"><i class="ti-email"></i> الرصيد </a></li>
-                                <li><a href="{{url('logout')}}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
+                                <li><a href="{{ url('balance') }}"><i class="ti-email"></i> الرصيد </a></li>
+                                <li><a href="{{ url('logout') }}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
                             </ul>
                         </div>
 
@@ -64,7 +66,7 @@
                             <div class="bredcrumb_wrap">
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="{{url("/")}}"> الرئيسية </a></li>
+                                        <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
                                         <li class="breadcrumb-item active" aria-current="page"> حسابي</li>
                                         <li class="breadcrumb-item active" aria-current="page"> رصيد الحساب</li>
                                     </ol>
@@ -83,8 +85,54 @@
                                         <h4><i class="fa fa-user mr-1"></i> رصيد الحساب </h4>
                                     </div>
                                     <div class="buttons">
-                                        <a href="#" class="btn btn-primary btn-sm"> سحب رصيد </a>
-                                        <a href="#" class="btn btn-warning btn-sm"> شحن رصيد </a>
+
+                                        <button style="height: 40px" href="#" class="btn btn-primary btn-sm"> سحب رصيد
+                                        </button>
+                                        <button style="height: 40px" type="button" class="btn btn-danger btn-sm"
+                                            data-bs-toggle="modal" data-bs-target="#charge_balance">
+                                            شحن رصيد
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade buy_services_model" id="charge_balance" tabindex="-1"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel"> شحن رصيد
+                                                        </h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"> X </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <ul>
+                                                            <li> منصة نفذها تضمن حقوقك بنسبة 100% .</li>
+                                                            <li> لا تتردد ابداً في التواصل معنا إذا احتجت أي مساعدة وسنسعد
+                                                                بخدمتك.
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        @if (Auth::check())
+                                                            <form style="width: 100%" method="post"
+                                                                action="{{ url('charge_balance') }}">
+                                                                <div class="form-group">
+                                                                    <label> ادخل المبلغ </label>
+                                                                    <input style="height: 45px" type="number"
+                                                                        class="form-control" name="price" required>
+                                                                </div>
+                                                                @csrf
+                                                                <button type="submit" class="btn global_button"> شحن رصيد
+                                                                    <i class="bi bi-bag"></i></button>
+                                                            </form>
+                                                        @else
+                                                            <a href="{{ url('login') }}" type="button"
+                                                                class="btn btn-primary"> سجل دخولك الان لتكملة الشحن </a>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="_dashboard_content balance_page">
@@ -112,11 +160,11 @@
                                                 <div class="col-lg-3 col-6">
                                                     <div class="info">
                                                         <h4> الرصيد الكلي </h4>
-                                                        <span> 20 $ </span>
+                                                        <span> {{ number_format(Auth::user()->balance, 2) }} $ </span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="orders_payments">
+                                            {{-- <div class="orders_payments">
                                                 <div class="_list_jobs_wraps mng_list shadow_0 border">
                                                     <div class="_list_jobs_f1ex first">
                                                         <div class="_list_110">
@@ -157,7 +205,7 @@
                                                     </div>
                                                 </div>
 
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -170,5 +218,4 @@
             </div>
     </section>
     <!-- ============================ Main Section End ================================== -->
-
 @endsection

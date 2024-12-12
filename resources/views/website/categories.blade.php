@@ -3,23 +3,9 @@
     اقسام الخدمات
 @endsection
 @section('content')
-    <!-- ============================ Page Title Start================================== -->
-    <div class="page-title" style="height: 350px;text-align: right">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-
-                    <h2 class="ipt-title"> الاقسام </h2>
-                    <span class="ipn-subtitle"> مشاهدة جميع الاقسام  </span>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ============================ Page Title End ================================== -->
 
     <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg text-right category_page" dir="rtl">
+    <section class="gray-bg text-right category_page profile_page" dir="rtl">
         <div class="container">
             <div class="row">
                 <!-- Item Wrap Start -->
@@ -72,26 +58,5 @@
         </div>
     </section>
     <!-- ============================ Main Section End ================================== -->
-
-    <!-- ============================ Call To Action Start ================================== -->
-    <section class="call-to-act"
-             style="background:#0b85ec url({{asset('assets/website/img/landing-bg.png')}}) no-repeat">
-        <div class="container">
-            <div class="row justify-content-center">
-
-                <div class="col-lg-7 col-md-8">
-                    <div class="clt-caption text-center mb-4">
-                        <h2 class="text-light"> هل أنت جاهز لبدء مشروعك الخاص ؟ </h2>
-                    </div>
-                    <div class="inner-flexible-box subscribe-box">
-                        <div class="input-group">
-                            <button class="btn btn-primary start_job"> ابدا الان</button>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- ============================ Call To Action End ================================== -->
+ 
 @endsection

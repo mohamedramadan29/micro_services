@@ -42,7 +42,7 @@
                                 </li>
                                 <li><a href="{{ url('my/project/index') }}"><i class="ti-user"></i> المشاريع </a></li>
                                 <li><a href="{{ url('my/project/add') }}"><i class="ti-plus"></i> اضف مشروع جديد </a></li>
-                                <li><a href="{{ url('my/courses') }}"><i class="ti-user"></i> الكورسات </a></li>
+                                <li><a href="{{ url('my/courses') }}"><i class="ti-user"></i> الكورسات  </a></li>
                                 <li><a href="{{ url('my/course/add') }}"><i class="ti-plus"></i> اضف كورس جديد </a></li>
                                 <li><a href="{{ url('service/index') }}"><i class="ti-user"></i> الخدمات </a></li>
                                 <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>

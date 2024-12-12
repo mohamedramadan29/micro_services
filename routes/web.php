@@ -23,7 +23,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 Route::group(
     [
         'prefix' => LaravelLocalization::setLocale(),
-        'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
+        'middleware' => [ 'localeViewPath']
     ],
     function () {
 
@@ -147,6 +147,11 @@ Route::group(
         });
 
         #################### Start Tickets Controller ###########################
+        ##################### Start User Courses ###################
+        Route::controller(CourseController::class)->group(function () {
+            Route::get('courses', 'index');
+            Route::get('course/{id}-{slug}', 'course_details');
+        });
 
         Route::group(['middleware' => ['auth']], function () {
             Route::controller(TicketsController::class)->group(function () {
@@ -160,8 +165,7 @@ Route::group(
             });
             ##################### Start User Courses ###################
             Route::controller(CourseController::class)->group(function () {
-                Route::get('courses', 'index');
-                Route::get('course/{id}-{slug}', 'course_details');
+
                 ////////////////  User Course Route  //////////////////////////////
                 Route::get('my/courses', action: 'user_courses');
                 Route::match(['post', 'get'], 'my/course/add', 'store');
@@ -172,6 +176,7 @@ Route::group(
             Route::controller(CourseRegisterController::class)->group(function () {
 
                 Route::post('course_regitser/{id}', 'course_register');
+                Route::post('charge_balance','charge_balance');
             });
         });
 

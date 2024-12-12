@@ -5,16 +5,16 @@
     <div class="hero-banner full bg-cover center"
          style="background:#00000057 url({{asset('assets/website/img/background3.webp')}}) no-repeat;" data-overlay="7">
         <div class="container">
-            <h1> دليلك الشامل لإنجاز المشاريع عبر الإنترنت بفاعلية وأمان </h1>
-            <p class="lead"> كيف توظّف أفضل المستقلين لإنجاز عملك بجودة عالية  </p>
+            <h1> {{ __('index.index_h1') }} </h1>
+            <p class="lead">  {{ __('index.index_p1') }} </p>
             <form class="mt-4" dir="rtl" method="get" action="{{url('search')}}">
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-md-10 col-sm-12">
                         <div class="banner-search style-2">
                             <div class="input-group">
-                                <input type="text" name="search" class="form-control lio-rad" placeholder=" ابحث عن الخدمة  ">
+                                <input type="text" name="search" class="form-control lio-rad" placeholder="  {{ __('index.search_text') }} ">
                                 <div class="input-group-append">
-                                    <button type="submit" class="btn bt-round btn--2"> بحث <i class="ti-search"></i></button>
+                                    <button type="submit" class="btn bt-round btn--2"> {{ __('index.search') }} <i class="ti-search"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -31,7 +31,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-7 col-md-9">
                     <div class="sec-heading">
-                        <h2> كيف <span class="theme-cl-2"> نعمل  ؟ </span></h2>
+                        <h2> {{ __('index.how_work') }} <span class="theme-cl-2"> {{ __('index.how_work2') }}  ؟ </span></h2>
                     </div>
                 </div>
             </div>
@@ -41,8 +41,8 @@
                                 src="{{asset('assets/website/img/step-1.png')}}"
                                 class="img-responsive" alt=""><span
                                 class="process-num">01</span></span>
-                        <h4> أضف المشروع </h4>
-                        <p> أضف تفاصيل مشروعك والمهارات المطلوبة لإنجازه وابدأ باستقبال عروض المستقلين عليه. </p>
+                        <h4> {{ __('index.add_project') }}</h4>
+                        <p>  {{ __('index.add_project_text') }} </p>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-4">
@@ -50,9 +50,8 @@
                                 src="{{asset('assets/website/img/step-2.png')}}"
                                 class="img-responsive" alt=""><span
                                 class="process-num">02</span></span>
-                        <h4> اختر العرض المناسب </h4>
-                        <p> من بين العروض المقدمة لمشروعك، اختر العرض المناسب لمتطلبات المشروع ثم ابدأ مباشرة مرحلة
-                            التنفيذ. </p>
+                        <h4> {{ __('index.select_offer') }} </h4>
+                        <p>  {{ __('index.select_offer_text') }} </p>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-4">
@@ -60,8 +59,8 @@
                                 src="{{asset('assets/website/img/step-3.png')}}"
                                 class="img-responsive" alt=""><span
                                 class="process-num">03</span></span>
-                        <h4> استلم المشروع </h4>
-                        <p> سيعمل المستقل الذي اخترته معك حتى انتهاء العمل وتسليم مشروعك بشكل كامل كما أردته. </p>
+                        <h4> {{ __('index.accept_project') }}  </h4>
+                        <p>  {{ __('index.accept_project_p') }}  </p>
                     </div>
                 </div>
             </div>
@@ -76,7 +75,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-7 col-md-9">
                     <div class="sec-heading">
-                        <h2> أفضل الخدمات الاحترافية <span class="theme-cl-2">  لتطوير أعمالك وزيادة أرباحك </span></h2>
+                        <h2> {{ __('index.index_h2') }} <span class="theme-cl-2">   {{ __('index.index_h3') }}</span></h2>
                     </div>
                 </div>
             </div>
@@ -119,7 +118,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-7 col-md-9">
                     <div class="sec-heading">
-                        <h2> خدمات شائعة يحتاجها كل صاحب عمل   <span class="theme-cl-2"> لتنمية مشروعه  </span></h2>
+                        <h2> {{ __('index.index_h4') }}   <span class="theme-cl-2">  {{ __('index.index_h5') }} </span></h2>
                     </div>
                 </div>
             </div>
@@ -227,24 +226,5 @@
     </section>
     <!-- ============================ End Popular Category ==================================== -->
 
-    <!-- ============================ Call To Action Start ================================== -->
-    <section class="call-to-act" style="background:#0b85ec url({{asset('assets/website/img/landing-bg.png')}}) no-repeat">
-        <div class="container">
-            <div class="row justify-content-center">
-
-                <div class="col-lg-7 col-md-8">
-                    <div class="clt-caption text-center mb-4">
-                        <h2 class="text-light"> هل أنت مستعد لبدء مشروعك الخاص؟ </h2>
-                    </div>
-                    <div class="inner-flexible-box subscribe-box">
-                        <div class="input-group">
-
-                            <a href="{{url('login')}}" class="btn btn-primary start_job">   ابدا الان   </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- ============================ Call To Action End ================================== -->
+  
 @endsection

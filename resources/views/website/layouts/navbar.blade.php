@@ -143,12 +143,12 @@
 
                         <ul class="nav-menu">
                             <li><a href="{{url('/')}}"> {{ __('public.home') }} </a></li>
-
-                            <li><a href="{{url('categories')}}"> {{ __("public.categories") }} </a></li>
-                            <li><a href="{{url('services')}}">  {{ __('public.services') }} </a></li>
                             <li><a href="{{url('projects')}}"> {{ __('public.projects') }}  </a></li>
                             <li><a href="{{url('courses')}}"> {{ __('public.courses') }}   </a></li>
                             <li><a href="{{url('products')}}">  {{ __('public.products') }} </a></li>
+                            <li><a href="{{url('categories')}}"> {{ __("public.categories") }} </a></li>
+                            <li><a href="{{url('services')}}">  {{ __('public.services') }} </a></li>
+
                             @if(\Illuminate\Support\Facades\Auth::check())
                                 <li><a href="{{url('purches')}}"> {{ __('public.purches') }} </a></li>
                                 <li><a href="{{url('orders')}}"> {{ __('public.incomming_request') }} </a></li>

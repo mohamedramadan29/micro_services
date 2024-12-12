@@ -38,11 +38,14 @@
                             <ul id="metismenu">
                                 <li><a href="{{ url('dashboard') }}"><i class="ti-dashboard"></i> الملف الشخصي </a>
                                 </li>
-                                <li><a href="{{ url('project/index') }}"><i class="ti-user"></i> المشاريع </a></li>
-                                <li><a href="{{ url('project/add') }}"><i class="ti-plus"></i> اضف مشروع جديد </a></li>
+                                <li><a href="{{ url('my/project/index') }}"><i class="ti-user"></i> المشاريع </a></li>
+                                <li><a href="{{ url('my/project/add') }}"><i class="ti-plus"></i> اضف مشروع جديد </a></li>
+                                <li><a href="{{ url('my/courses') }}"><i class="ti-user"></i> الكورسات  </a></li>
+                                <li><a href="{{ url('my/course/add') }}"><i class="ti-plus"></i> اضف كورس جديد </a></li>
                                 <li><a href="{{ url('service/index') }}"><i class="ti-user"></i> الخدمات </a></li>
                                 <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
                                 <li><a href="{{ url('chat-main') }}"><i class="ti-email"></i> المحادثات </a></li>
+                                <li><a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a></li>
                                 <li><a href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li>
                                 <li><a href="{{ url('update-account') }}"><i class="ti-email"></i> تعديل الملف الشخصي
                                     </a></li>
