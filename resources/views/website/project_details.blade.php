@@ -283,16 +283,21 @@
                             <div class="project_owner">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h6> صاحب المشروع </h6>
-                                    @if ($project['freelancer_id'] == Auth::user()->id)
-                                        <form action="{{ url('conversation/start/project') }}" method="post">
-                                            @csrf
-                                            <input type="hidden" name="project_id" value="{{ $project['id'] }}">
-                                            <input type="hidden" name="sender_id" value="{{ Auth::id() }}">
-                                            <input type="hidden" name="receiver_id" value="{{ $project['user_id'] }}">
-                                            <button type="submit" class="btn btn-primary btn-sm" style="height: 30px">
-                                                تواصل <i class="bi bi-send"></i> </button>
-                                        </form>
+                                    @if (Auth::check())
+                                        @if ($project['freelancer_id'] == Auth::user()->id)
+                                            <form action="{{ url('conversation/start/project') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="project_id" value="{{ $project['id'] }}">
+                                                <input type="hidden" name="sender_id" value="{{ Auth::id() }}">
+                                                <input type="hidden" name="receiver_id"
+                                                    value="{{ $project['user_id'] }}">
+                                                <button type="submit" class="btn btn-primary btn-sm"
+                                                    style="height: 30px">
+                                                    تواصل <i class="bi bi-send"></i> </button>
+                                            </form>
+                                        @endif
                                     @endif
+
                                 </div>
                                 <div class="user_info">
                                     <div>
@@ -317,17 +322,21 @@
                                 <div class="project_owner">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h6> منفذ المشروع </h6>
-                                        @if ($project['user_id'] == Auth::user()->id)
-                                            <form action="{{ url('conversation/start/project') }}" method="post">
-                                                @csrf
-                                                <input type="hidden" name="project_id" value="{{ $project['id'] }}">
-                                                <input type="hidden" name="sender_id" value="{{ Auth::id() }}">
-                                                <input type="hidden" name="receiver_id"
-                                                    value="{{ $project['freelancer_id'] }}">
-                                                <button type="submit" class="btn btn-primary btn-sm"
-                                                    style="height: 30px"> تواصل <i class="bi bi-send"></i> </button>
-                                            </form>
+                                        @if (Auth::check())
+                                            @if ($project['user_id'] == Auth::user()->id)
+                                                <form action="{{ url('conversation/start/project') }}" method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="project_id"
+                                                        value="{{ $project['id'] }}">
+                                                    <input type="hidden" name="sender_id" value="{{ Auth::id() }}">
+                                                    <input type="hidden" name="receiver_id"
+                                                        value="{{ $project['freelancer_id'] }}">
+                                                    <button type="submit" class="btn btn-primary btn-sm"
+                                                        style="height: 30px"> تواصل <i class="bi bi-send"></i> </button>
+                                                </form>
+                                            @endif
                                         @endif
+
                                     </div>
                                     <div class="user_info">
                                         <div>

@@ -82,73 +82,81 @@
                             </div>
                         @endif
 
-                        @if(Auth::user()->id != $course['user_id'])
+
+
                         <div class="project_offers ">
                             <h3> اشتراك في الكورس </h3>
-
                             @if (Auth::check())
-                                @php
-                                    // تحقق مما إذا كان المستخدم مسجلًا بالفعل في الدورة
-                                    $isRegistered = \App\Models\front\CourseRegister::where('course_id', $course['id'])
-                                        ->where('user_id', Auth::id())
-                                        ->exists();
-                                @endphp
-                                @if ($isRegistered)
-                                    <div class="alert alert-success" role="alert">
-                                        تم الاشتراك في هذه الدورة مسبقًا.
-                                    </div>
-                                @else
-                                    <button data-bs-toggle="modal" data-bs-target="#course_register"
-                                        class="btn btn-primary m-auto text-center mt-4"> الاشتراك في الكورس </button>
-                                @endif
-                                <!-- Modal -->
-                                <div class="modal fade buy_services_model" id="course_register" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel"> هل انت متاكد من اشتراكك
-                                                    في الكورس </h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"> X
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <ul>
-                                                    <li> منصة نفذها تضمن حقوقك بنسبة 100% .</li>
-                                                    <li> لا تتردد ابداً في التواصل معنا إذا احتجت أي مساعدة وسنسعد
-                                                        بخدمتك.
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="modal-footer">
-                                                @if (Auth::check())
-                                                    @if ($isRegistered)
-                                                        <div class="alert alert-success" role="alert">
-                                                            تم الاشتراك في هذه الدورة مسبقًا.
-                                                        </div>
-                                                    @else
-                                                        <form style="width: 100%" method="post"
-                                                            action="{{ url('course_regitser/' . $course['id']) }}">
-                                                            <div class="form-group">
-                                                                <label> السعر </label>
-                                                                <input disabled readonly style="height: 45px"
-                                                                    value="{{ $course['price'] }} $" class="form-control"
-                                                                    name="country" required>
+                                @if (Auth::user()->id != $course['user_id'])
+                                    @php
+                                        // تحقق مما إذا كان المستخدم مسجلًا بالفعل في الدورة
+                                        $isRegistered = \App\Models\front\CourseRegister::where(
+                                            'course_id',
+                                            $course['id'],
+                                        )
+                                            ->where('user_id', Auth::id())
+                                            ->exists();
+                                    @endphp
+                                    @if ($isRegistered)
+                                        <div class="alert alert-success" role="alert">
+                                            تم الاشتراك في هذه الدورة مسبقًا.
+                                        </div>
+                                    @else
+                                        <button data-bs-toggle="modal" data-bs-target="#course_register"
+                                            class="btn btn-primary m-auto text-center mt-4"> الاشتراك في الكورس </button>
+                                    @endif
+                                    <!-- Modal -->
+                                    <div class="modal fade buy_services_model" id="course_register" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel"> هل انت متاكد من
+                                                        اشتراكك
+                                                        في الكورس </h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"> X
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <ul>
+                                                        <li> منصة نفذها تضمن حقوقك بنسبة 100% .</li>
+                                                        <li> لا تتردد ابداً في التواصل معنا إذا احتجت أي مساعدة وسنسعد
+                                                            بخدمتك.
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    @if (Auth::check())
+                                                        @if ($isRegistered)
+                                                            <div class="alert alert-success" role="alert">
+                                                                تم الاشتراك في هذه الدورة مسبقًا.
                                                             </div>
-                                                            @csrf
-                                                            <button type="submit" class="btn global_button"> اشترك الان <i
-                                                                    class="bi bi-bag"></i></button>
-                                                        </form>
+                                                        @else
+                                                            <form style="width: 100%" method="post"
+                                                                action="{{ url('course_regitser/' . $course['id']) }}">
+                                                                <div class="form-group">
+                                                                    <label> السعر </label>
+                                                                    <input disabled readonly style="height: 45px"
+                                                                        value="{{ $course['price'] }} $"
+                                                                        class="form-control" name="country" required>
+                                                                </div>
+                                                                @csrf
+                                                                <button type="submit" class="btn global_button"> اشترك الان
+                                                                    <i class="bi bi-bag"></i></button>
+                                                            </form>
+                                                        @endif
+                                                    @else
+                                                        <a href="{{ url('login') }}" type="button"
+                                                            class="btn btn-primary">
+                                                            سجل دخولك الان لتكملة الاشتراك </a>
                                                     @endif
-                                                @else
-                                                    <a href="{{ url('login') }}" type="button" class="btn btn-primary">
-                                                        سجل دخولك الان لتكملة الاشتراك </a>
-                                                @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+
+                                @endif
                             @else
                                 <div class="logins_buttons">
                                     <a href="{{ url('register') }}" class="btn btn-primary"> حساب جديد </a>
@@ -156,7 +164,6 @@
                                 </div>
                             @endif
                         </div>
-                        @endif
 
 
                     </div>
