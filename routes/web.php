@@ -25,7 +25,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 Route::group(
     [
         'prefix' => LaravelLocalization::setLocale(),
-        'middleware' => [ 'localeViewPath']
+        'middleware' => ['localeViewPath']
     ],
     function () {
 
@@ -49,6 +49,8 @@ Route::group(
             Route::get('terms', 'terms');
             Route::get('privacy-policy', 'privacy_policy');
             Route::get('search', 'search');
+            Route::get('consultants', 'getConsultantsByCategory');
+
         });
         // Confirm User Email
         Route::get('user/confirm/{code}', [UserController::class, 'UserConfirm']);
@@ -102,6 +104,7 @@ Route::group(
         Route::controller(ConversationController::class)->group(function () {
             Route::post('conversation/start', 'start_conversation');
             Route::post('conversation/start/project', 'project_start_conversation');
+            Route::post('consult_conversation/start', 'consult_start_conversation');
         });
         //////////////////////// Start Chats /////////////////
         ///
@@ -180,11 +183,11 @@ Route::group(
             });
             ######################### Start Charge Balance ##########################
             Route::controller(ChargeBalanceController::class)->group(function () {
-                Route::post('charge_balance','charge_balance');
+                Route::post('charge_balance', 'charge_balance');
             });
             ###################### Start WithDraw Balance ############################
-            Route::controller(WithDrawController::class)->group(function(){
-                Route::post('withdraw_balance','WithDraw');
+            Route::controller(WithDrawController::class)->group(function () {
+                Route::post('withdraw_balance', 'WithDraw');
             });
 
         });

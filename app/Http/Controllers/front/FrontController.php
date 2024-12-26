@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\front;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\Message_Trait;
-use App\Models\admin\Category;
-use App\Models\admin\Service;
-use App\Models\admin\SubCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\admin\Service;
+use App\Models\admin\Category;
+use App\Models\admin\Consultant;
+use App\Models\admin\SubCategory;
+use App\Http\Traits\Message_Trait;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
@@ -193,6 +194,14 @@ class FrontController extends Controller
             $categories = Category::with('parents')->withCount('services')->where('status', '1')->get();
             return view('website.search', compact('services', 'search', 'categories'));
         }
+    }
+
+    public function getConsultantsByCategory(Request $request)
+    {
+        $categoryId = $request->get('category_id');
+        $consultants = Consultant::where('specialization', $categoryId)->get(['id', 'name', 'image', 'bio']);
+
+        return response()->json(['consultants' => $consultants]);
     }
 
 }

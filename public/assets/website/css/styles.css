@@ -14153,3 +14153,46 @@ textarea.form-control {
     font-family: inherit !important;
     font-size: 16px !important;
 }
+
+.free_consult_button {
+    margin-top: 20px;
+
+}
+
+.consultant-list {}
+
+.consultant-list .card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    border: none;
+    border-bottom: 1px solid #e6e3e3;
+    background: #f1f1f1;
+    border-radius: 0;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.consultant-list .card img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 2px;
+    background: #ececec;
+}
+
+.consultant-list .card p {
+    font-size: 15px;
+    color: #616060;
+}
+
+.consultant-list .card button {
+    height: 30px;
+    font-size: 14px;
+    padding: 0;
+    width: 75px;
+    margin-top: 10px;
+}

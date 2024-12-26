@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Traits\Upload_Images;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\admin\Category;
 use App\Models\admin\Consultant;
 use App\Http\Traits\Message_Trait;
+use App\Http\Traits\Upload_Images;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\admin\Category;
 use Illuminate\Support\Facades\Validator;
 
 class ConsultController extends Controller
@@ -25,7 +27,7 @@ class ConsultController extends Controller
         if ($request->isMethod('post')) {
             try {
                 $data = $request->all();
-               // dd($data);
+                // dd($data);
                 $rules = [
                     'name' => 'required',
                     'email' => 'required|email|unique:consultants',
@@ -60,6 +62,7 @@ class ConsultController extends Controller
                 if ($request->hasFile('image')) {
                     $filename = $this->saveImage($request->image, public_path('assets/uploads/consultants'));
                 }
+                DB::beginTransaction();
                 $consultant = new Consultant();
                 $consultant->name = $request->name;
                 $consultant->email = $request->email;
@@ -71,6 +74,17 @@ class ConsultController extends Controller
                 // $consultant->aviable_date = $request->aviable_date;
                 // $consultant->aviable_time = $request->aviable_time;
                 $consultant->save();
+                ///////////// Insert Consultant As USer
+                $user = new User();
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->password = bcrypt('password');
+                $user->user_name =  $request->name. 'consultant';
+                $user->info = $request->bio;
+                $user->image = $filename;
+                $user->account_type = 'consultant';
+                $user->save();
+                DB::commit();
                 return $this->success_message(' تم اضافة الاستشاري بنجاح');
 
             } catch (\Exception $e) {
@@ -94,7 +108,7 @@ class ConsultController extends Controller
                     'specialization' => 'required',
                     'bio' => 'required',
                     'price' => 'required|numeric',
-                    'is_active'=>'required'
+                    'is_active' => 'required'
                     // 'aviable_date' => 'required',
                     // 'aviable_time' => 'required',
                 ];
@@ -130,7 +144,6 @@ class ConsultController extends Controller
                 $consultant->bio = $request->bio;
                 $consultant->price = $request->price;
                 $consultant->is_active = $request->is_active;
-
                 // $consultant->aviable_date = $request->aviable
                 $consultant->save();
                 return $this->success_message('تم تعديل الاستشاري بنجاح');
@@ -139,7 +152,7 @@ class ConsultController extends Controller
             }
         }
 
-        return view('admin.consultants.edit', compact('consultant','categories'));
+        return view('admin.consultants.edit', compact('consultant', 'categories'));
 
     }
 

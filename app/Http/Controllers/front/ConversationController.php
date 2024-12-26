@@ -23,7 +23,7 @@ class ConversationController extends Controller
         $service_data = $service['name'];
         $checkConversation = Conversation::where('sender_id', Auth::id())->where('receiver_id', $receiverId)
             ->Orwhere('sender_id', $receiverId)->where('receiver_id', Auth::id())
-            ->where('project_id',$data['project_id'])->first();
+            ->where('project_id', $data['project_id'])->first();
         if (!$checkConversation) {
             // //// Create Chat
             $createConversation = Conversation::create([
@@ -54,22 +54,9 @@ class ConversationController extends Controller
         // الحصول على بيانات المشروع
         $project = Project::findOrFail($data['project_id']);
         $project_title = $project->title;
-
-        // التحقق من وجود محادثة بنفس المشروع ونفس الأطراف
-//        $checkConversation = Conversation::where('project_id', $data['project_id'])
-//            ->where(function ($query) use ($receiverId) {
-//                $query->where(function ($q) use ($receiverId) {
-//                    $q->where('sender_id', Auth::id())
-//                        ->where('receiver_id', $receiverId);
-//                })->orWhere(function ($q) use ($receiverId) {
-//                    $q->where('sender_id', $receiverId)
-//                        ->where('receiver_id', Auth::id());
-//                });
-//            })->first();
-
         $checkConversation = Conversation::where('sender_id', Auth::id())->where('receiver_id', $receiverId)
             ->Orwhere('sender_id', $receiverId)->where('receiver_id', Auth::id())
-            ->where('project_id',$data['project_id'])->first();
+            ->where('project_id', $data['project_id'])->first();
 
         if (!$checkConversation) {
             // إنشاء المحادثة الجديدة
@@ -86,6 +73,46 @@ class ConversationController extends Controller
                 'sender_id' => Auth::id(),
                 'receiver_id' => $receiverId,
                 'body' => $project_title . " تواصل بسبب طلب الخدمة ",
+            ]);
+
+            // تحديث وقت آخر رسالة
+            $createConversation->last_time_message = $createMessage->created_at;
+            $createConversation->save();
+
+            return Redirect::to('chat-main/' . $createConversation->id);
+        } else {
+            // إعادة التوجيه إلى المحادثة الموجودة
+            return Redirect::to('chat-main/' . $checkConversation->id);
+        }
+    }
+
+    public function consult_start_conversation(Request $request)
+    {
+        $data = $request->all();
+        $receiverId = $data['consultant'];
+       // dd($data);
+        $checkConversation = Conversation::where('sender_id', Auth::id())->where('receiver_id', $receiverId)
+            ->Orwhere('sender_id', $receiverId)->where('receiver_id', Auth::id())
+            ->where('consultant_id', $receiverId)
+            ->where('specialist_id', $data['category'])
+            ->where('chat_type', 'استشارة')
+            ->first();
+        if (!$checkConversation) {
+            // إنشاء المحادثة الجديدة
+            $createConversation = Conversation::create([
+                'sender_id' => Auth::id(),
+                'receiver_id' => $receiverId,
+                'consultant_id' => $receiverId,
+                'specialist_id' => $data['category'],
+                'chat_type' => 'استشارة',
+            ]);
+
+            // إنشاء الرسالة الأولى
+            $createMessage = Message::create([
+                'conversation_id' => $createConversation->id,
+                'sender_id' => Auth::id(),
+                'receiver_id' => $receiverId,
+                'body' => $data['question'] . " استشارة  ",
             ]);
 
             // تحديث وقت آخر رسالة
