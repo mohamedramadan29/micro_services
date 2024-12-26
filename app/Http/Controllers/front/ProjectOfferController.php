@@ -88,6 +88,11 @@ class ProjectOfferController extends Controller
     public function accept_offer($offer_id)
     {
         $offer = ProjectOffer::findOrFail($offer_id);
+        $user = User::where('id', Auth::id())->first();
+        $user_balance = $user->balance;
+        if ($user_balance < $offer['offer_price']) {
+            return Redirect::back()->withErrors(' رصيدك غير كافي لقبول هذا العرض من فضلك  قم بشحن رصيدك  ');
+        }
         $project_id = $offer['project_id'];
         $project = Project::where('id', $project_id)->first();
         DB::beginTransaction();
@@ -105,6 +110,9 @@ class ProjectOfferController extends Controller
                         'offer_days' => $offer['day_number'],
                         'offer_budget' => $offer['offer_price']
                     ]);
+                    ////////////  Decrease User Balance
+                    $user->balance = $user_balance - $offer['offer_price'];
+                    $user->save();
                     DB::commit();
                     return $this->success_message(' تمت الموافقة علي العرض بنجاح  ');
                 }

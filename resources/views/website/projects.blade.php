@@ -10,14 +10,15 @@
                     <h4> {{ __('projects.project_h1') }} </h4>
                 </div>
                 <div>
-                    <a class="btn btn-global-button" href="{{url('my/project/add')}}"> {{ __('projects.project_add') }} <i class="fa fa-plus"></i> </a>
+                    <a class="btn btn-global-button" href="{{ url('my/project/add') }}"> {{ __('projects.project_add') }} <i
+                            class="fa fa-plus"></i> </a>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="simple-sidebar sm-sidebar">
                         <div class="search-sidebar_header">
-                            <h4 class="ssh_heading"> {{ __('projects.search') }}  </h4>
+                            <h4 class="ssh_heading"> {{ __('projects.search') }} </h4>
                         </div>
                         <!-- Find New Property -->
                         <div class="sidebar-widgets collapse miz_show" id="search_open" data-parent="#search_open">

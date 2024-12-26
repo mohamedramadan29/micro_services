@@ -17,21 +17,22 @@ class CourseRegisterController extends Controller
 {
     use Message_Trait;
 
-    public function course_register(Request $request,$id){
+    public function course_register(Request $request, $id)
+    {
 
         $public_setting = Setting::first();
         $website_commission = floatval($public_setting['website_commission']);
 
-        $course  = Course::findOrFail($id);
-        $website_commission_profit =($course->price * $website_commission) / 100;
+        $course = Course::findOrFail($id);
+        $website_commission_profit = ($course->price * $website_commission) / 100;
         $course_owner_profit = $course->price - $website_commission_profit;
-        if($course){
-            $user = User::where('id',Auth::user()->id)->first();
+        if ($course) {
+            $user = User::where('id', Auth::user()->id)->first();
             $user_balance = $user->balance;
-            if($user_balance < $course->price){
+            if ($user_balance < $course->price) {
                 return Redirect::back()->withErrors([' رصيدك الحالي لا يكفي للاشتراك في الكورس  ']);
             }
-            try{
+            try {
 
                 DB::beginTransaction();
                 //////////  course Register
@@ -47,8 +48,8 @@ class CourseRegisterController extends Controller
 
                 //////////// Increase Course Owner Balance
 
-                $owner = User::where('id',$course->user_id)->first();
-                $owner->balance  += $course_owner_profit;
+                $owner = User::where('id', $course->user_id)->first();
+                $owner->balance += $course_owner_profit;
                 $owner->save();
 
                 /////////// DeCrease Register User Balance
@@ -66,7 +67,7 @@ class CourseRegisterController extends Controller
                 DB::commit();
 
                 return $this->success_message(' تم الاشتراك في الكورس بنجاح  ');
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 return $this->exception_message($e);
             }
 
@@ -74,20 +75,5 @@ class CourseRegisterController extends Controller
         }
 
         abort(404);
-    }
-
-    public function charge_balance(Request $request){
-        try{
-            $data = $request->all();
-            $price =$data['price'];
-            $user = User::where('id',Auth::user()->id)->first();
-            $old_balance = $user->balance;
-            $new_balance = $old_balance + $price;
-            $user->balance = $new_balance;
-            $user->save();
-            return $this->success_message('تم اضافة الرصيد الخاص بك بنجاح ');
-        }catch(\Exception $e){
-            return $this->exception_message($e);
-        }
     }
 }

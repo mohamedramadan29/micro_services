@@ -13,11 +13,13 @@ use App\Http\Controllers\front\serviceController;
 use App\Http\Controllers\front\TicketsController;
 use App\Http\Controllers\front\CheckOutController;
 use App\Http\Controllers\Auth\SocialMediaController;
+use App\Http\Controllers\front\ChargeBalanceController;
 use App\Http\Controllers\front\ConversationController;
 use App\Http\Controllers\front\ProductOrderController;
 use App\Http\Controllers\front\ProjectOfferController;
 use App\Http\Controllers\front\TicketMessageController;
 use App\Http\Controllers\front\CourseRegisterController;
+use App\Http\Controllers\front\WithDrawController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 Route::group(
@@ -174,10 +176,17 @@ Route::group(
             //////////////// Course Register ////////////////////////////////
 
             Route::controller(CourseRegisterController::class)->group(function () {
-
                 Route::post('course_regitser/{id}', 'course_register');
+            });
+            ######################### Start Charge Balance ##########################
+            Route::controller(ChargeBalanceController::class)->group(function () {
                 Route::post('charge_balance','charge_balance');
             });
+            ###################### Start WithDraw Balance ############################
+            Route::controller(WithDrawController::class)->group(function(){
+                Route::post('withdraw_balance','WithDraw');
+            });
+
         });
 
 

@@ -9,6 +9,8 @@ use App\Http\Traits\Upload_Images;
 use App\Models\admin\Service;
 use App\Models\front\Cart;
 use App\Models\front\OrderDetail;
+use App\Models\front\PaymentTransaction;
+use App\Models\front\WithDraw;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -274,17 +276,17 @@ class UserController extends Controller
 
         ////////// Get The Pruches
         ///
-        $purches = OrderDetail::with('seller')->where('user_buyer',Auth::id())->get();
+        $purches = OrderDetail::with('seller')->where('user_buyer', Auth::id())->get();
         // Generate slugs for each purchase
         foreach ($purches as $purche) {
             $purche->slug = $this->CustomeSlug($purche->service_name);
         }
-        return view('website.user.purches',compact('purches'));
+        return view('website.user.purches', compact('purches'));
     }
 
-    public function orders ()
+    public function orders()
     {
-        $orders = OrderDetail::with('buyer')->where('user_seller',Auth::id())->orderBy('id','DESC')->get();
+        $orders = OrderDetail::with('buyer')->where('user_seller', Auth::id())->orderBy('id', 'DESC')->get();
 
         // Generate slugs for each purchase
         foreach ($orders as $order) {
@@ -294,15 +296,18 @@ class UserController extends Controller
         ///
         $notification_type = 'App\Notifications\NewOrderNotification';
         $notifications = Auth::user()->unreadNotifications->where('type', $notification_type);
-        foreach ($notifications as $notification){
+        foreach ($notifications as $notification) {
             $notification->markAsRead();
         }
-        return view('website.user.orders',compact('orders'));
+        return view('website.user.orders', compact('orders'));
 
     }
 
     public function balance()
     {
-        return view('website.user.balance');
+        $ChargeTransactions = PaymentTransaction::where('user_id', Auth::id())->where('payment_status', 'succeeded')->get();
+        $WithDrawTransactions = WithDraw::where('user_id', Auth::id())->get();
+        $WithDrawLastOrder = WithDraw::where('user_id', Auth::id())->where('status',0)->first();
+        return view('website.user.balance', compact('ChargeTransactions', 'WithDrawTransactions','WithDrawLastOrder'));
     }
 }

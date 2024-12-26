@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\admin\ProductController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\admin\AdminController;
-use \App\Http\Controllers\admin\ServiceController;
 use \App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\AdminController;
+use \App\Http\Controllers\admin\TicketController;
+use App\Http\Controllers\admin\ConsultController;
+use App\Http\Controllers\admin\ProductController;
+use \App\Http\Controllers\admin\ServiceController;
+use \App\Http\Controllers\admin\SettingController;
 use \App\Http\Controllers\admin\CategoryController;
 use \App\Http\Controllers\admin\SubCategoryController;
-use \App\Http\Controllers\admin\SettingController;
-use \App\Http\Controllers\admin\TicketController;
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
     Route::post('admin_login', [AdminController::class, 'admin_login']);
@@ -32,29 +33,29 @@ Route::group(['prefix' => 'admin'], function () {
             Route::match(['get', 'post'], 'service/update/{id}', 'update');
             Route::match(['post', 'get'], 'service/add', 'store');
             Route::post('destroy/{id}', 'destroy');
-            Route::get('service/get-subcategories/{categoryId}','getSubCategories');
+            Route::get('service/get-subcategories/{categoryId}', 'getSubCategories');
         });
         Route::controller(UserController::class)->group(function () {
             Route::get('users', 'index');
         });
 
-        Route::controller(CategoryController::class)->group(function (){
-            Route::get('categories','index');
-            Route::post('category/store','store');
-            Route::post('category/update/{id}','update');
-            Route::post('category/destroy/{id}','destroy');
+        Route::controller(CategoryController::class)->group(function () {
+            Route::get('categories', 'index');
+            Route::post('category/store', 'store');
+            Route::post('category/update/{id}', 'update');
+            Route::post('category/destroy/{id}', 'destroy');
 
         });
-        Route::controller(SubCategoryController::class)->group(function (){
-            Route::get('sub-categories','index');
-            Route::post('sub-category/store','store');
-            Route::post('sub-category/update/{id}','update');
-            Route::post('sub-category/destroy/{id}','destroy');
+        Route::controller(SubCategoryController::class)->group(function () {
+            Route::get('sub-categories', 'index');
+            Route::post('sub-category/store', 'store');
+            Route::post('sub-category/update/{id}', 'update');
+            Route::post('sub-category/destroy/{id}', 'destroy');
         });
 
-        Route::controller(SettingController::class)->group(function (){
-            Route::get('public_settings','index');
-            Route::post('public_settings/update','update');
+        Route::controller(SettingController::class)->group(function () {
+            Route::get('public_settings', 'index');
+            Route::post('public_settings/update', 'update');
         });
         ////////////////////// Start Products ///////////////////////////////
         Route::controller(ProductController::class)->group(function () {
@@ -68,10 +69,20 @@ Route::group(['prefix' => 'admin'], function () {
         });
         ################ Start Ticket Controller #############
 
-        Route::controller(TicketController::class)->group(function (){
-           Route::get('tickets','index');
-           Route::get('ticket/details/{id}','details');
-           Route::post('message/create/{id}','create');
+        Route::controller(TicketController::class)->group(function () {
+            Route::get('tickets', 'index');
+            Route::get('ticket/details/{id}', 'details');
+            Route::post('message/create/{id}', 'create');
         });
+
+        ####################### Start Consultants ############################
+
+        Route::controller(ConsultController::class)->group(function () {
+            Route::get('consultants', 'index');
+            Route::match(['post', 'get'], 'consultant/add', 'store');
+            Route::match(['post', 'get'], 'consultant/update/{id}', 'update');
+            Route::post('consultant/delete/{id}', 'delete');
+        });
+        ###################### End Consultants ##############################
     });
 });
