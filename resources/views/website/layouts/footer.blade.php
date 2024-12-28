@@ -36,10 +36,10 @@
                     <div class="footer-widget">
                         <h4 class="widget-title"> {{ __('public.follow_us') }} </h4>
                         <ul class="footer-bottom-social">
-                            <li><a href="#"><i class="ti-facebook"></i></a></li>
-                            <li><a href="#"><i class="ti-twitter"></i></a></li>
-                            <li><a href="#"><i class="ti-instagram"></i></a></li>
-                            <li><a href="#"><i class="ti-linkedin"></i></a></li>
+                            <li><a href="https://www.facebook.com/profile.php?id=61570576550685"><i class="ti-facebook"></i></a></li>
+                            <li><a href="https://x.com/NafizhaWeb17206?t=MyM30nyRqryQi5xUkq0Ecw&s=09"><i class="ti-twitter"></i></a></li>
+                            {{-- <li><a href="#"><i class="ti-instagram"></i></a></li> --}}
+                            <li><a href="https://www.linkedin.com/in/nafizha-web-2b1270341?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i class="ti-linkedin"></i></a></li>
                         </ul>
                     </div>
                 </div>

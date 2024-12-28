@@ -52,7 +52,7 @@ class UserController extends Controller
                     'email.required' => 'من فضلك ادخل البريد الإلكتروني',
                     'email.email' => 'من فضلك ادخل بريد الكتوني صحيح',
                     'password.required' => 'من فضلك ادخل كلمة المرور',
-                      'g-recaptcha-response.required' => 'من فضلك قم بتأكيد أنك لست روبوتًا',
+                    'g-recaptcha-response.required' => 'من فضلك قم بتأكيد أنك لست روبوتًا',
                     'g-recaptcha-response.captcha' => 'فشل التحقق من reCAPTCHA، يرجى المحاولة مرة أخرى'
                 ];
                 $validator = Validator::make($all_data, $rules, $customMessage);
@@ -177,7 +177,8 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-        $user = Auth::user();
+      //  $user = Auth::user();
+        $user = User::where('id',Auth::id())->first();
         if ($request->isMethod('post')) {
             try {
 
