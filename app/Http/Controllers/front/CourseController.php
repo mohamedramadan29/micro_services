@@ -169,4 +169,13 @@ class CourseController extends Controller
         }
         return view('website.courses.edit', compact('course'));
     }
+
+    public function subscriptions($id){
+        $course = Course::findOrFail($id);
+        if($course->user_id != Auth::id()){
+            abort(404);
+        }
+        $subscriptions = $course->Subscriptions()->orderBy('id','desc')->get();
+        return view('website.courses.subscriptions',compact('subscriptions'));
+    }
 }

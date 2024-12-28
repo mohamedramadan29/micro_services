@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\admin\CourseController;
 use \App\Http\Controllers\admin\TicketController;
 use App\Http\Controllers\admin\ConsultController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\ProjectController;
 use \App\Http\Controllers\admin\ServiceController;
 use \App\Http\Controllers\admin\SettingController;
 use \App\Http\Controllers\admin\CategoryController;
@@ -84,5 +86,22 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('consultant/delete/{id}', 'delete');
         });
         ###################### End Consultants ##############################
+
+        #################### Project Controller ############################
+
+        Route::controller(ProjectController::class)->group(function () {
+            Route::get('projects', 'index');
+            Route::match(['post', 'get'], 'project/update/{id}', 'update');
+            Route::post('project/update_status/{id}','update_status');
+        });
+
+        ################### End Project Controller ########################
+
+        ################ Start Courses ###################
+        Route::controller(CourseController::class)->group(function () {
+            Route::get('courses', 'index');
+            Route::post('course/update_status/{id}', 'update_status');
+        });
+        ################# End Courses ####################
     });
 });

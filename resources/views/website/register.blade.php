@@ -30,7 +30,6 @@
                             <div class="social_login">
                                 <h4>  {{ __('login.login_socialmedia') }} </h4>
                                 <a class="google_login" href="{{route('auth.google.redirect','google')}}"> <i class="bi bi-google"></i> </a>
-                                <a class="facebook_login" href="{{route('auth.google.redirect','facebook')}}"> <i class="bi bi-facebook"></i> </a>
                             </div>
                             <hr>
                             <br>
@@ -63,6 +62,14 @@
                                         <label> {{ __('login.confirm_password') }} </label>
                                         <input required type="password" class="form-control" placeholder="*******"
                                             name="confirm-password">
+                                    </div>
+                                    <div class="form-group">
+                                        {!! NoCaptcha::display() !!}
+                                        @if ($errors->has('g-recaptcha-response'))
+                                            <span class="help-block">
+                                                <strong class="text-danger">{{ $errors->first('g-recaptcha-response') }}</strong>
+                                            </span>
+                                        @endif
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary dark-2 btn-md full-width pop-login">

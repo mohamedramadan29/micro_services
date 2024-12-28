@@ -40,17 +40,19 @@
                             <ul id="metismenu">
                                 <li><a href="{{ url('dashboard') }}"><i class="ti-dashboard"></i> الملف الشخصي </a>
                                 </li>
-                                <li><a href="{{ url('project/index') }}"><i class="ti-user"></i> المشاريع </a></li>
-                                <li><a href="{{ url('project/add') }}"><i class="ti-plus"></i> اضف مشروع جديد </a></li>
-                                <li><a href="{{ url('service/index') }}"><i class="ti-user"></i> الخدمات </a></li>
+                                <li><a href="{{ url('balance') }}"><i class="bi bi-credit-card"></i> الرصيد </a></li>
+                                <li><a href="{{ url('my/project/index') }}"><i class="bi bi-cast"></i> المشاريع </a></li>
+                                <li><a href="{{ url('my/project/add') }}"><i class="ti-plus"></i> اضف مشروع جديد </a></li>
+                                <li><a href="{{ url('my/courses') }}"> <i class="bi bi-mortarboard-fill"></i> الكورسات </a>
+                                </li>
+                                <li><a href="{{ url('my/course/add') }}"><i class="ti-plus"></i> اضف كورس جديد </a></li>
+                                <li><a href="{{ url('service/index') }}"><i class="bi bi-database-fill-check"></i> الخدمات </a></li>
                                 <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
-                                <li><a href="{{ url('chat-main') }}"><i class="ti-email"></i> المحادثات </a></li>
-                                <li><a href="{{ url('purches') }}"><i class="ti-email"></i> مشترياتي </a></li>
-                                <li><a href="{{ url('orders') }}"><i class="ti-email"></i> الطلبات الواردة </a></li>
-                                <li><a href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li>
-                                <li><a href="{{ url('update-account') }}"><i class="ti-email"></i> تعديل الملف الشخصي
+                                <li><a href="{{ url('chat-main') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a></li>
+                                <li><a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a></li>
+                                {{-- <li><a href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li> --}}
+                                <li><a href="{{ url('update-account') }}"> <i class="bi bi-gear-fill"></i> تعديل الملف الشخصي
                                     </a></li>
-                                <li><a href="{{ url('balance') }}"><i class="ti-email"></i> الرصيد </a></li>
                                 <li><a href="{{ url('logout') }}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
                             </ul>
                         </div>
@@ -238,20 +240,19 @@
                                     <div class="_dashboard_content_body">
                                         <div class="_dashboard_list_group">
                                             <div class="row">
-                                                <div class="col-lg-3 col-6">
+                                                <div class="col-lg-4 col-6">
                                                     <div class="info">
                                                         <h4> الرصيد القابل للسحب </h4>
                                                         <span> {{Auth::user()->balance }} $ </span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3 col-6">
+                                                <div class="col-lg-4 col-6">
                                                     <div class="info">
                                                         <h4> طلبات السحب   </h4>
-                                                        <span> {{ $WithDrawLastOrder['amount'] }} $ </span>
+                                                        <span> {{ $WithDrawLastOrder['amount'] ?? '0' }} $ </span>
                                                     </div>
                                                 </div>
-                                                
-                                                <div class="col-lg-3 col-6">
+                                                <div class="col-lg-4 col-6">
                                                     <div class="info">
                                                         <h4> الرصيد الكلي </h4>
                                                         <span> {{ number_format(Auth::user()->balance, 2) }} $ </span>

@@ -13900,6 +13900,11 @@ textarea {
     gap: 5px;
     /* مسافة بين النص والأيقونة */
 }
+.help_center_products a{
+    left: 10px;
+    right: auto;
+    background-color: #2b3038;
+}
 
 /* Animation effect inside the button */
 .help_center a::before {

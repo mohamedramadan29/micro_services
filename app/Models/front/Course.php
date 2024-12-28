@@ -14,4 +14,9 @@ class Course extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function Subscriptions()
+    {
+        return $this->hasMany(CourseRegister::class, 'course_id');
+    }
+
 }

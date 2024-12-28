@@ -58,6 +58,28 @@
                         <li><a class="slide-item" href="{{ url('admin/sub-categories') }}"> الاقسام الفرعية </a></li>
                     </ul>
                 </li>
+
+                <li class="side-item side-item-category"> المشاريع  </li>
+                <li class="slide">
+                    <a class="side-menu__item" data-toggle="slide" href="">
+                        <i style="font-size: 22px;margin-left: 10px" class="fa fa-file-signature"></i>
+                        <span class="side-menu__label"> المشاريع  </span><i class="angle fe fe-chevron-down"></i></a>
+                    <ul class="slide-menu">
+                        <li><a class="slide-item" href="{{ url('admin/projects') }}"> ادارة المشاريع  </a></li>
+                    </ul>
+                </li>
+
+                <li class="side-item side-item-category">  الكورسات   </li>
+                <li class="slide">
+                    <a class="side-menu__item" data-toggle="slide" href="">
+                        <i style="font-size: 22px;margin-left: 10px" class="fa fa-file-signature"></i>
+                        <span class="side-menu__label"> الكورسات   </span><i class="angle fe fe-chevron-down"></i></a>
+                    <ul class="slide-menu">
+                        <li><a class="slide-item" href="{{ url('admin/courses') }}">  ادارة الكورسات  </a></li>
+                    </ul>
+                </li>
+
+
                 <li class="side-item side-item-category"> الخدمات </li>
                 <li class="slide">
                     <a class="side-menu__item" data-toggle="slide" href="">

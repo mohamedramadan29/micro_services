@@ -2,6 +2,9 @@
     <div class="help_center">
         <a href="{{ url('tickets') }}" class="btn"> مركز المساعدة <i class="bi bi-person-raised-hand"></i> </a>
     </div>
+    <div class="help_center help_center_products">
+        <a target="_blank" href="https://wa.me/+963997610723" class="btn"> المسؤل عن المنتجات  <i class="bi bi-person-raised-hand"></i> </a>
+    </div>
     <div>
         <div class="container">
             <div class="row">
@@ -11,7 +14,7 @@
                         <img src="{{ asset('assets/website/img/logo.png') }}" class="img-fluid f-logo" width="120"
                             alt="">
                         <p>
-                             {{ __('public.footer_about') }}
+                            {{ __('public.footer_about') }}
                         </p>
 
                     </div>
@@ -21,9 +24,9 @@
                         <h4 class="widget-title"> {{ __('public.links') }} </h4>
                         <ul class="footer-menu">
                             <li><a href="{{ '/about' }}"> {{ __('public.about_us') }} </a></li>
-                            <li><a href="{{ '/faq' }}">  {{ __('public.faqs') }}  </a></li>
-                            <li><a href="{{ '/privacy-policy' }}">  {{ __('public.privacy') }}  </a></li>
-                            <li><a href="{{ '/terms' }}"> {{ __('public.terms') }}  </a></li>
+                            <li><a href="{{ '/faq' }}"> {{ __('public.faqs') }} </a></li>
+                            <li><a href="{{ '/privacy-policy' }}"> {{ __('public.privacy') }} </a></li>
+                            <li><a href="{{ '/terms' }}"> {{ __('public.terms') }} </a></li>
 
                         </ul>
                     </div>
@@ -31,7 +34,7 @@
 
                 <div class="col-lg-4 col-md-4">
                     <div class="footer-widget">
-                        <h4 class="widget-title"> {{ __('public.follow_us') }}  </h4>
+                        <h4 class="widget-title"> {{ __('public.follow_us') }} </h4>
                         <ul class="footer-bottom-social">
                             <li><a href="#"><i class="ti-facebook"></i></a></li>
                             <li><a href="#"><i class="ti-twitter"></i></a></li>
@@ -49,7 +52,7 @@
             <div class="row align-items-center">
 
                 <div class="col-lg-12 col-md-12 text-center">
-                    <p class="mb-0">  {{ __('public.copy_right') }}  </p>
+                    <p class="mb-0"> {{ __('public.copy_right') }} </p>
                 </div>
 
             </div>
@@ -78,7 +81,7 @@
 @toastifyJs
 @livewireScripts
 
-
+{!! NoCaptcha::renderJs() !!}
 <script>
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;

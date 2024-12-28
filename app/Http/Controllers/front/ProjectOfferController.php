@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\front;
 
-use App\Http\Requests\StoreProjectOfferRequest;
-use App\Http\Requests\UpdateProjectOfferRequest;
-use App\Http\Traits\Message_Trait;
-use App\Http\Traits\Upload_Images;
-use App\Models\front\Project;
-use App\Models\front\ProjectOffer;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\admin\Setting;
-use Illuminate\Support\Facades\Auth;
+use App\Models\front\Project;
+use App\Http\Traits\Message_Trait;
+use App\Http\Traits\Upload_Images;
+use App\Models\front\ProjectOffer;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Notifications\OfferAccepted;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\StoreProjectOfferRequest;
+use App\Http\Requests\UpdateProjectOfferRequest;
 
 class ProjectOfferController extends Controller
 {
@@ -113,6 +114,14 @@ class ProjectOfferController extends Controller
                     ////////////  Decrease User Balance
                     $user->balance = $user_balance - $offer['offer_price'];
                     $user->save();
+                    /////////////////////////// Send Notification Mails And Db To Users
+                    $user_id = $offer['user_id'];
+                    $user_name = $user->name;
+                    $project_title = $project['title'];
+                    $project_id = $project['id'];
+                    $project_slug = $project['slug'];
+                    $user = User::where('id', $user_id)->first();
+                    $user->notify(new OfferAccepted($user, $user_id, $project_title, $project_id, $project_slug));
                     DB::commit();
                     return $this->success_message(' تمت الموافقة علي العرض بنجاح  ');
                 }
@@ -158,7 +167,7 @@ class ProjectOfferController extends Controller
             // تحديث رصيد المستخدم المستقل
             $freelancer = User::find($project->freelancer_id);
             if ($freelancer) {
-               // $freelancer->increment('balance', $offer_user_get);
+                // $freelancer->increment('balance', $offer_user_get);
                 $freelancer->balance = intval($freelancer['balance']) + intval($offer_user_get);
                 $freelancer->save();
             } else {

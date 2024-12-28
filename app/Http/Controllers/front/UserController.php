@@ -46,11 +46,14 @@ class UserController extends Controller
                 $rules = [
                     'email' => 'required|email',
                     'password' => 'required',
+                    'g-recaptcha-response' => ['required', 'captcha'],
                 ];
                 $customMessage = [
                     'email.required' => 'من فضلك ادخل البريد الإلكتروني',
                     'email.email' => 'من فضلك ادخل بريد الكتوني صحيح',
                     'password.required' => 'من فضلك ادخل كلمة المرور',
+                      'g-recaptcha-response.required' => 'من فضلك قم بتأكيد أنك لست روبوتًا',
+                    'g-recaptcha-response.captcha' => 'فشل التحقق من reCAPTCHA، يرجى المحاولة مرة أخرى'
                 ];
                 $validator = Validator::make($all_data, $rules, $customMessage);
                 if ($validator->fails()) {
@@ -96,6 +99,7 @@ class UserController extends Controller
                     'username' => 'required|unique:users,user_name',
                     'password' => 'required',
                     'confirm-password' => 'required|same:password',
+                    'g-recaptcha-response' => ['required', 'captcha']
                 ];
                 $messages = [
                     'name.required' => ' من فضلك ادخل الاسم  ',
@@ -106,7 +110,9 @@ class UserController extends Controller
                     'username.unique' => ' اسم المستخدم متواجد بالفعل من فضلك ادخل اسم مستخدم جديد  ',
                     'password.required' => ' من فضلك ادخل كلمة المرور  ',
                     'confirm-password.required' => ' من فضلك يجب تاكيد كلمة المرور بشكل صحيح  ',
-                    'confirm-password.same' => ' من فضلك يجب تاكيد كلمة المرور بشكل صحيح '
+                    'confirm-password.same' => ' من فضلك يجب تاكيد كلمة المرور بشكل صحيح ',
+                    'g-recaptcha-response.required' => 'من فضلك قم بتأكيد أنك لست روبوتًا',
+                    'g-recaptcha-response.captcha' => 'فشل التحقق من reCAPTCHA، يرجى المحاولة مرة أخرى'
                 ];
                 $validator = Validator::make($data, $rules, $messages);
                 if ($validator->fails()) {
@@ -307,7 +313,7 @@ class UserController extends Controller
     {
         $ChargeTransactions = PaymentTransaction::where('user_id', Auth::id())->where('payment_status', 'succeeded')->get();
         $WithDrawTransactions = WithDraw::where('user_id', Auth::id())->get();
-        $WithDrawLastOrder = WithDraw::where('user_id', Auth::id())->where('status',0)->first();
-        return view('website.user.balance', compact('ChargeTransactions', 'WithDrawTransactions','WithDrawLastOrder'));
+        $WithDrawLastOrder = WithDraw::where('user_id', Auth::id())->where('status', 0)->first();
+        return view('website.user.balance', compact('ChargeTransactions', 'WithDrawTransactions', 'WithDrawLastOrder'));
     }
 }

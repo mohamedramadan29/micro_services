@@ -40,18 +40,22 @@
                             <ul id="metismenu">
                                 <li><a href="{{ url('dashboard') }}"><i class="ti-dashboard"></i> الملف الشخصي </a>
                                 </li>
-                                <li><a href="{{ url('my/project/index') }}"><i class="ti-user"></i> المشاريع </a></li>
+                                <li><a href="{{ url('balance') }}"><i class="bi bi-credit-card"></i> الرصيد </a></li>
+                                <li><a href="{{ url('my/project/index') }}"><i class="bi bi-cast"></i> المشاريع </a></li>
                                 <li><a href="{{ url('my/project/add') }}"><i class="ti-plus"></i> اضف مشروع جديد </a></li>
-                                <li><a href="{{ url('my/courses') }}"><i class="ti-user"></i> الكورسات </a></li>
+                                <li><a href="{{ url('my/courses') }}"> <i class="bi bi-mortarboard-fill"></i> الكورسات </a>
+                                </li>
                                 <li><a href="{{ url('my/course/add') }}"><i class="ti-plus"></i> اضف كورس جديد </a></li>
-                                <li><a href="{{ url('service/index') }}"><i class="ti-user"></i> الخدمات </a></li>
-                                <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
-                                <li><a href="{{ url('chat-main') }}"><i class="ti-email"></i> المحادثات </a></li>
-                                <li><a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a></li>
-                                <li><a href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li>
-                                <li><a href="{{ url('update-account') }}"><i class="ti-email"></i> تعديل الملف الشخصي
+                                <li><a href="{{ url('service/index') }}"><i class="bi bi-database-fill-check"></i> الخدمات
                                     </a></li>
-                                <li><a href="{{ url('balance') }}"><i class="ti-email"></i> الرصيد </a></li>
+                                <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
+                                <li><a href="{{ url('chat-main') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a>
+                                </li>
+                                <li><a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a></li>
+                                {{-- <li><a href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li> --}}
+                                <li><a href="{{ url('update-account') }}"> <i class="bi bi-gear-fill"></i> تعديل الملف
+                                        الشخصي
+                                    </a></li>
                                 <li><a href="{{ url('logout') }}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
                             </ul>
                         </div>
@@ -68,7 +72,7 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"> كورساتي  </li>
+                                        <li class="breadcrumb-item active" aria-current="page"> كورساتي </li>
                                     </ol>
                                 </nav>
                             </div>
@@ -84,7 +88,7 @@
                                 <div class="_dashboard_content">
                                     <div class="_dashboard_content_header">
                                         <div class="_dashboard__header_flex">
-                                            <h4><i class="ti-lock mr-1"></i> كورساتي  </h4>
+                                            <h4><i class="ti-lock mr-1"></i> كورساتي </h4>
                                         </div>
                                     </div>
 
@@ -95,7 +99,6 @@
                                                 @foreach ($courses as $course)
                                                     <div class="col-lg-12">
                                                         <div class="ser_110">
-
                                                             <div class="project">
                                                                 <div class="row">
                                                                     <div class="col-9">
@@ -124,6 +127,16 @@
                                                                                     </div>
                                                                                 </div>
                                                                             @endif
+                                                                            <div class="mb-1">
+                                                                                <div class="buttons"
+                                                                                    style="padding:10px">
+                                                                                    <a href="{{ url('my/course/subscriptions/' . $course['id']) }}"
+                                                                                        class="btn btn-primary btn-sm">
+                                                                                        المشتركين  <i class="bi bi-people-fill"></i>
+                                                                                    </a>
+
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-3">
@@ -132,7 +145,8 @@
                                                                                 <li> <i class="bi bi-currency-dollar"></i>
                                                                                     {{ $course['price'] }}
                                                                                     دولار </li>
-                                                                                <li> <i class="bi bi-pc-display-horizontal"></i>
+                                                                                <li> <i
+                                                                                        class="bi bi-pc-display-horizontal"></i>
                                                                                     {{ $course['leason_numbers'] }}
                                                                                     محاضرة
                                                                                 </li>
@@ -140,7 +154,8 @@
                                                                                     {{ $course['created_at']->diffForHumans() }}
                                                                                 </li>
                                                                                 <li> <i class="bi bi-people-fill"></i>
-                                                                                    {{ $course['current_student_num'] }} </li>
+                                                                                    {{ $course['current_student_num'] }}
+                                                                                </li>
                                                                             </ul>
                                                                         </div>
                                                                     </div>
@@ -154,7 +169,7 @@
                                                 @endforeach
                                             @else
                                                 <div class="alert alert-info">
-                                                    لا يوجد لديك كورسات  في الوقت الحالي
+                                                    لا يوجد لديك كورسات في الوقت الحالي
                                                 </div>
                                             @endif
                                         </div>

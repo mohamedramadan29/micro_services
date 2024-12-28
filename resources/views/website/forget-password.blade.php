@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-     نسيت كلمة المرور
+    نسيت كلمة المرور
 @endsection
 @section('content')
 
@@ -12,7 +12,7 @@
                 <div class="col-lg-8 col-12">
                     <div class="modal-content" id="registermodal">
                         <div class="modal-header">
-                            <h4> نسيت كلمة المرور  </h4>
+                            <h4> نسيت كلمة المرور </h4>
 
                         </div>
                         <div class="modal-body">
@@ -29,12 +29,12 @@
                                 @endforeach
                             @endif
                             <div class="login-form">
-                                <form action="{{url('forget-password')}}" method="post">
+                                <form action="{{ url('forget-password') }}" method="post">
                                     @csrf
                                     <div class="form-group">
-                                        <label>  البريد الالكتروني </label>
+                                        <label> ادخل البريد الالكتروني المسجل لدينا </label>
                                         <input type="email" class="form-control" name="email"
-                                               value="{{old('email')}}">
+                                            value="{{ old('email') }}">
                                     </div>
 
                                     <div class="form-group">

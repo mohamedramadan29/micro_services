@@ -175,6 +175,7 @@ Route::group(
                 Route::get('my/courses', action: 'user_courses');
                 Route::match(['post', 'get'], 'my/course/add', 'store');
                 Route::match(['post', 'get'], 'my/course/update/{id}', 'update');
+                Route::get('my/course/subscriptions/{id}', 'subscriptions');
             });
             //////////////// Course Register ////////////////////////////////
 

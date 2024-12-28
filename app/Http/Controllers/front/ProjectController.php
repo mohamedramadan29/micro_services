@@ -162,7 +162,8 @@ class ProjectController extends Controller
     {
         $project = Project::find($id);
         if ($project['user_id'] == Auth::id()) {
-            if (!$project) abort(404);
+            if (!$project)
+                abort(404);
             ////// delete Project Files
             $project_file = ProjectFiles::where('project_id', $id)->get();
             foreach ($project_file as $old_file) {
@@ -182,16 +183,32 @@ class ProjectController extends Controller
 
     public function website_project()
     {
-        $projects = Project::with('User')->orderBy('created_at','desc')->paginate(10);
+        $projects = Project::with('User')->orderBy('created_at', 'desc')->where('approved', 1)->paginate(10);
         $categories = Category::where('status', 1)->get();
+
         return view('website.projects', compact('projects', 'categories'));
     }
 
     public function ProjectDetails($id, $slug)
     {
-        $project = Project::with('User', 'Offers.User','freelancer')->where('id', $id)->where('slug', $slug)->first();
+        $project = Project::with('User', 'Offers.User', 'freelancer')->where('id', $id)->where('slug', $slug)->first();
 
+                //////////////// Mark Project Notifications as Read
+                if (Auth::check()) {
+                    $user = Auth::user();
+                    if ($user->unreadNotifications->isNotEmpty()) {
+                        // Filter notifications related to projects only
+                        $projectNotifications = $user->unreadNotifications->filter(function ($notification) {
+                            return $notification['type'] === 'App\Notifications\OfferAccepted';
+                        });
+                        // Mark these notifications as read
+                        foreach ($projectNotifications as $notification) {
+                            $notification->markAsRead();
+                        }
+                    }
+                }
         if ($project) {
+
             return view('website.project_details', compact('project'));
         }
         abort(404);
