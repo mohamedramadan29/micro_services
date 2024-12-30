@@ -35,12 +35,15 @@
                                 <li><a href="{{ url('my/courses') }}"> <i class="bi bi-mortarboard-fill"></i> الكورسات </a>
                                 </li>
                                 <li><a href="{{ url('my/course/add') }}"><i class="ti-plus"></i> اضف كورس جديد </a></li>
-                                <li><a href="{{ url('service/index') }}"><i class="bi bi-database-fill-check"></i> الخدمات </a></li>
+                                <li><a href="{{ url('service/index') }}"><i class="bi bi-database-fill-check"></i> الخدمات
+                                    </a></li>
                                 <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
-                                <li><a href="{{ url('chat-main') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a></li>
+                                <li><a href="{{ url('chats') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a>
+                                </li>
                                 <li><a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a></li>
                                 {{-- <li><a href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li> --}}
-                                <li><a href="{{ url('update-account') }}"> <i class="bi bi-gear-fill"></i> تعديل الملف الشخصي
+                                <li><a href="{{ url('update-account') }}"> <i class="bi bi-gear-fill"></i> تعديل الملف
+                                        الشخصي
                                     </a></li>
                                 <li><a href="{{ url('logout') }}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
                             </ul>
@@ -64,10 +67,59 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <!-- Single Wrap -->
+                                <div class="_dashboard_content public_alerts">
+                                    <div class="_dashboard_content_header">
+                                        <div class="_dashboard__header_flex">
+                                            <h4><i class="fa fa-bell mr-1"></i> تذكير </h4>
+                                        </div>
+                                    </div>
+                                    <div class="_dashboard_content public_alerts">
+                                        <div class="_dashboard_content_body">
+                                            <div class="row">
+                                                <div class="col-xl-12 col-lg-12">
+                                                    <h4> نذكركم بأن النجاح المستدام يعتمد على بناء الثقة والالتزام بأعلى
+                                                        معايير الأمانة والمصداقية. لذا نرجو منكم:
+                                                    </h4>
+                                                    <ul class="unstyled">
+                                                        <li>
+                                                            1. التحلي بالأمانة والمصداقية: كونوا واضحين ودقيقين في وصف
+                                                            خدماتكم. الأمانة هي أساس بناء الثقة مع عملائكم.
+                                                        </li>
+                                                        <li>
+                                                            2. الدفع من خلال الموقع: لضمان الشفافية وحماية حقوق الجميع، نرجو
+                                                            الالتزام باستخدام نظام الدفع الخاص بالموقع.
+                                                        </li>
+                                                        <li>
+                                                            3. التواصل مع العملاء عبر زوم: نوصي بأن يتم عقد جلسة تواصل لمدة
+                                                            15 دقيقة( مجانية ) مع العملاء لشرح الخدمات، والإجابة على
+                                                            أسئلتهم، وبناء علاقة جيدة معهم.
+                                                        </li>
+                                                        <li>
+                                                            4. الاحترام والاحترافية: تعاملوا مع العملاء بروح إيجابية واحترام
+                                                            لضمان تجربة مميزة ومريحة
+                                                            نحن نؤمن بأن هذه الخطوات ستساعد في بناء سمعة قوية وزيادة ثقة
+                                                            العملاء بالموقع وبكم كبائعين.
+                                                            شكرًا لتعاونكم، ونتطلع إلى نجاحكم المستمر معنا.
+                                                            مع أطيب التحيات،
+                                                            إدارة الموقع
+                                                        </li>
+                                                    </ul>
+                                                </div>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
                             <!-- Single Wrap -->
                             <div class="_dashboard_content">
                                 <div class="_dashboard_content_header">
@@ -120,7 +172,7 @@
                                                                                 {{ $serv['name'] }} </a>
                                                                         </h5>
                                                                         <span> {{ $serv['category']['name'] }} <span>
-                                                                                <div class="_dash_usr_rates mb-1">
+                                                                                {{-- <div class="_dash_usr_rates mb-1">
                                                                                     <span class="good">
                                                                                         {{ $serv['rate'] }} </span>
                                                                                     @for ($i = 0; $i < 5; $i++)
@@ -130,7 +182,7 @@
                                                                                             <i class="fa fa-star-o"></i>
                                                                                         @endif
                                                                                     @endfor
-                                                                                </div>
+                                                                                </div> --}}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -138,7 +190,8 @@
                                                                 <a href="{{ url('service/update/' . $serv['id']) }}"
                                                                     class="btn btn-primary btn-sm"> تعديل <i
                                                                         class="fa fa-edit"></i> </a>
-                                                                <a href="{{ url('service/delete/' . $serv['id']) }}"
+                                                                <a style="height: 30px"
+                                                                    href="{{ url('service/delete/' . $serv['id']) }}"
                                                                     class="btn btn-danger btn-sm"
                                                                     onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')">
                                                                     حذف <i class="fa fa-trash"></i> </a>

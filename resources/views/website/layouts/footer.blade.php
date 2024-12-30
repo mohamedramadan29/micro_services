@@ -3,7 +3,8 @@
         <a href="{{ url('tickets') }}" class="btn"> مركز المساعدة <i class="bi bi-person-raised-hand"></i> </a>
     </div>
     <div class="help_center help_center_products">
-        <a target="_blank" href="https://wa.me/+963997610723" class="btn"> المسؤل عن المنتجات  <i class="bi bi-person-raised-hand"></i> </a>
+        <a target="_blank" href="https://wa.me/+963997610723" class="btn"> المسؤل عن المنتجات <i
+                class="bi bi-person-raised-hand"></i> </a>
     </div>
     <div>
         <div class="container">
@@ -36,10 +37,14 @@
                     <div class="footer-widget">
                         <h4 class="widget-title"> {{ __('public.follow_us') }} </h4>
                         <ul class="footer-bottom-social">
-                            <li><a href="https://www.facebook.com/profile.php?id=61570576550685"><i class="ti-facebook"></i></a></li>
-                            <li><a href="https://x.com/NafizhaWeb17206?t=MyM30nyRqryQi5xUkq0Ecw&s=09"><i class="ti-twitter"></i></a></li>
+                            <li><a href="https://www.facebook.com/profile.php?id=61570576550685"><i
+                                        class="ti-facebook"></i></a></li>
+                            <li><a href="https://x.com/NafizhaWeb17206?t=MyM30nyRqryQi5xUkq0Ecw&s=09"><i
+                                        class="ti-twitter"></i></a></li>
                             {{-- <li><a href="#"><i class="ti-instagram"></i></a></li> --}}
-                            <li><a href="https://www.linkedin.com/in/nafizha-web-2b1270341?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i class="ti-linkedin"></i></a></li>
+                            <li><a
+                                    href="https://www.linkedin.com/in/nafizha-web-2b1270341?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i
+                                        class="ti-linkedin"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -76,6 +81,7 @@
 <script src="{{ asset('assets/website/js/custom.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @notifyJs
 @toastifyJs
@@ -170,7 +176,6 @@
 
     });
 </script>
-
 
 </body>
 

@@ -3,18 +3,6 @@
     المشتركين في الكورس
 @endsection
 @section('content')
-    @if (Session::has('Success_message'))
-        @php
-            toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-        @endphp
-    @endif
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            @php
-                toastify()->error($error);
-            @endphp
-        @endforeach
-    @endif
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
         <div class="container-fluid">
@@ -49,7 +37,7 @@
                                 <li><a href="{{ url('service/index') }}"><i class="bi bi-database-fill-check"></i> الخدمات
                                     </a></li>
                                 <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
-                                <li><a href="{{ url('chat-main') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a>
+                                <li><a href="{{ url('chats') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a>
                                 </li>
                                 <li><a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a></li>
                                 {{-- <li><a href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li> --}}
@@ -72,7 +60,7 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">  المشتركين في الكورس </li>
+                                        <li class="breadcrumb-item active" aria-current="page"> المشتركين في الكورس </li>
                                     </ol>
                                 </nav>
                             </div>
@@ -88,7 +76,7 @@
                                 <div class="_dashboard_content">
                                     <div class="_dashboard_content_header">
                                         <div class="_dashboard__header_flex">
-                                            <h4><i class="ti-lock mr-1"></i>   المشتركين في الكورس </h4>
+                                            <h4><i class="ti-lock mr-1"></i> المشتركين في الكورس </h4>
                                         </div>
                                     </div>
 
@@ -96,32 +84,31 @@
                                         <div class="row">
                                             <!-- Single Item -->
                                             @if ($subscriptions->count() > 0)
-                                                    <div class="col-lg-12">
-                                                        <div class="ser_110">
-                                                            <div class="project"> 
-                                                                    <table class="table table-bordered">
-                                                                        <thead>
-                                                                            <tr>
-                                                                            <th> الاسم  </th>
-                                                                            <th> البريد الالكتروني  </th>
-                                                                            <th> تاريخ الاشتراك  </th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            @foreach ($subscriptions as $sub)
-                                                                            <tr>
-                                                                                <td> {{ $sub->user->user_name }} </td>
-                                                                                <td> {{ $sub->user->email }} </td>
-                                                                                <td> {{ $sub->created_at }} </td>
-                                                                            </tr>
-                                                                            @endforeach
-                                                                        </tbody>
+                                                <div class="col-lg-12">
+                                                    <div class="ser_110">
+                                                        <div class="project">
+                                                            <table class="table table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th> الاسم </th>
+                                                                        <th> البريد الالكتروني </th>
+                                                                        <th> تاريخ الاشتراك </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach ($subscriptions as $sub)
+                                                                        <tr>
+                                                                            <td> {{ $sub->user->user_name }} </td>
+                                                                            <td> {{ $sub->user->email }} </td>
+                                                                            <td> {{ $sub->created_at }} </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
 
-                                                                    </table>
-                                                            </div>
+                                                            </table>
                                                         </div>
                                                     </div>
-
+                                                </div>
                                             @else
                                                 <div class="alert alert-info">
                                                     لا يوجد لديك كورسات في الوقت الحالي

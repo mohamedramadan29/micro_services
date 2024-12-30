@@ -152,3 +152,22 @@
     </section>
     <!-- ============================ End Popular Category ==================================== -->
 @endsection
+
+
+@section('js')
+<script>
+    function launchConfetti() {
+        confetti({
+            particleCount: 300,
+            angle: 60, // زاوية البداية
+            spread: 180, // انتشار واسع
+            origin: {
+                x: 0.5,
+                y: 0.5
+            }
+        });
+    }
+
+    setInterval(launchConfetti, 2000); // تشغيل دائم
+</script>
+@endsection

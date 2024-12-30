@@ -5,18 +5,6 @@
 @section('content')
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
-        @if (Session::has('Success_message'))
-            @php
-                toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-            @endphp
-        @endif
-        @if ($errors->any())
-            @foreach ($errors->all() as $error)
-                @php
-                    toastify()->error($error);
-                @endphp
-            @endforeach
-        @endif
         <div class="container-fluid">
             <div class="row m-0">
 
@@ -46,12 +34,15 @@
                                 <li><a href="{{ url('my/courses') }}"> <i class="bi bi-mortarboard-fill"></i> الكورسات </a>
                                 </li>
                                 <li><a href="{{ url('my/course/add') }}"><i class="ti-plus"></i> اضف كورس جديد </a></li>
-                                <li><a href="{{ url('service/index') }}"><i class="bi bi-database-fill-check"></i> الخدمات </a></li>
+                                <li><a href="{{ url('service/index') }}"><i class="bi bi-database-fill-check"></i> الخدمات
+                                    </a></li>
                                 <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
-                                <li><a href="{{ url('chat-main') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a></li>
+                                <li><a href="{{ url('chats') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a>
+                                </li>
                                 <li><a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a></li>
                                 {{-- <li><a href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li> --}}
-                                <li><a href="{{ url('update-account') }}"> <i class="bi bi-gear-fill"></i> تعديل الملف الشخصي
+                                <li><a href="{{ url('update-account') }}"> <i class="bi bi-gear-fill"></i> تعديل الملف
+                                        الشخصي
                                     </a></li>
                                 <li><a href="{{ url('logout') }}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
                             </ul>

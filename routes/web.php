@@ -70,6 +70,7 @@ Route::group(
                 Route::match(['post', 'get'], 'update-account', 'update');
                 Route::get('chat', 'chat');
                 Route::get('balance', 'balance');
+
                 Route::get('chat-main/{conversation_id}', \App\Livewire\Chat\Main::class)->name('chat.main');
             });
         });
@@ -102,6 +103,7 @@ Route::group(
 
         ///////////////////////////// Start Conversation ////////////////////
         Route::controller(ConversationController::class)->group(function () {
+            Route::get('chats',  'chats');
             Route::post('conversation/start', 'start_conversation');
             Route::post('conversation/start/project', 'project_start_conversation');
             Route::post('consult_conversation/start', 'consult_start_conversation');

@@ -39,7 +39,7 @@ class FrontController extends Controller
             $cat_ids = $request->get('cat_ids');
             $query->whereIn('sub_cat_id', $cat_ids);
         }
-        $services = $query->where('status', '1')->paginate(12);
+        $services = $query->where('status', '1')->orderBy('id', 'desc')->paginate(12);
         $categories = Category::with('subCategories')->where('status', 1)->get();
         return view('website.services', compact('services', 'categories'));
     }

@@ -97,7 +97,7 @@ class ProductController extends Controller
                 return $this->exception_message($e);
             }
         }
-        return view('admin.products.add');
+        return view('admin.Products.add');
 
     }
 

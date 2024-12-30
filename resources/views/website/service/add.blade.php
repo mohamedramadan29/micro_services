@@ -27,18 +27,22 @@
                             <ul id="metismenu">
                                 <li><a href="{{ url('dashboard') }}"><i class="ti-dashboard"></i> الملف الشخصي </a>
                                 </li>
-                                <li><a href="{{ url('my/project/index') }}"><i class="ti-user"></i> المشاريع </a></li>
+                                <li><a href="{{ url('balance') }}"><i class="bi bi-credit-card"></i> الرصيد </a></li>
+                                <li><a href="{{ url('my/project/index') }}"><i class="bi bi-cast"></i> المشاريع </a></li>
                                 <li><a href="{{ url('my/project/add') }}"><i class="ti-plus"></i> اضف مشروع جديد </a></li>
-                                <li><a href="{{ url('my/courses') }}"><i class="ti-user"></i> الكورسات  </a></li>
+                                <li><a href="{{ url('my/courses') }}"> <i class="bi bi-mortarboard-fill"></i> الكورسات </a>
+                                </li>
                                 <li><a href="{{ url('my/course/add') }}"><i class="ti-plus"></i> اضف كورس جديد </a></li>
-                                <li><a href="{{ url('service/index') }}"><i class="ti-user"></i> الخدمات </a></li>
-                                <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
-                                <li><a href="{{ url('chat-main') }}"><i class="ti-email"></i> المحادثات </a></li>
-                                <li><a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a></li>
-                                <li><a href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li>
-                                <li><a href="{{ url('update-account') }}"><i class="ti-email"></i> تعديل الملف الشخصي
+                                <li><a href="{{ url('service/index') }}"><i class="bi bi-database-fill-check"></i> الخدمات
                                     </a></li>
-                                <li><a href="{{ url('balance') }}"><i class="ti-email"></i> الرصيد </a></li>
+                                <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
+                                <li><a href="{{ url('chats') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a>
+                                </li>
+                                <li><a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a></li>
+                                {{-- <li><a href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li> --}}
+                                <li><a href="{{ url('update-account') }}"> <i class="bi bi-gear-fill"></i> تعديل الملف
+                                        الشخصي
+                                    </a></li>
                                 <li><a href="{{ url('logout') }}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
                             </ul>
                         </div>
@@ -63,18 +67,6 @@
                     </div>
 
                     <div class="row">
-                        @if (Session::has('Success_message'))
-                            @php
-                                emotify('success', \Illuminate\Support\Facades\Session::get('Success_message'));
-                            @endphp
-                        @endif
-                        @if ($errors->any())
-                            @foreach ($errors->all() as $error)
-                                @php
-                                    emotify('error', $error);
-                                @endphp
-                            @endforeach
-                        @endif
                         <form method="post" action="{{ url('service/add') }}" enctype="multipart/form-data"
                             id="uploadService">
                             @csrf
@@ -103,7 +95,7 @@
                                             <div class="col-xl-6 col-lg-6">
                                                 <div class="form-group with-light">
                                                     <label> القسم الرئيسي </label>
-                                                    <select required id="mainCategory" class="form-control" name="cat_id">
+                                                    <select required id="mainCategory" class="form-select" name="cat_id">
                                                         <option> -- حدد القسم الرئيسي --</option>
                                                         @foreach ($categories as $category)
                                                             <option value="{{ $category['id'] }}"> {{ $category['name'] }}
@@ -116,7 +108,7 @@
                                             <div class="col-xl-6 col-lg-6">
                                                 <div class="form-group with-light">
                                                     <label> حدد القسم الفرعي </label>
-                                                    <select required class="form-control select2" name="sub_cat_id"
+                                                    <select required class="form-select select2" name="sub_cat_id"
                                                         id="subCategory">
                                                         <option> -- حدد القسم الفرعي --</option>
                                                     </select>
@@ -124,7 +116,7 @@
                                             </div>
                                             <div class="col-xl-6 col-lg-6">
                                                 <div class="form-group">
-                                                    <label> السعر الاولي للخدمة </label>
+                                                    <label> سعر الخدمة </label>
                                                     <input type="number" min="5" class="form-control with-light"
                                                         required name="price" value="{{ old('price') }}">
                                                 </div>
@@ -172,16 +164,17 @@
                                             </div>
 
                                         </div>
+                                        <button type="submit" class="btn btn-save" id="submitBtn"> اضف الخدمة <i
+                                            class="fa fa-save"></i></button>
+                                    <span id="loader" style="display: none;">جاري الإرسال...</span>
 
                                     </div>
+
                                 </div>
                                 <!-- Single Wrap End -->
                                 {{--                                <button type="submit" class="btn btn-sm btn-save"> اضف الخدمة <i class="fa fa-save"></i> --}}
                                 {{--                                </button> --}}
 
-                                <button type="submit" class="btn btn-save" id="submitBtn"> اضف الخدمة <i
-                                        class="fa fa-save"></i></button>
-                                <span id="loader" style="display: none;">جاري الإرسال...</span>
 
                         </form>
 

@@ -117,8 +117,9 @@
                                                 </li>
                                                 <hr>
                                             @elseif($notification['type'] == 'App\Notifications\OfferAccepted')
-                                                <li><a class="dropdown-item" href="{{ url('project/'.$notification['data']['project_id'].'-'.$notification['data']['project_slug']) }}">
-                                                    تمت الموافقة علي العرض الخاص بك علي المشروع
+                                                <li><a class="dropdown-item"
+                                                        href="{{ url('project/' . $notification['data']['project_id'] . '-' . $notification['data']['project_slug']) }}">
+                                                        تمت الموافقة علي العرض الخاص بك علي المشروع
 
                                                         : {{ $notification['data']['project_title'] }}
                                                         <br>
@@ -155,7 +156,7 @@
                             </ul>
                         @endif
 
-                        <ul class="nav-menu">
+                        <ul class="nav-menu" style="width: 60%">
                             <li><a href="{{ url('/') }}"> {{ __('public.home') }} </a></li>
                             <li><a href="{{ url('projects') }}"> {{ __('public.projects') }} </a></li>
                             <li><a href="{{ url('courses') }}"> {{ __('public.courses') }} </a></li>

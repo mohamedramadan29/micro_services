@@ -13,6 +13,24 @@ use Illuminate\Support\Facades\Redirect;
 
 class ConversationController extends Controller
 {
+
+    public function chats()
+    {
+        $userId = Auth::id();
+
+        $conversations = Conversation::where('sender_id', $userId)
+        ->orWhere('receiver_id', $userId)
+        ->with([
+            'messages' => function ($query) {
+                $query->latest()->take(1); // جلب آخر رسالة فقط
+            },
+            'sender',  // لجلب بيانات المرسل
+            'receiver' // لجلب بيانات المستقبل
+        ])
+        ->get();
+
+        return view('website.chat.index', compact('conversations'));
+    }
     public function start_conversation(Request $request)
     {
         $data = $request->all();
@@ -23,7 +41,7 @@ class ConversationController extends Controller
         $service_data = $service['name'];
         $checkConversation = Conversation::where('sender_id', Auth::id())->where('receiver_id', $receiverId)
             ->Orwhere('sender_id', $receiverId)->where('receiver_id', Auth::id())
-            ->where('project_id', $data['project_id'])->first();
+            ->where('service_id', $data['service_id'])->first();
         if (!$checkConversation) {
             // //// Create Chat
             $createConversation = Conversation::create([
@@ -40,9 +58,9 @@ class ConversationController extends Controller
             ]);
             $createConversation->last_time_message = $createMessage->created_at;
             $createConversation->save();
-            return Redirect::to('chat-main');
-        } elseif (count($checkConversation) > 0) {
-            return Redirect::to('chat-main');
+            return Redirect::to('chat-main/' . $createConversation->id);
+        } else {
+            return Redirect::to('chat-main/' . $checkConversation->id);
         }
     }
 
@@ -90,7 +108,7 @@ class ConversationController extends Controller
     {
         $data = $request->all();
         $receiverId = $data['consultant'];
-       // dd($data);
+        // dd($data);
         $checkConversation = Conversation::where('sender_id', Auth::id())->where('receiver_id', $receiverId)
             ->Orwhere('sender_id', $receiverId)->where('receiver_id', Auth::id())
             ->where('consultant_id', $receiverId)
