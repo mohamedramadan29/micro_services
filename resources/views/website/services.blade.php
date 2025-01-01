@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-{{ __('services.services') }}
+    {{ __('services.services') }}
 @endsection
 @section('content')
     <!-- ============================ Main Section Start ================================== -->
@@ -25,7 +25,8 @@
                                     <div class="filter-search-box pb-0">
                                         <div class="form-group">
                                             <input type="text" name="search" class="form-control"
-                                                value="{{ request()->input('search') }}" placeholder="{{ __('services.search_services') }} ">
+                                                value="{{ request()->input('search') }}"
+                                                placeholder="{{ __('services.search_services') }} ">
                                         </div>
                                     </div>
                                     <div class="filter_wraps">
@@ -112,7 +113,7 @@
                                     <div class="ser_110_footer bott">
                                         <div class="_110_foot_left">
                                             <div class="_autho098">
-                                                @if ($serv['user']['image'] != '' || $serv['user']['image'] == null)
+                                                @if (empty($serv['user']['image']))
                                                     <img src="{{ asset('assets/website/img/avatar.png') }}"
                                                         class="img-fluid circle" alt="">
                                                 @else
@@ -125,8 +126,9 @@
                                             </div>
 
                                             <div class="_autho097">
-                                                <h5><a
-                                                        href="{{ url('user/' . $serv['user']['user_name']) }}">{{ $serv['user']['user_name'] }}</a>
+                                                <h5>
+                                                    <a href="{{ url('user/' . $serv['user']['user_name']) }}">{{ $serv['user']['user_name'] }}
+                                                    </a>
                                                 </h5>
                                             </div>
                                         </div>
@@ -148,8 +150,9 @@
                                                     {{ $serv['name'] }} </a>
                                             </h4>
                                         </div>
-                                        <div class="_oi0po price_section"><i class="fa fa-bolt"></i> {{ __('services.serive_price') }} <strong
-                                                class="theme-cl"> {{ number_format($serv['price'], 2) }} $ </strong>
+                                        <div class="_oi0po price_section"><i class="fa fa-bolt"></i>
+                                            {{ __('services.serive_price') }} <strong class="theme-cl">
+                                                {{ number_format($serv['price'], 2) }} $ </strong>
                                         </div>
                                     </div>
 

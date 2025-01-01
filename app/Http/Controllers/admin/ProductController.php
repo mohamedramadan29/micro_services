@@ -74,6 +74,7 @@ class ProductController extends Controller
                 $product->short_description = $data['short_description'];
                 $product->description = $data['description'];
                 $product->price = $data['price'];
+                $product->discount = $data['discount'] ?? null;
                 $product->meta_title = $data['meta_title'];
                 $product->meta_keywords = $data['meta_keywords'];
                 $product->meta_description = $data['meta_description'];
@@ -122,13 +123,13 @@ class ProductController extends Controller
                 // $product = Product::find();  // استبدال $productId بالمعرّف الخاص بالمنتج
 
                 if ($request->hasFile('image')) {
-                    $old_image = public_path('assets/uploads/product_images'.$product['image']);
-                    if(file_exists($old_image)){
+                    $old_image = public_path('assets/uploads/product_images' . $product['image']);
+                    if (file_exists($old_image)) {
                         unlink($old_image);
                     }
                     $file_name = $this->saveImage($request->image, public_path('assets/uploads/product_images'));
                     $product->update([
-                        'image'=>$file_name,
+                        'image' => $file_name,
                     ]);
                 }
                 // تحديث معلومات المنتج
@@ -144,12 +145,13 @@ class ProductController extends Controller
                     'short_description' => $data['short_description'],
                     'description' => $data['description'],
                     'price' => $data['price'],
+                    'discount' => $data['discount'] ?? null,
                     'meta_title' => $data['meta_title'],
                     'meta_keywords' => $data['meta_keywords'],
                     'meta_description' => $data['meta_description']
                 ]);
 
-//                ///////// تحديث معرض الصور إذا كان موجودًا
+                //                ///////// تحديث معرض الصور إذا كان موجودًا
                 if ($request->hasFile('gallery')) {
                     foreach ($request->file('gallery') as $gallery) {
                         $gallery_name = $this->saveImage($gallery, 'assets/uploads/product_gallery');

@@ -68,7 +68,7 @@
                                     <div class="ser_110_footer bott">
                                         <div class="_110_foot_left">
                                             <div class="_autho098">
-                                                @if($serv['user']['image'] !='' || $serv['user']['image'] == null)
+                                                @if (empty($serv['user']['image']))
                                                     <img
                                                         src="{{asset('assets/website/img/avatar.png')}}"
                                                         class="img-fluid circle" alt="">

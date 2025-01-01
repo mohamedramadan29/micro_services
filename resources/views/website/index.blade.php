@@ -10,7 +10,7 @@
             <h1> {{ __('index.index_h1') }} </h1>
             <p class="lead"> {{ __('index.index_p1') }} </p>
             <button data-bs-toggle="modal" data-bs-target="#FreeConsultModel" class="btn btn-primary free_consult_button"><i
-                class="bi bi-patch-question-fill"></i> احصل علي استشارة مجانية </button>
+                    class="bi bi-patch-question-fill"></i> احصل علي استشارة مجانية </button>
             <form class="mt-4" dir="rtl" method="get" action="{{ url('search') }}">
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-md-10 col-sm-12">
@@ -88,7 +88,7 @@
             <div class="row">
                 <!-- Single Item -->
                 @foreach ($main_categories as $category)
-                    <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="col-lg-3 col-md-6 col-6">
                         <div class="ser_110">
                             <div class="ser_110_thumb">
                                 <a href="{{ url('category/' . $category['slug']) }}" class="ser_100_link"><img
@@ -134,7 +134,7 @@
 
                 @foreach ($sub_categories as $sub_category)
                     <!-- Single Category -->
-                    <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="col-lg-3 col-md-4 col-6">
                         <div class="urip_cated shadow">
                             <div class="urip_cated_avater">
                                 <i class="ti-bar-chart"></i>
@@ -151,23 +151,42 @@
         </div>
     </section>
     <!-- ============================ End Popular Category ==================================== -->
+
+    <!-- ########################################### Presit Section ######################## -->
+
+    <section class="call-to-act gift_section"
+    style="background:#3fb697 url({{ asset('assets/website/img/landing-bg.png') }}) no-repeat">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="inner-flexible-box subscribe-box">
+                    <img class="animate-pulse" src="{{ asset('assets/website/img/gift.png') }}" alt="">
+                </div>
+                <div class="clt-caption text-center mb-4">
+                    <h2 class="text-light">هدية مميزة بانتظارك!</h2>
+                    <p class="text-light">إذا وصلت مشترياتك إلى 1000 دولار، ستحصل على **رصيد مجاني** بقيمة <strong>50 دولار</strong> في حسابك!
+                        لا تفوت الفرصة!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+    <!------------------------------------- End Present Section ##################### -->
 @endsection
 
 
 @section('js')
-<script>
-    function launchConfetti() {
-        confetti({
-            particleCount: 300,
-            angle: 60, // زاوية البداية
-            spread: 180, // انتشار واسع
-            origin: {
-                x: 0.5,
-                y: 0.5
-            }
-        });
-    }
-
-    setInterval(launchConfetti, 2000); // تشغيل دائم
-</script>
+    <script>
+        window.onload = () => {
+            confetti({
+                particleCount: 300,
+                spread: 300,
+                origin: {
+                    y: 0.6
+                }
+            });
+        };
+    </script>
 @endsection

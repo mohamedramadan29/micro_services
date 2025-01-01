@@ -177,11 +177,10 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-      //  $user = Auth::user();
-        $user = User::where('id',Auth::id())->first();
+        $user = User::find(Auth::id());
+
         if ($request->isMethod('post')) {
             try {
-
                 $data = $request->all();
                 $rules = [
                     'name' => 'required',
@@ -191,16 +190,18 @@ class UserController extends Controller
                     'phone' => 'required|unique:users,phone,' . $user->id,
                 ];
 
-                if ($request->has('old_password') && $request['old_password'] != '') {
-                    // التحقق من صحة كلمة المرور القديمة
+                if ($request->has('old_password') && !empty($request->old_password)) {
                     if (!Hash::check($data['old_password'], $user->password)) {
                         return Redirect::back()->withInput()->withErrors(['كلمة المرور القديمة غير صحيحة']);
                     }
                     $rules['new_password'] = 'required|min:8';
                     $rules['confirm_password'] = 'required|same:new_password';
-
-                    $user->update(['password' => Hash::make($data['new_password'])]);
                 }
+
+                if ($request->hasFile('image')) {
+                    $rules['image'] = 'image|mimes:jpeg,png,jpg,webp,gif|max:2048';
+                }
+
                 $messages = [
                     'name.required' => 'من فضلك ادخل الاسم',
                     'account_type.required' => 'من فضلك حدد نوع الحساب',
@@ -212,51 +213,53 @@ class UserController extends Controller
                     'phone.unique' => 'رقم الهاتف مستخدم بالفعل من فضلك ادخل رقم هاتف جديد',
                     'new_password.required' => 'من فضلك ادخل كلمة المرور الجديدة',
                     'new_password.min' => 'كلمة المرور يجب ان تكون اكثر من 8 احرف ',
-                    'confirm_password.same' => 'من فضلك يجب تاكيد كلمة المرور بشكل صحيح '
+                    'confirm_password.same' => 'من فضلك يجب تاكيد كلمة المرور بشكل صحيح',
+                    'image.image' => 'من فضلك اختر ملف صورة صالح',
+                    'image.mimes' => 'نوع الصورة يجب أن يكون jpeg, png, jpg, webp, gif',
+                    'image.max' => 'حجم الصورة يجب ان لا يتجاوز ال2 ميجابايت',
                 ];
-                if ($request->hasFile('image')) {
-                    $rules['image'] = 'image|mimes:jpeg,png,jpg,webp,gif|max:2048';
-                    $messages['image.image'] = 'من فضلك اختر ملف صورة صالح';
-                    $messages['image.mimes'] = 'نوع الصورة يجب أن يكون jpeg, png, jpg,webp, gif';
-                    $messages['image.max'] = ' حجم   الصورة يجب ان لا يتجاوز ال2m ';
-                }
 
-                if ($request->hasFile('image')) {
-                    /////// Delete Old Image
-                    ///
-                    $oldImage = public_path('assets/uploads/users_image/' . $user['image']);
-                    if (isset($oldImage) && $oldImage != '') {
-                        //   unlink($oldImage);
-                    }
-                    $fileimage = $this->saveImage($request->image, public_path('assets/uploads/users_image'));
-                    $user->update([
-                        'image' => $fileimage,
-                    ]);
-                }
                 $validator = Validator::make($data, $rules, $messages);
+
                 if ($validator->fails()) {
                     return Redirect::back()->withInput()->withErrors($validator);
                 }
 
+                // تحديث الصورة إذا تم رفعها
+                if ($request->hasFile('image')) {
+                    $oldImage = public_path('assets/uploads/users_image/' . $user->image);
+                    if ($user->image && file_exists($oldImage)) {
+                        @unlink($oldImage);
+                    }
+
+                    $fileimage = $this->saveImage($request->file('image'), public_path('assets/uploads/users_image'));
+                    $user->image = $fileimage;
+                }
+
+                // تحديث كلمة المرور إذا تم إدخال كلمة مرور جديدة
+                if ($request->has('new_password') && !empty($data['new_password'])) {
+                    $user->password = Hash::make($data['new_password']);
+                }
+
+                // تحديث باقي البيانات
                 $user->update([
                     'name' => $data['name'],
                     'email' => $data['email'],
                     'phone' => $data['phone'],
                     'info' => $data['info'],
                     'account_type' => $data['account_type'],
-                    'job_title' => $data['job_title']
-
+                    'job_title' => $data['job_title'] ?? $user->job_title,
                 ]);
+
                 return $this->success_message('تم تحديث بياناتك بنجاح');
-            } catch
-            (\Exception $e) {
+            } catch (\Exception $e) {
                 return $this->exception_message($e);
             }
-        } else {
-            return view('website.user.update');
         }
 
+        return view('website.user.update');
     }
+
 
     public function show_profile($username)
     {

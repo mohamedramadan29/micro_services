@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Metadata for SEO and Social Sharing -->
     <meta name="description" content="نفذها هو منصة للخدمات المصغّرة والمشاريع، تجمع بين مقدمي الخدمات المستقلين وأصحاب المشاريع الباحثين عن إنجاز مهامهم بسرعة وكفاءة. سواء كنت تبحث عن تصميم، كتابة محتوى، أو تطوير، ستجد الخبرة المطلوبة هنا.">
     <meta name="keywords" content="نفذها, خدمات مصغرة, مشاريع, مستقلين, تصميم, كتابة, تطوير, خدمات رقمية">

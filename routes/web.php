@@ -1,25 +1,25 @@
 <?php
 
 use App\Livewire\Chat\Main;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\front\CartController;
 use App\Http\Controllers\front\UserController;
 use App\Http\Controllers\front\FrontController;
 use App\Http\Controllers\front\CourseController;
+use App\Http\Controllers\front\ChatgptController;
 use App\Http\Controllers\front\ProductController;
 use App\Http\Controllers\front\ProjectController;
 use App\Http\Controllers\front\serviceController;
 use App\Http\Controllers\front\TicketsController;
 use App\Http\Controllers\front\CheckOutController;
+use App\Http\Controllers\front\WithDrawController;
 use App\Http\Controllers\Auth\SocialMediaController;
-use App\Http\Controllers\front\ChargeBalanceController;
 use App\Http\Controllers\front\ConversationController;
 use App\Http\Controllers\front\ProductOrderController;
 use App\Http\Controllers\front\ProjectOfferController;
+use App\Http\Controllers\front\ChargeBalanceController;
 use App\Http\Controllers\front\TicketMessageController;
 use App\Http\Controllers\front\CourseRegisterController;
-use App\Http\Controllers\front\WithDrawController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 Route::group(
@@ -81,6 +81,7 @@ Route::group(
                 Route::match(['post', 'get'], 'service/add', 'add');
                 Route::match(['post', 'get'], 'service/update/{id}', 'update');
                 Route::match(['post', 'get'], 'service/delete/{id}', 'delete');
+                Route::get('service/get-subcategories/{categoryId}', 'getSubCategories');
                 Route::post('/tmp-upload', 'tmpUpload');
                 Route::delete('/tmp-delete', 'tmpDelete');
             });
@@ -195,10 +196,13 @@ Route::group(
 
         });
 
+        ######################## Start ChatGpt ##################
+        Route::controller(ChatgptController::class)->group(function () {
 
+            Route::get('chatgpt', 'index');
+            Route::post('chatgpt', 'chatgpt');
 
-
-
+        });
         Route::get('auth/{provider}/redirect', [SocialMediaController::class, 'redirect'])->name('auth.google.redirect');
         Route::get('auth/{provider}/callback', [SocialMediaController::class, 'callback'])->name('auth.google.callback');
     }

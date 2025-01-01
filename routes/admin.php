@@ -34,7 +34,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('services', 'index');
             Route::match(['get', 'post'], 'service/update/{id}', 'update');
             Route::match(['post', 'get'], 'service/add', 'store');
-            Route::post('destroy/{id}', 'destroy');
+            Route::post('service/destroy/{id}', 'destroy');
             Route::get('service/get-subcategories/{categoryId}', 'getSubCategories');
         });
         Route::controller(UserController::class)->group(function () {

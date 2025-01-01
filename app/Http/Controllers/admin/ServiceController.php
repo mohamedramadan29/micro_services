@@ -154,7 +154,7 @@ class ServiceController extends Controller
         try {
             $service = Service::findOrFail($id);
             if ($service['image'] != '') {
-                unlink(public_path('assets/uploads/services/' . $service['image']));
+                @unlink(public_path('assets/uploads/services/' . $service['image']));
             }
             $service->delete();
             return $this->success_message('تم حذف الخدمة بنجاح ');

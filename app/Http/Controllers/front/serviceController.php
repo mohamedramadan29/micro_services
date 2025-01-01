@@ -29,6 +29,12 @@ class serviceController extends Controller
         return view('website.service.index', compact('services'));
     }
 
+    public function getSubCategories($category_id)
+    {
+        $subCategories = SubCategory::where('parent_id', $category_id)->get();
+        return response()->json($subCategories);
+    }
+
     public function add(Request $request)
     {
         try {
