@@ -50,3 +50,4 @@
 <!-- custom js -->
 <script src="{{ URL::asset('assets/admin/js/custom.js') }}"></script><!-- Left-menu js-->
 <script src="{{ URL::asset('assets/admin/plugins/side-menu/sidemenu.js') }}"></script>
+<script src="https://cdn.tiny.cloud/1/c8u902w1qjlgsxdu73djug5kw4ckg9n6ggwi5lynenmwrw25/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>

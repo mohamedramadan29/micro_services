@@ -73,7 +73,7 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label for="description" class="form-label"> وصف المنتج </label>
-                                            <textarea required class="form-control bg-light-subtle" id="description" rows="7" placeholder=""
+                                            <textarea required class="form-control bg-light-subtle tinymce" id="description" rows="7" placeholder=""
                                                 name="description">{{ $product['description'] }}</textarea>
                                         </div>
                                     </div>
@@ -226,4 +226,54 @@
 
     </div>
 
+@endsection
+
+
+@section('js')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: '.tinymce',
+            height: 300,
+            directionality: 'rtl', // لجعل المحرر يعمل من اليمين إلى اليسار
+            language: 'ar',
+            plugins: [
+                'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
+                'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code', 'fullscreen',
+                'insertdatetime',
+                'media', 'table', 'emoticons', 'help'
+            ],
+            toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+                'forecolor backcolor emoticons',
+            menu: {
+                favs: {
+                    title: 'My Favorites',
+                    items: 'code visualaid | searchreplace | emoticons'
+                }
+            },
+            image_title: true, // السماح بتعديل العنوان
+            automatic_uploads: true,
+            images_upload_url: 'post_uploads', // مسار API لاستقبال الصور
+            file_picker_types: 'image',
+            file_picker_callback: function(cb, value, meta) {
+                if (meta.filetype === 'image') {
+                    var input = document.createElement('input');
+                    input.setAttribute('type', 'file');
+                    input.setAttribute('accept', 'image/*');
+                    input.onchange = function() {
+                        var file = this.files[0];
+                        var reader = new FileReader();
+                        reader.onload = function() {
+                            cb(reader.result, {
+                                title: file.name
+                            });
+                        };
+                        reader.readAsDataURL(file);
+                    };
+                    input.click();
+                }
+            }
+        });
+    </script>
 @endsection

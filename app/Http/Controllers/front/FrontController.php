@@ -24,7 +24,7 @@ class FrontController extends Controller
     public function index()
     {
         $main_categories = Category::where('status', 1)->where('home_page', 1)->limit(6)->get();
-        $sub_categories = SubCategory::where('status', 1)->where('home_page', 1)->limit(6)->get();
+        $sub_categories = SubCategory::where('status', 1)->where('home_page', 1)->limit(8)->get();
         //dd($main_categories);
         return view('website.index', compact('main_categories', 'sub_categories'));
     }
@@ -41,7 +41,7 @@ class FrontController extends Controller
         }
         $services = $query->where('status', '1')->orderBy('id', 'desc')->paginate(12);
         $categories = Category::with('subCategories')->where('status', 1)->get();
-        return view('website.services', compact('services', 'categories'));
+        return view('website.services2', compact('services', 'categories'));
     }
 
     public function service_details($id, $slug)
@@ -84,11 +84,11 @@ class FrontController extends Controller
 
     public function category_services(Request $request, $slug)
     {
-        $category = SubCategory::where('slug', $slug)->first();
+        $category = Category::where('slug', $slug)->first();
 
         $category_id = $category['id'];
 
-        $query = Service::where('sub_cat_id', $category_id);
+        $query = Service::where('cat_id', $category_id);
         if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }

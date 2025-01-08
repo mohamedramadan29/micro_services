@@ -281,7 +281,7 @@
                             <li><a href="{{ url('projects') }}"> {{ __('public.projects') }} </a></li>
                             <li><a href="{{ url('courses') }}"> {{ __('public.courses') }} </a></li>
                             <li><a href="{{ url('products') }}"> {{ __('public.products') }} </a></li>
-                            <li><a href="{{ url('categories') }}"> {{ __('public.categories') }} </a></li>
+                            {{-- <li><a href="{{ url('categories') }}"> {{ __('public.categories') }} </a></li> --}}
                             <li><a href="{{ url('services') }}"> {{ __('public.services') }} </a></li>
 
                             @if (\Illuminate\Support\Facades\Auth::check())

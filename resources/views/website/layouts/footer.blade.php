@@ -14,13 +14,13 @@
                     <div class="footer-widget">
                         <img src="{{ asset('assets/website/img/logo.png') }}" class="img-fluid f-logo" width="120"
                             alt="">
-                        <p>
-                            {{ __('public.footer_about') }}
-                        </p>
+                         <p style='line-height:1.3;font-weight:bold'>  منصة "نفذها": وجهتك الأولى لتوظيف أفضل المستقلين  .  </p>
+                         <p  style='line-height:1.3;'> اجمع بين أصحاب المشاريع والمستقلين لإنجاز  الأعمال <br>  باحترافية وسرعة، مع حلول مبتكرة تلبي جميع احتياجاتك.   </p>
+
 
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4">
+                <div class="col-lg-2 col-md-4">
                     <div class="footer-widget">
                         <h4 class="widget-title"> {{ __('public.links') }} </h4>
                         <ul class="footer-menu">
@@ -28,25 +28,24 @@
                             <li><a href="{{ '/faq' }}"> {{ __('public.faqs') }} </a></li>
                             <li><a href="{{ '/privacy-policy' }}"> {{ __('public.privacy') }} </a></li>
                             <li><a href="{{ '/terms' }}"> {{ __('public.terms') }} </a></li>
-
                         </ul>
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-md-4">
+                <div class="col-lg-6 col-md-4">
                     <div class="footer-widget">
                         <h4 class="widget-title"> {{ __('public.follow_us') }} </h4>
                         <ul class="footer-bottom-social">
-                            <li><a href="https://www.facebook.com/profile.php?id=61570576550685"><i
+                            <li><a style="background-color: #1877f2" href="https://www.facebook.com/profile.php?id=61571530797575"><i
                                         class="ti-facebook"></i></a></li>
-                            <li><a href="https://x.com/NafizhaWeb17206?t=MyM30nyRqryQi5xUkq0Ecw&s=09"><i
+                            <li><a style="background-color: #1da1f2;" href="https://x.com/NafizhaWeb17206?t=MyM30nyRqryQi5xUkq0Ecw&s=09"><i
                                         class="bi bi-x"></i></a></li>
-                            <li><a href="#"><i class="ti-instagram"></i></a></li>
-                            <li><a href="#"><i class="ti-youtube"></i></a></li>
-                            <li><a href="#"><i class="bi bi-snapchat"></i></a></li>
-                            <li><a href="#"><i class="bi bi-tiktok"></i></a></li>
-                            <li><a
-                                    href="https://www.linkedin.com/in/nafizha-web-2b1270341?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i
+                            <li><a style="background-color: #c32aa3;" href="https://www.instagram.com/nafizha900/"><i class="ti-instagram"></i></a></li>
+                            <li><a style="background-color: #ff0000;" href="https://www.youtube.com/@Nafizha-e3m"><i class="ti-youtube"></i></a></li>
+                            <li><a style="background-color: #fffc00;" href="https://www.snapchat.com/add/nfizha900?share_id=4P1IjTfMpzI&locale=en-EG"><i class="bi bi-snapchat"></i></a></li>
+                            <li><a style="background-color: #010101;" href="https://www.tiktok.com/@nafizha33"><i class="bi bi-tiktok"></i></a></li>
+                            <li><a style="background-color: #0a66c2;"
+                                    href="https://www.linkedin.com/in/nafizha-%D9%86%D9%81%D8%B0%D9%87%D8%A7-4528a8344/"><i
                                         class="ti-linkedin"></i></a></li>
                         </ul>
                     </div>
@@ -85,7 +84,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
-@vite(['resources/css/app.css', 'resources/js/app.js'])
+
 @notifyJs
 @toastifyJs
 @livewireScripts

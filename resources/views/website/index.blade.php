@@ -5,10 +5,10 @@
 @section('content')
     <!-- ============================ Hero Banner  Start================================== -->
     <div class="hero-banner full bg-cover center"
-        style="background:#00000057 url({{ asset('assets/website/img/background3.webp') }}) no-repeat;" data-overlay="7">
+        style="background:#00000057 url({{ asset('assets/website/img/nafizha.jpg') }}) no-repeat;" data-overlay="7">
         <div class="container">
             <h1> {{ __('index.index_h1') }} </h1>
-            <p class="lead"> {{ __('index.index_p1') }} </p>
+            <p class="lead"> دليل شامل لاختيار وتوظيف أفضل المستقلين لعملك </p>
             <button data-bs-toggle="modal" data-bs-target="#FreeConsultModel" class="btn btn-primary free_consult_button"><i
                     class="bi bi-patch-question-fill"></i> احصل علي استشارة مجانية </button>
             <form class="mt-4" dir="rtl" method="get" action="{{ url('search') }}">
@@ -46,26 +46,27 @@
             <div class="row">
                 <div class="col-md-4 col-sm-4">
                     <div class="working-process"><span class="process-img"><img
-                                src="{{ asset('assets/website/img/step-1.png') }}" class="img-responsive"
+                                src="{{ asset('assets/website/img/new-project.png') }}" class="img-responsive"
                                 alt=""><span class="process-num">01</span></span>
-                        <h4> {{ __('index.add_project') }}</h4>
-                        <p> {{ __('index.add_project_text') }} </p>
+                        <h4> نشر مشروع </h4>
+                        <p> قم بنشر تفاصيل مشروعك على المنصة، واطلب من الخبراء تقديم عروضهم. </p>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-4">
                     <div class="working-process"><span class="process-img"><img
-                                src="{{ asset('assets/website/img/step-2.png') }}" class="img-responsive"
+                                src="{{ asset('assets/website/img/select_user.png') }}" class="img-responsive"
                                 alt=""><span class="process-num">02</span></span>
-                        <h4> {{ __('index.select_offer') }} </h4>
-                        <p> {{ __('index.select_offer_text') }} </p>
+                        <h4> استقر على العرض الأفضل </h4>
+                        <p> بعد مقارنة العروض، حدد العرض الذي يلبي متطلبات مشروعك بالكامل. </p>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-4">
                     <div class="working-process"><span class="process-img"><img
-                                src="{{ asset('assets/website/img/step-3.png') }}" class="img-responsive"
+                                src="{{ asset('assets/website/img/completed-task.png') }}" class="img-responsive"
                                 alt=""><span class="process-num">03</span></span>
-                        <h4> {{ __('index.accept_project') }} </h4>
-                        <p> {{ __('index.accept_project_p') }} </p>
+                        <h4> إتمام مشروعك </h4>
+                        <p> إتمام المشروع بنجاح هو الهدف الأساسي للمنصة، حيث يرافق المستقل صاحب المشروع خطوة بخطوة حتى
+                            التسليم النهائي. </p>
                     </div>
                 </div>
             </div>
@@ -80,18 +81,19 @@
             <div class="row justify-content-center">
                 <div class="col-lg-7 col-md-9">
                     <div class="sec-heading">
-                        <h2> {{ __('index.index_h2') }} <span class="theme-cl-2"> {{ __('index.index_h3') }}</span></h2>
+
+                        <h2>خدمات احترافية مميزة <span class="theme-cl-2"> لدعم نمو أعمالك وتعزيز أرباحك</span></h2>
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <!-- Single Item -->
                 @foreach ($main_categories as $category)
                     <div class="col-lg-3 col-md-6 col-6">
                         <div class="ser_110">
                             <div class="ser_110_thumb">
-                                <a href="{{ url('category/' . $category['slug']) }}" class="ser_100_link"><img
+                                <a href="{{ url('services/' . $category['slug']) }}" class="ser_100_link">
+                                    <img style="width: 120px; height:120px;margin:auto;padding-top: 15px;display:block;"
                                         src=" {{ asset('assets/uploads/service_category/' . $category['image']) }}"
                                         class="img-fluid" alt=""></a>
                             </div>
@@ -119,13 +121,16 @@
     <!-- =========================== End Categories  ======================================= -->
 
     <!-- ============================ Start  Popular Category ==================================== -->
-    <section class="gray-light">
+    {{-- <section class="gray-light">
         <div class="container">
 
             <div class="row justify-content-center">
                 <div class="col-lg-7 col-md-9">
                     <div class="sec-heading">
-                        <h2> {{ __('index.index_h4') }} <span class="theme-cl-2"> {{ __('index.index_h5') }} </span></h2>
+
+
+
+                        <h2> خدمات لا غنى عنها <span class="theme-cl-2"> لأي رائد أعمال طموح </span></h2>
                     </div>
                 </div>
             </div>
@@ -149,29 +154,36 @@
 
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- ============================ End Popular Category ==================================== -->
 
     <!-- ########################################### Presit Section ######################## -->
 
     <section class="call-to-act gift_section"
-    style="background:#3fb697 url({{ asset('assets/website/img/landing-bg.png') }}) no-repeat">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="inner-flexible-box subscribe-box">
-                    <img class="animate-pulse" src="{{ asset('assets/website/img/gift.png') }}" alt="">
-                </div>
-                <div class="clt-caption text-center mb-4">
-                    <h2 class="text-light">هدية مميزة بانتظارك!</h2>
-                    <p class="text-light">إذا وصلت مشترياتك إلى 1000 دولار، ستحصل على **رصيد مجاني** بقيمة <strong>50 دولار</strong> في حسابك!
-                        لا تفوت الفرصة!</p>
+        style="background:#3fb697 url({{ asset('assets/website/img/landing-bg.png') }}) no-repeat">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="inner-flexible-box subscribe-box">
+                        <img class="animate-pulse" src="{{ asset('assets/website/img/gift.png') }}" alt="">
+                    </div>
+                    <div class="clt-caption text-center mb-4">
+                        <h2 class="text-light">هدية مميزة بانتظارك!</h2>
+
+                        <p class="text-light">
+
+
+                            بمجرد أن تصل قيمة مشترياتك إلى <strong> 1000 دولار </strong> ، ستُفاجأ برصيد مجاني بقيمة
+                            <strong> 50 دولار </strong> سيضاف تلقائيًا إلى حسابك! استمتع بتسوقك معنا واحصل على المزيد.
+
+
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</section>
+    </section>
 
     <!------------------------------------- End Present Section ##################### -->
 @endsection

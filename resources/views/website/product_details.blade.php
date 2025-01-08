@@ -2,6 +2,10 @@
 @section('title')
     {{ $product['name'] }}
 @endsection
+@section('css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+@endsection
 @section('content')
     <!-- ============================ Page Title Start================================== -->
     <div class="page-title bg-cover" style="background:url( {{ asset('assets/website/img/bn-2.jpg') }})no-repeat;"
@@ -20,29 +24,63 @@
     <section class="gray-bg text-right product_page" dir="rtl">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="col-lg-5 col-md-12 col-sm-12">
                     <div class="_jb_summary light_box">
                         <div class="_jb_summary_largethumb">
-                            <img src="{{ asset('assets/uploads/product_images/' . $product['image']) }}"
-                                class="product_image img-fluid" alt="">
+                            <!-- الصورة الرئيسية -->
+                            <a href="{{ asset('assets/uploads/product_images/' . $product['image']) }}"
+                                data-lightbox="product-gallery">
+                                <img src="{{ asset('assets/uploads/product_images/' . $product['image']) }}"
+                                    class="product_image img-fluid" alt="Main Product Image">
+                            </a>
                         </div>
+                        <!-- السلايدر -->
+                        <div class="swiper mySwiper">
+                            <div class="swiper-wrapper">
+                                <!-- الصورة الرئيسية في السلايدر -->
+                                <div class="swiper-slide">
+                                    <a href="{{ asset('assets/uploads/product_images/' . $product['image']) }}"
+                                        data-lightbox="product-gallery">
+                                        <img src="{{ asset('assets/uploads/product_images/' . $product['image']) }}"
+                                            class="img-fluid" alt="Main Product Image">
+                                    </a>
+                                </div>
+
+                                <!-- الصور الإضافية -->
+                                @foreach ($product['gallary'] as $image)
+                                    <div class="swiper-slide">
+                                        <a href="{{ asset('assets/uploads/product_gallery/' . $image['image']) }}"
+                                            data-lightbox="product-gallery">
+                                            <img src="{{ asset('assets/uploads/product_gallery/' . $image['image']) }}"
+                                                class="img-fluid" alt="Gallery Image">
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <!-- أزرار التنقل -->
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+
 
                         <div class="_jb_summary_caption">
                             <h4 class="product_name"> {{ $product['name'] }} </h4>
                         </div>
                         <div class="_view_dis_908 price_section">
                             <ul class="exlio_list">
-                                @if($product['discount'] > 0)
-                                    <li> السعر <span style="color: #3fb699"> {{ number_format($product['discount'], 2) }} $</span>
-                                        <span style="text-decoration: line-through;margin-left:10px"> {{ number_format($product['price'], 2) }}  $</span>
+                                @if ($product['discount'] > 0)
+                                    <li> السعر <span style="color: #3fb699"> {{ number_format($product['discount'], 2) }}
+                                            $</span>
+                                        <span style="text-decoration: line-through;margin-left:10px">
+                                            {{ number_format($product['price'], 2) }} $</span>
                                     </li>
-
-                                    @else
-                                <li> السعر <span style="color: #3fb699"> {{ number_format($product['price'], 2) }} $</span>
-                                </li>
-
+                                @else
+                                    <li> السعر <span style="color: #3fb699"> {{ number_format($product['price'], 2) }}
+                                            $</span>
+                                    </li>
                                 @endif
-                                                         </ul>
+                            </ul>
                         </div>
                         <div class="_jb_summary_body">
                             <div class="_view_dis_908 d-flex">
@@ -68,6 +106,7 @@
                                                 <li> لا تتردد ابداً في التواصل معنا إذا احتجت أي مساعدة وسنسعد
                                                     بخدمتك.
                                                 </li>
+                                                <li style="color: red"> تترواح مدة الشحن بين 10 - 15 يوم من تاريخ الطلب  </li>
                                             </ul>
                                         </div>
                                         <div class="modal-footer">
@@ -104,7 +143,8 @@
                                                             class="bi bi-bag"></i></button>
                                                 </form>
                                             @else
-                                                <a href="{{ url('login') }}" type="button" class="btn btn-primary"> سجل
+                                                <a href="{{ url('login') }}" type="button" class="btn btn-primary">
+                                                    سجل
                                                     دخولك الان لتكملة الشراء </a>
                                             @endif
                                         </div>
@@ -133,7 +173,7 @@
 
                 </div>
                 <!-- Item Wrap Start -->
-                <div class="col-lg-8 col-md-12 col-sm-12">
+                <div class="col-lg-7 col-md-12 col-sm-12">
                     <div class="_job_detail_box">
                         @if (Session::has('Success_message'))
                             @php
@@ -150,7 +190,7 @@
                         <div class="_wrap_box_slice">
                             <div class="_job_detail_single">
                                 <p>
-                                    {{ $product['description'] }}
+                                    {!! $product['description'] !!}
                                 </p>
                             </div>
                         </div>
@@ -162,4 +202,22 @@
     </section>
     <!-- ============================ Main Section End ================================== -->
 
+@endsection
+
+@section('js')
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 2, // عرض صورتين في وقت واحد
+           // spaceBetween: 2, // المسافة بين الصور
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            loop: true, // التمرير بشكل دائري
+           // centeredSlides: true, // وضع الصورة النشطة في المنتصف
+        });
+    </script>
 @endsection

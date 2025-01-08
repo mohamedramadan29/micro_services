@@ -60,7 +60,7 @@ class CategoryController extends Controller
                 $filename = $this->saveImage($request->image, public_path('assets/uploads/service_category'));
                 $old_image = public_path('assets/uploads/service_category/' . $category->image);
                 if (file_exists($old_image) && isset($category->image)) {
-                    unlink($old_image);
+                    @unlink($old_image);
                 }
                 $category->update([
                     'image' => $filename
@@ -85,7 +85,7 @@ class CategoryController extends Controller
         try {
             $category = Category::findOrFail($id);
             if ($category['image'] != '') {
-                unlink(public_path('assets/uploads/service_category/' . $category['image']));
+                @unlink(public_path('assets/uploads/service_category/' . $category['image']));
             }
             $category->delete();
             return $this->success_message('تم حذف القسم بنجاح ');

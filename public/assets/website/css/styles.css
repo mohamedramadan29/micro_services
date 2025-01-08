@@ -9993,14 +9993,14 @@ h3.pa-name {
 }
 
 .bredcrumb_wrap nav .breadcrumb {
-    background: #102234;
+    background: #3fb697;
     margin-bottom: 30px;
     margin-top: 10px;
     padding: 10px;
 }
 
 .bredcrumb_wrap nav .breadcrumb a {
-    color: white;
+    color: white !important;
 }
 
 .bredcrumb_wrap .breadcrumb-item+.breadcrumb-item::before {
@@ -14262,7 +14262,8 @@ a {
         padding: 24px 8px !important;
         font-size: 12px !important;
     }
-    .nav-menus-wrapper.nav-menus-wrapper-open ul li a{
+
+    .nav-menus-wrapper.nav-menus-wrapper-open ul li a {
         color: #fff !important;
         text-align: right;
     }
@@ -14311,48 +14312,133 @@ a {
     section.min-sec {
         padding: 10px;
     }
-    .help_center a{
+
+    .help_center a {
         padding: 5px 10px;
         right: 5px;
         bottom: 30px;
     }
-    .help_center_products a{
+
+    .help_center_products a {
         right: auto;
         left: 5px;
     }
 }
 
 
-.mobile_alerts{
-display: none;
+.mobile_alerts {
+    display: none;
 }
 
-@media(max-width:991px ){
-    .mobile_alerts{
+@media(max-width:991px) {
+    .mobile_alerts {
         display: block;
     }
-    .large_desktop_notification{
+
+    .large_desktop_notification {
         display: none;
     }
 
 
-.ser_110_thumb img{
-    height: 165px;
+    .ser_110_thumb img {
+        height: 165px;
+    }
 }
-}
-.mobile_alerts .nav-menu-social{
+
+.mobile_alerts .nav-menu-social {
     display: flex;
 }
 
-.mobile_alerts .nav-menu-social .notificaion-alerts{
- margin: 0;
- padding: 15px 10px;
+.mobile_alerts .nav-menu-social .notificaion-alerts {
+    margin: 0;
+    padding: 15px 10px;
 }
-.mobile_alerts .mobile_account{
+
+.mobile_alerts .mobile_account {
     width: auto !important;
     height: 58px;
 }
-.mobile_alerts .mobile_account a{
+
+.mobile_alerts .mobile_account a {
     color: #fff !important;
 }
 
+
+
+/**************** Start New Style In Services Page ***************/
+
+.services_page {}
+
+.services_page .service_header {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.services_page .service_header h3 {
+    font-weight: bold;
+    font-size: 25px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.services_page .service_header p {
+    font-size: 18px;
+    color: #383737;
+}
+
+.services_page .categories {
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.services_page .categories .info {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #f1f1f1;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.services_page .categories .info img {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    margin-top: 10px;
+}
+
+.services_page .categories .info h4 {
+    color: #000;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+/**************** End New Style In Services Page ***************/
+
+
+.btn-theme-2 {
+    background-color: #3fb697 !important;
+}
+
+
+.mySwiper img {
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.swiper-button-next:after, .swiper-button-prev:after {
+    font-size: 16px !important;
+    color: #fff5f5;
+    background: #3fb697;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px !important;
+    border-radius: 4px
+}

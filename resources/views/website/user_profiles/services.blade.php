@@ -3,24 +3,14 @@
     خدمات المستخدم -  {{$user['name']}}
 @endsection
 @section('content')
-    <!-- ============================ Page Title Start================================== -->
-    <div class="page-title bg-cover" style="background:url({{asset('assets/website/img/bn-1.jpg')}})no-repeat;"
-         data-overlay="5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12"></div>
-            </div>
-        </div>
-    </div>
-    <!-- ============================ Page Title End ================================== -->
 
     <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg pt-4 text-right" dir="rtl">
+    <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
         <div class="container-fluid">
             <div class="row m-0">
 
                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
-                    <div class="dashboard-navbar overlio-top">
+                    <div class="dashboard-navbar">
 
                         <div class="d-user-avater">
                             @if($user->image !='')
@@ -39,7 +29,7 @@
                                 <li><a href="{{url('user/'.$user['user_name'])}}"><i class="ti-dashboard"></i> الملف الشخصي </a>
                                 </li>
                                 <li><a href="{{url('user/'.$user['user_name'].'/services')}}"><i class="ti-user"></i> الخدمات </a></li>
-                                <li><a href="{{url('reviews')}}"><i class="ti-email"></i> التقيمات </a></li>
+
                             </ul>
                         </div>
 
