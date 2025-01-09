@@ -108,8 +108,12 @@ class CheckOutController extends Controller
         // Get The Public Setting To GEt Commision
         $public_setting = Setting::first();
         $website_commission = $public_setting['website_commission'] / 100;
+        $auth_user = User::find(Auth::user()->id);
+        $user_balance = $auth_user->balance;
+
         try {
             $data = $request->all();
+
             $service = Service::findOrFail($data['service_id']);
             $service_price = $service['price'];
             $order = new Order();
@@ -120,6 +124,9 @@ class CheckOutController extends Controller
             } else {
                 $new_order_number = 1;
             }
+            if($user_balance < $service_price){
+                return Redirect()->back()->withErrors([' رصيدك الحالي لا يكفي لشراء الخدمة !! ']);
+            }
             /////////////// Stop Here Now In Make Orders
             DB::beginTransaction();
             $order->order_number = $new_order_number;
@@ -129,6 +136,9 @@ class CheckOutController extends Controller
             $order->website_commission = $service_price * $website_commission;
             $order->seller_commission = $service_price - ($service_price * $website_commission);
             $order->save();
+            ////////////////// Decrease Auth USer Balance
+            $auth_user->balance = $user_balance - $service_price;
+            $auth_user->save();
             /////// Send Notification To Seller New Order
             $user = User::find($service['user_id']);
             Notification::send($user, new NewOrderNotification(Auth::id(), Auth::user()->name, Auth::user()->user_name, $service['id'], $this->CustomeSlug($service['name']), $service['name']));

@@ -20,18 +20,6 @@
                 <!-- Item Wrap Start -->
                 <div class="col-lg-8 col-md-12 col-sm-12">
                     <div class="_job_detail_box">
-                        @if (Session::has('Success_message'))
-                            @php
-                                toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-                            @endphp
-                        @endif
-                        @if ($errors->any())
-                            @foreach ($errors->all() as $error)
-                                @php
-                                    toastify()->error($error);
-                                @endphp
-                            @endforeach
-                        @endif
                         <div class="_wrap_box_slice">
                             <div class="_job_detail_single">
                                 <p>
