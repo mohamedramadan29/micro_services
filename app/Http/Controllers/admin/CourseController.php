@@ -2,26 +2,36 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\Message_Trait;
+use App\Models\User;
 use App\Models\front\Course;
 use Illuminate\Http\Request;
+use App\Http\Traits\Message_Trait;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Notifications\AdminActiveCourse;
+use Illuminate\Support\Facades\Notification;
 
 class CourseController extends Controller
 {
     use Message_Trait;
     public function index()
     {
-        $courses = Course::with('User')->orderBy('created_at','desc')->get();
+        $courses = Course::with('User')->orderBy('created_at', 'desc')->get();
 
-        return view('admin.courses.index',compact('courses'));
+        return view('admin.courses.index', compact('courses'));
     }
 
     public function update_status(Request $request, $id)
     {
+        DB::beginTransaction();
         $course = Course::find($id);
+        $user = User::find($course->user_id);
         $course->status = 1;
         $course->save();
+        ############# Send Notofication Mails And Db To Users
+        Notification::send($user, new AdminActiveCourse($user->id, $course->id, $course->slug, $course->title));
+        #####################################
+        DB::commit();
         return $this->success_message(' تم تفعيل الكورس  وظهورة علي الموقع ');
     }
 }

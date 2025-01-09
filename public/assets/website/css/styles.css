@@ -13525,6 +13525,7 @@ button {
 
 .main_hero_section h4 {
     font-weight: bold;
+    font-size:17px;
 }
 
 .main_hero_section .btn-global-button {
@@ -14305,6 +14306,7 @@ a {
     margin-bottom: 20px;
     margin-top: 20px;
     font-size: 20px;
+    display:block;
 }
 
 
@@ -14415,6 +14417,7 @@ a {
     color: #000;
     margin-top: 15px;
     margin-bottom: 15px;
+    font-size:17px;
 }
 
 /**************** End New Style In Services Page ***************/

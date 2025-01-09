@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\CourseController;
 use \App\Http\Controllers\admin\TicketController;
 use App\Http\Controllers\admin\ConsultController;
@@ -103,5 +104,11 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('course/update_status/{id}', 'update_status');
         });
         ################# End Courses ####################
+        ################## Start Order Controller ################
+        Route::controller(OrderController::class)->group(function () {
+            Route::get('orders', 'index');
+            Route::match(['post', 'get'], 'order/update/{id}', 'update');
+            Route::post('order/delete/{id}', 'delete');
+        });
     });
 });

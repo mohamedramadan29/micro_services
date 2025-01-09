@@ -3,49 +3,37 @@
         المحادثات
     @endsection
     @section('content')
-
         <!-- ============================ Main Section Start ================================== -->
         <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
-            @if (Session::has('Success_message'))
-                @php
-                    toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-                @endphp
-            @endif
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    @php
-                        toastify()->error($error);
-                    @endphp
-                @endforeach
-            @endif
             <div class="container-fluid">
                 <div class="row m-0">
                     <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
                         <div class="dashboard-navbar">
 
                             <div class="d-user-avater">
-                                @if(Auth::user()->image !='')
-                                    <img src="{{asset('assets/uploads/users_image/'.Auth::user()->image)}}"
-                                         class="img-fluid rounded" alt="">
+                                @if (Auth::user()->image != '')
+                                    <img src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
+                                        class="img-fluid rounded" alt="">
                                 @else
-                                    <img src="{{asset('assets/website/img/avatar.png')}}" class="img-fluid rounded" alt="">
+                                    <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
+                                        alt="">
                                 @endif
-                                <h4> {{Auth::user()->user_name}} </h4>
-                                <span> {{Auth::user()->email}} </span>
+                                <h4> {{ Auth::user()->user_name }} </h4>
+                                <span> {{ Auth::user()->email }} </span>
                             </div>
 
                             <div class="d-navigation">
                                 <ul id="metismenu">
-                                    <li><a href="{{url('dashboard')}}"><i class="ti-dashboard"></i> الملف الشخصي </a>
+                                    <li><a href="{{ url('dashboard') }}"><i class="ti-dashboard"></i> الملف الشخصي </a>
                                     </li>
-                                    <li><a href="{{url('service/index')}}"><i class="ti-user"></i> الخدمات </a></li>
-                                    <li><a href="{{url('service/add')}}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
-                                    <li><a href="{{url('chat-main')}}"><i class="ti-email"></i> المحادثات </a></li>
-                                    <li><a href="{{url('reviews')}}"><i class="ti-email"></i> التقيمات </a></li>
-                                    <li><a href="{{url('update-account')}}"><i class="ti-email"></i> تعديل الملف الشخصي
+                                    <li><a href="{{ url('service/index') }}"><i class="ti-user"></i> الخدمات </a></li>
+                                    <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
+                                    <li><a href="{{ url('chat-main') }}"><i class="ti-email"></i> المحادثات </a></li>
+                                    <li><a href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li>
+                                    <li><a href="{{ url('update-account') }}"><i class="ti-email"></i> تعديل الملف الشخصي
                                         </a></li>
-                                    <li><a href="{{url('balance')}}"><i class="ti-email"></i> الرصيد </a></li>
-                                    <li><a href="{{url('logout')}}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
+                                    <li><a href="{{ url('balance') }}"><i class="ti-email"></i> الرصيد </a></li>
+                                    <li><a href="{{ url('logout') }}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
                                 </ul>
                             </div>
 
@@ -61,8 +49,8 @@
                                 <div class="bredcrumb_wrap">
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="{{url('/')}}"> الرئيسية </a></li>
-                                            <li class="breadcrumb-item"><a href="{{url('dashboard')}}"> حسابي </a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('dashboard') }}"> حسابي </a></li>
                                             <li class="breadcrumb-item active" aria-current="page"> الرسائل</li>
                                         </ol>
                                     </nav>

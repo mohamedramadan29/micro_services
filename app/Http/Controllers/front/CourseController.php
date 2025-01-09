@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\front;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\Message_Trait;
+use App\Models\User;
 use App\Models\front\Course;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Traits\Slug_Trait;
+use App\Http\Traits\Message_Trait;
+use App\Http\Traits\Upload_Images;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Traits\Slug_Trait;
-use App\Http\Traits\Upload_Images;
 
 class CourseController extends Controller
 {
@@ -29,6 +30,18 @@ class CourseController extends Controller
         $course = Course::with('User')->where('id', $id)->where('slug', $slug)->first();
         //dd($course);
         if ($course) {
+            $user = User::find(Auth::id());
+            /////////// Make Coourse IS Read
+            $notification_type = 'App\Notifications\AdminActiveCourse';
+            $notifications = $user->unreadNotifications->where('type', $notification_type);
+            foreach ($notifications as $notification) {
+                $notification->markAsRead();
+            }
+            $notification_type_new_register = 'App\Notifications\NewCourseRegister';
+            $notification_register = $user->unreadNotifications->where('type', $notification_type_new_register);
+            foreach ($notification_register as $notification) {
+                $notification->markAsRead();
+            }
             return view('website.course_details', compact('course'));
         }
         abort(404);
@@ -170,12 +183,13 @@ class CourseController extends Controller
         return view('website.courses.edit', compact('course'));
     }
 
-    public function subscriptions($id){
+    public function subscriptions($id)
+    {
         $course = Course::findOrFail($id);
-        if($course->user_id != Auth::id()){
+        if ($course->user_id != Auth::id()) {
             abort(404);
         }
-        $subscriptions = $course->Subscriptions()->orderBy('id','desc')->get();
-        return view('website.courses.subscriptions',compact('subscriptions'));
+        $subscriptions = $course->Subscriptions()->orderBy('id', 'desc')->get();
+        return view('website.courses.subscriptions', compact('subscriptions'));
     }
 }

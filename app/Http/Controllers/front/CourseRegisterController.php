@@ -5,13 +5,15 @@ namespace App\Http\Controllers\front;
 use App\Models\User;
 use App\Models\front\Course;
 use Illuminate\Http\Request;
+use App\Models\admin\Setting;
 use App\Http\Traits\Message_Trait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\admin\Setting;
 use App\Models\front\CourseRegister;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\NewCourseRegister;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Notification;
 
 class CourseRegisterController extends Controller
 {
@@ -25,6 +27,7 @@ class CourseRegisterController extends Controller
 
         $course = Course::findOrFail($id);
         $website_commission_profit = ($course->price * $website_commission) / 100;
+        //dd($website_commission_profit);
         $course_owner_profit = $course->price - $website_commission_profit;
         if ($course) {
             $user = User::where('id', Auth::user()->id)->first();
@@ -63,7 +66,15 @@ class CourseRegisterController extends Controller
 
                 $course->current_student_num++;
                 $course->save();
+                ################# Update Website Balance
+                $public_setting = Setting::first();
+                $website_balance = $public_setting->website_balance + $website_commission_profit;
 
+                $public_setting->website_balance = $website_balance;
+                $public_setting->save();
+                #################
+                ######### Send Notification To Course Owner
+                Notification::send($owner, new NewCourseRegister($user->id, $course->id, $course->slug, $course->title));
                 DB::commit();
 
                 return $this->success_message(' تم الاشتراك في الكورس بنجاح  ');

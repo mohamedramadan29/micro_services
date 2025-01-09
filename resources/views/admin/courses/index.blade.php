@@ -53,6 +53,7 @@
                                         <th class="wd-15p border-bottom-0"> صاحب الكورس  </th>
                                         <th class="wd-15p border-bottom-0"> عدد الساعات  </th>
                                         <th class="wd-15p border-bottom-0"> التفعيل </th>
+                                        <th class="wd-15p border-bottom-0"> عدد المشتركين </th>
                                         <th class="wd-15p border-bottom-0"> العمليات</th>
                                     </tr>
                                 </thead>
@@ -76,6 +77,9 @@
                                                         <button type="submit" class="btn btn-sm btn-primary"> تفعيل  </button>
                                                     </form>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                {{ $course['current_student_num'] }} مشترك
                                             </td>
 
                                             <td>

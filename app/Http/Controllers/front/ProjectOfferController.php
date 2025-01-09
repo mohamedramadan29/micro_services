@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreProjectOfferRequest;
 use App\Http\Requests\UpdateProjectOfferRequest;
-
+use App\Notifications\ProjectDelivery;
+use Illuminate\Support\Facades\Notification;
 class ProjectOfferController extends Controller
 {
     use Message_Trait;
@@ -146,13 +147,7 @@ class ProjectOfferController extends Controller
                 //    return $this->error_message('');
                 return Redirect::back()->withErrors('لا يمكن تسليم هذا المشروع في الحالة الحالية.');
             }
-
             DB::beginTransaction();
-
-            // تحديث حالة المشروع
-            $project->update([
-                'status' => 'تم الاستلام',
-            ]);
 
             // جلب العرض المقبول
             $offer = ProjectOffer::find($project->offer_accept);
@@ -160,6 +155,10 @@ class ProjectOfferController extends Controller
                 DB::rollBack();
                 return Redirect::back()->withErrors('العرض المقبول غير موجود.');
             }
+            // تحديث حالة المشروع
+            $project->update([
+                'status' => 'تم الاستلام',
+            ]);
 
             $offer_user_get = $offer->user_get;
             $website_get = $offer->website_get;
@@ -179,11 +178,19 @@ class ProjectOfferController extends Controller
             if ($project_owner) {
                 $project_owner->balance = intval($project_owner['balance']) - intval($project['offer_budget']);
                 $project_owner->save();
-
             } else {
                 DB::rollBack();
                 return Redirect::back()->withErrors('صاحب المشروع غير موجود.');
             }
+            // تحديث رصيد الموقع
+            $public_setting = Setting::first();
+            if ($public_setting) {
+                $public_setting->website_balance = intval($public_setting['website_balance']) + intval($website_get);
+                $public_setting->save();
+            }
+            //////////////////// Send Notification Mails And Db To Users
+            Notification::send($freelancer, new ProjectDelivery($freelancer, $offer_user_get, $project->id, $project->slug, $project->title));
+
             DB::commit();
             return $this->success_message('تم تسليم المشروع بنجاح.');
         } catch (\Exception $e) {

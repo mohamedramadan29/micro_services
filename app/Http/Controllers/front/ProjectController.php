@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\front;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\Message_Trait;
-use App\Http\Traits\Slug_Trait;
-use App\Http\Traits\Upload_Images;
-use App\Models\front\Project;
-use App\Models\front\ProjectFiles;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\front\Project;
+use App\Models\admin\Category;
+use App\Http\Traits\Slug_Trait;
+use App\Http\Traits\Message_Trait;
+use App\Http\Traits\Upload_Images;
+use App\Models\front\ProjectFiles;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use App\Models\admin\Category;
 
 class ProjectController extends Controller
 {
@@ -193,21 +194,35 @@ class ProjectController extends Controller
     {
         $project = Project::with('User', 'Offers.User', 'freelancer')->where('id', $id)->where('slug', $slug)->first();
 
-                //////////////// Mark Project Notifications as Read
-                if (Auth::check()) {
-                    $user = Auth::user();
-                    if ($user->unreadNotifications->isNotEmpty()) {
-                        // Filter notifications related to projects only
-                        $projectNotifications = $user->unreadNotifications->filter(function ($notification) {
-                            return $notification['type'] === 'App\Notifications\OfferAccepted';
-                        });
-                        // Mark these notifications as read
-                        foreach ($projectNotifications as $notification) {
-                            $notification->markAsRead();
-                        }
-                    }
+        //////////////// Mark Project Notifications as Read
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->unreadNotifications->isNotEmpty()) {
+                // Filter notifications related to projects only
+                $projectNotifications = $user->unreadNotifications->filter(function ($notification) {
+                    return $notification['type'] === 'App\Notifications\OfferAccepted';
+                });
+                // Mark these notifications as read
+                foreach ($projectNotifications as $notification) {
+                    $notification->markAsRead();
                 }
+            }
+        }
         if ($project) {
+            //////////// Make Notification Is Read
+            $user = User::find(Auth::id());
+            if ($user) {
+                $notification_type = 'App\Notifications\AcceptProjectFromAdmin';
+                $notifications = $user->unreadNotifications->where('type', $notification_type);
+                foreach ($notifications as $notification) {
+                    $notification->markAsRead();
+                }
+                $accepted_type = 'App\Notifications\ProjectDelivery';
+                $notifications = $user->unreadNotifications->where('type', $accepted_type);
+                foreach ($notifications as $notification) {
+                    $notification->markAsRead();
+                }
+            }
 
             return view('website.project_details', compact('project'));
         }

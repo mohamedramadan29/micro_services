@@ -130,7 +130,6 @@ class CheckOutController extends Controller
             $order->seller_commission = $service_price - ($service_price * $website_commission);
             $order->save();
             /////// Send Notification To Seller New Order
-            ///
             $user = User::find($service['user_id']);
             Notification::send($user, new NewOrderNotification(Auth::id(), Auth::user()->name, Auth::user()->user_name, $service['id'], $this->CustomeSlug($service['name']), $service['name']));
             DB::commit();

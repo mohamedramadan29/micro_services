@@ -7,22 +7,26 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
 @endsection
 @section('content')
-    <!-- ============================ Page Title Start================================== -->
-    <div class="page-title bg-cover" style="background:url( {{ asset('assets/website/img/bn-2.jpg') }})no-repeat;"
-        data-overlay="5">
+
+    <!-- ============================ Main Section Start ================================== -->
+    <section class="gray-bg text-right product_page" dir="rtl" style="padding-top: 2px;">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
+            <div class="main_hero_section" dir="rtl">
+                <div>
+                    <h4> {{ $product['title'] }} </h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('products') }}"> المنتجات </a></li>
+                            <li class="breadcrumb-item active" aria-current="page"> {{ $product['name'] }} </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div>
 
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- ============================ Page Title End ================================== -->
-
-    <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg text-right product_page" dir="rtl">
-        <div class="container">
+            <br>
             <div class="row">
                 <div class="col-lg-5 col-md-12 col-sm-12">
                     <div class="_jb_summary light_box">
@@ -106,13 +110,29 @@
                                                 <li> لا تتردد ابداً في التواصل معنا إذا احتجت أي مساعدة وسنسعد
                                                     بخدمتك.
                                                 </li>
-                                                <li style="color: red"> تترواح مدة الشحن بين 10 - 15 يوم من تاريخ الطلب  </li>
+                                                <li style="color: red"> تترواح مدة الشحن بين 10 - 15 يوم من تاريخ الطلب
+                                                </li>
                                             </ul>
                                         </div>
                                         <div class="modal-footer">
                                             @if (Auth::check())
                                                 <form style="width: 100%" method="post"
                                                     action="{{ url('product_order') }}">
+                                                    <div class="form-group">
+                                                        <label> الاسم </label>
+                                                        <input style="height: 45px" class="form-control" name="name"
+                                                            required value="{{ Auth::user()->name }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label> رقم الهاتف </label>
+                                                        <input style="height: 45px" class="form-control" name="phone"
+                                                            required value="{{ Auth::user()->phone }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label> البريد الالكتروني </label>
+                                                        <input style="height: 45px" class="form-control" name="email"
+                                                            required value="{{ Auth::user()->email }}">
+                                                    </div>
                                                     <div class="form-group">
                                                         <label> الدولة </label>
                                                         <input style="height: 45px" class="form-control" name="country"
@@ -132,7 +152,8 @@
                                                         <label> ملاحظات اضافية </label>
                                                         <textarea style="height: 90px" name="note" id="" class="form-control"></textarea>
                                                     </div>
-                                                    <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+                                                    <input type="hidden" name="product_id"
+                                                        value="{{ $product['id'] }}">
                                                     <input type="hidden" name="product_name"
                                                         value="{{ $product['name'] }}">
                                                     <input type="hidden" name="product_price"
@@ -175,18 +196,6 @@
                 <!-- Item Wrap Start -->
                 <div class="col-lg-7 col-md-12 col-sm-12">
                     <div class="_job_detail_box">
-                        @if (Session::has('Success_message'))
-                            @php
-                                toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-                            @endphp
-                        @endif
-                        @if ($errors->any())
-                            @foreach ($errors->all() as $error)
-                                @php
-                                    toastify()->error($error);
-                                @endphp
-                            @endforeach
-                        @endif
                         <div class="_wrap_box_slice">
                             <div class="_job_detail_single">
                                 <p>
@@ -211,13 +220,13 @@
     <script>
         var swiper = new Swiper(".mySwiper", {
             slidesPerView: 2, // عرض صورتين في وقت واحد
-           // spaceBetween: 2, // المسافة بين الصور
+            // spaceBetween: 2, // المسافة بين الصور
             navigation: {
                 nextEl: ".swiper-button-next",
                 prevEl: ".swiper-button-prev",
             },
             loop: true, // التمرير بشكل دائري
-           // centeredSlides: true, // وضع الصورة النشطة في المنتصف
+            // centeredSlides: true, // وضع الصورة النشطة في المنتصف
         });
     </script>
 @endsection

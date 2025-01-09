@@ -46,7 +46,8 @@
                                         @if ($newMessageNotifications->count() > 0)
                                             @forelse ($newMessageNotifications as $notification)
                                                 <li>
-                                                    <a class="dropdown-item" href="{{ url('chat-main') }}">
+                                                    <a class="dropdown-item"
+                                                        href="{{ url('chat-main/' . $notification['data']['conversation_id']) }}">
                                                         {{ $notification['data']['title'] }}
                                                         {{ $notification['data']['sender_username'] }}
                                                         <br>
@@ -232,7 +233,6 @@
                                                             {{ $notification->created_at->diffForHumans() }}
                                                         </span>
                                                     </a>
-
                                                 </li>
                                                 <hr>
                                             @elseif($notification['type'] == 'App\Notifications\OfferAccepted')
@@ -241,6 +241,58 @@
                                                         تمت الموافقة علي العرض الخاص بك علي المشروع
 
                                                         : {{ $notification['data']['project_title'] }}
+                                                        <br>
+                                                        <span class="timer"> <i class="fa fa-clock"></i>
+                                                            {{ $notification->created_at->diffForHumans() }}
+                                                        </span>
+                                                    </a>
+
+                                                </li>
+                                                <hr>
+                                            @elseif($notification['type'] == 'App\Notifications\AcceptProjectFromAdmin')
+                                                <li><a class="dropdown-item"
+                                                        href="{{ url('project/' . $notification['data']['project_id'] . '-' . $notification['data']['project_slug']) }}">
+                                                        تمت الموافقة علي المشروع الخاص بك
+                                                        : {{ $notification['data']['project_name'] }}
+                                                        <br>
+                                                        <span class="timer"> <i class="fa fa-clock"></i>
+                                                            {{ $notification->created_at->diffForHumans() }}
+                                                        </span>
+                                                    </a>
+
+                                                </li>
+                                                <hr>
+                                            @elseif($notification['type'] == 'App\Notifications\ProjectDelivery')
+                                                <li><a class="dropdown-item"
+                                                        href="{{ url('project/' . $notification['data']['project_id'] . '-' . $notification['data']['project_slug']) }}">
+                                                        {{ $notification['data']['noti_title'] }}
+                                                        : {{ $notification['data']['project_title'] }}
+                                                        <br>
+                                                        <span class="timer"> <i class="fa fa-clock"></i>
+                                                            {{ $notification->created_at->diffForHumans() }}
+                                                        </span>
+                                                    </a>
+
+                                                </li>
+                                                <hr>
+                                            @elseif($notification['type'] == 'App\Notifications\AdminActiveCourse')
+                                                <li><a class="dropdown-item"
+                                                        href="{{ url('course/' . $notification['data']['course_id'] . '-' . $notification['data']['course_slug']) }}">
+                                                        {{ $notification['data']['noti_title'] }}
+                                                        : {{ $notification['data']['course_title'] }}
+                                                        <br>
+                                                        <span class="timer"> <i class="fa fa-clock"></i>
+                                                            {{ $notification->created_at->diffForHumans() }}
+                                                        </span>
+                                                    </a>
+
+                                                </li>
+                                                <hr>
+                                            @elseif($notification['type'] == 'App\Notifications\NewCourseRegister')
+                                                <li><a class="dropdown-item"
+                                                        href="{{ url('course/' . $notification['data']['course_id'] . '-' . $notification['data']['course_slug']) }}">
+                                                        {{ $notification['data']['noti_title'] }}
+                                                        : {{ $notification['data']['course_title'] }}
                                                         <br>
                                                         <span class="timer"> <i class="fa fa-clock"></i>
                                                             {{ $notification->created_at->diffForHumans() }}
