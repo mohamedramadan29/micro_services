@@ -36,6 +36,9 @@ class WithDrawController extends Controller
         if($withdraw_transactions->count() > 0){
             return Redirect()->back()->withErrors(' هناك عملية سحب في الوقت الحالي من فضلك انتظر حتي اتمام العملية الاولي  ');
         }
+        if($user->balance < $request->amount){
+            return Redirect()->back()->withErrors(' الرصيد المتاح للسحب اقل من المبلغ المطلوب  ');
+        }
         $validator = Validator::make($data, $rules, $messages);
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();

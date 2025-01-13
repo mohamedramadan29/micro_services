@@ -61,7 +61,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mobile_form">
                         <form id="uploadService" method="post" action="{{url('service/update/'.$service['id'])}}" enctype="multipart/form-data">
                             @csrf
                             <div class="col-lg-12 col-md-12 col-sm-12">

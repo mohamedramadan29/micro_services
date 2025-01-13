@@ -137,9 +137,43 @@
                                         @endforelse
                                     </ul>
                                 </div>
-                                <li class="mobile_account">
+                                <div class="dropdown profile-dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        @if (Auth::user()->image != '')
+                                            <img
+                                                src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
+                                                class="img-fluid rounded" alt="">
+                                        @else
+                                            <img src="{{ asset('assets/website/img/avatar.png') }}"
+                                                class="img-fluid rounded" alt="">
+                                        @endif
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ url('dashboard') }}"> الملف الشخصي <i class="ti-dashboard"></i> </a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="{{ url('balance') }}"> الرصيد <i class="bi bi-credit-card"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/project/index') }}"> المشاريع <i class="bi bi-cast"></i></a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/project/add') }}"> اضف مشروع جديد <i class="ti-plus"></i></a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/courses') }}">  الكورسات <i class="bi bi-mortarboard-fill"></i> </a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="{{ url('my/course/add') }}"> اضف كورس جديد <i class="ti-plus"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('service/index') }}">الخدمات
+                                            <i class="bi bi-database-fill-check"></i>  </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('service/add') }}"> اضف خدمة جديدة <i class="ti-plus"></i></a></li>
+                                        <li><a class="dropdown-item" href="{{ url('chats') }}">  المحادثات <i class="bi bi-chat-dots-fill"></i></a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="{{ url('tickets') }}"> تذاكري <i class="bi bi-ticket"></i> </a></li>
+                                        {{-- <li><a class="dropdown-item" href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li> --}}
+                                        <li><a class="dropdown-item" href="{{ url('update-account') }}">  تعديل الملف
+                                                الشخصي
+                                                <i class="bi bi-gear-fill"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('logout') }}"> تسجيل خروج <i class="ti-power-off"></i> </a></li>
+                                    </ul>
+                                </div>
+                                {{-- <li class="mobile_account">
                                     <a href="{{ url('dashboard') }}"> {{ __('public.account') }} </a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
                     @endif
@@ -204,7 +238,8 @@
                                             <span class="counter"> {{ $unreadNotificationsUsers->count() }}
                                             </span>
                                         @endif
-                                        <li><a href="#"> <i style="font-size: 20px" class="bi bi-bell-fill"></i>
+                                        <li><a href="#"> <i style="font-size: 20px"
+                                                    class="bi bi-bell-fill"></i>
                                             </a>
                                         </li>
                                     </button>
@@ -310,7 +345,7 @@
                                     </ul>
                                 </div>
                                 <li>
-                                    <a href="{{ url('dashboard') }}"> {{ __('public.account') }} </a>
+                                    <a href="{{ url('dashboard') }}"> حسابي </a>
                                 </li>
                             </ul>
                         @else

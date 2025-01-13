@@ -151,7 +151,7 @@ class serviceController extends Controller
                 if ($request->hasFile('image')) {
                     $filename = $this->saveImage($request->image, public_path('assets/uploads/services'));
                     if ($service['image'] != '') {
-                        unlink(public_path('assets/uploads/services/' . $service['image']));
+                        @unlink(public_path('assets/uploads/services/' . $service['image']));
                     }
                     $service->update([
                         'image' => $filename
@@ -184,7 +184,7 @@ class serviceController extends Controller
         try {
             $serivces = Service::findOrFail($id);
             if ($serivces['image'] != '') {
-                unlink(public_path('assets/uploads/services/' . $serivces['image']));
+                @unlink(public_path('assets/uploads/services/' . $serivces['image']));
             }
             $serivces->delete();
             return $this->success_message('تم حذف الخدمة بنجاح');

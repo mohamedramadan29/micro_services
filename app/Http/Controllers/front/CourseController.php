@@ -20,11 +20,17 @@ class CourseController extends Controller
     use Slug_Trait;
     use Upload_Images;
 
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::where("status", 1)->orderBy("id", "desc")->paginate(10);
+        $query = Course::where('status',1);
+        if($request->has('search')){
+            $query->where('title','like','%'.$request->input('search').'%');
+        }
+        $courses = $query->orderBy('id', 'desc')->paginate(10);
         return view("website.courses", compact("courses"));
     }
+
+
     public function course_details($id, $slug)
     {
         $course = Course::with('User')->where('id', $id)->where('slug', $slug)->first();

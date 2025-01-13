@@ -71,19 +71,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        @if (Session::has('Success_message'))
-                            @php
-                                toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-                            @endphp
-                        @endif
-                        @if ($errors->any())
-                            @foreach ($errors->all() as $error)
-                                @php
-                                    toastify()->error($error);
-                                @endphp
-                            @endforeach
-                        @endif
+                    <div class="row mobile_form">
                         <form method="post" action="{{ url('my/project/update/' . $project['id']) }}"
                             enctype="multipart/form-data" id="uploadService">
                             @csrf

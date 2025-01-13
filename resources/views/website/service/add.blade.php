@@ -66,7 +66,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mobile_form">
                         <form method="post" action="{{ url('service/add') }}" enctype="multipart/form-data"
                             id="uploadService">
                             @csrf

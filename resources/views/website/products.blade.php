@@ -6,6 +6,12 @@
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg text-right profile_page" dir="rtl">
         <div class="container">
+            <div class="main_hero_section">
+                <div>
+                    <h4> منتجات نفذها </h4>
+                </div>
+            </div>
+            <br>
             <div class="row">
                 <!-- Item Wrap Start -->
                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -20,8 +26,6 @@
                                                 class="img-fluid" alt=""></a>
                                     </div>
                                     <div class="ser_110_footer bott">
-
-
                                     </div>
                                     <div class="ser_110_caption">
 
@@ -38,7 +42,8 @@
                                             @if ($product['discount'] > 0)
                                                 <strong class="theme-cl" style="opacity: .5; text-decoration:line-through">
                                                     {{ number_format($product['price'], 2) }} $ </strong>
-                                                <strong class="theme-cl"> {{ number_format($product['discount'],2) }} $ </strong>
+                                                <strong class="theme-cl"> {{ number_format($product['discount'], 2) }} $
+                                                </strong>
                                             @else
                                                 <strong class="theme-cl"> {{ number_format($product['price'], 2) }} $
                                                 </strong>

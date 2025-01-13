@@ -77,7 +77,7 @@
                             @endphp
                         @endforeach
                     @endif
-                    <form method="post" enctype="multipart/form-data" action="{{url('update-account')}}">
+                    <form method="post" enctype="multipart/form-data" action="{{url('update-account')}}" autocomplete="off">
                         @csrf
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12">

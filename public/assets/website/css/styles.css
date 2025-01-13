@@ -12850,7 +12850,8 @@ textarea.form-control::placeholder {
     }
 
     .dashboard-navbar {
-        margin-bottom: 20px;
+        margin-bottom: 0px;
+        padding: 0;
     }
 
     ._grouping_single_reviews_thumb {
@@ -14445,3 +14446,61 @@ a {
     line-height: 30px !important;
     border-radius: 4px
 }
+.profile-dropdown{
+
+}
+.profile-dropdown button{
+    border: none !important;
+    box-shadow: none;
+    outline: none;
+    position: relative;
+    top: 5px;
+    background-color:transparent !important;
+}
+.profile-dropdown button:hover,
+.profile-dropdown button:active,
+.profile-dropdown button:focus{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+.profile-dropdown img{
+    width: 45px;
+    height: 45px;
+    border-radius: 50% !important;
+    border: 1px solid #ccc;
+    outline: none;
+    padding: 2px;
+}
+.profile-dropdown .dropdown-menu{
+
+}
+.profile-dropdown .dropdown-menu li{
+    padding-top: 5px;
+    border-bottom: 1px solid #f1f1f1;
+    padding-bottom: 5px;
+}
+
+
+@media(max-width:991px) {
+    .dashboard-navbar .d-navigation{
+        display: none;
+    }
+    .mobile_form form{
+        padding: 0;
+    }
+    .mobile_form{
+        padding: 0 !important;
+    }
+    .message_headline_chatbox{
+        flex-direction: column;
+    }
+    .profile_page{
+        margin-top: 15px;
+    }
+    section{
+        padding: 1px 0 80px;
+    }
+}
+

@@ -18,18 +18,18 @@
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="simple-sidebar sm-sidebar">
                         <div class="search-sidebar_header">
-                            <h4 class="ssh_heading"> {{ __('courses.the_search') }} </h4>
+                            <h4 class="ssh_heading"> البحث </h4>
                         </div>
                         <!-- Find New Property -->
                         <div class="sidebar-widgets collapse miz_show" id="search_open" data-parent="#search_open">
-                            <form action="{{ url('services') }}" method="get">
+                            <form action="{{ url('courses') }}" method="get">
                                 @csrf
                                 <div class="search-inner p-0">
 
                                     <div class="filter-search-box pb-0">
                                         <div class="form-group">
                                             <input type="text" name="search" class="form-control"
-                                                value="{{ request()->input('search') }}" placeholder=" {{ __('courses.search_services') }} ">
+                                                value="{{ request()->input('search') }}" placeholder="  ابحث عن كورس  ">
                                         </div>
                                     </div>
                                     {{-- <div class="filter_wraps">

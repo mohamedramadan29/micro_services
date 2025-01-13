@@ -82,11 +82,14 @@
                                             data-bs-toggle="modal" data-bs-target="#charge_balance">
                                             شحن رصيد <i class="bi bi-plus"></i>
                                         </button>
-                                        <button style="height: 40px;background-color:#ffca2c;" type="button"
-                                            class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#minus_balance"> سحب رصيد
-                                            <i class="bi bi-dash"></i>
-                                        </button>
+                                        @if (Auth::user()->balance > 0)
+                                            <button style="height: 40px;background-color:#ffca2c;" type="button"
+                                                class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#minus_balance"> سحب رصيد
+                                                <i class="bi bi-dash"></i>
+                                            </button>
+                                        @endif
+
                                         <!-- Modal -->
                                         <div class="modal fade buy_services_model" id="charge_balance" tabindex="-1"
                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -234,12 +237,12 @@
                                                 <div class="col-lg-4 col-6">
                                                     <div class="info">
                                                         <h4> الرصيد القابل للسحب </h4>
-                                                        <span> {{Auth::user()->balance }} $ </span>
+                                                        <span> {{ Auth::user()->balance }} $ </span>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-6">
                                                     <div class="info">
-                                                        <h4> طلبات السحب   </h4>
+                                                        <h4> طلبات السحب </h4>
                                                         <span> {{ $WithDrawLastOrder['amount'] ?? '0' }} $ </span>
                                                     </div>
                                                 </div>
@@ -290,17 +293,20 @@
                                                     <div class="_list_jobs_wraps mng_list shadow_0 border">
                                                         <div class="_list_jobs_f1ex first">
                                                             <div class="_list_110">
-                                                                <div class="minues_balance"> - {{ $transaction['amount'] }} $ </div>
+                                                                <div class="minues_balance"> -
+                                                                    {{ $transaction['amount'] }} $ </div>
                                                                 <div class="_list_110_caption">
                                                                     <h4 class="_jb_title"><a href="#">
-                                                                    طلب سحب اموال
-                                                                    </a>
+                                                                            طلب سحب اموال
+                                                                        </a>
                                                                     </h4>
                                                                     <ul class="_grouping_list">
-                                                                        <li><span> {{ $transaction['amount'] }}  $ <i class="ti-credit-card"></i>
+                                                                        <li><span> {{ $transaction['amount'] }} $ <i
+                                                                                    class="ti-credit-card"></i>
                                                                             </span>
                                                                         </li>
-                                                                        <li><span><i class="ti-timer"></i> {{ $transaction['created_at'] }}
+                                                                        <li><span><i class="ti-timer"></i>
+                                                                                {{ $transaction['created_at'] }}
                                                                             </span>
                                                                         </li>
                                                                     </ul>
