@@ -93,6 +93,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::controller(ProjectController::class)->group(function () {
             Route::get('projects', 'index');
             Route::match(['post', 'get'], 'project/update/{id}', 'update');
+            Route::post('project/delete/{id}', 'delete');
             Route::post('project/update_status/{id}','update_status');
         });
 
@@ -102,6 +103,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::controller(CourseController::class)->group(function () {
             Route::get('courses', 'index');
             Route::post('course/update_status/{id}', 'update_status');
+            Route::post('course/delete/{id}', 'delete');
         });
         ################# End Courses ####################
         ################## Start Order Controller ################

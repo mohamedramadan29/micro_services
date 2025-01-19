@@ -72,9 +72,11 @@
                                                     <span class="badge badge-success"> موافق </span>
                                                 @else
                                                     <span class="badge badge-danger"> غير موافق </span>
-                                                    <form action="{{ url('admin/project/update_status/'.$project['id']) }}" method="POST">
+                                                    <form action="{{ url('admin/project/update_status/' . $project['id']) }}"
+                                                        method="POST">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-sm btn-primary"> تفعيل  </button>
+                                                        <button type="submit" class="btn btn-sm btn-primary"> تفعيل
+                                                        </button>
                                                     </form>
                                                 @endif
                                             </td>
@@ -82,16 +84,19 @@
                                             <td>
                                                 <a href="{{ url('admin/project/update/' . $project['id']) }}"
                                                     class="btn btn-primary btn-sm"> تعديل <i class="fa fa-edit"></i> </a>
-
+                                                <button data-target="#delete_model_{{ $project['id'] }}"
+                                                    data-toggle="modal" class="btn btn-danger btn-sm"> حذف <i
+                                                        class="fa fa-trash"></i>
+                                                </button>
                                             </td>
                                         </tr>
+                                        @include('admin.projects.delete')
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div><!-- bd -->
                 </div>
-
             </div>
         </div>
         <!-- /Col -->

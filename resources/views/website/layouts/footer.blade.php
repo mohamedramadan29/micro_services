@@ -36,7 +36,7 @@
                     <div class="footer-widget">
                         <h4 class="widget-title"> {{ __('public.follow_us') }} </h4>
                         <ul class="footer-bottom-social">
-                            <li><a style="background-color: #1877f2" href="https://www.facebook.com/profile.php?id=61571530797575"><i
+                            <li><a style="background-color: #1877f2" href="https://www.facebook.com/profile.php?id=61571368633513"><i
                                         class="ti-facebook"></i></a></li>
                             <li><a style="background-color: #1da1f2;" href="https://x.com/NafizhaWeb17206?t=MyM30nyRqryQi5xUkq0Ecw&s=09"><i
                                         class="bi bi-x"></i></a></li>

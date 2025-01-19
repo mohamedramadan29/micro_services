@@ -45,4 +45,10 @@ class ProjectController extends Controller
         return $this->success_message(' تم تفعيل المشروع وظهورة علي الموقع ');
     }
 
+    public function delete($id){
+        $project = Project::find($id);
+        $project->delete();
+        return  $this->success_message('تم حذف المشروع بنجاح ');    
+    }
+
 }

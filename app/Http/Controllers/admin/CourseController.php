@@ -34,4 +34,10 @@ class CourseController extends Controller
         DB::commit();
         return $this->success_message(' تم تفعيل الكورس  وظهورة علي الموقع ');
     }
+
+    public function delete($id){
+        $course = Course::find($id);
+        $course->delete();
+        return  $this->success_message('تم حذف الكورس بنجاح ');
+    }
 }

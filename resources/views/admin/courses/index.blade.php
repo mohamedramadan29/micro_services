@@ -50,8 +50,8 @@
                                     <tr>
                                         <th class="wd-15p border-bottom-0"> #</th>
                                         <th class="wd-15p border-bottom-0"> عنوان الكورس </th>
-                                        <th class="wd-15p border-bottom-0"> صاحب الكورس  </th>
-                                        <th class="wd-15p border-bottom-0"> عدد الساعات  </th>
+                                        <th class="wd-15p border-bottom-0"> صاحب الكورس </th>
+                                        <th class="wd-15p border-bottom-0"> عدد الساعات </th>
                                         <th class="wd-15p border-bottom-0"> التفعيل </th>
                                         <th class="wd-15p border-bottom-0"> عدد المشتركين </th>
                                         <th class="wd-15p border-bottom-0"> العمليات</th>
@@ -72,9 +72,11 @@
                                                     <span class="badge badge-success"> موافق </span>
                                                 @else
                                                     <span class="badge badge-danger"> غير موافق </span>
-                                                    <form action="{{ url('admin/course/update_status/'.$course['id']) }}" method="POST">
+                                                    <form action="{{ url('admin/course/update_status/' . $course['id']) }}"
+                                                        method="POST">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-sm btn-primary"> تفعيل  </button>
+                                                        <button type="submit" class="btn btn-sm btn-primary"> تفعيل
+                                                        </button>
                                                     </form>
                                                 @endif
                                             </td>
@@ -85,9 +87,13 @@
                                             <td>
                                                 <a href="{{ url('admin/project/update/' . $course['id']) }}"
                                                     class="btn btn-primary btn-sm"> تعديل <i class="fa fa-edit"></i> </a>
-
+                                                <button data-target="#delete_model_{{ $course['id'] }}"
+                                                    data-toggle="modal" class="btn btn-danger btn-sm"> حذف <i
+                                                        class="fa fa-trash"></i>
+                                                </button>
                                             </td>
                                         </tr>
+                                        @include('admin.courses.delete')
                                     @endforeach
                                 </tbody>
                             </table>
