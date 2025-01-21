@@ -104,6 +104,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('courses', 'index');
             Route::post('course/update_status/{id}', 'update_status');
             Route::post('course/delete/{id}', 'delete');
+            Route::match(['post','get'],'course/update/{id}','update');
         });
         ################# End Courses ####################
         ################## Start Order Controller ################

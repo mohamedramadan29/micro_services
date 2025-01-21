@@ -43,28 +43,29 @@ class serviceController extends Controller
                 $rules = [
                     'name' => 'required',
                     'cat_id' => 'required',
+                    'sub_cat_id' => 'required',
                     'description' => 'required|min:20',
-                    'image'=>'required|image',
-                    'price' => 'required|numeric'
+                    'image' => 'required|image',
+                    'price' => 'required|numeric',
                 ];
                 $messages = [
                     'name.required' => 'من فضلك ادخل اسم الخدمة ',
                     'cat_id.required' => 'من فضلك حدد القسم للخدمة  ',
                     'description.required' => 'من فضلك ادخل وصف الخدمة',
-                    'image.required'=>' من فضلك ادخل الصورة  ',
-                    'image.image'=>' من فضلك ادخل الصورة بشكل صحيح  ',
+                    'image.required' => ' من فضلك ادخل الصورة  ',
+                    'image.image' => ' من فضلك ادخل الصورة بشكل صحيح  ',
                     'description.min' => 'يجب ان يكون وصف الخدمة اكبر من 20 حرف ',
                     'price.required' => ' من فضلك ادخل سعر الخدمة  ',
-                    'price.numeric' => ' يجب ان يكون سعر الخدمة رقم صحيح  '
+                    'price.numeric' => ' يجب ان يكون سعر الخدمة رقم صحيح  ',
+                    'sub_cat_id.required' => ' من فضلك حدد القسم الفرعي للخدمة '
                 ];
                 $validator = Validator::make($data, $rules, $messages);
                 if ($validator->fails()) {
                     return Redirect::back()->withInput()->withErrors($validator);
                 }
 
-                if ($request->hasFile('image'))
-                {
-                    $filename = $this->saveImage($request->image,public_path('assets/uploads/services'));
+                if ($request->hasFile('image')) {
+                    $filename = $this->saveImage($request->image, public_path('assets/uploads/services'));
                 }
 
                 $service = new Service();
@@ -72,7 +73,7 @@ class serviceController extends Controller
                     'name' => $data['name'],
                     'slug' => $this->CustomeSlug($data['name']),
                     'cat_id' => $data['cat_id'],
-                    'sub_cat_id'=>$data['sub_cat_id'],
+                    'sub_cat_id' => $data['sub_cat_id'],
                     'user_id' => Auth::id(),
                     'image' => $filename,
                     'description' => $data['description'],
@@ -90,7 +91,7 @@ class serviceController extends Controller
         $subCategories = SubCategory::where('status', 1)->get();
         return view('website.service.add', compact('categories', 'subCategories'));
     }
-//    public function tmpUpload(Request $request)
+    //    public function tmpUpload(Request $request)
 //    {
 //        if ($request->hasFile('image')) {
 //            $image = $request->file('image');
@@ -161,7 +162,7 @@ class serviceController extends Controller
                     'name' => $data['name'],
                     'slug' => $this->CustomeSlug($data['name']),
                     'cat_id' => $data['cat_id'],
-                    'sub_cat_id'=>$data['sub_cat_id'],
+                    'sub_cat_id' => $data['sub_cat_id'],
                     'user_id' => Auth::id(),
                     'description' => $data['description'],
                     'price' => $data['price'],
@@ -176,7 +177,7 @@ class serviceController extends Controller
         }
         $categories = Category::where('status', 1)->get();
         $subCategories = SubCategory::where('status', 1)->get();
-        return view('website.service.update', compact('categories','subCategories', 'service'));
+        return view('website.service.update', compact('categories', 'subCategories', 'service'));
     }
 
     public function delete($id)

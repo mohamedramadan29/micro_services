@@ -89,29 +89,63 @@
                                                 <div class="form-group">
                                                     <label> مهارات متعلقة بالمشروع </label>
                                                     <select required class="form-control select2" multiple name="skills[]">
-                                                        <option>-- حدد من القائمة --</option>
-                                                        <option value="برمجة">برمجة</option>
-                                                        <option value="تصميم جرافيك">تصميم جرافيك</option>
-                                                        <option value="كتابة محتوى">كتابة محتوى</option>
-                                                        <option value="إدارة المشاريع">إدارة المشاريع</option>
-                                                        <option value="تحليل البيانات">تحليل البيانات</option>
-                                                        <option value="تسويق رقمي">تسويق رقمي</option>
-                                                        <option value="التدقيق اللغوي">التدقيق اللغوي</option>
-                                                        <option value="التعليق الصوتي">التعليق الصوتي</option>
-                                                        <option value="تصميم مواقع">تصميم مواقع</option>
-                                                        <option value="تحرير الفيديو">تحرير الفيديو</option>
-                                                        <option value="ترجمة">ترجمة</option>
-                                                        <option value="دعم فني">دعم فني</option>
-                                                        <option value="تطوير ويب">تطوير ويب</option>
-                                                        <option value="التسويق عبر وسائل التواصل الاجتماعي">التسويق عبر
-                                                            وسائل التواصل الاجتماعي
-                                                        </option>
-                                                        <option value="استشارات الأعمال">استشارات الأعمال</option>
-                                                        <option value="تحليل مالي">تحليل مالي</option>
-                                                        <option value="إدارة الموارد البشرية">إدارة الموارد البشرية
-                                                        </option>
-                                                        <option value="تحسين محركات البحث">تحسين محركات البحث</option>
+                                                        <option disabled>-- حدد من القائمة --</option>
+                                                        <option value="برمجة"
+                                                            {{ in_array('برمجة', old('skills', [])) ? 'selected' : '' }}>
+                                                            برمجة</option>
+                                                        <option value="تصميم جرافيك"
+                                                            {{ in_array('تصميم جرافيك', old('skills', [])) ? 'selected' : '' }}>
+                                                            تصميم جرافيك</option>
+                                                        <option value="كتابة محتوى"
+                                                            {{ in_array('كتابة محتوى', old('skills', [])) ? 'selected' : '' }}>
+                                                            كتابة محتوى</option>
+                                                        <option value="إدارة المشاريع"
+                                                            {{ in_array('إدارة المشاريع', old('skills', [])) ? 'selected' : '' }}>
+                                                            إدارة المشاريع</option>
+                                                        <option value="تحليل البيانات"
+                                                            {{ in_array('تحليل البيانات', old('skills', [])) ? 'selected' : '' }}>
+                                                            تحليل البيانات</option>
+                                                        <option value="تسويق رقمي"
+                                                            {{ in_array('تسويق رقمي', old('skills', [])) ? 'selected' : '' }}>
+                                                            تسويق رقمي</option>
+                                                        <option value="التدقيق اللغوي"
+                                                            {{ in_array('التدقيق اللغوي', old('skills', [])) ? 'selected' : '' }}>
+                                                            التدقيق اللغوي</option>
+                                                        <option value="التعليق الصوتي"
+                                                            {{ in_array('التعليق الصوتي', old('skills', [])) ? 'selected' : '' }}>
+                                                            التعليق الصوتي</option>
+                                                        <option value="تصميم مواقع"
+                                                            {{ in_array('تصميم مواقع', old('skills', [])) ? 'selected' : '' }}>
+                                                            تصميم مواقع</option>
+                                                        <option value="تحرير الفيديو"
+                                                            {{ in_array('تحرير الفيديو', old('skills', [])) ? 'selected' : '' }}>
+                                                            تحرير الفيديو</option>
+                                                        <option value="ترجمة"
+                                                            {{ in_array('ترجمة', old('skills', [])) ? 'selected' : '' }}>
+                                                            ترجمة</option>
+                                                        <option value="دعم فني"
+                                                            {{ in_array('دعم فني', old('skills', [])) ? 'selected' : '' }}>
+                                                            دعم فني</option>
+                                                        <option value="تطوير ويب"
+                                                            {{ in_array('تطوير ويب', old('skills', [])) ? 'selected' : '' }}>
+                                                            تطوير ويب</option>
+                                                        <option value="التسويق عبر وسائل التواصل الاجتماعي"
+                                                            {{ in_array('التسويق عبر وسائل التواصل الاجتماعي', old('skills', [])) ? 'selected' : '' }}>
+                                                            التسويق عبر وسائل التواصل الاجتماعي</option>
+                                                        <option value="استشارات الأعمال"
+                                                            {{ in_array('استشارات الأعمال', old('skills', [])) ? 'selected' : '' }}>
+                                                            استشارات الأعمال</option>
+                                                        <option value="تحليل مالي"
+                                                            {{ in_array('تحليل مالي', old('skills', [])) ? 'selected' : '' }}>
+                                                            تحليل مالي</option>
+                                                        <option value="إدارة الموارد البشرية"
+                                                            {{ in_array('إدارة الموارد البشرية', old('skills', [])) ? 'selected' : '' }}>
+                                                            إدارة الموارد البشرية</option>
+                                                        <option value="تحسين محركات البحث"
+                                                            {{ in_array('تحسين محركات البحث', old('skills', [])) ? 'selected' : '' }}>
+                                                            تحسين محركات البحث</option>
                                                     </select>
+
                                                 </div>
                                             </div>
                                             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -134,17 +168,37 @@
                                                 <div class="form-group">
                                                     <label> الميزانية المتوقعة </label>
                                                     <select required class="form-select" name="price">
-                                                        <option disabled selected> -- حدد الميزانية --</option>
-                                                        <option value="10 - 25">10 - 25</option>
-                                                        <option value="25 - 50">25 - 50</option>
-                                                        <option value="50 - 100">50 - 100</option>
-                                                        <option value="100 - 250">100 - 250</option>
-                                                        <option value="250 - 500">250 - 500</option>
-                                                        <option value="500 - 1000">500 - 1000</option>
-                                                        <option value="1000 - 2500">1000 - 2500</option>
-                                                        <option value="2500 - 5000">2500 - 5000</option>
-                                                        <option value="5000 - 10000">5000 - 10000</option>
+                                                        <option disabled {{ old('price') ? '' : 'selected' }}> -- حدد
+                                                            الميزانية --</option>
+                                                        <option value="10 - 25"
+                                                            {{ old('price') == '10 - 25' ? 'selected' : '' }}>10 - 25
+                                                        </option>
+                                                        <option value="25 - 50"
+                                                            {{ old('price') == '25 - 50' ? 'selected' : '' }}>25 - 50
+                                                        </option>
+                                                        <option value="50 - 100"
+                                                            {{ old('price') == '50 - 100' ? 'selected' : '' }}>50 - 100
+                                                        </option>
+                                                        <option value="100 - 250"
+                                                            {{ old('price') == '100 - 250' ? 'selected' : '' }}>100 - 250
+                                                        </option>
+                                                        <option value="250 - 500"
+                                                            {{ old('price') == '250 - 500' ? 'selected' : '' }}>250 - 500
+                                                        </option>
+                                                        <option value="500 - 1000"
+                                                            {{ old('price') == '500 - 1000' ? 'selected' : '' }}>500 - 1000
+                                                        </option>
+                                                        <option value="1000 - 2500"
+                                                            {{ old('price') == '1000 - 2500' ? 'selected' : '' }}>1000 -
+                                                            2500</option>
+                                                        <option value="2500 - 5000"
+                                                            {{ old('price') == '2500 - 5000' ? 'selected' : '' }}>2500 -
+                                                            5000</option>
+                                                        <option value="5000 - 10000"
+                                                            {{ old('price') == '5000 - 10000' ? 'selected' : '' }}>5000 -
+                                                            10000</option>
                                                     </select>
+
                                                 </div>
                                             </div>
                                             <div class="col-xl-6 col-lg-6">
@@ -160,10 +214,8 @@
                                                 <div class="form-group">
                                                     <br>
                                                     <input type="file" name="files[]" class="form-control"
-                                                        accept="" id="fileInput" multiple style="display: none;">
-                                                    <button type="button" class="btn btn-primary uploadFiles"
-                                                        id="uploadButton"> ارفاق ملفات <i class="fa fa-upload"></i>
-                                                    </button>
+                                                        accept="" id="fileInput" multiple >
+                                                   
                                                     <span id="fileNames" class="span_info">لم يتم اختيار ملفات بعد</span>
                                                     <span class="span_info">الامتدادات المسموحة: jpg,png,jpeg,webp. الحجم
                                                         الأقصى للملف 4MB</span>
@@ -241,33 +293,4 @@
         </div>
     </section>
     <!-- ============================ Main Section End ================================== -->
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#mainCategory').on('change', function() {
-                var categoryId = $(this).val();
-                if (categoryId) {
-                    $.ajax({
-                        url: 'http://127.0.0.1:8000/admin/service/get-subcategories/' + categoryId,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            $('#subCategory').empty();
-                            $('#subCategory').append(
-                                '<option> -- حدد القسم الفرعي --</option>');
-                            $.each(data, function(key, value) {
-                                $('#subCategory').append('<option value="' + value.id +
-                                    '">' + value.name + '</option>');
-                            });
-                        }
-                    });
-                } else {
-                    $('#subCategory').empty();
-                    $('#subCategory').append('<option> -- حدد القسم الفرعي --</option>');
-                }
-            });
-        });
-    </script>
 @endsection

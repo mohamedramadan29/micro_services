@@ -36,7 +36,8 @@ class CourseController extends Controller
         $course = Course::with('User')->where('id', $id)->where('slug', $slug)->first();
         //dd($course);
         if ($course) {
-            $user = User::find(Auth::id());
+            if(Auth::user()){
+                $user = User::find(Auth::id());
             /////////// Make Coourse IS Read
             $notification_type = 'App\Notifications\AdminActiveCourse';
             $notifications = $user->unreadNotifications->where('type', $notification_type);
@@ -48,6 +49,8 @@ class CourseController extends Controller
             foreach ($notification_register as $notification) {
                 $notification->markAsRead();
             }
+            }
+
             return view('website.course_details', compact('course'));
         }
         abort(404);
@@ -71,7 +74,6 @@ class CourseController extends Controller
                     'desc' => 'required|min:50',
                     'price' => 'required',
                     'leason_numbers' => 'required|numeric',
-                    'image' => 'required|image'
                 ];
                 $messages = [
                     'title.required' => ' من فضلك ادخل عنوان الكورس   ',
@@ -80,7 +82,6 @@ class CourseController extends Controller
                     'price.required' => '  من فضلك ادخل سعر الكورس  ',
                     'leason_numbers.required' => '  من فضلك ادخل عدد المحاضرات ',
                     'image.required' => ' من فضلك ادخل صورة الكورس  ',
-                    'image.image' => ' من فضلك ادخل صورة بشكل صحيح  ',
                 ];
                 $validator = Validator::make($data, $rules, $messages);
                 if ($validator->fails()) {
@@ -95,7 +96,7 @@ class CourseController extends Controller
                 $course->user_id = Auth::id();
                 $course->title = $data['title'];
                 $course->slug = $this->CustomeSlug($data['title']);
-                $course->image = $filename;
+                $course->image = 'image';
                 $course->desc = $data['desc'];
                 $course->adv = $data['adv'];
                 $course->learn = $data['learn'];

@@ -168,7 +168,7 @@
                         <img class="animate-pulse" src="{{ asset('assets/website/img/gift.png') }}" alt="">
                     </div>
                     <div class="clt-caption text-center mb-4">
-                        <h2 class="text-light">هدية مميزة بانتظارك!</h2>
+                        <h2 class="text-light">هدية مميزة بانتظارك </h2>
 
                         <p class="text-light">
 

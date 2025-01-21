@@ -3,7 +3,6 @@
     اضف خدمة جديدة
 @endsection
 @section('content')
-
     <!-- ============================ Page Title End ================================== -->
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
@@ -96,9 +95,11 @@
                                                 <div class="form-group with-light">
                                                     <label> القسم الرئيسي </label>
                                                     <select required id="mainCategory" class="form-select" name="cat_id">
-                                                        <option> -- حدد القسم الرئيسي --</option>
+                                                        <option value=""> -- حدد القسم الرئيسي --</option>
                                                         @foreach ($categories as $category)
-                                                            <option value="{{ $category['id'] }}"> {{ $category['name'] }}
+                                                            <option value="{{ $category['id'] }}"
+                                                                {{ old('cat_id') == $category['id'] ? 'selected' : '' }}>
+                                                                {{ $category['name'] }}
                                                             </option>
                                                         @endforeach
                                                     </select>
@@ -108,24 +109,62 @@
                                             <div class="col-xl-6 col-lg-6">
                                                 <div class="form-group with-light">
                                                     <label> حدد القسم الفرعي </label>
-                                                    <select required class="form-select select2" name="sub_cat_id"
-                                                        id="subCategory">
-                                                        <option> -- حدد القسم الفرعي --</option>
+                                                    <select required class="form-select" name="sub_cat_id" id="subCategory">
+                                                        @if (old('sub_cat_id'))
+                                                            <option value="{{ old('sub_cat_id') }}" selected>القسم السابق
+                                                                المحدد</option>
+                                                        @endif
                                                     </select>
                                                 </div>
                                             </div>
+
+
+                                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                            <script>
+                                                $(document).ready(function() {
+                                                    const oldSubCatId = "{{ old('sub_cat_id') }}";
+                                                    $('#mainCategory').on('change', function() {
+                                                        var categoryId = $(this).val();
+                                                        if (categoryId) {
+                                                            $.ajax({
+                                                                url: 'http://127.0.0.1:8000/service/get-subcategories/' + categoryId,
+                                                                type: 'GET',
+                                                                dataType: 'json',
+                                                                success: function(data) {
+                                                                    $('#subCategory').empty();
+
+                                                                    $.each(data, function(key, value) {
+                                                                        const isSelected = oldSubCatId == value.id ?
+                                                                            "selected" : "";
+                                                                        $('#subCategory').append(
+                                                                            `<option value="${value.id}" ${isSelected}>${value.name}</option>`
+                                                                        );
+                                                                    });
+                                                                }
+                                                            });
+                                                        } else {
+                                                            $('#subCategory').empty();
+                                                        }
+                                                    });
+                                                    // قم بتشغيل تغيير يدوي لتحميل الأقسام الفرعية إذا كانت هناك قيمة قديمة
+                                                    if ("{{ old('cat_id') }}") {
+                                                        $('#mainCategory').val("{{ old('cat_id') }}").trigger('change');
+                                                    }
+                                                });
+                                            </script>
+
                                             <div class="col-xl-6 col-lg-6">
                                                 <div class="form-group">
                                                     <label> سعر الخدمة </label>
                                                     <input type="number" min="5" class="form-control with-light"
-                                                        required name="price" value="{{ old('price') }}">
+                                                        required name="price" step="0.01" value="{{ old('price') }}">
                                                 </div>
                                             </div>
 
                                             <div class="col-xl-12 col-lg-12">
                                                 <div class="form-group">
                                                     <label> وصف الخدمة </label>
-                                                    <textarea class="form-control with-light" required name="description">{{ old('description') }}</textarea>
+                                                    <textarea class="form-control with-light" minlength="20" required name="description">{{ old('description') }}</textarea>
                                                 </div>
                                             </div>
 
@@ -134,28 +173,19 @@
                                                     <label> الكلمات المفتاحية <span class="badge badge-danger"> افصل بين كل
                                                             كلمة والاخري ب (,) </span></label>
                                                     <div class="tg_grouping">
-                                                        <input type="text" id="lg-input" name="tags"
+                                                        <input type="text" required id="lg-input" name="tags"
                                                             class="form-control with-light"
-                                                            placeholder="برمجة , تصميم , ... ">
+                                                            placeholder="برمجة , تصميم , ... "
+                                                            value="{{ old('tags') }}">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-xl-12 col-lg-12">
-                                                {{--                                                <div class="form-group"> --}}
-                                                {{--                                                    <label> صورة الخدمة </label> --}}
-                                                {{--                                                    <input  type="file" class="form-control" required --}}
-                                                {{--                                                           name="image" id="image"> --}}
-
-                                                {{--                                                </div> --}}
-
                                                 <div class="form-group">
                                                     <label> اضافة صور للخدمة </label>
                                                     <br>
-                                                    <input type="file" name="image" class="form-control"
-                                                        accept="" id="fileInput" multiple style="display: none;">
-                                                    <button type="button" class="btn btn-primary uploadFiles"
-                                                        id="uploadButton">ارفع الملفات <i class="fa fa-upload"></i>
-                                                    </button>
+                                                    <input required type="file" name="image" class="form-control"
+                                                        accept="" id="fileInput">
                                                     <span id="fileNames" class="span_info">لم يتم اختيار ملفات بعد</span>
                                                     <span class="span_info">الامتدادات المسموحة: jpg,png,jpeg,webp. الحجم
                                                         الأقصى للملف 4MB</span>
@@ -165,16 +195,12 @@
 
                                         </div>
                                         <button type="submit" class="btn btn-save" id="submitBtn"> اضف الخدمة <i
-                                            class="fa fa-save"></i></button>
-                                    <span id="loader" style="display: none;">جاري الإرسال...</span>
+                                                class="fa fa-save"></i></button>
+                                        <span id="loader" style="display: none;">جاري الإرسال...</span>
 
                                     </div>
 
                                 </div>
-                                <!-- Single Wrap End -->
-                                {{--                                <button type="submit" class="btn btn-sm btn-save"> اضف الخدمة <i class="fa fa-save"></i> --}}
-                                {{--                                </button> --}}
-
 
                         </form>
 
@@ -240,34 +266,4 @@
         </div>
     </section>
     <!-- ============================ Main Section End ================================== -->
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#mainCategory').on('change', function() {
-                var categoryId = $(this).val();
-                if (categoryId) {
-                    $.ajax({
-                        url: 'http://127.0.0.1:8000/admin/service/get-subcategories/' + categoryId,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            $('#subCategory').empty();
-                            $('#subCategory').append(
-                            '<option> -- حدد القسم الفرعي --</option>');
-                            $.each(data, function(key, value) {
-                                $('#subCategory').append('<option value="' + value.id +
-                                    '">' + value.name + '</option>');
-                            });
-                        }
-                    });
-                } else {
-                    $('#subCategory').empty();
-                    $('#subCategory').append('<option> -- حدد القسم الفرعي --</option>');
-                }
-            });
-        });
-    </script>
-
 @endsection

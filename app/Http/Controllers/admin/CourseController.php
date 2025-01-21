@@ -35,6 +35,18 @@ class CourseController extends Controller
         return $this->success_message(' تم تفعيل الكورس  وظهورة علي الموقع ');
     }
 
+    public function update(Request $request, $id){
+        $course = Course::find($id);
+        if($request->isMethod('post')){
+            $status = $request->get('status');
+            $course->update([
+                'status' => $status
+            ]);
+            return $this->success_message('تم تعديل حالة الكورس بنجاح');
+        }
+        return view('admin.courses.view',compact('course'));
+    }
+
     public function delete($id){
         $course = Course::find($id);
         $course->delete();

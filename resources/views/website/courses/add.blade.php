@@ -149,20 +149,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-xl-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <br>
-                                                    <input type="file" name="image" class="form-control" accept="image/*"
-                                                        id="fileInput" style="display: none;">
-                                                    <button type="button" class="btn btn-primary uploadFiles"
-                                                        id="uploadButton"> صورة الكورس  <i class="fa fa-upload"></i>
-                                                    </button>
-                                                    <span id="fileNames" class="span_info">لم يتم اختيار ملفات بعد</span>
-                                                    <span class="span_info">الامتدادات المسموحة: jpg,png,jpeg,webp. الحجم
-                                                        الأقصى للملف 4MB</span>
-                                                </div>
 
-                                            </div>
 
                                         </div>
                                     </div>

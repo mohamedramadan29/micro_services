@@ -85,8 +85,8 @@
                                             </td>
 
                                             <td>
-                                                <a href="{{ url('admin/project/update/' . $course['id']) }}"
-                                                    class="btn btn-primary btn-sm"> تعديل <i class="fa fa-edit"></i> </a>
+                                                <a href="{{ url('admin/course/update/' . $course['id']) }}"
+                                                    class="btn btn-primary btn-sm"> تفاصيل الكورس <i class="fa fa-edit"></i> </a>
                                                 <button data-target="#delete_model_{{ $course['id'] }}"
                                                     data-toggle="modal" class="btn btn-danger btn-sm"> حذف <i
                                                         class="fa fa-trash"></i>
