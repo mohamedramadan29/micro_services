@@ -7,7 +7,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
 @endsection
 @section('content')
-
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg text-right product_page" dir="rtl" style="padding-top: 2px;">
         <div class="container">
@@ -198,19 +197,35 @@
                     <div class="_job_detail_box">
                         <div class="_wrap_box_slice">
                             <div class="_job_detail_single">
+                                <!-- عرض وصف المنتج -->
                                 <p>
                                     {!! $product['description'] !!}
                                 </p>
+
+                                <!-- عرض الفيديو -->
+                                @if (!empty($product['video']))
+                                    <div class="video-container" style="margin-top: 20px;">
+                                        <video controls width="100%"
+                                            style="border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+                                            <source
+                                                src="{{ asset('assets/uploads/product_videos/' . $product['video']) }}"
+                                                type="video/mp4">
+                                            <!-- نص بديل إذا كان المتصفح لا يدعم الفيديو -->
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                            
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
 
+
             </div>
         </div>
     </section>
     <!-- ============================ Main Section End ================================== -->
-
 @endsection
 
 @section('js')

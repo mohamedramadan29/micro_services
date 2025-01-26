@@ -52,8 +52,8 @@ class SocialMediaController extends Controller
             Auth::login($user);
             return redirect()->route('dashboard');
         } catch (\Exception $e) {
-            return $e;
-            //return redirect()->route('login');
+            //return $e;
+            return redirect()->route('user_login');
         }
     }
 

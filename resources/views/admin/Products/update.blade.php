@@ -105,7 +105,13 @@
                                             <input type="file" multiple id="gallery" name="gallery[]"
                                                 class="form-control" accept="image/*">
                                         </div>
-
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="video" class="form-label"> تعديل او اضافة فيديو للمنتج  </label>
+                                            <input type="file" id="video" name="video"
+                                                class="form-control" accept="video/*">
+                                        </div>
                                     </div>
 
                                 </div>
@@ -133,6 +139,7 @@
                                                 class="form-control" placeholder="000" value="{{ $product['discount'] }}">
                                         </div>
                                     </div>
+
 
                                 </div>
                             </div>

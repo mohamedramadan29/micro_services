@@ -22,15 +22,25 @@ class WithDrawController extends Controller
         $rules = [
             'amount' => 'required|numeric|min:1|max:' . $user->balance,
             'method' => 'required',
-            'paypal_mail' => 'required|email'
+            'country'=>'required',
+            'account_name'=>'required',
+            'account_number'=>'required',
+            'bank_name'=>'required',
+            'swift_code'=>'required',
+            'iban_code'=>'required',
         ];
         $messages = [
             'amount.required' => ' من فضلك حدد الميلغ  ',
             'amount.numeric' => ' من فضلك ادخل مبلغ صحيح للسحب  ',
             'amount.min' => ' اقل مبلغ للسحب هو 1 دولار  ',
             'amount.max' => ' الرصيد المتاح للسحب اقل من المبلغ المطلوب  ',
-            'paypal_mail.required' => ' من فضلك ادخل حساب الباي بال  ',
-            'paypal_mail.email' => ' من فضلك ادخل البريد الالكتروني بشكل صحيح  ',
+            'method.required' => ' من فضلك حدد طريقة السحب  ',
+            'country.required' => ' من فضلك حدد الدولة  ',
+            'account_name.required' => ' من فضلك حدد اسم الحساب  ',
+            'account_number.required' => ' من فضلك حدد رقم الحساب  ',
+            'bank_name.required' => ' من فضلك حدد اسم البنك  ',
+            'swift_code.required' => ' من فضلك حدد كود السويفت  ',
+            'iban_code.required' => ' من فضلك حدد كود الايبان  ',
         ];
         $withdraw_transactions = WithDraw::where('user_id',Auth::id())->where('status',0)->get();
         if($withdraw_transactions->count() > 0){
@@ -49,7 +59,13 @@ class WithDrawController extends Controller
         $withdraw->user_id = Auth::id();
         $withdraw->amount = $data['amount'];
         $withdraw->method = $data['method'];
-        $withdraw->paypal_mail = $data['paypal_mail'];
+        $withdraw->account_name = $data['account_name'];
+        $withdraw->account_number = $data['account_number'];
+        $withdraw->bank_name = $data['bank_name'];
+        $withdraw->swift_code = $data['swift_code'];
+        $withdraw->iban_code = $data['iban_code'];
+        $withdraw->country = $data['country'];
+        $withdraw->status = 0;
         $withdraw->save();
         ################## Update User Balance ############################
         $user->balance -= $request->amount;

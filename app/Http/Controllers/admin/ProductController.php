@@ -55,6 +55,15 @@ class ProductController extends Controller
                 if ($request->hasFile('image')) {
                     $file_name = $this->saveImage($request->image, public_path('assets/uploads/product_images'));
                 }
+                ########## Check If Product Has Video
+                $video_name = null;
+                if ($request->hasFile('video')) {
+                    if ($request->file('video')->isValid()) {
+                        $video_name = $this->saveImage($request->video, public_path('assets/uploads/product_videos'));
+                    } else {
+                        return back()->withErrors(['video' => 'هناك مشكلة في رفع الفيديو.']);
+                    }
+                }
                 /////// Check if This Product In Db Or Not
                 ///
                 $count_old_product = Product::where('name', $data['name'])->count();
@@ -79,6 +88,7 @@ class ProductController extends Controller
                 $product->meta_keywords = $data['meta_keywords'];
                 $product->meta_description = $data['meta_description'];
                 $product->image = $file_name;
+                $product->video = $video_name;
                 $product->save();
                 ///////// Check If Product Gallary Not Empty
                 ///
@@ -130,6 +140,18 @@ class ProductController extends Controller
                     $file_name = $this->saveImage($request->image, public_path('assets/uploads/product_images'));
                     $product->update([
                         'image' => $file_name,
+                    ]);
+                }
+                ############## Check If Update Video
+
+                if($request->hasFile('video')) {
+                    $old_video = public_path('assets/uploads/product_videos' . $product['video']);
+                    if (file_exists($old_video)) {
+                        unlink($old_video);
+                    }
+                    $video_name = $this->saveImage($request->video, public_path('assets/uploads/product_videos'));
+                    $product->update([
+                        'video' => $video_name,
                     ]);
                 }
                 // تحديث معلومات المنتج

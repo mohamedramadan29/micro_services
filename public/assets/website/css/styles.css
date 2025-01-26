@@ -14482,7 +14482,9 @@ a {
     padding-bottom: 5px;
 }
 
-
+.serv_data_new_details{
+    min-height: 300px;
+}
 @media(max-width:991px) {
     .dashboard-navbar .d-navigation{
         display: none;
@@ -14505,5 +14507,10 @@ a {
     ul.footer-bottom-social li{
         margin-right:5px;
     }
+    .serv_data_new_details{
+        min-height: auto;
+    }
 }
+
+
 

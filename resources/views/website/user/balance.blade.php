@@ -187,24 +187,44 @@
                                                                         name="amount" required
                                                                         max="{{ Auth::user()->balance }}">
                                                                 </div>
+                                                                <input type="hidden" name="method" value="bank">
                                                                 <div class="form-group">
-                                                                    <label> حدد وسيلة السحب </label>
-                                                                    <select required name="method" class="form-select"
-                                                                        required>
-                                                                        <option value="" selected disabled> - حدد
-                                                                            وسيلة الدفع - </option>
-                                                                        <option value="paypal"> Paypal </option>
-                                                                        <option value="bank"> الحوالة البنكية </option>
-                                                                    </select>
+                                                                    <label> الدولة  </label>
+                                                                    <input required id="country" style="height: 45px"
+                                                                        type="text" class="form-control"
+                                                                        name="country" required>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label> البريد الالكتروني </label>
-                                                                    <input style="text-align: right;direction:rtl" required
-                                                                        id="price-input" style="height: 45px"
-                                                                        type="email" class="form-control"
-                                                                        name="paypal_mail" required>
+                                                                    <label> اسم الحساب   </label>
+                                                                    <input required id="account_name" style="height: 45px"
+                                                                        type="text" class="form-control"
+                                                                        name="account_name" required>
                                                                 </div>
-                                                                <button type="submit" class="btn btn-primary"> سحب الرصيد
+                                                                <div class="form-group">
+                                                                    <label> رقم الحساب   </label>
+                                                                    <input required id="account_number" style="height: 45px"
+                                                                        type="text" class="form-control"
+                                                                        name="account_number" required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>  اسم البنك   </label>
+                                                                    <input required id="bank_name" style="height: 45px"
+                                                                        type="text" class="form-control"
+                                                                        name="bank_name" required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label> Iban Code   </label>
+                                                                    <input required id="iban_code" style="height: 45px"
+                                                                        type="text" class="form-control"
+                                                                        name="iban_code" required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label> 	Swift Code   </label>
+                                                                    <input required id="swift_code" style="height: 45px"
+                                                                        type="text" class="form-control"
+                                                                        name="swift_code" required>
+                                                                </div>
+                                                                <button type="submit" class="btn btn-primary"> طلب سحب الرصيد
                                                                     <i class="bi bi-dash"></i> </button>
                                                             </form>
                                                         @else

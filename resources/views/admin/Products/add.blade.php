@@ -15,7 +15,9 @@
             @endif
             @if ($errors->any())
                 @foreach ($errors->all() as $error)
+                {{ $error }}
                     @php
+
                         toastify()->error($error);
                     @endphp
                 @endforeach
@@ -97,6 +99,14 @@
                                             <label for="gallery" class="form-label"> اضافة صور للمعرض </label>
                                             <input type="file" multiple id="gallery" name="gallery[]"
                                                 class="form-control" accept="image/*">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="video" class="form-label"> اضافة فيديو للمنتج  </label>
+                                            <input type="file" id="video" name="video"
+                                                class="form-control" accept="video/*">
                                         </div>
                                     </div>
 

@@ -47,7 +47,7 @@
                             @foreach ($category['services'] as $serv)
                                 <!-- Single Item -->
                                 <div class="col-lg-3 col-md-6 col-sm-12">
-                                    <div class="ser_110 shadow_0">
+                                    <div class="ser_110 shadow_0 serv_data_new_details">
                                         <div class="ser_110_thumb">
                                             <a href="{{ url('service/' . $serv['id'] . '-' . $serv['slug']) }}"
                                                 class="ser_100_link"><img
