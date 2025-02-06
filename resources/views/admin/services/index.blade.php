@@ -71,7 +71,7 @@
                                         <td> {{$i++}} </td>
                                         <td> {{$service['name']}} </td>
                                         <td> {{$service['category']['name']}} </td>
-                                        <td> {{$service['subcategory']['name']}} </td>
+                                        <td> {{ $service->subcategory->name ?? 'غير متوفر' }} </td>
                                         <td><img width="60px" height="60px" src="{{asset('assets/uploads/services/'.$service['image'])}}" alt=""> </td>
                                         <td> @if($service['status'] == 1)
                                                 <span class="badge badge-success"> فعال </span>

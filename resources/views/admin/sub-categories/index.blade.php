@@ -73,7 +73,7 @@
                                     <tr>
                                         <td> {{$i++}} </td>
                                         <td> {{$category['name']}} </td>
-                                        <td> <span class="badge badge-info"> {{$category['category']['name']}} </span> </td>
+                                        <td> <span class="badge badge-info"> {{ $category->category->name ?? 'غير متوفر' }} </span> </td>
                                         <td><img width="60px" height="60px" src="{{asset('assets/uploads/service_category/'.$category['image'])}}" alt=""> </td>
                                         <td> @if($category['status'] == 1)
                                                  <span class="badge badge-success"> فعال </span>
