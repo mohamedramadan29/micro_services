@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </div>
-            @foreach ($categories as $category)
+            @foreach ($categories2 as $category)
                 <div class="main_hero_section" style="margin-bottom: 10px;padding:10px">
                     <div>
                         <h4> خدمات {{ $category['name'] }}  </h4>
@@ -104,7 +104,6 @@
                                 </div>
                             @endforeach
                         </div>
-
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 {{ $services->links() }}

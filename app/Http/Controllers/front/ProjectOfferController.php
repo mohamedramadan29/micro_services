@@ -93,7 +93,11 @@ class ProjectOfferController extends Controller
         $user = User::where('id', Auth::id())->first();
         $user_balance = $user->balance;
         if ($user_balance < $offer['offer_price']) {
-            return Redirect::back()->withErrors(' رصيدك غير كافي لقبول هذا العرض من فضلك  قم بشحن رصيدك  ');
+
+            // return Redirect::back()->withErrors([
+            //     'رصيدك غير كافٍ لقبول هذا العرض. يرجى شحن رصيدك أولاً لإتمام العملية.'
+            // ]);
+            return Redirect()->route('user_balance')->withErrors(['رصيدك غير كافٍ لقبول هذا العرض. يرجى شحن رصيدك اولا لاتمام العملية.']);
         }
         $project_id = $offer['project_id'];
         $project = Project::where('id', $project_id)->first();

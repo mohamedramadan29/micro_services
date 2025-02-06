@@ -13,13 +13,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-
 class CourseController extends Controller
 {
     use Message_Trait;
     use Slug_Trait;
     use Upload_Images;
-
     public function index(Request $request)
     {
         $query = Course::where('status',1);
@@ -65,7 +63,6 @@ class CourseController extends Controller
     }
     public function store(Request $request)
     {
-
         if ($request->isMethod('post')) {
             try {
                 $data = $request->all();

@@ -25,9 +25,9 @@ class ProductOrderController extends Controller
                 'country' => 'required',
                 'city' => 'required',
                 'address' => 'required',
-                'name'=>'required',
-                'phone'=>'required',
-                'email'=>'required|email',
+                'name' => 'required',
+                'phone' => 'required',
+                'email' => 'required|email',
             ];
             $messages = [
                 'country.required' => ' من فضلك ادخل الدولة ',
@@ -38,13 +38,16 @@ class ProductOrderController extends Controller
                 'email.required' => ' من فضلك ادخل البريد الالكتروني ',
                 'email.email' => ' من فضلك ادخل بريد الكتروني بشكل صحيح ',
             ];
-            $validator = Validator::make($data,$rules,$messages);
-            if ($validator->fails()){
+            $validator = Validator::make($data, $rules, $messages);
+            if ($validator->fails()) {
                 return Redirect::back()->withInput()->withErrors($validator);
             }
             $user = User::where('id', Auth::id())->first();
             if ($user->balance < $data['product_price']) {
-                return Redirect::back()->withErrors([' رصيدك الحالي لا يكفي للطلب  ']);
+                // return Redirect::back()->withErrors([' رصيدك الحالي لا يكفي للطلب  ']);
+                return Redirect()->route('user_balance')->withErrors([
+                    'رصيدك الحالي غير كافٍ لإتمام عملية الشراء. يرجى شحن رصيدك في الموقع أولاً لإتمام الطلب.'
+                ]);
             }
             $product = Product::where('id', $data['product_id'])->first();
             $product_price = $product->discount ? $product->discount : $product->price;
@@ -62,7 +65,7 @@ class ProductOrderController extends Controller
             $order->country = $data['country'];
             $order->city = $data['city'];
             $order->address = $data['address'];
-            $order->order_status =  ' لم يبدا  ';
+            $order->order_status = ' لم يبدا  ';
             $order->save();
             ////////////// Send Notification To Admin
             ///
@@ -71,7 +74,7 @@ class ProductOrderController extends Controller
             $user->balance -= $data['product_price'];
             $user->save();
             DB::commit();
-            return $this->success_message( ' تم اضافة الطلب الخاص بك بنجاح  ');
+            return $this->success_message(' تم اضافة الطلب الخاص بك بنجاح  ');
         } catch (\Exception $e) {
             return $this->exception_message($e);
         }

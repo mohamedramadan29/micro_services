@@ -69,7 +69,7 @@ Route::group(
                 Route::get('reviews', 'reviews');
                 Route::match(['post', 'get'], 'update-account', 'update');
                 Route::get('chat', 'chat');
-                Route::get('balance', 'balance');
+                Route::get('balance', 'balance')->name('user_balance');
 
                 Route::get('chat-main/{conversation_id}', \App\Livewire\Chat\Main::class)->name('chat.main');
             });

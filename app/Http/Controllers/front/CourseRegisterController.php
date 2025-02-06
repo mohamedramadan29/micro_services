@@ -33,7 +33,11 @@ class CourseRegisterController extends Controller
             $user = User::where('id', Auth::user()->id)->first();
             $user_balance = $user->balance;
             if ($user_balance < $course->price) {
-                return Redirect::back()->withErrors([' رصيدك الحالي لا يكفي للاشتراك في الكورس  ']);
+                //return Redirect::back()->withErrors(['  رصيدك الحالي لا يكفي للاشتراك في الكورس من فضلك اشحن الرصيد الخاص بك  ']);
+                return Redirect()->route('user_balance')->withErrors([
+                    'رصيدك الحالي غير كافٍ للاشتراك في الكورس. يرجى شحن رصيدك في الموقع أولاً لإتمام الاشتراك.'
+                ]);
+
             }
             try {
 
