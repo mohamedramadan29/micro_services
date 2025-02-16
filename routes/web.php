@@ -20,6 +20,8 @@ use App\Http\Controllers\front\ProjectOfferController;
 use App\Http\Controllers\front\ChargeBalanceController;
 use App\Http\Controllers\front\TicketMessageController;
 use App\Http\Controllers\front\CourseRegisterController;
+use App\Http\Controllers\front\FrontProperityController;
+use App\Http\Controllers\front\ProperityController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 Route::group(
@@ -104,7 +106,7 @@ Route::group(
 
         ///////////////////////////// Start Conversation ////////////////////
         Route::controller(ConversationController::class)->group(function () {
-            Route::get('chats',  'chats');
+            Route::get('chats', 'chats');
             Route::post('conversation/start', 'start_conversation');
             Route::post('conversation/start/project', 'project_start_conversation');
             Route::post('consult_conversation/start', 'consult_start_conversation');
@@ -123,8 +125,10 @@ Route::group(
         ///
         ////////////// Start Product ORder /////////////
         ///
-        Route::controller(\App\Http\Controllers\front\ProductOrderController::class)->group(function () {
+        Route::controller(ProductOrderController::class)->group(function () {
             Route::post('product_order', 'store');
+            Route::get('/product/payment/success',  'paymentSuccess')->name('product.order.success');
+            Route::get('/product/payment/cancel', 'PaymentCancel')->name('product.order.cancel');
         });
 
         ////////////////// Start Projects Controller
@@ -193,8 +197,28 @@ Route::group(
             Route::controller(WithDrawController::class)->group(function () {
                 Route::post('withdraw_balance', 'WithDraw');
             });
+            ################# Start Properites ################
+
+
+            Route::controller(ProperityController::class)->group(function () {
+                Route::get('my/properties/index', 'index');
+                Route::match(['post', 'get'], 'my/property/add', 'store');
+                Route::match(['post', 'get'], 'my/property/update/{id}', 'update');
+                Route::match(['post', 'get'], 'my/property/delete/{id}', 'delete');
+                Route::post('my/property/upload-temp', 'uploadTemp');
+                Route::post('my/property/remove-temp', 'removeTemp');
+                Route::post('delete-property-image/{id}', 'deletePropertyImage');
+            });
+
+            ################ End Properites #################
 
         });
+                ############### Staty Front Properity Controller ##########
+                Route::controller(FrontProperityController::class)->group(function () {
+                    Route::get('properties', 'index');
+                    Route::get('property/{id}-{slug}', 'propertyDetails');
+                });
+                ############### End Front Properity Controller ##########
 
         ######################## Start ChatGpt ##################
         Route::controller(ChatgptController::class)->group(function () {
@@ -203,6 +227,13 @@ Route::group(
             Route::post('chatgpt', 'chatgpt');
 
         });
+
+        Route::group(['middleware' => ['auth']], function () {
+            Route::get('/course/payment/success', [CourseRegisterController::class, 'payment_success'])->name('course.payment.success');
+            Route::get('/course/payment/cancel', [CourseRegisterController::class, 'payment_cancel'])->name('course.payment.cancel');
+        });
+
+
         Route::get('auth/{provider}/redirect', [SocialMediaController::class, 'redirect'])->name('auth.google.redirect');
         Route::get('auth/{provider}/callback', [SocialMediaController::class, 'callback'])->name('auth.google.callback');
     }

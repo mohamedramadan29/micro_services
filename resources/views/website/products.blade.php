@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg text-right profile_page" dir="rtl">
+    <section class="gray-bg text-right" dir="rtl">
         <div class="container">
             <div class="main_hero_section">
                 <div>
@@ -34,7 +34,7 @@
                                                     {{ $product['name'] }} </a>
                                             </h4>
                                             <p style="color: #595656;font-size: 14px;padding-bottom: 10px;">
-                                                {{ \Illuminate\Support\Str::words($product['description'], 12) }}
+                                            {!! \Illuminate\Support\Str::words($product['description'], 12) !!}
                                             </p>
                                         </div>
                                         <div class="_oi0po"><i class="fa fa-bolt"></i> السعر

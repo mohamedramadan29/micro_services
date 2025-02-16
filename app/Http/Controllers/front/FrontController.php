@@ -41,7 +41,9 @@ class FrontController extends Controller
         }
         $services = $query->where('status', '1')->orderBy('id', 'desc')->paginate(12);
         $categories = Category::with('subCategories')->where('status', 1)->get();
-        $categories2 = Category::with('subCategories')->where('status', 1)->limit(4)->get();
+        $categories2 = Category::with('subCategories')->where('status', 1)
+        ->whereIn('name',['قرآن','تطوير الذات','برمجة','التسويق'])
+        ->limit(4)->get();
         return view('website.services2', compact('services', 'categories','categories2'));
     }
 

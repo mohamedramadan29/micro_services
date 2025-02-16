@@ -32,8 +32,14 @@
                                 </li>
                                 <li><a href="{{ url('my/course/add') }}"><i class="ti-plus"></i> اضف كورس جديد </a></li>
                                 <li><a href="{{ url('service/index') }}"><i class="bi bi-database-fill-check"></i> الخدمات
-                                    </a></li>
-                                <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
+                                    </a>
+                                </li>
+                                <li><a href="{{ url('my/course/add') }}"><i class="ti-plus"></i> اضف كورس جديد </a></li>
+                                <li>
+                                    <a href="{{ url('my/properties/index') }}"><i class="bi bi-building"></i> العقارات
+                                    </a>
+                                </li>
+                                <li><a href="{{ url('my/property/add') }}"><i class="ti-plus"></i> اضف عقار جديد </a></li>
                                 <li><a href="{{ url('chats') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a>
                                 </li>
                                 <li><a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a></li>
@@ -215,7 +221,7 @@
                                                     <br>
                                                     <input type="file" name="files[]" class="form-control"
                                                         accept="" id="fileInput" multiple >
-                                                   
+
                                                     <span id="fileNames" class="span_info">لم يتم اختيار ملفات بعد</span>
                                                     <span class="span_info">الامتدادات المسموحة: jpg,png,jpeg,webp. الحجم
                                                         الأقصى للملف 4MB</span>

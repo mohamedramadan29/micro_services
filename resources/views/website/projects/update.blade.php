@@ -37,8 +37,14 @@
                                 </li>
                                 <li><a href="{{ url('my/course/add') }}"><i class="ti-plus"></i> اضف كورس جديد </a></li>
                                 <li><a href="{{ url('service/index') }}"><i class="bi bi-database-fill-check"></i> الخدمات
-                                    </a></li>
-                                <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
+                                    </a>
+                                </li>
+                                <li><a href="{{ url('my/course/add') }}"><i class="ti-plus"></i> اضف كورس جديد </a></li>
+                                <li>
+                                    <a href="{{ url('my/properties/index') }}"><i class="bi bi-building"></i> العقارات
+                                    </a>
+                                </li>
+                                <li><a href="{{ url('my/property/add') }}"><i class="ti-plus"></i> اضف عقار جديد </a></li>
                                 <li><a href="{{ url('chats') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a>
                                 </li>
                                 <li><a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a></li>

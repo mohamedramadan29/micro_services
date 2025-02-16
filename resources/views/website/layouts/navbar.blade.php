@@ -379,8 +379,10 @@
                             <li class="{{ request()->is('services') ? 'active' : '' }}">
                                 <a href="{{ url('services') }}"> {{ __('public.services') }} </a>
                             </li>
+
+                            <li class="{{ request()->is('properties') ? 'active' : '' }}"><a href="{{ url('properties') }}"> عقارات  </a></li>
                             @if (\Illuminate\Support\Facades\Auth::check())
-                                <li><a href="{{ url('purches') }}"> {{ __('public.purches') }} </a></li>
+
                                 <li><a href="{{ url('service/add') }}"> اضافة خدمة </a></li>
                             @endif
                             @php

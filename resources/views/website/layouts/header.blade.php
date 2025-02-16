@@ -17,7 +17,7 @@
     <meta name="twitter:title" content="نفذها - منصة الخدمات المصغرة والمشاريع">
     <meta name="twitter:description" content="اكتشف عالمًا من الخدمات المصغّرة التي يقدّمها محترفون مستقلون جاهزون لإنجاز مشاريعك.">
     <meta name="twitter:image" content="{{asset('assets/website/img/logo.png')}}">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon and Title -->
     <link rel="icon" href="{{asset('assets/website/img/favicon.png')}}" type="image/x-icon">
     <title>@yield('title')</title>

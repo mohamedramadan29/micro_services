@@ -12,6 +12,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
+use Stripe\Exception\ApiErrorException;
 
 class ProductOrderController extends Controller
 {
@@ -28,55 +31,101 @@ class ProductOrderController extends Controller
                 'name' => 'required',
                 'phone' => 'required',
                 'email' => 'required|email',
+                'product_id' => 'required',
             ];
             $messages = [
                 'country.required' => ' من فضلك ادخل الدولة ',
-                'city.required' => ' من فضلك ادخلا المدينة ',
+                'city.required' => ' من فضلك ادخل المدينة ',
                 'address.required' => ' من فضلك ادخل العنوان بشكل كامل ',
                 'name.required' => ' من فضلك ادخل الاسم ',
                 'phone.required' => ' من فضلك ادخل رقم الهاتف ',
                 'email.required' => ' من فضلك ادخل البريد الالكتروني ',
                 'email.email' => ' من فضلك ادخل بريد الكتروني بشكل صحيح ',
+                'product_id.required' => 'يجب اختيار منتج للشراء',
             ];
             $validator = Validator::make($data, $rules, $messages);
             if ($validator->fails()) {
                 return Redirect::back()->withInput()->withErrors($validator);
             }
-            $user = User::where('id', Auth::id())->first();
-            if ($user->balance < $data['product_price']) {
-                // return Redirect::back()->withErrors([' رصيدك الحالي لا يكفي للطلب  ']);
-                return Redirect()->route('user_balance')->withErrors([
-                    'رصيدك الحالي غير كافٍ لإتمام عملية الشراء. يرجى شحن رصيدك في الموقع أولاً لإتمام الطلب.'
-                ]);
-            }
-            $product = Product::where('id', $data['product_id'])->first();
+
+            $product = Product::findOrFail($data['product_id']);
             $product_price = $product->discount ? $product->discount : $product->price;
 
-            //dd($product);
-            DB::beginTransaction();
-            $order = new ProductOrder();
-            $order->user_id = Auth::id();
-            $order->product_id = $data['product_id'];
-            $order->product_name = $data['product_name'];
-            $order->price = $product_price;
-            $order->name = $data['name'];
-            $order->email = $data['email'];
-            $order->phone = $data['phone'];
-            $order->country = $data['country'];
-            $order->city = $data['city'];
-            $order->address = $data['address'];
-            $order->order_status = ' لم يبدا  ';
-            $order->save();
-            ////////////// Send Notification To Admin
-            ///
+            Stripe::setApiKey(env('STRIPE_SECRET'));
 
-            ///////// Decrease USer Price
-            $user->balance -= $data['product_price'];
-            $user->save();
-            DB::commit();
-            return $this->success_message(' تم اضافة الطلب الخاص بك بنجاح  ');
+            $session = Session::create([
+                'payment_method_types' => ['card', 'alipay'],
+                'line_items' => [
+                    [
+                        'price_data' => [
+                            'currency' => 'usd',
+                            'product_data' => ['name' => $product->name],
+                            'unit_amount' => $product_price * 100,
+                        ],
+                        'quantity' => 1,
+                    ]
+                ],
+                'mode' => 'payment',
+                'metadata' => [
+                    'user_id' => Auth::id(),
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'country' => $request->country,
+                    'city' => $request->city,
+                    'address' => $request->address,
+                    'product_id' => $product->id,
+                ],
+                'success_url' => route('product.order.success') . '?session_id={CHECKOUT_SESSION_ID}&product_id=' . $product->id,
+                'cancel_url' => route('product.order.cancel'),
+            ]);
+
+            return redirect($session->url);
         } catch (\Exception $e) {
             return $this->exception_message($e);
         }
+    }
+
+
+    public function paymentSuccess(Request $request)
+    {
+
+        try {
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+
+            $session = Session::retrieve($request->session_id);
+            if (!$session) {
+                return Redirect::route('home')->withErrors(['حدث خطأ أثناء التحقق من الدفع.']);
+            }
+
+            $metadata = $session->metadata;
+           // dd($metadata);
+            $product = Product::findOrFail($metadata->product_id);
+            $product_price = $product->discount ? $product->discount : $product->price;
+
+            DB::beginTransaction();
+            $order = new ProductOrder();
+            $order->user_id = $metadata->user_id;
+            $order->product_id = $metadata->product_id;
+            $order->product_name = $product->name;
+            $order->price = $product_price;
+            $order->name = $metadata->name;
+            $order->email = $metadata->email;
+            $order->phone = $metadata->phone;
+            $order->country = $metadata->country;
+            $order->city = $metadata->city;
+            $order->address = $metadata->address;
+            $order->order_status = 'تم الدفع';
+            $order->save();
+            DB::commit();
+
+            return $this->success_message('تمت عملية الشراء بنجاح.');
+        } catch (ApiErrorException $e) {
+            return $this->exception_message($e);
+        }
+    }
+    public function PaymentCancel()
+    {
+        return $this->Error_message('تم الغاء الدفع');
     }
 }

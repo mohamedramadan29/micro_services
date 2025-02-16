@@ -1,9 +1,8 @@
 @extends('website.layouts.master')
 @section('title')
-    اضف خدمة جديدة
+    اضافة عقار جديد
 @endsection
 @section('content')
-    <!-- ============================ Page Title End ================================== -->
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
         <div class="container-fluid">
@@ -64,150 +63,141 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="#"> الرئيسية </a></li>
                                         <li class="breadcrumb-item"><a href="#"> لوحة التحكم </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"> اضف خدمة جديدة</li>
+                                        <li class="breadcrumb-item active" aria-current="page"> اضافة عقار </li>
                                     </ol>
                                 </nav>
                             </div>
                         </div>
                     </div>
-
                     <div class="row mobile_form">
-                        <form method="post" action="{{ url('service/add') }}" enctype="multipart/form-data"
+                        <form method="post" action="{{ url('my/property/add') }}" enctype="multipart/form-data"
                             id="uploadService">
                             @csrf
                             <div class="col-lg-12 col-md-12 col-sm-12">
-
                                 <!-- Single Wrap -->
                                 <div class="_dashboard_content">
                                     <div class="_dashboard_content_header">
                                         <div class="_dashboard__header_flex">
-                                            <h4><i class="ti-briefcase mr-1"></i> اضف خدمة جديدة </h4>
+                                            <h4><i class="ti-briefcase mr-1"></i> اضافة تفاصيل العقار </h4>
                                         </div>
                                     </div>
 
                                     <div class="_dashboard_content_body">
-
                                         <div class="row">
-
                                             <div class="col-xl-12 col-lg-12">
                                                 <div class="form-group">
-                                                    <label> اسم الخدمة </label>
-                                                    <input type="text" class="form-control with-light" name="name"
-                                                        required value="{{ old('name') }}">
+                                                    <label> ادخل العنوان </label>
+                                                    <input type="text" class="form-control with-light" name="title"
+                                                        required value="{{ old('title') }}" placeholder=" عقار جديد  ">
                                                 </div>
                                             </div>
 
-                                            <div class="col-xl-6 col-lg-6">
-                                                <div class="form-group with-light">
-                                                    <label> القسم الرئيسي </label>
-                                                    <select required id="mainCategory" class="form-select" name="cat_id">
-                                                        <option value=""> -- حدد القسم الرئيسي --</option>
-                                                        @foreach ($categories as $category)
-                                                            <option value="{{ $category['id'] }}"
-                                                                {{ old('cat_id') == $category['id'] ? 'selected' : '' }}>
-                                                                {{ $category['name'] }}
-                                                            </option>
-                                                        @endforeach
+                                            <div class="col-xl-12 col-lg-12">
+                                                <div class="form-group">
+                                                    <label> الوصف </label>
+                                                    <textarea class="form-control with-light" required name="description">{{ old('description') }}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label> نوع العقار </label>
+                                                    <select name="type" id="" class="form-select" required>
+                                                        <option value="" selected disabled> -- حدد نوع العقار --
+                                                        </option>
+                                                        <option {{ old('type') == 'بيع' ? 'selected' : '' }} value="بيع">بيع</option>
+                                                        <option {{ old('type') == 'ايجار' ? 'selected' : '' }} value="ايجار">ايجار</option>
                                                     </select>
                                                 </div>
                                             </div>
 
-                                            <div class="col-xl-6 col-lg-6">
-                                                <div class="form-group with-light">
-                                                    <label> حدد القسم الفرعي </label>
-                                                    <select required class="form-select" name="sub_cat_id" id="subCategory">
-                                                        @if (old('sub_cat_id'))
-                                                            <option value="{{ old('sub_cat_id') }}" selected>القسم السابق
-                                                                المحدد</option>
-                                                        @endif
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label> حدد القسم </label>
+                                                    <select name="category" id="" class="form-select" required>
+                                                        <option value="" selected disabled> -- حدد القسم -- </option>
+                                                        <option {{ old('category') == 'شقة' ? 'selected' : '' }} value="شقة"> شقة </option>
+                                                        <option {{ old('category') == 'فيلا' ? 'selected' : '' }} value="فيلا">فيلا</option>
+                                                        <option {{ old('category') == 'أرض' ? 'selected' : ''  }} value="أرض">أرض</option>
+                                                        <option {{ old('category') == 'محل تجاري' ? 'selected' : ''  }} value="محل تجاري">محل تجاري</option>
+                                                        <option {{ old('category') == 'اخري' ? 'selected' : ''   }} value="اخري">اخري</option>
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label> السعر </label>
+                                                    <input type="number" class="form-control with-light" name="price"
+                                                        required value="{{ old('price') }}" step="0.01">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label> المساحة <span class="badge badge-danger"> م٢ </span> </label>
+                                                    <input type="number" class="form-control with-light" name="area"
+                                                        required value="{{ old('area') }}" step="0.01">
+                                                </div>
+                                            </div>
 
 
-                                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                                            <script>
-                                                $(document).ready(function() {
-                                                    const oldSubCatId = "{{ old('sub_cat_id') }}";
-                                                    $('#mainCategory').on('change', function() {
-                                                        var categoryId = $(this).val();
-                                                        if (categoryId) {
-                                                            $.ajax({
-                                                                url: 'http://127.0.0.1:8000/service/get-subcategories/' + categoryId,
-                                                                type: 'GET',
-                                                                dataType: 'json',
-                                                                success: function(data) {
-                                                                    $('#subCategory').empty();
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label> عدد الغرف </label>
+                                                    <input type="number" class="form-control with-light" name="rooms"
+                                                        required value="{{ old('rooms') }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label> عدد الحمامات </label>
+                                                    <input type="number" class="form-control with-light"
+                                                        name="bathrooms" required value="{{ old('bathrooms') }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-12 col-lg-12">
+                                                <div class="form-group">
+                                                    <label> مميزات العقار <span class="badge badge-danger"> افصل بين كل
+                                                            ميزة والاخري ب (,) </span> </label>
+                                                    <textarea class="form-control with-light" name="features">{{ old('features') }}</textarea>
+                                                </div>
+                                            </div>
 
-                                                                    $.each(data, function(key, value) {
-                                                                        const isSelected = oldSubCatId == value.id ?
-                                                                            "selected" : "";
-                                                                        $('#subCategory').append(
-                                                                            `<option value="${value.id}" ${isSelected}>${value.name}</option>`
-                                                                        );
-                                                                    });
-                                                                }
-                                                            });
-                                                        } else {
-                                                            $('#subCategory').empty();
-                                                        }
-                                                    });
-                                                    // قم بتشغيل تغيير يدوي لتحميل الأقسام الفرعية إذا كانت هناك قيمة قديمة
-                                                    if ("{{ old('cat_id') }}") {
-                                                        $('#mainCategory').val("{{ old('cat_id') }}").trigger('change');
-                                                    }
-                                                });
-                                            </script>
-
+                                            <div class="col-xl-12 col-lg-12">
+                                                <div class="form-group">
+                                                    <label> حدد موقع العقار بالتفصيل </label>
+                                                    <input type="text" class="form-control with-light" name="location"
+                                                        required value="{{ old('location') }}">
+                                                </div>
+                                            </div>
                                             <div class="col-xl-6 col-lg-6">
                                                 <div class="form-group">
-                                                    <label> سعر الخدمة </label>
-                                                    <input type="number" min="5" class="form-control with-light"
-                                                        required name="price" step="0.01" value="{{ old('price') }}">
+                                                    <label> المدينة </label>
+                                                    <input type="text" class="form-control with-light" name="city"
+                                                        required value="{{ old('city') }}">
                                                 </div>
                                             </div>
-
-                                            <div class="col-xl-12 col-lg-12">
+                                            <div class="col-xl-6 col-lg-6">
                                                 <div class="form-group">
-                                                    <label> وصف الخدمة </label>
-                                                    <textarea class="form-control with-light" minlength="20" required name="description">{{ old('description') }}</textarea>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xl-12 col-lg-12">
-                                                <div class="form-group with-light">
-                                                    <label> الكلمات المفتاحية <span class="badge badge-danger"> افصل بين كل
-                                                            كلمة والاخري ب (,) </span></label>
-                                                    <div class="tg_grouping">
-                                                        <input type="text" required id="lg-input" name="tags"
-                                                            class="form-control with-light"
-                                                            placeholder="برمجة , تصميم , ... "
-                                                            value="{{ old('tags') }}">
-                                                    </div>
+                                                    <label> الدولة </label>
+                                                    <input type="text" class="form-control with-light" name="country"
+                                                        required value="{{ old('country') }}">
                                                 </div>
                                             </div>
                                             <div class="col-xl-12 col-lg-12">
                                                 <div class="form-group">
-                                                    <label> اضافة صور للخدمة </label>
-                                                    <br>
-                                                    <input required type="file" name="image" class="form-control"
-                                                        accept="" id="fileInput">
-                                                    <span id="fileNames" class="span_info">لم يتم اختيار ملفات بعد</span>
-                                                    <span class="span_info">الامتدادات المسموحة: jpg,png,jpeg,webp. الحجم
-                                                        الأقصى للملف 4MB</span>
+                                                    <label>ادخل صور العقار (يمكنك مشاهدة الصور قبل الرفع)</label>
+                                                    <input type="file" id="imageInput" class="form-control with-light"
+                                                        multiple name="images[]" accept="image/*">
                                                 </div>
-
+                                                <div id="imagePreview" class="d-flex flex-wrap mt-3"></div>
                                             </div>
-
                                         </div>
-                                        <button type="submit" class="btn btn-save" id="submitBtn"> اضف الخدمة <i
-                                                class="fa fa-save"></i></button>
-                                        <span id="loader" style="display: none;">جاري الإرسال...</span>
-
                                     </div>
-
+                                    <button style="margin: auto;display: block" type="submit" class="btn btn-save"
+                                        id="submitBtn"> اضافة العقار <i class="fa fa-save"></i></button>
+                                    <span id="loader" style="display: none;">جاري الإرسال...</span>
                                 </div>
-
+                            </div>
                         </form>
 
                         <script>
@@ -269,7 +259,44 @@
             </div>
 
         </div>
-        </div>
     </section>
     <!-- ============================ Main Section End ================================== -->
+@endsection
+
+@section('js')
+<script>
+    document.getElementById('imageInput').addEventListener('change', function(event) {
+        let imagePreview = document.getElementById('imagePreview');
+
+        Array.from(event.target.files).forEach(file => {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let imgContainer = document.createElement("div");
+                imgContainer.classList.add("position-relative", "m-2");
+
+                let img = document.createElement("img");
+                img.src = e.target.result;
+                img.classList.add("rounded", "shadow", "border", "p-1");
+                img.style.width = "120px";
+                img.style.height = "120px";
+
+                let removeBtn = document.createElement("span");
+                removeBtn.innerHTML = "&times;";
+                removeBtn.classList.add("position-absolute", "top-0", "end-0", "bg-danger",
+                    "text-white", "rounded-circle", "p-1", "cursor-pointer");
+                removeBtn.style.cursor = "pointer";
+
+                removeBtn.onclick = function() {
+                    imgContainer.remove();
+                };
+
+                imgContainer.appendChild(img);
+                imgContainer.appendChild(removeBtn);
+                imagePreview.appendChild(imgContainer);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+</script>
+
 @endsection

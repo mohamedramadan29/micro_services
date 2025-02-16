@@ -8,22 +8,20 @@
 @endsection
 @section('content')
     <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg text-right product_page" dir="rtl" style="padding-top: 2px;">
+    <section class="gray-bg text-right" dir="rtl">
         <div class="container">
-            <div class="main_hero_section" dir="rtl">
+            <div class="main_hero_section">
                 <div>
-                    <h4> {{ $product['title'] }} </h4>
+                    <h4> {{ $product['name'] }} </h4>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                            <li class="breadcrumb-item"><a href="{{ url('products') }}"> المنتجات </a></li>
+                            <li class="breadcrumb-item"><a href="#"> الرئيسية </a></li>
+                            <li class="breadcrumb-item"><a href="#"> المنتجات  </a></li>
                             <li class="breadcrumb-item active" aria-current="page"> {{ $product['name'] }} </li>
                         </ol>
                     </nav>
                 </div>
-                <div>
 
-                </div>
             </div>
             <br>
             <div class="row">
@@ -214,7 +212,6 @@
                                             Your browser does not support the video tag.
                                         </video>
                                     </div>
-                            
                                 @endif
                             </div>
                         </div>
