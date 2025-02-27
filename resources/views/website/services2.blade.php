@@ -17,7 +17,7 @@
                 <div class="categories">
                     <div class="row">
                         @foreach ($categories as $category)
-                            <div class="col-lg-2 col-6">
+                            <div class="col-lg-3 col-6">
                                 <a href="{{ url('services/' . $category['slug']) }}">
                                     <div class="info">
                                         <img src="{{ asset('assets/uploads/service_category/' . $category['image'] . '') }}"

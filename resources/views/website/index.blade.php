@@ -2,6 +2,27 @@
 @section('title')
     نفذها
 @endsection
+@section('css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <style>
+        .payment-slider {
+            width: 90%;
+            margin: 30px auto;
+            overflow: hidden;
+        }
+
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .swiper-slide img {
+            width: 100px;
+            height: 100px;
+            filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.1));
+        }
+    </style>
+@endsection
 @section('content')
     <!-- ============================ Hero Banner  Start================================== -->
     <div class="hero-banner full bg-cover center"
@@ -31,6 +52,40 @@
     </div>
     <!-- ============================ Hero Banner End ================================== -->
 
+    <!-- =========================== Start Payment Slider  ============================ -->
+    <div class="container">
+        <div class="payment-slider">
+
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="{{ asset('assets/website/img/visa.png') }}" alt="Visa"></div>
+                    <div class="swiper-slide"><img src="{{ asset('assets/website/img/master.png') }}" alt="MasterCard">
+                    </div>
+                    <div class="swiper-slide"><img src="{{ asset('assets/website/img/paypal.png') }}" alt="PayPal"></div>
+                    <div class="swiper-slide"><img src="{{ asset('assets/website/img/apple-pay.png') }}" alt="ApplePay">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        const swiper = new Swiper('.swiper', {
+            slidesPerView: '3', // عرض عدد غير محدد بناءً على حجم الشاشة
+            spaceBetween: 20,
+            loop: true, // تشغيل اللوب لانهائي
+            speed: 3000, // سرعة الحركة (كلما زاد الرقم، زادت السرعة)
+            autoplay: {
+                delay: 0, // بدون توقف
+                disableOnInteraction: false
+            }
+        });
+    </script>
+
+
+    <!-- =========================== End Payment Slider ============================== -->
 
     <!-- ============================ How It Work Start ==================================== -->
     <section class="how-it-works" dir="rtl">
@@ -39,7 +94,8 @@
             <div class="row justify-content-center">
                 <div class="col-lg-7 col-md-9">
                     <div class="sec-heading">
-                        <h2> {{ __('index.how_work') }} <span class="theme-cl-2"> {{ __('index.how_work2') }} ؟ </span></h2>
+                        <h2> {{ __('index.how_work') }} <span class="theme-cl-2"> {{ __('index.how_work2') }} ؟ </span>
+                        </h2>
                     </div>
                 </div>
             </div>
@@ -173,7 +229,9 @@
                         <p class="text-light">
 
 
-                            بمجرد أن تصل قيمة مشترياتك إلى <strong>1000 دولار</strong>، ستحصل على رصيد مجاني بقيمة <strong>50 دولار</strong> يمكن إضافته إلى حسابك بعد طلبك القادم! استمتع بتسوقك معنا واستفد من المزيد من المزايا.
+                            بمجرد أن تصل قيمة مشترياتك إلى <strong>1000 دولار</strong>، ستحصل على رصيد مجاني بقيمة
+                            <strong>50 دولار</strong> يمكن إضافته إلى حسابك بعد طلبك القادم! استمتع بتسوقك معنا واستفد من
+                            المزيد من المزايا.
 
                         </p>
                     </div>

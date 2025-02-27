@@ -136,12 +136,13 @@ class ProperityController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
             DB::beginTransaction();
+
             $property->title = $data['title'];
             $property->slug = $this->CustomeSlug($data['title']);
             $property->description = $data['description'];
             $property->type = $data['type'];
             $property->category = $data['category'];
-            $property->price = $data['price'] ?: 0;
+            $property->price = $data['price'];
             $property->area = $data['area'] ?: 0;
             $property->rooms = $data['rooms'] ?: 0;
             $property->bathrooms = $data['bathrooms'] ?: 0;

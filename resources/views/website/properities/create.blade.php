@@ -104,8 +104,10 @@
                                                     <select name="type" id="" class="form-select" required>
                                                         <option value="" selected disabled> -- حدد نوع العقار --
                                                         </option>
-                                                        <option {{ old('type') == 'بيع' ? 'selected' : '' }} value="بيع">بيع</option>
-                                                        <option {{ old('type') == 'ايجار' ? 'selected' : '' }} value="ايجار">ايجار</option>
+                                                        <option {{ old('type') == 'بيع' ? 'selected' : '' }}
+                                                            value="بيع">بيع</option>
+                                                        <option {{ old('type') == 'ايجار' ? 'selected' : '' }}
+                                                            value="ايجار">ايجار</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -115,21 +117,46 @@
                                                     <label> حدد القسم </label>
                                                     <select name="category" id="" class="form-select" required>
                                                         <option value="" selected disabled> -- حدد القسم -- </option>
-                                                        <option {{ old('category') == 'شقة' ? 'selected' : '' }} value="شقة"> شقة </option>
-                                                        <option {{ old('category') == 'فيلا' ? 'selected' : '' }} value="فيلا">فيلا</option>
-                                                        <option {{ old('category') == 'أرض' ? 'selected' : ''  }} value="أرض">أرض</option>
-                                                        <option {{ old('category') == 'محل تجاري' ? 'selected' : ''  }} value="محل تجاري">محل تجاري</option>
-                                                        <option {{ old('category') == 'اخري' ? 'selected' : ''   }} value="اخري">اخري</option>
+                                                        <option {{ old('category') == 'شقة' ? 'selected' : '' }}
+                                                            value="شقة"> شقة </option>
+                                                        <option {{ old('category') == 'فيلا' ? 'selected' : '' }}
+                                                            value="فيلا">فيلا</option>
+                                                        <option {{ old('category') == 'أرض' ? 'selected' : '' }}
+                                                            value="أرض">أرض</option>
+                                                        <option {{ old('category') == 'محل تجاري' ? 'selected' : '' }}
+                                                            value="محل تجاري">محل تجاري</option>
+                                                            <option {{ old('category') == 'بيت عربي' ? 'selected' : ''  }} value="بيت عربي">بيت عربي</option>
+                                                            <option {{ old('category') == 'اخرى' ? 'selected' : ''   }} value="اخرى">اخرى</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <label> السعر </label>
-                                                    <input type="number" class="form-control with-light" name="price"
-                                                        required value="{{ old('price') }}" step="0.01">
+                                                    <input type="text" id="formatted-price" class="form-control with-light" required>
+                                                    <input type="hidden" id="actual-price" name="price" value="{{ old('price') }}">
                                                 </div>
                                             </div>
+
+                                            <!-- تحميل AutoNumeric.js -->
+                                            <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
+
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", function () {
+                                                    const formattedInput = new AutoNumeric('#formatted-price', {
+                                                        digitGroupSeparator: ',',  // الفاصلة بين الأرقام
+                                                        decimalCharacter: '.',      // الفاصلة العشرية
+                                                        decimalPlaces: 2,           // عدد الأرقام بعد الفاصلة العشرية
+                                                        unformatOnSubmit: true      // إزالة الفواصل عند الإرسال
+                                                    });
+
+                                                    // عند التغيير، نقوم بتحديث الحقل المخفي بالقيمة الفعلية
+                                                    document.getElementById('formatted-price').addEventListener('input', function () {
+                                                        document.getElementById('actual-price').value = formattedInput.getNumericString();
+                                                    });
+                                                });
+                                            </script>
+
 
                                             <div class="col-6">
                                                 <div class="form-group">
@@ -264,39 +291,38 @@
 @endsection
 
 @section('js')
-<script>
-    document.getElementById('imageInput').addEventListener('change', function(event) {
-        let imagePreview = document.getElementById('imagePreview');
+    <script>
+        document.getElementById('imageInput').addEventListener('change', function(event) {
+            let imagePreview = document.getElementById('imagePreview');
 
-        Array.from(event.target.files).forEach(file => {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let imgContainer = document.createElement("div");
-                imgContainer.classList.add("position-relative", "m-2");
+            Array.from(event.target.files).forEach(file => {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let imgContainer = document.createElement("div");
+                    imgContainer.classList.add("position-relative", "m-2");
 
-                let img = document.createElement("img");
-                img.src = e.target.result;
-                img.classList.add("rounded", "shadow", "border", "p-1");
-                img.style.width = "120px";
-                img.style.height = "120px";
+                    let img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.classList.add("rounded", "shadow", "border", "p-1");
+                    img.style.width = "120px";
+                    img.style.height = "120px";
 
-                let removeBtn = document.createElement("span");
-                removeBtn.innerHTML = "&times;";
-                removeBtn.classList.add("position-absolute", "top-0", "end-0", "bg-danger",
-                    "text-white", "rounded-circle", "p-1", "cursor-pointer");
-                removeBtn.style.cursor = "pointer";
+                    let removeBtn = document.createElement("span");
+                    removeBtn.innerHTML = "&times;";
+                    removeBtn.classList.add("position-absolute", "top-0", "end-0", "bg-danger",
+                        "text-white", "rounded-circle", "p-1", "cursor-pointer");
+                    removeBtn.style.cursor = "pointer";
 
-                removeBtn.onclick = function() {
-                    imgContainer.remove();
+                    removeBtn.onclick = function() {
+                        imgContainer.remove();
+                    };
+
+                    imgContainer.appendChild(img);
+                    imgContainer.appendChild(removeBtn);
+                    imagePreview.appendChild(imgContainer);
                 };
-
-                imgContainer.appendChild(img);
-                imgContainer.appendChild(removeBtn);
-                imagePreview.appendChild(imgContainer);
-            };
-            reader.readAsDataURL(file);
+                reader.readAsDataURL(file);
+            });
         });
-    });
-</script>
-
+    </script>
 @endsection

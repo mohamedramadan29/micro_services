@@ -63,15 +63,15 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="#"> الرئيسية </a></li>
                                         <li class="breadcrumb-item"><a href="#"> لوحة التحكم </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">  تعديل عقار </li>
+                                        <li class="breadcrumb-item active" aria-current="page"> تعديل عقار </li>
                                     </ol>
                                 </nav>
                             </div>
                         </div>
                     </div>
                     <div class="row mobile_form">
-                        <form method="post" action="{{ url('my/property/update/'.$property['id']) }}" enctype="multipart/form-data"
-                            id="uploadService">
+                        <form method="post" action="{{ url('my/property/update/' . $property['id']) }}"
+                            enctype="multipart/form-data" id="uploadService">
                             @csrf
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <!-- Single Wrap -->
@@ -88,7 +88,8 @@
                                                 <div class="form-group">
                                                     <label> ادخل العنوان </label>
                                                     <input type="text" class="form-control with-light" name="title"
-                                                        required value="{{  $property['title'] ?? old('title')  }}" placeholder=" عقار جديد  ">
+                                                        required value="{{ $property['title'] ?? old('title') }}"
+                                                        placeholder=" عقار جديد  ">
                                                 </div>
                                             </div>
 
@@ -104,8 +105,12 @@
                                                     <select name="type" id="" class="form-select" required>
                                                         <option value="" selected disabled> -- حدد نوع العقار --
                                                         </option>
-                                                        <option {{ $property['type'] ?? old('type') == 'بيع' ? 'selected' : '' }} value="بيع">بيع</option>
-                                                        <option {{ $property['type'] ?? old('type') == 'ايجار' ? 'selected' : '' }} value="ايجار">ايجار</option>
+                                                        <option
+                                                            {{ ($property['type'] ?? old('type')) == 'بيع' ? 'selected' : '' }}
+                                                            value="بيع">بيع</option>
+                                                        <option
+                                                            {{ ($property['type'] ?? old('type')) == 'ايجار' ? 'selected' : '' }}
+                                                            value="ايجار">ايجار</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -115,27 +120,68 @@
                                                     <label> حدد القسم </label>
                                                     <select name="category" id="" class="form-select" required>
                                                         <option value="" selected disabled> -- حدد القسم -- </option>
-                                                        <option {{ $property['category'] ?? old('category') == 'شقة' ? 'selected' : '' }} value="شقة"> شقة </option>
-                                                        <option {{ $property['category'] ?? old('category') == 'فيلا' ? 'selected' : '' }} value="فيلا">فيلا</option>
-                                                        <option {{ $property['category'] ?? old('category') == 'أرض' ? 'selected' : ''  }} value="أرض">أرض</option>
-                                                        <option {{ $property['category'] ?? old('category') == 'محل تجاري' ? 'selected' : ''  }} value="محل تجاري">محل تجاري</option>
-                                                        <option {{ $property['category'] ?? old('category') == 'اخري' ? 'selected' : ''   }} value="اخري">اخري</option>
+                                                        <option
+                                                            {{ ($property['category'] ?? old('category')) == 'شقة' ? 'selected' : '' }}
+                                                            value="شقة"> شقة </option>
+                                                        <option
+                                                            {{ ($property['category'] ?? old('category')) == 'فيلا' ? 'selected' : '' }}
+                                                            value="فيلا">فيلا</option>
+                                                        <option
+                                                            {{ ($property['category'] ?? old('category')) == 'أرض' ? 'selected' : '' }}
+                                                            value="أرض">أرض</option>
+                                                        <option
+                                                            {{ ($property['category'] ?? old('category')) == 'محل تجاري' ? 'selected' : '' }}
+                                                            value="محل تجاري">محل تجاري</option>
+                                                        <option
+                                                            {{ ($property['category'] ?? old('category')) == 'بيت عربي' ? 'selected' : '' }}
+                                                            value="بيت عربي">بيت عربي</option>
+                                                        <option
+                                                            {{ ($property['category'] ?? old('category')) == 'اخرى' ? 'selected' : '' }}
+                                                            value="اخرى">اخرى</option>
                                                     </select>
                                                 </div>
                                             </div>
+                                            <!-- تضمين مكتبة AutoNumeric -->
+                                            <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
+
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <label> السعر </label>
-                                                    <input type="number" class="form-control with-light" name="price"
-                                                        required value="{{ $property['price'] ?? old('price') }}" step="0.01">
+                                                    <input type="text" id="price" class="form-control with-light" required
+                                                        value="{{ number_format($property['price'] ?? old('price'), 2, '.', ',') }}">
+                                                    <input type="hidden" id="actual-price" name="price"
+                                                        value="{{ $property['price'] ?? old('price') }}">
                                                 </div>
                                             </div>
+
+                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/autoNumeric/4.5.4/autoNumeric.min.js"></script>
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", function () {
+                                                    // تهيئة AutoNumeric
+                                                    const priceInput = new AutoNumeric("#price", {
+                                                        digitGroupSeparator: ",",
+                                                        decimalCharacter: ".",
+                                                        decimalPlaces: 2,
+                                                        unformatOnSubmit: true,
+                                                    });
+
+                                                    // عند الإرسال، تحديث القيمة المخفية
+                                                    document.getElementById("price").closest("form").addEventListener("submit", function () {
+                                                        const actualPriceInput = document.getElementById("actual-price");
+                                                        actualPriceInput.value = priceInput.getNumber();
+                                                        console.log("القيمة الحقيقية المخزنة:", actualPriceInput.value); // اختبار القيم
+                                                    });
+                                                });
+                                            </script>
+
+
 
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <label> المساحة <span class="badge badge-danger"> م٢ </span> </label>
                                                     <input type="number" class="form-control with-light" name="area"
-                                                        required value="{{ $property['area'] ?? old('area') }}" step="0.01">
+                                                        required value="{{ $property['area'] ?? old('area') }}"
+                                                        step="0.01">
                                                 </div>
                                             </div>
 
@@ -151,7 +197,8 @@
                                                 <div class="form-group">
                                                     <label> عدد الحمامات </label>
                                                     <input type="number" class="form-control with-light"
-                                                        name="bathrooms" required value="{{ $property['bathrooms'] ?? old('bathrooms') }}">
+                                                        name="bathrooms" required
+                                                        value="{{ $property['bathrooms'] ?? old('bathrooms') }}">
                                                 </div>
                                             </div>
                                             <div class="col-xl-12 col-lg-12">
@@ -194,7 +241,7 @@
                                         </div>
                                     </div>
                                     <button style="margin: auto;display: block" type="submit" class="btn btn-save"
-                                        id="submitBtn"> تحديث البيانات  <i class="fa fa-save"></i></button>
+                                        id="submitBtn"> تحديث البيانات <i class="fa fa-save"></i></button>
                                     <span id="loader" style="display: none;">جاري الإرسال...</span>
                                 </div>
                             </div>
@@ -206,20 +253,25 @@
                                     <thead>
                                         <tr>
                                             <th> صور العقار </th>
-                                            <th> العمليات  </th>
+                                            <th> العمليات </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($property['ProperityImages'] as $image)
                                             <tr>
                                                 <td>
-                                                    <img width="80px" height="80px" src="{{ asset('assets/uploads/properities/' . $image->image) }}" alt="">
+                                                    <img width="80px" height="80px"
+                                                        src="{{ asset('assets/uploads/properities/' . $image->image) }}"
+                                                        alt="">
                                                 </td>
                                                 <td>
-                                                    <form action="{{ url('delete-property-image/' . $image->id) }}" method="post">
-                                                    @csrf
-                                                    <button type="submit" onclick="return confirm('هل تريد حذف هذه الصورة؟')"
-                                                        class="btn btn-danger btn-sm text-light"> حذف <i class="bi bi-trash"></i> </button>
+                                                    <form action="{{ url('delete-property-image/' . $image->id) }}"
+                                                        method="post">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            onclick="return confirm('هل تريد حذف هذه الصورة؟')"
+                                                            class="btn btn-danger btn-sm text-light"> حذف <i
+                                                                class="bi bi-trash"></i> </button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -292,39 +344,38 @@
 @endsection
 
 @section('js')
-<script>
-    document.getElementById('imageInput').addEventListener('change', function(event) {
-        let imagePreview = document.getElementById('imagePreview');
+    <script>
+        document.getElementById('imageInput').addEventListener('change', function(event) {
+            let imagePreview = document.getElementById('imagePreview');
 
-        Array.from(event.target.files).forEach(file => {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let imgContainer = document.createElement("div");
-                imgContainer.classList.add("position-relative", "m-2");
+            Array.from(event.target.files).forEach(file => {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let imgContainer = document.createElement("div");
+                    imgContainer.classList.add("position-relative", "m-2");
 
-                let img = document.createElement("img");
-                img.src = e.target.result;
-                img.classList.add("rounded", "shadow", "border", "p-1");
-                img.style.width = "120px";
-                img.style.height = "120px";
+                    let img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.classList.add("rounded", "shadow", "border", "p-1");
+                    img.style.width = "120px";
+                    img.style.height = "120px";
 
-                let removeBtn = document.createElement("span");
-                removeBtn.innerHTML = "&times;";
-                removeBtn.classList.add("position-absolute", "top-0", "end-0", "bg-danger",
-                    "text-white", "rounded-circle", "p-1", "cursor-pointer");
-                removeBtn.style.cursor = "pointer";
+                    let removeBtn = document.createElement("span");
+                    removeBtn.innerHTML = "&times;";
+                    removeBtn.classList.add("position-absolute", "top-0", "end-0", "bg-danger",
+                        "text-white", "rounded-circle", "p-1", "cursor-pointer");
+                    removeBtn.style.cursor = "pointer";
 
-                removeBtn.onclick = function() {
-                    imgContainer.remove();
+                    removeBtn.onclick = function() {
+                        imgContainer.remove();
+                    };
+
+                    imgContainer.appendChild(img);
+                    imgContainer.appendChild(removeBtn);
+                    imagePreview.appendChild(imgContainer);
                 };
-
-                imgContainer.appendChild(img);
-                imgContainer.appendChild(removeBtn);
-                imagePreview.appendChild(imgContainer);
-            };
-            reader.readAsDataURL(file);
+                reader.readAsDataURL(file);
+            });
         });
-    });
-</script>
-
+    </script>
 @endsection
