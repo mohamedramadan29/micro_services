@@ -12,6 +12,7 @@ use App\Http\Controllers\admin\ProjectController;
 use \App\Http\Controllers\admin\ServiceController;
 use \App\Http\Controllers\admin\SettingController;
 use \App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\ProperityController;
 use \App\Http\Controllers\admin\SubCategoryController;
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
@@ -113,5 +114,13 @@ Route::group(['prefix' => 'admin'], function () {
             Route::match(['post', 'get'], 'order/update/{id}', 'update');
             Route::post('order/delete/{id}', 'delete');
         });
+        ############### Start Properities ################
+        Route::controller(ProperityController::class)->group(function () {
+            Route::get('properities', 'index');
+            Route::match(['post', 'get'], 'properity/update/{id}', 'update');
+            Route::post('properity/delete/{id}', 'delete');
+            Route::match(['post', 'get'], 'properit/active/{id}', 'ActiveStatus');
+        });
+        ############## End Properiteis ###################
     });
 });
