@@ -13,6 +13,7 @@ use App\Http\Controllers\front\serviceController;
 use App\Http\Controllers\front\TicketsController;
 use App\Http\Controllers\front\CheckOutController;
 use App\Http\Controllers\front\WithDrawController;
+use App\Http\Controllers\front\ProperityController;
 use App\Http\Controllers\Auth\SocialMediaController;
 use App\Http\Controllers\front\ConversationController;
 use App\Http\Controllers\front\ProductOrderController;
@@ -21,8 +22,9 @@ use App\Http\Controllers\front\ChargeBalanceController;
 use App\Http\Controllers\front\TicketMessageController;
 use App\Http\Controllers\front\CourseRegisterController;
 use App\Http\Controllers\front\FrontProperityController;
-use App\Http\Controllers\front\ProperityController;
+use App\Http\Controllers\front\ProperityMaintainController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Http\Controllers\front\FrontProperityMaintainController;
 
 Route::group(
     [
@@ -127,7 +129,7 @@ Route::group(
         ///
         Route::controller(ProductOrderController::class)->group(function () {
             Route::post('product_order', 'store');
-            Route::get('/product/payment/success',  'paymentSuccess')->name('product.order.success');
+            Route::get('/product/payment/success', 'paymentSuccess')->name('product.order.success');
             Route::get('/product/payment/cancel', 'PaymentCancel')->name('product.order.cancel');
         });
 
@@ -212,13 +214,27 @@ Route::group(
 
             ################ End Properites #################
 
+            ################# Start Properity Maintain #################
+            Route::controller(ProperityMaintainController::class)->group(function () {
+                Route::get('my/property/maintain/index', 'index');
+                Route::match(['post', 'get'], 'my/property/maintain/add', 'store');
+                Route::match(['post', 'get'], 'my/property/maintain/update/{id}', 'update');
+                Route::match(['post', 'get'], 'my/property/maintain/delete/{id}', 'delete');
+            });
+            ################# End Properity Maintain #################
         });
-                ############### Staty Front Properity Controller ##########
-                Route::controller(FrontProperityController::class)->group(function () {
-                    Route::get('properties', 'index');
-                    Route::get('property/{id}-{slug}', 'propertyDetails');
-                });
-                ############### End Front Properity Controller ##########
+        ############### Staty Front Properity Controller ##########
+        Route::controller(FrontProperityController::class)->group(function () {
+            Route::get('properties', 'index');
+            Route::get('property/{id}-{slug}', 'propertyDetails');
+        });
+        ############### End Front Properity Controller ##########
+        ################# Start Front Properity Maintain Controller ##########
+        Route::controller(FrontProperityMaintainController::class)->group(function () {
+            Route::get('properties/maintain', 'index');
+            Route::get('properties/maintain/{id}-{slug}', 'propertyDetails');
+        });
+        ################# End Front Properity Maintain Controller ##########
 
         ######################## Start ChatGpt ##################
         Route::controller(ChatgptController::class)->group(function () {

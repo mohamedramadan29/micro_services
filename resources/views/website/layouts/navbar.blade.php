@@ -141,8 +141,7 @@
                                     <button class="btn btn-secondary dropdown-toggle" type="button"
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         @if (Auth::user()->image != '')
-                                            <img
-                                                src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
+                                            <img src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
                                                 class="img-fluid rounded" alt="">
                                         @else
                                             <img src="{{ asset('assets/website/img/avatar.png') }}"
@@ -150,25 +149,47 @@
                                         @endif
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ url('dashboard') }}"> الملف الشخصي <i class="ti-dashboard"></i> </a>
+                                        <li><a class="dropdown-item" href="{{ url('dashboard') }}"> الملف الشخصي <i
+                                                    class="ti-dashboard"></i> </a>
                                         </li>
-                                        <li><a class="dropdown-item" href="{{ url('balance') }}"> الرصيد <i class="bi bi-credit-card"></i> </a></li>
-                                        <li><a class="dropdown-item" href="{{ url('my/project/index') }}"> المشاريع <i class="bi bi-cast"></i></a></li>
-                                        <li><a class="dropdown-item" href="{{ url('my/project/add') }}"> اضف مشروع جديد <i class="ti-plus"></i></a></li>
-                                        <li><a class="dropdown-item" href="{{ url('my/courses') }}">  الكورسات <i class="bi bi-mortarboard-fill"></i> </a>
+                                        <li><a class="dropdown-item" href="{{ url('balance') }}"> الرصيد <i
+                                                    class="bi bi-credit-card"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/project/index') }}"> المشاريع <i
+                                                    class="bi bi-cast"></i></a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/project/add') }}"> اضف مشروع جديد
+                                                <i class="ti-plus"></i></a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/courses') }}"> الكورسات <i
+                                                    class="bi bi-mortarboard-fill"></i> </a>
                                         </li>
-                                        <li><a class="dropdown-item" href="{{ url('my/course/add') }}"> اضف كورس جديد <i class="ti-plus"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/course/add') }}"> اضف كورس جديد
+                                                <i class="ti-plus"></i> </a></li>
                                         <li><a class="dropdown-item" href="{{ url('service/index') }}">الخدمات
-                                            <i class="bi bi-database-fill-check"></i>  </a></li>
-                                        <li><a class="dropdown-item" href="{{ url('service/add') }}"> اضف خدمة جديدة <i class="ti-plus"></i></a></li>
-                                        <li><a class="dropdown-item" href="{{ url('chats') }}">  المحادثات <i class="bi bi-chat-dots-fill"></i></a>
+                                                <i class="bi bi-database-fill-check"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('service/add') }}"> اضف خدمة جديدة
+                                                <i class="ti-plus"></i></a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/properties/index') }}">
+                                                العقارات
+                                                <i class="bi bi-building"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/property/add') }}"> اضف عقار
+                                                جديد
+                                                <i class="ti-plus"></i> </a> </li>
+                                        <li><a class="dropdown-item" href="{{ url('my/property/maintain/index') }}">
+                                                خدمات
+                                                الصيانة <i class="bi bi-database-fill"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/property/maintain/add') }}">
+                                                اضف
+                                                خدمة صيانة <i class="ti-plus"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('chats') }}"> المحادثات <i
+                                                    class="bi bi-chat-dots-fill"></i></a>
                                         </li>
-                                        <li><a class="dropdown-item" href="{{ url('tickets') }}"> تذاكري <i class="bi bi-ticket"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('tickets') }}"> تذاكري <i
+                                                    class="bi bi-ticket"></i> </a></li>
                                         {{-- <li><a class="dropdown-item" href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li> --}}
-                                        <li><a class="dropdown-item" href="{{ url('update-account') }}">  تعديل الملف
+                                        <li><a class="dropdown-item" href="{{ url('update-account') }}"> تعديل الملف
                                                 الشخصي
                                                 <i class="bi bi-gear-fill"></i> </a></li>
-                                        <li><a class="dropdown-item" href="{{ url('logout') }}"> تسجيل خروج <i class="ti-power-off"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('logout') }}"> تسجيل خروج <i
+                                                    class="ti-power-off"></i> </a></li>
                                     </ul>
                                 </div>
                                 {{-- <li class="mobile_account">
@@ -380,9 +401,11 @@
                                 <a href="{{ url('services') }}"> {{ __('public.services') }} </a>
                             </li>
 
-                            <li class="{{ request()->is('properties') ? 'active' : '' }}"><a href="{{ url('properties') }}"> عقارات  </a></li>
+                            <li class="{{ request()->is('properties') ? 'active' : '' }}"><a
+                                    href="{{ url('properties') }}"> عقارات </a></li>
+                            <li class="{{ request()->is('properties/maintain') ? 'active' : '' }}"><a
+                                    href="{{ url('properties/maintain') }}">    خدمات الصيانة </a></li>
                             @if (\Illuminate\Support\Facades\Auth::check())
-
                                 <li><a href="{{ url('service/add') }}"> اضافة خدمة </a></li>
                             @endif
                             @php

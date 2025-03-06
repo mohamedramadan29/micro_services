@@ -14,6 +14,7 @@ use \App\Http\Controllers\admin\SettingController;
 use \App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ProperityController;
 use \App\Http\Controllers\admin\SubCategoryController;
+use App\Http\Controllers\admin\ProperityMaintainController;
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
     Route::post('admin_login', [AdminController::class, 'admin_login']);
@@ -122,5 +123,13 @@ Route::group(['prefix' => 'admin'], function () {
             Route::match(['post', 'get'], 'properit/active/{id}', 'ActiveStatus');
         });
         ############## End Properiteis ###################
+        ############## Start Properity Maintain ############
+        Route::controller(ProperityMaintainController::class)->group(function () {
+            Route::get('properity-maintain', 'index');
+            Route::match(['post', 'get'], 'properity-maintain/update/{id}', 'update');
+            Route::post('properity-maintain/delete/{id}', 'delete');
+            Route::match(['post', 'get'], 'properity-maintain/active/{id}', 'ActiveStatus');
+        });
+        ############## End Properity Maintain #############
     });
 });

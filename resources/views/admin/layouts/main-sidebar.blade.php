@@ -59,23 +59,23 @@
                     </ul>
                 </li>
 
-                <li class="side-item side-item-category"> المشاريع  </li>
+                <li class="side-item side-item-category"> المشاريع </li>
                 <li class="slide">
                     <a class="side-menu__item" data-toggle="slide" href="">
                         <i style="font-size: 22px;margin-left: 10px" class="fa fa-file-signature"></i>
-                        <span class="side-menu__label"> المشاريع  </span><i class="angle fe fe-chevron-down"></i></a>
+                        <span class="side-menu__label"> المشاريع </span><i class="angle fe fe-chevron-down"></i></a>
                     <ul class="slide-menu">
-                        <li><a class="slide-item" href="{{ url('admin/projects') }}"> ادارة المشاريع  </a></li>
+                        <li><a class="slide-item" href="{{ url('admin/projects') }}"> ادارة المشاريع </a></li>
                     </ul>
                 </li>
 
-                <li class="side-item side-item-category">  الكورسات   </li>
+                <li class="side-item side-item-category"> الكورسات </li>
                 <li class="slide">
                     <a class="side-menu__item" data-toggle="slide" href="">
                         <i style="font-size: 22px;margin-left: 10px" class="fa fa-file-signature"></i>
-                        <span class="side-menu__label"> الكورسات   </span><i class="angle fe fe-chevron-down"></i></a>
+                        <span class="side-menu__label"> الكورسات </span><i class="angle fe fe-chevron-down"></i></a>
                     <ul class="slide-menu">
-                        <li><a class="slide-item" href="{{ url('admin/courses') }}">  ادارة الكورسات  </a></li>
+                        <li><a class="slide-item" href="{{ url('admin/courses') }}"> ادارة الكورسات </a></li>
                     </ul>
                 </li>
 
@@ -100,43 +100,57 @@
                     </ul>
                 </li>
 
-                <li class="side-item side-item-category"> الطلبات  </li>
+                <li class="side-item side-item-category"> الطلبات </li>
                 <li class="slide">
                     <a class="side-menu__item" data-toggle="slide" href="">
                         <i style="font-size: 22px;margin-left: 10px" class="fa fa-shopping-basket"></i>
-                        <span class="side-menu__label"> الطلبات  </span><i class="angle fe fe-chevron-down"></i></a>
+                        <span class="side-menu__label"> الطلبات </span><i class="angle fe fe-chevron-down"></i></a>
                     <ul class="slide-menu">
-                        <li><a class="slide-item" href="{{ url('admin/orders') }}"> الطلبات  </a></li>
+                        <li><a class="slide-item" href="{{ url('admin/orders') }}"> الطلبات </a></li>
                     </ul>
                 </li>
 
-                <li class="side-item side-item-category"> العقارات   </li>
+                <li class="side-item side-item-category"> العقارات </li>
                 <li class="slide">
                     <a class="side-menu__item" data-toggle="slide" href="">
                         <i style="font-size: 22px;margin-left: 10px" class="fa fa-building"></i>
-                        <span class="side-menu__label"> العقارات  </span><i class="angle fe fe-chevron-down"></i></a>
+                        <span class="side-menu__label"> العقارات </span><i class="angle fe fe-chevron-down"></i></a>
                     <ul class="slide-menu">
-                        <li><a class="slide-item" href="{{ url('admin/properities') }}"> العقارات  </a></li>
+                        <li><a class="slide-item" href="{{ url('admin/properities') }}"> العقارات </a></li>
                     </ul>
                 </li>
 
-                <li class="side-item side-item-category"> الدعم الفني  </li>
+                <li class="side-item side-item-category"> خدمات الصيانة </li>
+                <li class="slide">
+                    <a class="side-menu__item" data-toggle="slide" href="">
+                        <i style="font-size: 22px;margin-left: 10px" class="fa fa-wrench"></i>
+                        <span class="side-menu__label"> خدمات الصيانة </span><i
+                            class="angle fe fe-chevron-down"></i></a>
+                    <ul class="slide-menu">
+                        <li><a class="slide-item" href="{{ url('admin/properity-maintain') }}">  خدمات الصيانة </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="side-item side-item-category"> الدعم الفني </li>
                 <li class="slide">
                     <a class="side-menu__item" data-toggle="slide" href="">
                         <i style="font-size: 22px;margin-left: 10px" class="fa fa-box"></i>
-                        <span class="side-menu__label"> الدعم الفني  </span><i class="angle fe fe-chevron-down"></i></a>
+                        <span class="side-menu__label"> الدعم الفني </span><i
+                            class="angle fe fe-chevron-down"></i></a>
                     <ul class="slide-menu">
-                        <li><a class="slide-item" href="{{ url('admin/tickets') }}"> الدعم الفني  </a></li>
+                        <li><a class="slide-item" href="{{ url('admin/tickets') }}"> الدعم الفني </a></li>
                     </ul>
                 </li>
 
-                <li class="side-item side-item-category">  الاستشارين   </li>
+                <li class="side-item side-item-category"> الاستشارين </li>
                 <li class="slide">
                     <a class="side-menu__item" data-toggle="slide" href="">
                         <i style="font-size: 22px;margin-left: 10px" class="fa fa-user"></i>
-                        <span class="side-menu__label">  جميع الاستشارين    </span><i class="angle fe fe-chevron-down"></i></a>
+                        <span class="side-menu__label"> جميع الاستشارين </span><i
+                            class="angle fe fe-chevron-down"></i></a>
                     <ul class="slide-menu">
-                        <li><a class="slide-item" href="{{ url('admin/consultants') }}">  مشاهدة الكل   </a></li>
+                        <li><a class="slide-item" href="{{ url('admin/consultants') }}"> مشاهدة الكل </a></li>
                     </ul>
                 </li>
 
