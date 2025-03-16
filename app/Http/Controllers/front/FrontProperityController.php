@@ -9,10 +9,9 @@ use App\Http\Controllers\Controller;
 class FrontProperityController extends Controller
 {
     public function index(){
-        $properities = Properity::with('ProperityFirstImage','ProperityImages')->orderBy('created_at', 'desc')->paginate(10);
+        $properities = Properity::with('ProperityFirstImage','ProperityImages')->where('active', 1)->orderBy('created_at', 'desc')->paginate(10);
         return view('website.properities', compact('properities'));
     }
-
     public function propertyDetails($id,$slug){
 
         $property = Properity::with('ProperityFirstImage','ProperityImages')->where('id', $id)->where('slug', $slug)->first();

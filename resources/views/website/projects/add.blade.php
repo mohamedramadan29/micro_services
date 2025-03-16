@@ -96,60 +96,13 @@
                                                     <label> مهارات متعلقة بالمشروع </label>
                                                     <select required class="form-control select2" multiple name="skills[]">
                                                         <option disabled>-- حدد من القائمة --</option>
-                                                        <option value="برمجة"
-                                                            {{ in_array('برمجة', old('skills', [])) ? 'selected' : '' }}>
-                                                            برمجة</option>
-                                                        <option value="تصميم جرافيك"
-                                                            {{ in_array('تصميم جرافيك', old('skills', [])) ? 'selected' : '' }}>
-                                                            تصميم جرافيك</option>
-                                                        <option value="كتابة محتوى"
-                                                            {{ in_array('كتابة محتوى', old('skills', [])) ? 'selected' : '' }}>
-                                                            كتابة محتوى</option>
-                                                        <option value="إدارة المشاريع"
-                                                            {{ in_array('إدارة المشاريع', old('skills', [])) ? 'selected' : '' }}>
-                                                            إدارة المشاريع</option>
-                                                        <option value="تحليل البيانات"
-                                                            {{ in_array('تحليل البيانات', old('skills', [])) ? 'selected' : '' }}>
-                                                            تحليل البيانات</option>
-                                                        <option value="تسويق رقمي"
-                                                            {{ in_array('تسويق رقمي', old('skills', [])) ? 'selected' : '' }}>
-                                                            تسويق رقمي</option>
-                                                        <option value="التدقيق اللغوي"
-                                                            {{ in_array('التدقيق اللغوي', old('skills', [])) ? 'selected' : '' }}>
-                                                            التدقيق اللغوي</option>
-                                                        <option value="التعليق الصوتي"
-                                                            {{ in_array('التعليق الصوتي', old('skills', [])) ? 'selected' : '' }}>
-                                                            التعليق الصوتي</option>
-                                                        <option value="تصميم مواقع"
-                                                            {{ in_array('تصميم مواقع', old('skills', [])) ? 'selected' : '' }}>
-                                                            تصميم مواقع</option>
-                                                        <option value="تحرير الفيديو"
-                                                            {{ in_array('تحرير الفيديو', old('skills', [])) ? 'selected' : '' }}>
-                                                            تحرير الفيديو</option>
-                                                        <option value="ترجمة"
-                                                            {{ in_array('ترجمة', old('skills', [])) ? 'selected' : '' }}>
-                                                            ترجمة</option>
-                                                        <option value="دعم فني"
-                                                            {{ in_array('دعم فني', old('skills', [])) ? 'selected' : '' }}>
-                                                            دعم فني</option>
-                                                        <option value="تطوير ويب"
-                                                            {{ in_array('تطوير ويب', old('skills', [])) ? 'selected' : '' }}>
-                                                            تطوير ويب</option>
-                                                        <option value="التسويق عبر وسائل التواصل الاجتماعي"
-                                                            {{ in_array('التسويق عبر وسائل التواصل الاجتماعي', old('skills', [])) ? 'selected' : '' }}>
-                                                            التسويق عبر وسائل التواصل الاجتماعي</option>
-                                                        <option value="استشارات الأعمال"
-                                                            {{ in_array('استشارات الأعمال', old('skills', [])) ? 'selected' : '' }}>
-                                                            استشارات الأعمال</option>
-                                                        <option value="تحليل مالي"
-                                                            {{ in_array('تحليل مالي', old('skills', [])) ? 'selected' : '' }}>
-                                                            تحليل مالي</option>
-                                                        <option value="إدارة الموارد البشرية"
-                                                            {{ in_array('إدارة الموارد البشرية', old('skills', [])) ? 'selected' : '' }}>
-                                                            إدارة الموارد البشرية</option>
-                                                        <option value="تحسين محركات البحث"
-                                                            {{ in_array('تحسين محركات البحث', old('skills', [])) ? 'selected' : '' }}>
-                                                            تحسين محركات البحث</option>
+                                                        @foreach ($sub_categories as $sub_category)
+                                                            <option value="{{ $sub_category->id }}"
+                                                                {{ in_array($sub_category->id, old('skills', [])) ? 'selected' : '' }}>
+                                                                {{ $sub_category->name }}
+                                                            </option>
+                                                        @endforeach
+
                                                     </select>
 
                                                 </div>
@@ -220,7 +173,7 @@
                                                 <div class="form-group">
                                                     <br>
                                                     <input type="file" name="files[]" class="form-control"
-                                                        accept="" id="fileInput" multiple >
+                                                        accept="" id="fileInput" multiple>
 
                                                     <span id="fileNames" class="span_info">لم يتم اختيار ملفات بعد</span>
                                                     <span class="span_info">الامتدادات المسموحة: jpg,png,jpeg,webp. الحجم

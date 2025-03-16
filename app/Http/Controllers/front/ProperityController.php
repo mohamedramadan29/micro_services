@@ -85,6 +85,7 @@ class ProperityController extends Controller
             $properity->city = $data['city'];
             $properity->country = $data['country'];
             $properity->status = 'متاح';
+            $properity->active = 0;
             $properity->save();
             ############## Add Images
             if ($request->hasFile('images')) {
@@ -96,7 +97,7 @@ class ProperityController extends Controller
                 }
             }
             DB::commit();
-            return $this->success_message(' تم اضافة العقار بنجاح ');
+            return $this->success_message(' تم اضافة العقار بنجاح من فضلك انتظر التفعيل من الادارة ');
         }
         return view('website.properities.create');
     }

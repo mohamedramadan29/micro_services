@@ -94,17 +94,32 @@
                                                             {{ $message['sender_type'] == 'user' ? Auth::user()->user_name : 'فريق دعم نفذها' }}
                                                         </h6>
                                                         <p> {{ $message['content'] }} </p>
+                                                        @if ($message['file'])
+                                                            <a href="{{ asset('assets/uploads/tickets/' . $message['file']) }}"
+                                                                target="_blank">
+                                                                <button class="btn btn-primary btn-sm mt-2">
+                                                                    <i class="bi bi-file-earmark-pdf"></i> عرض الملف
+                                                                </button>
+                                                            </a>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             @endforeach
 
                                             <div class="clearfix"></div>
-                                            <form method="POST" action="{{ url('message/create/'.$ticket_id) }}" enctype="multipart/form-data">
+                                            <form method="POST" action="{{ url('message/create/' . $ticket_id) }}"
+                                                enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="message-reply">
 
                                                     <textarea name="message" required class="form-control with-light" placeholder=" اكتب رسالتك  "></textarea>
-                                                    <button type="submit" class="btn dark-2"> ارسال <i class="bi bi-send"></i> </button>
+                                                    <div class="form-group mt-2">
+                                                        <label for="file">إضافة ملف</label>
+                                                        <input type="file" name="file" class="form-control"
+                                                            accept="image/*">
+                                                    </div>
+                                                    <button type="submit" class="btn dark-2"> ارسال <i
+                                                            class="bi bi-send"></i> </button>
                                                 </div>
                                             </form>
                                         </div>

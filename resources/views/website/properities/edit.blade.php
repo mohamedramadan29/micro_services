@@ -136,6 +136,15 @@
                                                             {{ ($property['category'] ?? old('category')) == 'بيت عربي' ? 'selected' : '' }}
                                                             value="بيت عربي">بيت عربي</option>
                                                         <option
+                                                            {{ ($property['category'] ?? old('category')) == 'مكتب' ? 'selected' : '' }}
+                                                            value="مكتب">مكتب</option>
+                                                        <option
+                                                            {{ ($property['category'] ?? old('category')) == 'مخزن' ? 'selected' : '' }}
+                                                            value="مخزن">مخزن</option>
+                                                        <option
+                                                            {{ ($property['category'] ?? old('category')) == 'مزارع' ? 'selected' : '' }}
+                                                            value="مزارع">مزارع</option>
+                                                        <option
                                                             {{ ($property['category'] ?? old('category')) == 'اخرى' ? 'selected' : '' }}
                                                             value="اخرى">اخرى</option>
                                                     </select>
@@ -147,7 +156,8 @@
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <label> السعر </label>
-                                                    <input type="text" id="price" class="form-control with-light" required
+                                                    <input type="text" id="price" class="form-control with-light"
+                                                        required
                                                         value="{{ number_format($property['price'] ?? old('price'), 2, '.', ',') }}">
                                                     <input type="hidden" id="actual-price" name="price"
                                                         value="{{ $property['price'] ?? old('price') }}">
@@ -156,7 +166,7 @@
 
                                             <script src="https://cdnjs.cloudflare.com/ajax/libs/autoNumeric/4.5.4/autoNumeric.min.js"></script>
                                             <script>
-                                                document.addEventListener("DOMContentLoaded", function () {
+                                                document.addEventListener("DOMContentLoaded", function() {
                                                     // تهيئة AutoNumeric
                                                     const priceInput = new AutoNumeric("#price", {
                                                         digitGroupSeparator: ",",
@@ -166,7 +176,7 @@
                                                     });
 
                                                     // عند الإرسال، تحديث القيمة المخفية
-                                                    document.getElementById("price").closest("form").addEventListener("submit", function () {
+                                                    document.getElementById("price").closest("form").addEventListener("submit", function() {
                                                         const actualPriceInput = document.getElementById("actual-price");
                                                         actualPriceInput.value = priceInput.getNumber();
                                                         console.log("القيمة الحقيقية المخزنة:", actualPriceInput.value); // اختبار القيم

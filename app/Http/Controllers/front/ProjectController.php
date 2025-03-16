@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\front\Project;
 use App\Models\admin\Category;
 use App\Http\Traits\Slug_Trait;
+use App\Models\admin\SubCategory;
 use App\Http\Traits\Message_Trait;
 use App\Http\Traits\Upload_Images;
 use App\Models\front\ProjectFiles;
@@ -31,7 +32,6 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
-
         if ($request->isMethod('post')) {
             try {
                 $data = $request->all();
@@ -83,13 +83,16 @@ class ProjectController extends Controller
             }
         }
 
-        return view('website.projects.add');
+        $categories = Category::where('status', 1)->get();
+        $sub_categories = SubCategory::where('status', 1)->get();
+        return view('website.projects.add', compact('categories', 'sub_categories'));
     }
 
     public function update(Request $request, $id)
     {
 
         $project = Project::with('files')->where('id', $id)->first();
+        $sub_categories = SubCategory::where('status', 1)->get();
 
         if ($project) {
             if ($project['user_id'] == Auth::id()) {
@@ -154,7 +157,7 @@ class ProjectController extends Controller
             } else {
                 abort(404);
             }
-            return view('website.projects.update', compact('project'));
+            return view('website.projects.update', compact('project', 'sub_categories'));
         }
         abort(404);
     }

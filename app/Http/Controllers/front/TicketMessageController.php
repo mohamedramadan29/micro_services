@@ -4,6 +4,7 @@ namespace App\Http\Controllers\front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
+use App\Http\Traits\Upload_Images;
 use App\Models\admin\TicketMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,7 @@ class TicketMessageController extends Controller
 {
 
     use Message_Trait;
+    use Upload_Images;
     public function index($ticket_id)
     {
 
@@ -27,24 +29,33 @@ class TicketMessageController extends Controller
             //dd($data);
 
             $rules = [
-                'message' => 'required|string|min:10'
+                'message' => 'required|string',
+                'file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ];
             $messages = [
                 'message.required' => 'من فضلك ادخل رسالتك ',
-                'message.min' => 'اقل احرف للرسالة هي 10 ارقام ',
                 'message.string' => ' من فضلك ادخل نص الرسالة بشكل صحيح  ',
+                'file.image' => 'يجب أن يكون الملف صورة',
+                'file.mimes' => 'يجب أن يكون الملف صورة',
+                'file.max' => 'يجب أن يكون حجم الملف أقل من 2 ميجابايت',
             ];
             $validator = Validator::make($data, $rules, $messages);
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
+            $filename = '';
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $filename = $this->saveImage($file, public_path('assets/uploads/tickets'));
+            }
             DB::beginTransaction();
-            $message = new TicketMessage();
 
+            $message = new TicketMessage();
             $message->user_id = Auth::user()->id;
             $message->ticket_id = $ticket_id;
             $message->content = $data['message'];
             $message->sender_type = 'user';
+            $message->file = $filename;
             $message->save();
 
             DB::commit();

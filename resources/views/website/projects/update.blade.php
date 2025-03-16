@@ -112,60 +112,12 @@
                                                     <label>مهارات متعلقة بالمشروع</label>
                                                     <select required class="form-control select2" multiple name="skills[]">
                                                         <option disabled>-- حدد من القائمة --</option>
-                                                        <option value="برمجة"
-                                                            {{ in_array('برمجة', $skills) ? 'selected' : '' }}>برمجة
-                                                        </option>
-                                                        <option value="تصميم جرافيك"
-                                                            {{ in_array('تصميم جرافيك', $skills) ? 'selected' : '' }}>تصميم
-                                                            جرافيك</option>
-                                                        <option value="كتابة محتوى"
-                                                            {{ in_array('كتابة محتوى', $skills) ? 'selected' : '' }}>كتابة
-                                                            محتوى</option>
-                                                        <option value="إدارة المشاريع"
-                                                            {{ in_array('إدارة المشاريع', $skills) ? 'selected' : '' }}>
-                                                            إدارة المشاريع</option>
-                                                        <option value="تحليل البيانات"
-                                                            {{ in_array('تحليل البيانات', $skills) ? 'selected' : '' }}>
-                                                            تحليل البيانات</option>
-                                                        <option value="تسويق رقمي"
-                                                            {{ in_array('تسويق رقمي', $skills) ? 'selected' : '' }}>تسويق
-                                                            رقمي</option>
-                                                        <option value="التدقيق اللغوي"
-                                                            {{ in_array('التدقيق اللغوي', $skills) ? 'selected' : '' }}>
-                                                            التدقيق اللغوي</option>
-                                                        <option value="التعليق الصوتي"
-                                                            {{ in_array('التعليق الصوتي', $skills) ? 'selected' : '' }}>
-                                                            التعليق الصوتي</option>
-                                                        <option value="تصميم مواقع"
-                                                            {{ in_array('تصميم مواقع', $skills) ? 'selected' : '' }}>تصميم
-                                                            مواقع</option>
-                                                        <option value="تحرير الفيديو"
-                                                            {{ in_array('تحرير الفيديو', $skills) ? 'selected' : '' }}>
-                                                            تحرير الفيديو</option>
-                                                        <option value="ترجمة"
-                                                            {{ in_array('ترجمة', $skills) ? 'selected' : '' }}>ترجمة
-                                                        </option>
-                                                        <option value="دعم فني"
-                                                            {{ in_array('دعم فني', $skills) ? 'selected' : '' }}>دعم فني
-                                                        </option>
-                                                        <option value="تطوير ويب"
-                                                            {{ in_array('تطوير ويب', $skills) ? 'selected' : '' }}>تطوير
-                                                            ويب</option>
-                                                        <option value="التسويق عبر وسائل التواصل الاجتماعي"
-                                                            {{ in_array('التسويق عبر وسائل التواصل الاجتماعي', $skills) ? 'selected' : '' }}>
-                                                            التسويق عبر وسائل التواصل الاجتماعي</option>
-                                                        <option value="استشارات الأعمال"
-                                                            {{ in_array('استشارات الأعمال', $skills) ? 'selected' : '' }}>
-                                                            استشارات الأعمال</option>
-                                                        <option value="تحليل مالي"
-                                                            {{ in_array('تحليل مالي', $skills) ? 'selected' : '' }}>تحليل
-                                                            مالي</option>
-                                                        <option value="إدارة الموارد البشرية"
-                                                            {{ in_array('إدارة الموارد البشرية', $skills) ? 'selected' : '' }}>
-                                                            إدارة الموارد البشرية</option>
-                                                        <option value="تحسين محركات البحث"
-                                                            {{ in_array('تحسين محركات البحث', $skills) ? 'selected' : '' }}>
-                                                            تحسين محركات البحث</option>
+                                                        @foreach ($sub_categories as $sub_category)
+                                                            <option value="{{ $sub_category->id }}"
+                                                                {{ in_array($sub_category->id, $skills) ? 'selected' : '' }}>
+                                                                {{ $sub_category->name }}
+                                                            </option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
 
@@ -189,8 +141,7 @@
                                             <div class="col-xl-6 col-lg-6">
                                                 <div class="form-group">
                                                     <label> الميزانية المتوقعة </label>
-                                                    <select style="height:55px" required class="form-select"
-                                                        name="price">
+                                                    <select style="height:55px" required class="form-select" name="price">
                                                         <option disabled selected>-- حدد الميزانية --</option>
                                                         @php
                                                             $prices = [

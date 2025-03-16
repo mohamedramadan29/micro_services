@@ -16,6 +16,7 @@
             justify-content: center;
             align-items: center;
         }
+
         .swiper-slide img {
             width: 100px;
             height: 100px;

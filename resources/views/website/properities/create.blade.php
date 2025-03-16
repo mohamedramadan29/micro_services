@@ -125,16 +125,27 @@
                                                             value="أرض">أرض</option>
                                                         <option {{ old('category') == 'محل تجاري' ? 'selected' : '' }}
                                                             value="محل تجاري">محل تجاري</option>
-                                                            <option {{ old('category') == 'بيت عربي' ? 'selected' : ''  }} value="بيت عربي">بيت عربي</option>
-                                                            <option {{ old('category') == 'اخرى' ? 'selected' : ''   }} value="اخرى">اخرى</option>
+                                                        <option {{ old('category') == 'بيت عربي' ? 'selected' : '' }}
+                                                            value="بيت عربي">بيت عربي</option>
+                                                        <option {{ old('category') == 'مكتب' ? 'selected' : '' }}
+                                                            value="مكتب">مكتب</option>
+                                                        <option {{ old('category') == 'مخزن' ? 'selected' : '' }}
+                                                            value="مخزن">مخزن</option>
+                                                        <option value="مزارع"
+                                                            {{ old('category') == 'مزارع' ? 'selected' : '' }}
+                                                            value="مزارع">مزارع</option>
+                                                        <option {{ old('category') == 'اخرى' ? 'selected' : '' }}
+                                                            value="اخرى">اخرى</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <label> السعر </label>
-                                                    <input type="text" id="formatted-price" class="form-control with-light" required>
-                                                    <input type="hidden" id="actual-price" name="price" value="{{ old('price') }}">
+                                                    <input type="text" id="formatted-price"
+                                                        class="form-control with-light" required>
+                                                    <input type="hidden" id="actual-price" name="price"
+                                                        value="{{ old('price') }}">
                                                 </div>
                                             </div>
 
@@ -142,16 +153,16 @@
                                             <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
 
                                             <script>
-                                                document.addEventListener("DOMContentLoaded", function () {
+                                                document.addEventListener("DOMContentLoaded", function() {
                                                     const formattedInput = new AutoNumeric('#formatted-price', {
-                                                        digitGroupSeparator: ',',  // الفاصلة بين الأرقام
-                                                        decimalCharacter: '.',      // الفاصلة العشرية
-                                                        decimalPlaces: 2,           // عدد الأرقام بعد الفاصلة العشرية
-                                                        unformatOnSubmit: true      // إزالة الفواصل عند الإرسال
+                                                        digitGroupSeparator: ',', // الفاصلة بين الأرقام
+                                                        decimalCharacter: '.', // الفاصلة العشرية
+                                                        decimalPlaces: 2, // عدد الأرقام بعد الفاصلة العشرية
+                                                        unformatOnSubmit: true // إزالة الفواصل عند الإرسال
                                                     });
 
                                                     // عند التغيير، نقوم بتحديث الحقل المخفي بالقيمة الفعلية
-                                                    document.getElementById('formatted-price').addEventListener('input', function () {
+                                                    document.getElementById('formatted-price').addEventListener('input', function() {
                                                         document.getElementById('actual-price').value = formattedInput.getNumericString();
                                                     });
                                                 });
