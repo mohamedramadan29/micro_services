@@ -31,8 +31,8 @@
         <div class="container">
             <h1> {{ __('index.index_h1') }} </h1>
             <p class="lead"> دليل شامل لاختيار وتوظيف أفضل المستقلين لعملك </p>
-            <button data-bs-toggle="modal" data-bs-target="#FreeConsultModel" class="btn btn-primary free_consult_button"><i
-                    class="bi bi-patch-question-fill"></i> احصل علي استشارة مجانية </button>
+            {{-- <button data-bs-toggle="modal" data-bs-target="#FreeConsultModel" class="btn btn-primary free_consult_button"><i
+                    class="bi bi-patch-question-fill"></i> احصل علي استشارة مجانية </button> --}}
             <form class="mt-4" dir="rtl" method="get" action="{{ url('search') }}">
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-md-10 col-sm-12">
@@ -59,11 +59,11 @@
 
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="{{ asset('assets/website/img/visa.png') }}" alt="Visa"></div>
-                    <div class="swiper-slide"><img src="{{ asset('assets/website/img/master.png') }}" alt="MasterCard">
+                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/visa.png') }}" alt="Visa"></div>
+                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/master.png') }}" alt="MasterCard">
                     </div>
-                    <div class="swiper-slide"><img src="{{ asset('assets/website/img/paypal.png') }}" alt="PayPal"></div>
-                    <div class="swiper-slide"><img src="{{ asset('assets/website/img/apple-pay.png') }}" alt="ApplePay">
+                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/paypal.png') }}" alt="PayPal"></div>
+                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/apple-pay.png') }}" alt="ApplePay">
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4 col-sm-4">
-                    <div class="working-process"><span class="process-img"><img
+                    <div class="working-process"><span class="process-img"><img loading="lazy"
                                 src="{{ asset('assets/website/img/new-project.png') }}" class="img-responsive"
                                 alt=""><span class="process-num">01</span></span>
                         <h4> نشر مشروع </h4>
@@ -110,7 +110,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-4">
-                    <div class="working-process"><span class="process-img"><img
+                    <div class="working-process"><span class="process-img"><img loading="lazy"
                                 src="{{ asset('assets/website/img/select_user.png') }}" class="img-responsive"
                                 alt=""><span class="process-num">02</span></span>
                         <h4> استقر على العرض الأفضل </h4>
@@ -118,7 +118,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-4">
-                    <div class="working-process"><span class="process-img"><img
+                    <div class="working-process"><span class="process-img"><img loading="lazy"
                                 src="{{ asset('assets/website/img/completed-task.png') }}" class="img-responsive"
                                 alt=""><span class="process-num">03</span></span>
                         <h4> إتمام مشروعك </h4>
@@ -150,7 +150,7 @@
                         <div class="ser_110">
                             <div class="ser_110_thumb">
                                 <a href="{{ url('services/' . $category['slug']) }}" class="ser_100_link">
-                                    <img style="width: 120px; height:120px;margin:auto;padding-top: 15px;display:block;"
+                                    <img loading="lazy" style="width: 120px; height:120px;margin:auto;padding-top: 15px;display:block;"
                                         src=" {{ asset('assets/uploads/service_category/' . $category['image']) }}"
                                         class="img-fluid" alt=""></a>
                             </div>
@@ -222,7 +222,7 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="inner-flexible-box subscribe-box">
-                        <img class="animate-pulse" src="{{ asset('assets/website/img/gift.png') }}" alt="">
+                        <img loading="lazy"  class="animate-pulse" src="{{ asset('assets/website/img/gift.png') }}" alt="">
                     </div>
                     <div class="clt-caption text-center mb-4">
                         <h2 class="text-light">هدية مميزة بانتظارك </h2>

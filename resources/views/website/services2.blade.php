@@ -15,8 +15,8 @@
                 <p> يقدم المستقلون على كاف مجموعة متنوعة من الخدمات الإحترافية التى تساعدك على تطوير أعمالك و نمو
                     مشاريعك
                 </p>
-                {{-- <a href="{{ url('my/course/add') }}" class="btn btn-primary free_consult_button">  {{ __('courses.add_course') }} <i
-            class="fa fa-plus"></i> </a> --}}
+                <a href="{{ url('service/add') }}" class="btn btn-primary free_consult_button">
+                    اضف خدمك الان <i class="fa fa-plus"></i> </a>
             </div>
         </div>
         <!-- ============================ Hero Banner End ================================== -->
