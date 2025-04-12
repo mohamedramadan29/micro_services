@@ -179,6 +179,10 @@
                                         <li><a class="dropdown-item" href="{{ url('my/property/maintain/add') }}">
                                                 اضف
                                                 خدمة صيانة <i class="ti-plus"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/jobs') }}">
+                                                وظائفي <i class="bi bi-database-fill"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/job/add') }}">
+                                                اضف وظيفة جديدة <i class="ti-plus"></i> </a></li>
                                         <li><a class="dropdown-item" href="{{ url('chats') }}"> المحادثات <i
                                                     class="bi bi-chat-dots-fill"></i></a>
                                         </li>
@@ -403,8 +407,10 @@
 
                             <li class="{{ request()->is('properties') ? 'active' : '' }}"><a
                                     href="{{ url('properties') }}"> عقارات </a></li>
+                            <li class="{{ request()->is('jobs') ? 'active' : '' }}"><a
+                                    href="{{ url('jobs') }}"> الوظائف  </a></li>
                             <li class="{{ request()->is('properties/maintain') ? 'active' : '' }}"><a
-                                    href="{{ url('properties/maintain') }}">    خدمات الصيانة </a></li>
+                                    href="{{ url('properties/maintain') }}"> خدمات الصيانة </a></li>
                             @if (\Illuminate\Support\Facades\Auth::check())
                                 <li><a href="{{ url('service/add') }}"> اضافة خدمة </a></li>
                             @endif

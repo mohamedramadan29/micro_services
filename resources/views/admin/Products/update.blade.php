@@ -106,13 +106,13 @@
                                                 class="form-control" accept="image/*">
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    {{-- <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label for="video" class="form-label"> تعديل او اضافة فيديو للمنتج  </label>
-                                            <input type="file" id="video" name="video"
-                                                class="form-control" accept="video/*">
+                                            <label for="video" class="form-label"> تعديل او اضافة فيديو للمنتج </label>
+                                            <input type="file" id="video" name="video" class="form-control"
+                                                accept="video/*">
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                 </div>
                             </div>
@@ -132,11 +132,12 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <label for="product-discount" class="form-label"> الخصم علي المنتج  </label>
+                                        <label for="product-discount" class="form-label"> الخصم علي المنتج </label>
                                         <div class="input-group mb-3">
                                             <span class="input-group-text fs-20"><i class='bx bx-dollar'></i></span>
                                             <input step="0.01" type="number" id="discount" name="discount"
-                                                class="form-control" placeholder="000" value="{{ $product['discount'] }}">
+                                                class="form-control" placeholder="000"
+                                                value="{{ $product['discount'] }}">
                                         </div>
                                     </div>
 
@@ -196,6 +197,37 @@
             </form>
             <div class="card">
                 <div class="card-header">
+                    رفع فيديو للمنتج
+                </div>
+                <div class="card-body">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" id="product_id" value="{{ $product['id'] }}">
+                        <input type="file" id="videoUpload" />
+                        <button type="button" onclick="uploadVideo(event)" class="btn btn-primary">
+                            رفع الفيديو <i class="fa fa-upload"></i>
+                        </button>
+                        <p id="uploadStatus" style="display:none; color: green; margin-top: 10px;">جاري تحميل الفيديو...
+                        </p>
+                    </form>
+                    <br>
+                    <!-- عرض الفيديو -->
+                    @if (!empty($product['video']))
+                        <div class="video-container" style="margin-top: 20px;">
+                            <video controls width="400"
+                                style="border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+                                <source src="{{ asset('assets/uploads/product_videos/' . $product['video']) }}"
+                                    type="video/mp4">
+                                <!-- نص بديل إذا كان المتصفح لا يدعم الفيديو -->
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    @endif
+
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
                     معرض المنتج
                 </div>
                 <div class="card-body">
@@ -230,7 +262,6 @@
             </div>
         </div>
         <!-- End Container Fluid -->
-
     </div>
 
 @endsection
@@ -282,5 +313,97 @@
                 }
             }
         });
+    </script>
+
+    <!-- ####################### chunk Video ########################## -->
+
+    <script>
+        function uploadVideo(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('videoUpload');
+            const productId = document.getElementById('product_id').value;
+            const file = fileInput.files[0];
+            const uploadStatus = document.getElementById('uploadStatus');
+
+            if (!file) {
+                alert("يرجى اختيار فيديو!");
+                return;
+            }
+
+            // عرض "جاري التحميل"
+            uploadStatus.style.display = "block";
+            uploadStatus.textContent = "جاري تحميل الفيديو...";
+
+
+            const chunkSize = 1 * 1024 * 1024; // 1MB لكل جزء
+            const totalChunks = Math.ceil(file.size / chunkSize);
+            let chunkIndex = 0;
+            const fileIdentifier = new Date().getTime() + "_" + file.name.replace(/\s+/g, '_');
+
+            // الحصول على CSRF Token من الميتا تاج في <head>
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            function uploadNextChunk() {
+                if (chunkIndex >= totalChunks) {
+                    mergeChunks();
+                    return;
+                }
+
+                const start = chunkIndex * chunkSize;
+                const end = Math.min(start + chunkSize, file.size);
+                const chunk = file.slice(start, end);
+
+                let formData = new FormData();
+                formData.append("chunk", chunk);
+                formData.append("chunkIndex", chunkIndex);
+                formData.append("fileIdentifier", fileIdentifier);
+                formData.append("totalChunks", totalChunks);
+                formData.append("product_id", productId);
+
+                fetch(`/admin/upload-chunk/${productId}`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": csrfToken // تمرير CSRF Token
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("رفع الجزء:", data.chunkIndex);
+                        chunkIndex++;
+                        uploadNextChunk();
+                    })
+                    .catch(error => {
+                        console.error("خطأ أثناء رفع الجزء:", error);
+                        uploadStatus.textContent = "حدث خطأ أثناء رفع الفيديو.";
+                    });
+            }
+
+            function mergeChunks() {
+                let formData = new FormData();
+                formData.append("fileIdentifier", fileIdentifier);
+                formData.append("originalFileName", file.name);
+                formData.append("totalChunks", totalChunks);
+                formData.append("product_id", productId);
+
+                fetch(`/admin/merge-chunks/${productId}`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": csrfToken // تمرير CSRF Token
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === "completed") {
+                            alert("تم رفع الفيديو بنجاح: " + data.video_path);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("خطأ أثناء دمج الأجزاء:", error);
+                    });
+            }
+            uploadNextChunk();
+        }
     </script>
 @endsection

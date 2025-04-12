@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\front\JobOfferController;
 use App\Livewire\Chat\Main;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\front\CartController;
@@ -21,10 +22,12 @@ use App\Http\Controllers\front\ProjectOfferController;
 use App\Http\Controllers\front\ChargeBalanceController;
 use App\Http\Controllers\front\TicketMessageController;
 use App\Http\Controllers\front\CourseRegisterController;
+use App\Http\Controllers\front\FrontJobController;
 use App\Http\Controllers\front\FrontProperityController;
 use App\Http\Controllers\front\ProperityMaintainController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Http\Controllers\front\FrontProperityMaintainController;
+use App\Http\Controllers\front\JobController;
 
 Route::group(
     [
@@ -54,7 +57,6 @@ Route::group(
             Route::get('privacy-policy', 'privacy_policy');
             Route::get('search', 'search');
             Route::get('consultants', 'getConsultantsByCategory');
-
         });
         // Confirm User Email
         Route::get('user/confirm/{code}', [UserController::class, 'UserConfirm']);
@@ -222,6 +224,17 @@ Route::group(
                 Route::match(['post', 'get'], 'my/property/maintain/delete/{id}', 'delete');
             });
             ################# End Properity Maintain #################
+
+            ############## Start Jobs Controller ########################
+            Route::controller(JobController::class)->group(function () {
+                Route::get('my/jobs', 'index');
+                Route::match(['post', 'get'], 'my/job/add', 'store');
+                Route::match(['post', 'get'], 'my/job/update/{id}', 'update');
+                Route::post('my/job/delete/{id}', 'delete');
+                Route::match(['get', 'post'], 'my/job/delete/{id}', 'delete');
+                Route::get('my/job/subscriptions/{id}', 'subscriptions');
+            });
+            ############# End Jobs Controller ####################
         });
         ############### Staty Front Properity Controller ##########
         Route::controller(FrontProperityController::class)->group(function () {
@@ -229,6 +242,7 @@ Route::group(
             Route::get('property/{id}-{slug}', 'propertyDetails');
         });
         ############### End Front Properity Controller ##########
+
         ################# Start Front Properity Maintain Controller ##########
         Route::controller(FrontProperityMaintainController::class)->group(function () {
             Route::get('properties/maintain', 'index');
@@ -236,12 +250,19 @@ Route::group(
         });
         ################# End Front Properity Maintain Controller ##########
 
+        ################# Start Front Jobs Controller ##########
+        Route::controller(FrontJobController::class)->group(function () {
+            Route::get('jobs', 'index');
+            Route::get('job/{id}-{slug}', 'jobDetails');
+            Route::post('job/offer/store/{id}', 'OfferStore');
+        });
+        ################# End Front Jobs Controller ##########
+
         ######################## Start ChatGpt ##################
         Route::controller(ChatgptController::class)->group(function () {
 
             Route::get('chatgpt', 'index');
             Route::post('chatgpt', 'chatgpt');
-
         });
 
         Route::group(['middleware' => ['auth']], function () {

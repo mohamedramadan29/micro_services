@@ -43,6 +43,14 @@
                                     </a>
                                 </li>
                                 <li><a href="{{ url('my/property/add') }}"><i class="ti-plus"></i> اضف عقار جديد </a></li>
+                                <li><a href="{{ url('my/property/maintain/add') }}"><i class="ti-plus"></i> اضف خدمة صيانة
+                                        للعقارات </a></li>
+                                <li><a href="{{ url('my/property/maintain/index') }}"><i class="ti-plus"></i> خدمات الصيانة
+                                    </a></li>
+                                <li><a href="{{ url('my/job/add') }}"><i class="ti-plus"></i> اضافة وظيفة جديدة
+                                    </a></li>
+                                <li><a href="{{ url('my/jobs') }}"><i class="ti-plus"></i> وظائفي
+                                    </a></li>
                                 <li><a href="{{ url('chats') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a>
                                 </li>
                                 <li><a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a></li>
@@ -53,6 +61,7 @@
                                 <li><a href="{{ url('logout') }}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
                             </ul>
                         </div>
+
                     </div>
                 </div>
 
@@ -105,27 +114,26 @@
                                                                                 {{ Str::limit($course['desc'], 150, '...') }}
                                                                             </p>
 
-                                                                                <div class="mb-1">
-                                                                                    <div class="buttons"
-                                                                                        style="padding:10px">
-                                                                                        <a href="{{ url('my/course/update/' . $course['id']) }}"
-                                                                                            class="btn btn-primary btn-sm">
-                                                                                            تعديل <i class="fa fa-edit"></i>
-                                                                                        </a>
-                                                                                        <a href="{{ url('my/course/delete/' . $course['id']) }}"
-                                                                                            class="btn btn-warning btn-sm"
-                                                                                            onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')">
-                                                                                            حذف <i class="fa fa-trash"></i>
-                                                                                        </a>
-                                                                                    </div>
+                                                                            <div class="mb-1">
+                                                                                <div class="buttons" style="padding:10px">
+                                                                                    <a href="{{ url('my/course/update/' . $course['id']) }}"
+                                                                                        class="btn btn-primary btn-sm">
+                                                                                        تعديل <i class="fa fa-edit"></i>
+                                                                                    </a>
+                                                                                    <a href="{{ url('my/course/delete/' . $course['id']) }}"
+                                                                                        class="btn btn-warning btn-sm"
+                                                                                        onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')">
+                                                                                        حذف <i class="fa fa-trash"></i>
+                                                                                    </a>
                                                                                 </div>
+                                                                            </div>
 
                                                                             <div class="mb-1">
-                                                                                <div class="buttons"
-                                                                                    style="padding:10px">
+                                                                                <div class="buttons" style="padding:10px">
                                                                                     <a href="{{ url('my/course/subscriptions/' . $course['id']) }}"
                                                                                         class="btn btn-primary btn-sm">
-                                                                                        المشتركين  <i class="bi bi-people-fill"></i>
+                                                                                        المشتركين <i
+                                                                                            class="bi bi-people-fill"></i>
                                                                                     </a>
 
                                                                                 </div>

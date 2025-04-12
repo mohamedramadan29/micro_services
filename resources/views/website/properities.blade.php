@@ -5,13 +5,26 @@
 @section('content')
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg text-right" dir="rtl">
+        <!-- ============================ Hero Banner  Start================================== -->
+        <div class="hero-banner bg-cover center"
+            style="background:#00000057 url({{ asset('assets/website/img/real.jpg') }}) no-repeat;"
+            data-overlay="7">
+            <div class="container">
+                <h1> العقارات </h1>
+                <a href="{{ url('my/property/add') }}" class="btn btn-primary free_consult_button">
+                    اضف عقارك الان  <i class="fa fa-plus"></i> </a>
+            </div>
+        </div>
+        <br>
+        <!-- ============================ Hero Banner End ================================== -->
+
         <div class="container">
-            <div class="main_hero_section">
+            {{-- <div class="main_hero_section">
                 <div>
                     <h4> العقارات </h4>
                 </div>
             </div>
-            <br>
+            <br> --}}
             <div class="row">
                 <!-- Item Wrap Start -->
                 <div class="col-lg-12 col-md-12 col-sm-12">

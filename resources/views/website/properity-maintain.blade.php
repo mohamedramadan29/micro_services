@@ -4,8 +4,20 @@
 @endsection
 @section('content')
     <section class="gray-bg text-right" dir="rtl">
+           <!-- ============================ Hero Banner  Start================================== -->
+           <div class="hero-banner bg-cover center"
+           style="background:#00000057 url({{ asset('assets/website/img/maintain.jpg') }}) no-repeat;"
+           data-overlay="7">
+           <div class="container">
+               <h1> خدمات الصيانة  </h1>
+               <a href="{{ url('my/property/maintain/add') }}" class="btn btn-primary free_consult_button">
+                  اض خدمة صيانة  <i class="fa fa-plus"></i> </a>
+           </div>
+       </div>
+       <br>
+       <!-- ============================ Hero Banner End ================================== -->
         <div class="container">
-            <div class="main_hero_section">
+            {{-- <div class="main_hero_section">
                 <div>
                     <h4> خدمات الصيانة </h4>
                 </div>
@@ -13,7 +25,7 @@
                     <a class="btn btn-global-button" href="{{ url('my/property/maintain/add') }}"> اضافة خدمة صيانة
                         <i class="fa fa-plus"></i> </a>
                 </div>
-            </div>
+            </div> --}}
             <div class="row">
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="simple-sidebar sm-sidebar">

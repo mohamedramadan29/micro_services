@@ -52,6 +52,7 @@ class ProductController extends Controller
                 if ($validator->fails()) {
                     return Redirect::back()->withInput()->withErrors($validator);
                 }
+                $file_name = null;
                 if ($request->hasFile('image')) {
                     $file_name = $this->saveImage($request->image, public_path('assets/uploads/product_images'));
                 }
@@ -88,7 +89,7 @@ class ProductController extends Controller
                 $product->meta_keywords = $data['meta_keywords'];
                 $product->meta_description = $data['meta_description'];
                 $product->image = $file_name;
-                $product->video = $video_name;
+                // $product->video = $video_name;
                 $product->save();
                 ///////// Check If Product Gallary Not Empty
                 ///
@@ -101,7 +102,6 @@ class ProductController extends Controller
                         $gallery_image->save();
                     }
                 }
-
                 DB::commit();
                 return $this->success_message(' تم اضافة المنتج بنجاح  ');
             } catch (\Exception $e) {
@@ -144,7 +144,7 @@ class ProductController extends Controller
                 }
                 ############## Check If Update Video
 
-                if($request->hasFile('video')) {
+                if ($request->hasFile('video')) {
                     $old_video = public_path('assets/uploads/product_videos' . $product['video']);
                     if (file_exists($old_video)) {
                         unlink($old_video);
@@ -217,5 +217,60 @@ class ProductController extends Controller
         }
         $imageGallary->delete();
         return $this->success_message(' تم حذف الصورة بنجاح  ');
+    }
+    ##########################################
+
+    public function uploadChunk(Request $request, $id)
+    {
+        $file = $request->file('chunk');
+        $chunkIndex = $request->input('chunkIndex');
+        $fileIdentifier = $request->input('fileIdentifier');
+        $totalChunks = $request->input('totalChunks');
+
+        $uploadPath = storage_path("app/chunks/$fileIdentifier");
+        if (!file_exists($uploadPath)) {
+            mkdir($uploadPath, 0777, true);
+        }
+
+        $file->move($uploadPath, "chunk_$chunkIndex");
+
+        return response()->json(['status' => 'success', 'chunkIndex' => $chunkIndex]);
+    }
+
+    public function mergeChunks(Request $request, $id)
+    {
+        $fileIdentifier = $request->input('fileIdentifier');
+        $originalFileName = $request->input('originalFileName');
+        $uploadPath = storage_path("app/chunks/$fileIdentifier");
+        $finalPath = public_path("assets/uploads/product_videos");
+
+        if (!file_exists($finalPath)) {
+            mkdir($finalPath, 0777, true);
+        }
+
+        $finalFilePath = "$finalPath/$originalFileName";
+        $finalFile = fopen($finalFilePath, 'wb');
+
+        $totalChunks = $request->input('totalChunks');
+        for ($i = 0; $i < $totalChunks; $i++) {
+            $chunkFile = fopen("$uploadPath/chunk_$i", 'rb');
+            fwrite($finalFile, fread($chunkFile, filesize("$uploadPath/chunk_$i")));
+            fclose($chunkFile);
+        }
+
+        fclose($finalFile);
+
+        // حذف الأجزاء بعد الدمج
+        array_map('unlink', glob("$uploadPath/*"));
+        rmdir($uploadPath);
+
+        // تحديث الفيديو في قاعدة البيانات للمنتج المحدد
+        $product = Product::find($id);
+        if ($product) {
+            $product->video = "$originalFileName";
+            $product->save();
+        }
+
+        return response()->json(['status' => 'completed', 'video_path' => "assets/uploads/product_videos/$originalFileName"]);
     }
 }

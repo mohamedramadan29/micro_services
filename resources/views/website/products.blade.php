@@ -5,12 +5,23 @@
 @section('content')
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg text-right" dir="rtl">
+          <!-- ============================ Hero Banner  Start================================== -->
+          <div class="hero-banner bg-cover center"
+          style="background:#00000057 url({{ asset('assets/website/img/products.jpg') }}) no-repeat;" data-overlay="7">
+          <div class="container">
+              <h1> منتجات نفذها  </h1>
+              {{-- <a href="{{ url('my/course/add') }}" class="btn btn-primary free_consult_button">  {{ __('courses.add_course') }} <i
+                      class="fa fa-plus"></i> </a> --}}
+          </div>
+      </div>
+      <!-- ============================ Hero Banner End ================================== -->
+
         <div class="container">
-            <div class="main_hero_section">
+            {{-- <div class="main_hero_section">
                 <div>
                     <h4> منتجات نفذها </h4>
                 </div>
-            </div>
+            </div> --}}
             <br>
             <div class="row">
                 <!-- Item Wrap Start -->

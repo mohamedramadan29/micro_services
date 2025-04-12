@@ -11,20 +11,42 @@
                        </div>
                        <div class="modal-body">
                            @if (Auth::check())
-                               <form id="categoryForm" style="width: 100%" method="post">
-                                   <div class="form-group">
-                                       <label> حدد المجال </label>
-                                       <select name="category" id="categorySelect" class="form-select" required>
-                                           <option value="" selected disabled> -- حدد المجال -- </option>
-                                           @foreach ($main_categories as $category)
-                                               <option value="{{ $category['id'] }}"> {{ $category['name'] }} </option>
-                                           @endforeach
-                                       </select>
-                                   </div>
-                                   @csrf
-                                   <button type="button" id="nextButton" class="btn global_button"> التالي <i
-                                           class="bi bi-arrow-left"></i></button>
-                               </form>
+                               {{-- <form id="categoryForm" style="width: 100%" method="post"> --}}
+                               <div class="form-group">
+                                   <label>حدد المجال</label>
+                                   <select name="category" id="categorySelect" class="form-select" required>
+                                       <option value="" selected disabled> -- حدد المجال -- </option>
+                                       @foreach ($categories as $category)
+                                           <option value="{{ $category['id'] }}" data-slug="{{ $category['slug'] }}">
+                                               {{ $category['name'] }}
+                                           </option>
+                                       @endforeach
+                                   </select>
+                               </div>
+
+                               @csrf
+
+                               <!-- زر الانتقال إلى خدمات القسم -->
+                               <button type="button" class="btn global_button" onclick="goToSelectedCategory()">
+                                   <i class="bi bi-arrow-left"></i> خدمات القسم
+                               </button>
+                               {{-- </form> --}}
+
+                               <script>
+                                function goToSelectedCategory() {
+                                    const select = document.getElementById('categorySelect');
+                                    const selectedOption = select.options[select.selectedIndex];
+
+                                    if (!selectedOption || !selectedOption.dataset.slug) {
+                                        alert("يرجى تحديد المجال أولاً.");
+                                        return;
+                                    }
+
+                                    const slug = selectedOption.dataset.slug;
+                                    const url = `/services/${slug}`;
+                                    window.location.href = url;
+                                }
+                            </script>
 
                                <!-- مكان الفورم الثاني -->
                                <div id="consultantForm" style="display: none;">

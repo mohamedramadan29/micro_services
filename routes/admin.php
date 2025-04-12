@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\AdminController;
@@ -12,6 +11,7 @@ use App\Http\Controllers\admin\ProjectController;
 use \App\Http\Controllers\admin\ServiceController;
 use \App\Http\Controllers\admin\SettingController;
 use \App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\JobController;
 use App\Http\Controllers\admin\ProperityController;
 use \App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\ProperityMaintainController;
@@ -71,6 +71,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/get-attribute-values/{attributeId}', 'getAttributeValues');
             Route::get('/get-subcategories', 'getSubCategories')->name('get.subcategories');
             Route::post('product/gallary/delete/{id}', 'delete_image_gallary');
+            Route::post('/upload-chunk/{id}', 'uploadChunk');
+            Route::post('/merge-chunks/{id}', 'mergeChunks');
         });
         ################ Start Ticket Controller #############
 
@@ -96,7 +98,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('projects', 'index');
             Route::match(['post', 'get'], 'project/update/{id}', 'update');
             Route::post('project/delete/{id}', 'delete');
-            Route::post('project/update_status/{id}','update_status');
+            Route::post('project/update_status/{id}', 'update_status');
         });
 
         ################### End Project Controller ########################
@@ -106,7 +108,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('courses', 'index');
             Route::post('course/update_status/{id}', 'update_status');
             Route::post('course/delete/{id}', 'delete');
-            Route::match(['post','get'],'course/update/{id}','update');
+            Route::match(['post', 'get'], 'course/update/{id}', 'update');
         });
         ################# End Courses ####################
         ################## Start Order Controller ################
@@ -131,5 +133,15 @@ Route::group(['prefix' => 'admin'], function () {
             Route::match(['post', 'get'], 'properity-maintain/active/{id}', 'ActiveStatus');
         });
         ############## End Properity Maintain #############
+
+        ############### Start Jobs Controller  ################
+        Route::controller(JobController::class)->group(function () {
+            Route::get('jobs', 'index');
+            Route::match(['post', 'get'], 'job/update/{id}', 'update');
+            Route::post('job/delete/{id}', 'delete');
+            Route::match(['post', 'get'], 'job/active/{id}', 'ActiveStatus');
+        });
+        ############## End Jobs Controller  ###################
+
     });
 });

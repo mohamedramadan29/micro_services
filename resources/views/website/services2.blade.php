@@ -5,14 +5,30 @@
 @section('content')
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg text-right" dir="rtl">
+        <!-- ============================ Hero Banner  Start================================== -->
+        <div class="hero-banner bg-cover center"
+            style="background:#00000057 url({{ asset('assets/website/img/services_background.jpg') }}) no-repeat;"
+            data-overlay="7">
+            <div class="container">
+                <h1> خدمات تساعدك على نمو مشاريعك </h1>
+
+                <p> يقدم المستقلون على كاف مجموعة متنوعة من الخدمات الإحترافية التى تساعدك على تطوير أعمالك و نمو
+                    مشاريعك
+                </p>
+                {{-- <a href="{{ url('my/course/add') }}" class="btn btn-primary free_consult_button">  {{ __('courses.add_course') }} <i
+            class="fa fa-plus"></i> </a> --}}
+            </div>
+        </div>
+        <!-- ============================ Hero Banner End ================================== -->
+
         <div class="container">
             <div class="services_page">
-                <div class="service_header">
+                {{-- <div class="service_header">
                     <h3> خدمات تساعدك على نمو مشاريعك </h3>
                     <p> يقدم المستقلون على كاف مجموعة متنوعة من الخدمات الإحترافية التى تساعدك على تطوير أعمالك و نمو
                         مشاريعك
                     </p>
-                </div>
+                </div> --}}
 
                 <div class="categories">
                     <div class="row">
@@ -28,14 +44,14 @@
                             </div>
                         @endforeach
 
-                        
+
                     </div>
                 </div>
             </div>
             @foreach ($categories2 as $category)
                 <div class="main_hero_section" style="margin-bottom: 10px;padding:10px">
                     <div>
-                        <h4> خدمات {{ $category['name'] }}  </h4>
+                        <h4> خدمات {{ $category['name'] }} </h4>
                     </div>
                     <div>
                         <a class="btn btn-global-button" href="{{ url('services/' . $category['slug']) }}"> مشاهدة المزيد <i

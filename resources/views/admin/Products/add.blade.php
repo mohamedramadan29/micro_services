@@ -71,8 +71,9 @@
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3">
+                                            {{-- tinymce --}}
                                             <label for="description" class="form-label"> وصف المنتج </label>
-                                            <textarea required class="form-control bg-light-subtle tinymce" id="description" rows="7" placeholder=""
+                                            <textarea required class="form-control bg-light-subtle " id="description" rows="7" placeholder=""
                                                 name="description">{{ old('description') }}</textarea>
                                         </div>
                                     </div>
@@ -90,7 +91,7 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="image" class="form-label"> صورة المنتج </label>
-                                            <input required type="file" id="image" name="image"
+                                            <input type="file" id="image" name="image"
                                                 class="form-control" accept="image/*">
                                         </div>
                                     </div>
@@ -102,13 +103,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6">
+                                    {{-- <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="video" class="form-label"> اضافة فيديو للمنتج  </label>
                                             <input type="file" id="video" name="video"
                                                 class="form-control" accept="video/*">
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                 </div>
                             </div>

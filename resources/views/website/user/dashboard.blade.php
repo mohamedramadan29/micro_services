@@ -46,6 +46,10 @@
                                         للعقارات </a></li>
                                 <li><a href="{{ url('my/property/maintain/index') }}"><i class="ti-plus"></i> خدمات الصيانة
                                     </a></li>
+                                <li><a href="{{ url('my/job/add') }}"><i class="ti-plus"></i> اضافة وظيفة جديدة
+                                    </a></li>
+                                <li><a href="{{ url('my/jobs') }}"><i class="ti-plus"></i> وظائفي
+                                    </a></li>
                                 <li><a href="{{ url('chats') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a>
                                 </li>
                                 <li><a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a></li>
