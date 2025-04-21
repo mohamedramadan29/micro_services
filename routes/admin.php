@@ -12,6 +12,7 @@ use \App\Http\Controllers\admin\ServiceController;
 use \App\Http\Controllers\admin\SettingController;
 use \App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\JobController;
+use App\Http\Controllers\admin\MessagesController;
 use App\Http\Controllers\admin\ProperityController;
 use \App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\ProperityMaintainController;
@@ -142,6 +143,14 @@ Route::group(['prefix' => 'admin'], function () {
             Route::match(['post', 'get'], 'job/active/{id}', 'ActiveStatus');
         });
         ############## End Jobs Controller  ###################
+
+        ############# Start User Chat Controller ##############
+
+        Route::controller(MessagesController::class)->group(function(){
+            Route::get('chats','index');
+            Route::get('chat/details/{id}','chatDetails');
+        });
+        ############## End User Chat Controller
 
     });
 });

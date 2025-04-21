@@ -227,7 +227,7 @@
                                         @if ($newMessageNotifications->count() > 0)
                                             @forelse ($newMessageNotifications as $notification)
                                                 <li>
-                                                    <a class="dropdown-item" href="{{ url('chat-main') }}">
+                                                    <a class="dropdown-item" href="{{ url('chat-main/' . $notification['data']['conversation_id']) }}">
                                                         {{ $notification['data']['title'] }}
                                                         {{ $notification['data']['sender_username'] }}
                                                         <br>
