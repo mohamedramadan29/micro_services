@@ -8,8 +8,13 @@ use App\Http\Controllers\Controller;
 
 class FrontProperityController extends Controller
 {
-    public function index(){
-        $properities = Properity::with('ProperityFirstImage','ProperityImages')->where('active', 1)->orderBy('created_at', 'desc')->paginate(10);
+    public function index(Request $request){
+
+        $query = Properity::with('ProperityFirstImage','ProperityImages')->where('active', 1);
+        if($request->has('search')){
+            $query->where('title','like','%'.$request->input('search').'%');
+        }
+        $properities = $query->orderBy('created_at', 'desc')->paginate(10);
         return view('website.properities', compact('properities'));
     }
     public function propertyDetails($id,$slug){

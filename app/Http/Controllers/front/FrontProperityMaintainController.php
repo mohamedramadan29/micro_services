@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 use App\Models\front\ProperityMaintain;
 class FrontProperityMaintainController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $properity_maintains = properityMaintain::where('active', 1)->orderBy('id', 'desc')->paginate(10);
+        $search = $request->input('search');
+        $query = properityMaintain::where('active', 1);
+        if($search) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        $properity_maintains = $query->orderBy('id', 'desc')->paginate(10);
         return view('website.properity-maintain', compact('properity_maintains'));
     }
     public function propertyDetails($id, $slug)

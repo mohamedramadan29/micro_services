@@ -12,6 +12,22 @@
                 <h1> {{ __('courses.courses_h1') }} </h1>
                 <a href="{{ url('my/course/add') }}" class="btn btn-primary free_consult_button">
                     {{ __('courses.add_course') }} <i class="fa fa-plus"></i> </a>
+                <form class="mt-4" dir="rtl" method="get" action="{{ url('courses') }}">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 col-md-10 col-sm-12">
+                            <div class="banner-search style-2">
+                                <div class="input-group">
+                                    <input type="text" name="search" class="form-control lio-rad"
+                                        placeholder=" بحث عن كورس  " value="{{ request()->input('search') }}">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn bt-round btn--2"> بحث <i
+                                                class="ti-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <!-- ============================ Hero Banner End ================================== -->

@@ -15,9 +15,14 @@ class FrontJobController extends Controller
 {
     use Message_Trait;
     use Upload_Images;
-    public function index()
+    public function index(Request $request)
     {
-        $jobs = Jobs::where('status', 1)->orderBy('created_at', 'desc')->paginate(10);
+        $search = $request->input('search');
+        $query = Jobs::where('status', 1);
+        if($search) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        $jobs = $query->orderBy('created_at', 'desc')->paginate(10);
         return view('website.jobs', compact('jobs'));
     }
 

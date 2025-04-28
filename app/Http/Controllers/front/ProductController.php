@@ -10,9 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::paginate(6);
+        $query = Product::where('status',1);
+        if($request->has('search')){
+            $query->where('name','like','%'.$request->input('search').'%');
+        }
+        $products = $query->orderBy('id', 'desc')->paginate(6);
         return view('website.products', compact('products'));
     }
     public function product_details($slug)

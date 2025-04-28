@@ -17,6 +17,22 @@
                 </p>
                 <a href="{{ url('service/add') }}" class="btn btn-primary free_consult_button">
                     اضف خدمك الان <i class="fa fa-plus"></i> </a>
+                <form class="mt-4" dir="rtl" method="get" action="{{ url('search') }}">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 col-md-10 col-sm-12">
+                            <div class="banner-search style-2">
+                                <div class="input-group">
+                                    <input type="text" name="search" class="form-control lio-rad"
+                                        placeholder="  {{ __('index.search_text') }} ">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn bt-round btn--2"> {{ __('index.search') }} <i
+                                                class="ti-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <!-- ============================ Hero Banner End ================================== -->
@@ -54,8 +70,8 @@
                         <h4> خدمات {{ $category['name'] }} </h4>
                     </div>
                     <div>
-                        <a class="btn btn-global-button" href="{{ url('services/' . $category['slug']) }}"> مشاهدة المزيد <i
-                                class="fa fa-plus"></i> </a>
+                        <a class="btn btn-global-button" href="{{ url('services/' . $category['slug']) }}"> مشاهدة المزيد
+                            <i class="fa fa-plus"></i> </a>
                     </div>
                 </div>
                 <div class="row">

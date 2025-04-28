@@ -10,6 +10,22 @@
           style="background:#00000057 url({{ asset('assets/website/img/products.jpg') }}) no-repeat;" data-overlay="7">
           <div class="container">
               <h1> منتجات نفذها  </h1>
+              <form class="mt-4" dir="rtl" method="get" action="{{ url('products') }}">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-md-10 col-sm-12">
+                        <div class="banner-search style-2">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control lio-rad"
+                                    placeholder=" بحث عن منتج  " value="{{ request()->input('search') }}">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn bt-round btn--2"> بحث <i
+                                            class="ti-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
               {{-- <a href="{{ url('my/course/add') }}" class="btn btn-primary free_consult_button">  {{ __('courses.add_course') }} <i
                       class="fa fa-plus"></i> </a> --}}
           </div>

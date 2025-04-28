@@ -92,7 +92,7 @@ class FrontController extends Controller
 
         $category_id = $category['id'];
 
-        $query = Service::where('cat_id', $category_id);
+        $query = Service::where('cat_id', $category_id)->where('status', 1);
         if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }

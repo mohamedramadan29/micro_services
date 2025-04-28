@@ -185,9 +185,14 @@ class ProjectController extends Controller
 
     ////////////////////////////////// Start Project In Front ///////////
 
-    public function website_project()
+    public function website_project(Request $request)
     {
-        $projects = Project::with('User')->orderBy('created_at', 'desc')->where('approved', 1)->paginate(10);
+        $search = $request->search;
+        if($search) {
+            $projects = Project::with('User')->orderBy('created_at', 'desc')->where('approved', 1)->where('title', 'like', '%' . $search . '%')->paginate(10);
+        } else {
+            $projects = Project::with('User')->orderBy('created_at', 'desc')->where('approved', 1)->paginate(10);
+        }
         $categories = Category::where('status', 1)->get();
 
         return view('website.projects', compact('projects', 'categories'));

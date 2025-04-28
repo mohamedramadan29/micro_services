@@ -6,11 +6,28 @@
     <section class="gray-bg text-right" dir="rtl">
         <!-- ============================ Hero Banner  Start================================== -->
         <div class="hero-banner bg-cover center"
-            style="background:#00000057 url({{ asset('assets/website/img/project_background.jpg') }}) no-repeat;" data-overlay="7">
+            style="background:#00000057 url({{ asset('assets/website/img/project_background.jpg') }}) no-repeat;"
+            data-overlay="7">
             <div class="container">
                 <h1> المشاريع المعروضة </h1>
                 <a href="{{ url('my/project/add') }}" class="btn btn-primary free_consult_button"> اضف مشروعك الان <i
                         class="fa fa-plus"></i> </a>
+                <form class="mt-4" dir="rtl" method="get" action="{{ url('projects') }}">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 col-md-10 col-sm-12">
+                            <div class="banner-search style-2">
+                                <div class="input-group">
+                                    <input type="text" name="search" class="form-control lio-rad"
+                                        placeholder=" بحث عن مشروع  " value="{{ request()->input('search') }}">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn bt-round btn--2"> بحث <i
+                                                class="ti-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <!-- ============================ Hero Banner End ================================== -->
