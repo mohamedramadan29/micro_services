@@ -8,10 +8,8 @@
     <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
         <div class="container-fluid">
             <div class="row m-0">
-
                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
                     <div class="dashboard-navbar">
-
                         <div class="d-user-avater">
                             @if (Auth::user()->image != '')
                                 <img src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
@@ -28,9 +26,10 @@
                                 <li><a href="{{ url('dashboard') }}"><i class="ti-dashboard"></i> الملف الشخصي </a>
                                 </li>
                                 <li><a href="{{ url('update-account') }}"> <i class="bi bi-gear-fill"></i> تعديل الملف
-                                    الشخصي
-                                </a></li>
+                                        الشخصي
+                                    </a></li>
                                 <li><a href="{{ url('balance') }}"><i class="bi bi-credit-card"></i> الرصيد </a></li>
+                                <li><a href="{{ url('my/products/purches') }}"><i class="bi bi-cart-check-fill"></i> مشتريات المنتجات  </a></li>
                                 <li><a href="{{ url('my/project/index') }}"><i class="bi bi-cast"></i> المشاريع </a></li>
                                 <li><a href="{{ url('my/project/add') }}"><i class="ti-plus"></i> اضف مشروع جديد </a></li>
                                 <li><a href="{{ url('my/courses') }}"> <i class="bi bi-mortarboard-fill"></i> الكورسات </a>
@@ -39,9 +38,7 @@
                                 <li><a href="{{ url('service/index') }}"><i class="bi bi-database-fill-check"></i> الخدمات
                                     </a>
                                 </li>
-                                <li><a href="{{ url('my/course/add') }}"><i class="ti-plus"></i> اضف كورس جديد </a></li>
-                                <li>
-                                    <a href="{{ url('my/properties/index') }}"><i class="bi bi-building"></i> العقارات
+                                <li><a href="{{ url('my/properties/index') }}"><i class="bi bi-building"></i> العقارات
                                     </a>
                                 </li>
                                 <li><a href="{{ url('my/property/add') }}"><i class="ti-plus"></i> اضف عقار جديد </a></li>

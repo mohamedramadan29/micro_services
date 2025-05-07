@@ -118,8 +118,7 @@ class ProductOrderController extends Controller
             $order->order_status = 'تم الدفع';
             $order->save();
             DB::commit();
-
-            return $this->success_message('تمت عملية الشراء بنجاح.');
+            return Redirect()->route('user.products.purches')->with('success', 'تمت عملية الشراء بنجاح.');
         } catch (ApiErrorException $e) {
             return $this->exception_message($e);
         }

@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+
 class CourseController extends Controller
 {
     use Message_Trait;
@@ -20,9 +21,9 @@ class CourseController extends Controller
     use Upload_Images;
     public function index(Request $request)
     {
-        $query = Course::where('status',1);
-        if($request->has('search')){
-            $query->where('title','like','%'.$request->input('search').'%');
+        $query = Course::where('status', 1);
+        if ($request->has('search')) {
+            $query->where('title', 'like', '%' . $request->input('search') . '%');
         }
         $courses = $query->orderBy('id', 'desc')->paginate(10);
         return view("website.courses", compact("courses"));
@@ -34,19 +35,19 @@ class CourseController extends Controller
         $course = Course::with('User')->where('id', $id)->where('slug', $slug)->first();
         //dd($course);
         if ($course) {
-            if(Auth::user()){
+            if (Auth::user()) {
                 $user = User::find(Auth::id());
-            /////////// Make Coourse IS Read
-            $notification_type = 'App\Notifications\AdminActiveCourse';
-            $notifications = $user->unreadNotifications->where('type', $notification_type);
-            foreach ($notifications as $notification) {
-                $notification->markAsRead();
-            }
-            $notification_type_new_register = 'App\Notifications\NewCourseRegister';
-            $notification_register = $user->unreadNotifications->where('type', $notification_type_new_register);
-            foreach ($notification_register as $notification) {
-                $notification->markAsRead();
-            }
+                /////////// Make Coourse IS Read
+                $notification_type = 'App\Notifications\AdminActiveCourse';
+                $notifications = $user->unreadNotifications->where('type', $notification_type);
+                foreach ($notifications as $notification) {
+                    $notification->markAsRead();
+                }
+                $notification_type_new_register = 'App\Notifications\NewCourseRegister';
+                $notification_register = $user->unreadNotifications->where('type', $notification_type_new_register);
+                foreach ($notification_register as $notification) {
+                    $notification->markAsRead();
+                }
             }
 
             return view('website.course_details', compact('course'));
@@ -193,7 +194,9 @@ class CourseController extends Controller
         if ($course->user_id != Auth::id()) {
             abort(404);
         }
+        // dd($course);
         $subscriptions = $course->Subscriptions()->orderBy('id', 'desc')->get();
+        //  dd($subscriptions);
         return view('website.courses.subscriptions', compact('subscriptions'));
     }
 }

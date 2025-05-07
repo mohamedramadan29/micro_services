@@ -45,8 +45,17 @@
                     </svg>
                     <span class="side-menu__label">الرئيسية </span></a>
             </li>
-
             @if (Auth::user()->account_type == 'admin')
+            <li class="side-item side-item-category"> طلبات السحب في الموقع  </li>
+                <li class="slide">
+                    <a class="side-menu__item" data-toggle="slide" href="">
+                        <i style="font-size: 22px;margin-left: 10px" class="fa fa-money-bill"></i>
+                        <span class="side-menu__label"> طلبات السحب في الموقع  </span><i
+                            class="angle fe fe-chevron-down"></i></a>
+                    <ul class="slide-menu">
+                        <li><a class="slide-item" href="{{ url('admin/withdraws') }}"> طلبات السحب </a></li>
+                    </ul>
+                </li>
                 <li class="side-item side-item-category"> اقسام الخدمات </li>
                 <li class="slide">
                     <a class="side-menu__item" data-toggle="slide" href="">

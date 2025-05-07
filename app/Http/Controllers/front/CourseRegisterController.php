@@ -110,7 +110,7 @@ class CourseRegisterController extends Controller
         //     }
         // }
 
-      //  abort(404);
+        //  abort(404);
     }
 
 
@@ -120,48 +120,50 @@ class CourseRegisterController extends Controller
         $user = User::findOrFail($request->user_id);
 
         DB::beginTransaction();
-        try {
-            // تسجيل الاشتراك
-            $register = new CourseRegister();
-            $register->user_id = $user->id;
-            $register->course_id = $course->id;
-            $register->price = $course->price;
-            $register->title = $course->title;
-            $register->slug = $course->slug;
-            $register->course_owner_profit = $course->price * (1 - (floatval(Setting::first()->website_commission) / 100));
-            $register->website_profit = $course->price * (floatval(Setting::first()->website_commission) / 100);
-            $register->save();
+        //try {
+        // تسجيل الاشتراك
+        $register = new CourseRegister();
+        $register->user_id = $user->id;
+        $register->course_id = $course->id;
+        $register->price = $course->price;
+        $register->title = $course->title;
+        $register->slug = $course->slug;
+        $register->course_owner_profit = $course->price * (1 - (floatval(Setting::first()->website_commission) / 100));
+        $register->website_profit = $course->price * (floatval(Setting::first()->website_commission) / 100);
+        $register->save();
 
-            // إضافة الربح إلى رصيد صاحب الكورس
-            $owner = User::findOrFail($course->user_id);
-            $owner->balance += $register->course_owner_profit;
-            $owner->save();
+        // إضافة الربح إلى رصيد صاحب الكورس
+        $owner = User::findOrFail($course->user_id);
+        $owner->balance += $register->course_owner_profit;
+        $owner->save();
 
-            // تحديث عدد الطلاب المسجلين
-            $course->current_student_num++;
-            $course->save();
+        // تحديث عدد الطلاب المسجلين
+        $course->current_student_num++;
+        $course->save();
 
-            // تحديث رصيد الموقع
-            $public_setting = Setting::first();
-            $public_setting->website_balance += $register->website_profit;
-            $public_setting->save();
+        // تحديث رصيد الموقع
+        $public_setting = Setting::first();
+        $public_setting->website_balance += $register->website_profit;
+        $public_setting->save();
 
-            // إرسال إشعار إلى مالك الكورس
-            Notification::send($owner, new NewCourseRegister($user->id, $course->id, $course->slug, $course->title));
+        // إرسال إشعار إلى مالك الكورس
+        //   Notification::send($owner, new NewCourseRegister($user->id, $course->id, $course->slug, $course->title));
 
-            DB::commit();
+        DB::commit();
 
-            // return redirect()->route('user_dashboard')->with('success', 'تم الاشتراك في الكورس بنجاح.');
-            return $this->success_message(' تم الاشتراك في الكورس بنجاح  ');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $this->Error_message('حدث خطاء في معالجة الدفع.');
-            // return redirect()->route('user_dashboard')->with('error', 'حدث خطأ أثناء معالجة الدفع.');
-        }
+        // return redirect()->route('user_dashboard')->with('success', 'تم الاشتراك في الكورس بنجاح.');
+        return Redirect()->route('course_details',[$course->id,$course->slug])->with('success_message', 'تم الاشتراك في الكورس بنجاح.');
+        //return $this->success_message(' تم الاشتراك في الكورس بنجاح  ');
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return $this->Error_message('حدث خطاء في معالجة الدفع.');
+        //     // return redirect()->route('user_dashboard')->with('error', 'حدث خطأ أثناء معالجة الدفع.');
+        // }
     }
 
 
-    public function payment_cancel(){
+    public function payment_cancel()
+    {
         return $this->Error_message('تم الغاء الدفع');
     }
 }

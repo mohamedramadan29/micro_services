@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\AdminController;
@@ -16,6 +17,8 @@ use App\Http\Controllers\admin\MessagesController;
 use App\Http\Controllers\admin\ProperityController;
 use \App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\ProperityMaintainController;
+use App\Http\Controllers\admin\WithdrawRequestController;
+
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
     Route::post('admin_login', [AdminController::class, 'admin_login']);
@@ -50,7 +53,6 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('category/store', 'store');
             Route::post('category/update/{id}', 'update');
             Route::post('category/destroy/{id}', 'destroy');
-
         });
         Route::controller(SubCategoryController::class)->group(function () {
             Route::get('sub-categories', 'index');
@@ -146,11 +148,19 @@ Route::group(['prefix' => 'admin'], function () {
 
         ############# Start User Chat Controller ##############
 
-        Route::controller(MessagesController::class)->group(function(){
-            Route::get('chats','index');
-            Route::get('chat/details/{id}','chatDetails');
+        Route::controller(MessagesController::class)->group(function () {
+            Route::get('chats', 'index');
+            Route::get('chat/details/{id}', 'chatDetails');
         });
         ############## End User Chat Controller
+
+        ############# Start WithDraw Controller ############
+        Route::controller(WithdrawRequestController::class)->group(function () {
+            Route::get('withdraws', 'index');
+            Route::match(['post', 'get'], 'withdraw/update/{id}', 'update');
+            Route::post('withdraw/delete/{id}', 'delete');
+        });
+        ############# End Withdraw Controller ###############
 
     });
 });

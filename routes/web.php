@@ -28,6 +28,7 @@ use App\Http\Controllers\front\ProperityMaintainController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Http\Controllers\front\FrontProperityMaintainController;
 use App\Http\Controllers\front\JobController;
+use App\Http\Controllers\front\UserProductPurchesController;
 
 Route::group(
     [
@@ -166,7 +167,7 @@ Route::group(
         ##################### Start User Courses ###################
         Route::controller(CourseController::class)->group(function () {
             Route::get('courses', 'index');
-            Route::get('course/{id}-{slug}', 'course_details');
+            Route::get('course/{id}-{slug}', 'course_details')->name('course_details');
         });
 
         Route::group(['middleware' => ['auth']], function () {
@@ -235,6 +236,11 @@ Route::group(
                 Route::get('my/job/subscriptions/{id}', 'subscriptions');
             });
             ############# End Jobs Controller ####################
+            ############ Start User Product Purches ##############
+            Route::controller(UserProductPurchesController::class)->group(function(){
+                Route::get('my/products/purches','index')->name('user.products.purches');
+            });
+            ############ End User Product Purches ################
         });
         ############### Staty Front Properity Controller ##########
         Route::controller(FrontProperityController::class)->group(function () {

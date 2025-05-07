@@ -154,6 +154,8 @@
                                         </li>
                                         <li><a class="dropdown-item" href="{{ url('balance') }}"> الرصيد <i
                                                     class="bi bi-credit-card"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/products/purches') }}"> مشتريات المنتجات  <i
+                                                    class="bi bi-cart-check-fill"></i> </a></li>
                                         <li><a class="dropdown-item" href="{{ url('my/project/index') }}"> المشاريع <i
                                                     class="bi bi-cast"></i></a></li>
                                         <li><a class="dropdown-item" href="{{ url('my/project/add') }}"> اضف مشروع جديد
@@ -227,7 +229,8 @@
                                         @if ($newMessageNotifications->count() > 0)
                                             @forelse ($newMessageNotifications as $notification)
                                                 <li>
-                                                    <a class="dropdown-item" href="{{ url('chat-main/' . $notification['data']['conversation_id']) }}">
+                                                    <a class="dropdown-item"
+                                                        href="{{ url('chat-main/' . $notification['data']['conversation_id']) }}">
                                                         {{ $notification['data']['title'] }}
                                                         {{ $notification['data']['sender_username'] }}
                                                         <br>
@@ -407,8 +410,8 @@
 
                             <li class="{{ request()->is('properties') ? 'active' : '' }}"><a
                                     href="{{ url('properties') }}"> عقارات </a></li>
-                            <li class="{{ request()->is('jobs') ? 'active' : '' }}"><a
-                                    href="{{ url('jobs') }}"> الوظائف  </a></li>
+                            <li class="{{ request()->is('jobs') ? 'active' : '' }}"><a href="{{ url('jobs') }}">
+                                    الوظائف </a></li>
                             <li class="{{ request()->is('properties/maintain') ? 'active' : '' }}"><a
                                     href="{{ url('properties/maintain') }}"> خدمات الصيانة </a></li>
                             @if (\Illuminate\Support\Facades\Auth::check())
