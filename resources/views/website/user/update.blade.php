@@ -46,18 +46,6 @@
                             </div>
                         </div>
                     </div>
-                    @if (Session::has('Success_message'))
-                        @php
-                            emotify('success', \Illuminate\Support\Facades\Session::get('Success_message'));
-                        @endphp
-                    @endif
-                    @if ($errors->any())
-                        @foreach ($errors->all() as $error)
-                            @php
-                                emotify('error', $error);
-                            @endphp
-                        @endforeach
-                    @endif
                     <form method="post" enctype="multipart/form-data" action="{{ url('update-account') }}"
                         autocomplete="off">
                         @csrf
@@ -90,7 +78,7 @@
                                                     <div class="col-xl-12 col-lg-12">
                                                         <div class="form-group">
                                                             <label> تعديل الصورة الشخصية </label>
-                                                            <input required type="file" name="image"
+                                                            <input type="file" name="image"
                                                                 class="form-control with-light">
                                                         </div>
                                                     </div>
@@ -99,7 +87,7 @@
                                                             <label> الاسم </label>
                                                             <input required type="text" name="name"
                                                                 class="form-control with-light"
-                                                                value="{{ Auth::user()->name }}">
+                                                                value="{{ old('name', Auth::user()->name) }}">
                                                         </div>
                                                     </div>
 
@@ -109,11 +97,14 @@
                                                             <select required class="form-control with-light select2"
                                                                 name="account_type">
                                                                 <option value=""> -- حدد نوع الحساب --</option>
-                                                                <option @if (Auth::user()->account_type == 'مشتري') selected @endif
+                                                                <option @if (old('account_type', Auth::user()->account_type) == 'مشتري') selected @endif
                                                                     value="مشتري"> مشتري
                                                                 </option>
-                                                                <option @if (Auth::user()->account_type == 'بائع') selected @endif
+                                                                <option @if (old('account_type', Auth::user()->account_type) == 'بائع') selected @endif
                                                                     value="بائع"> بائع
+                                                                </option>
+                                                                <option @if (old('account_type', Auth::user()->account_type) == 'موظف') selected @endif
+                                                                    value="موظف"> موظف
                                                                 </option>
                                                             </select>
                                                         </div>
@@ -122,21 +113,21 @@
                                                         <div class="form-group">
                                                             <label> البريد الالكتروني </label>
                                                             <input required type="email" class="form-control with-light"
-                                                                name="email" value="{{ Auth::user()->email }}">
+                                                                name="email" value="{{ old('email', Auth::user()->email) }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-6">
                                                         <div class="form-group">
                                                             <label> رقم الهاتف </label>
                                                             <input required type="phone" class="form-control with-light"
-                                                                name="phone" value="{{ Auth::user()->phone }}">
+                                                                name="phone" value="{{ old('phone', Auth::user()->phone) }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-6">
                                                         <div class="form-group">
                                                             <label> المسمي الوظيفي </label>
                                                             <input required type="text" class="form-control with-light"
-                                                                name="job_title" value="{{ Auth::user()->job_title }}">
+                                                                name="job_title" value="{{ old('job_title', Auth::user()->job_title) }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -160,7 +151,7 @@
                                             <div class="col-xl-12 col-lg-12">
                                                 <div class="form-group">
                                                     <label> النبذة التعريفية </label>
-                                                    <textarea name="info" required class="form-control with-light">{{ Auth::user()->info }}</textarea>
+                                                    <textarea name="info" required class="form-control with-light">{{ old('info', Auth::user()->info) }}</textarea>
                                                 </div>
                                             </div>
 

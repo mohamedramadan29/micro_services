@@ -412,6 +412,8 @@
                                     href="{{ url('properties') }}"> عقارات </a></li>
                             <li class="{{ request()->is('jobs') ? 'active' : '' }}"><a href="{{ url('jobs') }}">
                                     الوظائف </a></li>
+                            <li class="{{ request()->is('employees') ? 'active' : '' }}"><a
+                                    href="{{ url('employees') }}"> الموظفين </a></li>
                             <li class="{{ request()->is('properties/maintain') ? 'active' : '' }}"><a
                                     href="{{ url('properties/maintain') }}"> خدمات الصيانة </a></li>
                             @if (\Illuminate\Support\Facades\Auth::check())

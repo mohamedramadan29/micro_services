@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('job_title')->nullable();
             $table->double('balance')->nullable();
-            $table->string('account_type')->nullable();
+            $table->string('account_type')->nullable()->comment('user, employee, admin');
             $table->integer('rate')->nullable();
             $table->tinyInteger('status')->default('1');
 

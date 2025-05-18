@@ -29,6 +29,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Http\Controllers\front\FrontProperityMaintainController;
 use App\Http\Controllers\front\JobController;
 use App\Http\Controllers\front\UserProductPurchesController;
+use App\Http\Controllers\front\EmployeeController;
 
 Route::group(
     [
@@ -265,6 +266,13 @@ Route::group(
             Route::post('job/offer/store/{id}', 'OfferStore');
         });
         ################# End Front Jobs Controller ##########
+
+        ################# Start Employees Controller ##########
+        Route::controller(EmployeeController::class)->group(function () {
+            Route::get('employees', 'index');
+            Route::get('employee/{username}', 'show');
+        });
+        ################# End Employees Controller ##########
 
         ######################## Start ChatGpt ##################
         Route::controller(ChatgptController::class)->group(function () {
