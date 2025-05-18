@@ -7,7 +7,7 @@
     <section class="gray-bg text-right" dir="rtl">
         <!-- ============================ Hero Banner  Start================================== -->
         <div class="hero-banner bg-cover center"
-            style="background:#00000057 url({{ asset('assets/website/img/real.jpg') }}) no-repeat;" data-overlay="7">
+            style="background:#00000057 url({{ asset('assets/website/img/realstate.jpg') }}) no-repeat;" data-overlay="7">
             <div class="container">
                 <h1> العقارات </h1>
                 <a href="{{ url('my/property/add') }}" class="btn btn-primary free_consult_button">
