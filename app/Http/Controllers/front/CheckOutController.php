@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
+use Stripe\Stripe;
+use Stripe\Checkout\Session as StripeSession;
 
 class CheckOutController extends Controller
 {
@@ -108,44 +110,97 @@ class CheckOutController extends Controller
         // Get The Public Setting To GEt Commision
         $public_setting = Setting::first();
         $website_commission = $public_setting['website_commission'] / 100;
-        $auth_user = User::find(Auth::user()->id);
-        $user_balance = $auth_user->balance;
 
         try {
             $data = $request->all();
-
             $service = Service::findOrFail($data['service_id']);
             $service_price = $service['price'];
-            $order = new Order();
-            $count_orders = Order::count();
-            if ($count_orders > 0) {
-                $last_order = Order::orderBy('order_number', 'desc')->first();
-                $new_order_number = $last_order->order_number + 1;
-            } else {
-                $new_order_number = 1;
-            }
-            if($user_balance < $service_price){
-                return Redirect()->back()->withErrors([' رصيدك الحالي لا يكفي لشراء الخدمة !! ']);
-            }
-            /////////////// Stop Here Now In Make Orders
-            DB::beginTransaction();
-            $order->order_number = $new_order_number;
-            $order->user_buyer = Auth::id();
-            $order->user_seller = $service['user_id'];
-            $order->order_price = $service_price;
-            $order->website_commission = $service_price * $website_commission;
-            $order->seller_commission = $service_price - ($service_price * $website_commission);
-            $order->save();
-            ////////////////// Decrease Auth USer Balance
-            $auth_user->balance = $user_balance - $service_price;
-            $auth_user->save();
-            /////// Send Notification To Seller New Order
-            $user = User::find($service['user_id']);
-            Notification::send($user, new NewOrderNotification(Auth::id(), Auth::user()->name, Auth::user()->user_name, $service['id'], $this->CustomeSlug($service['name']), $service['name']));
-            DB::commit();
-            return $this->success_message(' تم طلب الخدمة بنجاح  ');
+
+            // Create Stripe checkout session
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+            $session = StripeSession::create([
+                'payment_method_types' => ['card', 'alipay'],
+                'line_items' => [
+                    [
+                        'price_data' => [
+                            'currency' => 'usd',
+                            'product_data' => [
+                                'name' => $service['name'],
+                            ],
+                            'unit_amount' => $service_price * 100, // Convert to cents
+                        ],
+                        'quantity' => 1,
+                    ]
+                ],
+                'mode' => 'payment',
+                'metadata' => [
+                    'user_id' => Auth::id(),
+                    'service_id' => $service->id,
+                    'service_name' => $service->name,
+                    'service_price' => $service_price,
+                    'website_commission' => $website_commission,
+                    'seller_id' => $service['user_id']
+                ],
+                'success_url' => route('service.payment.success') . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('service.payment.cancel'),
+            ]);
+
+            return redirect($session->url);
         } catch (\Exception $e) {
             return $this->exception_message($e);
         }
+    }
+    public function paymentSuccess(Request $request)
+    {
+        try {
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+            $session = StripeSession::retrieve($request->session_id);
+
+            if ($session->payment_status === 'paid') {
+                $metadata = $session->metadata;
+
+                DB::beginTransaction();
+
+                // Create order
+                $order = new Order();
+                $count_orders = Order::count();
+                if ($count_orders > 0) {
+                    $last_order = Order::orderBy('order_number', 'desc')->first();
+                    $new_order_number = $last_order->order_number + 1;
+                } else {
+                    $new_order_number = 1;
+                }
+
+                $order->order_number = $new_order_number;
+                $order->user_buyer = $metadata->user_id;
+                $order->user_seller = $metadata->seller_id;
+                $order->order_price = $metadata->service_price;
+                $order->website_commission = $metadata->service_price * $metadata->website_commission;
+                $order->seller_commission = $metadata->service_price - ($metadata->service_price * $metadata->website_commission);
+                $order->status = 'جديد';
+                $order->save();
+
+                // Send notification to seller
+                $user = User::find($metadata->seller_id);
+                Notification::send($user, new NewOrderNotification(
+                    $metadata->user_id,
+                    Auth::user()->name,
+                    Auth::user()->user_name,
+                    $metadata->service_id,
+                    $this->CustomeSlug($metadata->service_name),
+                    $metadata->service_name
+                ));
+                DB::commit();
+                return $this->success_message('تم طلب الخدمة بنجاح');
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->exception_message($e);
+        }
+    }
+
+    public function paymentCancel()
+    {
+        return redirect()->back()->with('error', 'تم إلغاء عملية الدفع');
     }
 }

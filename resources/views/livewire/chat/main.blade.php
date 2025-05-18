@@ -9,7 +9,6 @@
                 <div class="row m-0">
                     <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
                         <div class="dashboard-navbar">
-
                             <div class="d-user-avater">
                                 @if (Auth::user()->image != '')
                                     <img src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
@@ -22,20 +21,7 @@
                                 <span> {{ Auth::user()->email }} </span>
                             </div>
 
-                            <div class="d-navigation">
-                                <ul id="metismenu">
-                                    <li><a href="{{ url('dashboard') }}"><i class="ti-dashboard"></i> الملف الشخصي </a>
-                                    </li>
-                                    <li><a href="{{ url('service/index') }}"><i class="ti-user"></i> الخدمات </a></li>
-                                    <li><a href="{{ url('service/add') }}"><i class="ti-plus"></i> اضف خدمة جديدة </a></li>
-                                    <li><a href="{{ url('chat-main') }}"><i class="ti-email"></i> المحادثات </a></li>
-                                    <li><a href="{{ url('reviews') }}"><i class="ti-email"></i> التقيمات </a></li>
-                                    <li><a href="{{ url('update-account') }}"><i class="ti-email"></i> تعديل الملف الشخصي
-                                        </a></li>
-                                    <li><a href="{{ url('balance') }}"><i class="ti-email"></i> الرصيد </a></li>
-                                    <li><a href="{{ url('logout') }}"><i class="ti-power-off"></i> تسجيل خروج </a></li>
-                                </ul>
-                            </div>
+                            @include('website.layouts.dashboard-sidebar')
 
                         </div>
                     </div>
@@ -63,11 +49,25 @@
 
                                 <!-- Convershion -->
                                 <div class="messages-container margin-top-0">
-
                                     <div class="messages-container-inner">
-
                                         <!-- Message Content -->
-                                        <div class="dash-msg-content">
+                                        <div class="dash-msg-content d-flex flex-column gap-4">
+                                            @if ($service)
+                                                <!-- تفاصيل الخدمة المرتبطة بالمحادثة -->
+                                                <div class="d-flex flex-column gap-2">
+                                                    <div class="d-flex flex-row gap-2">
+                                                        <h4> {{ $service->name }} </h4>
+                                                        <span class="text-success">سعر الخدمة: {{ $service->price }}
+                                                            $</span>
+                                                        @if ($service->user_id != Auth::id())
+                                                            <button type="button" class="btn btn-primary btn-sm ms-auto"
+                                                                data-bs-toggle="modal" data-bs-target="#buyServiceModal">
+                                                                شراء الخدمة الان
+                                                            </button>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            @endif
                                             @livewire('chat.chatbox', ['conversation_id' => $conversation_id])
                                             <!-- Reply Area -->
                                             <div class="clearfix"></div>
@@ -81,12 +81,52 @@
 
                             </div>
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </section>
+        <!-- Modal -->
+        <div class="modal fade buy_services_model" id="buyServiceModal" tabindex="-1"
+            aria-labelledby="buyServiceModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header d-flex flex-row gap-2 justify-content-between align-items-center">
+                        <h1 class="modal-title fs-5" id="buyServiceModalLabel">شراء الخدمة</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                            <li> منصة نفذها تضمن حقوقك بنسبة 100% .</li>
+                            <li> لا تتردد ابداً في التواصل معنا إذا
+                                احتجت أي مساعدة وسنسعد بخدمتك.</li>
+                            <li> يمكنك التواصل مع مقدم الخدمة إذا احتجت
+                                أي استفسار قبل طلب الخدمة.</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" style="background-color: #404040;" class="btn btn-secondary"
+                            data-bs-dismiss="modal">رجوع</button>
+                        @if (Auth::check())
+                            <form method="post" action="{{ url('create_order') }}">
+                                @csrf
+                                <input type="hidden" name="service_id" value="{{ $service->id }}">
+                                <input type="hidden" name="service_name" value="{{ $service->name }}">
+                                <input type="hidden" name="service_price" value="{{ $service->price }}">
+                                <input type="hidden" name="qty" value="1">
+                                <input type="hidden" name="user_serv" value="{{ $service->user_id }}">
+                                <button type="submit" class="btn btn-primary">شراء الخدمة
+                                    الان <i class="bi bi-cart"></i></button>
+                            </form>
+                        @else
+                            <a href="{{ url('login') }}" type="button" class="btn btn-primary">شراء الخدمة الان
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- ============================ Main Section End ================================== -->
     @endsection
 

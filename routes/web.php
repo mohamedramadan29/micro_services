@@ -106,6 +106,8 @@ Route::group(
                 Route::get('checkout', 'index');
                 Route::post('checkout/order', 'order');
                 Route::post('create_order', 'create_order');
+                Route::get('service/payment/success', 'paymentSuccess')->name('service.payment.success');
+                Route::get('service/payment/cancel', 'paymentCancel')->name('service.payment.cancel');
             });
         });
 
