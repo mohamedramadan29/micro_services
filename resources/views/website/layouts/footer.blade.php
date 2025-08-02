@@ -24,6 +24,7 @@
                     <div class="footer-widget">
                         <h4 class="widget-title"> {{ __('public.links') }} </h4>
                         <ul class="footer-menu">
+                            <li><a href="{{ route('blogCategories') }}"> المدونة  </a></li>
                             <li><a href="{{ '/about' }}"> {{ __('public.about_us') }} </a></li>
                             <li><a href="{{ '/faq' }}"> {{ __('public.faqs') }} </a></li>
                             <li><a href="{{ '/privacy-policy' }}"> {{ __('public.privacy') }} </a></li>

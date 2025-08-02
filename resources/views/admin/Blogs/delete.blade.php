@@ -1,19 +1,18 @@
-<div class="modal fade" id="delete_model_{{$category['id']}}" tabindex="-1" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
+<div class="modal fade" id="delete_category_{{$blog['id']}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content modal-content-demo">
+        <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title"> هل انت متاكد من حذف القسم    </h6>
+                <h5 class="modal-title" id="exampleModalLabel"> هل انت متاكذ من حذف المقال    </h5>
                 <button aria-label="Close" class="close" data-dismiss="modal"
-                        type="button"><span aria-hidden="true">&times;</span>
-                </button>
+                type="button"><span aria-hidden="true">&times;</span>
+        </button>
             </div>
-            <form method="post"
-                  action="{{url('admin/category/destroy/'.$category['id'])}}">
+            <form action="{{url('admin/blog/delete/'.$blog['id'])}}" method="post">
                 @csrf
                 <div class="modal-body">
-                    <input class="form-control" type="text" readonly
-                           value="{{$category['name']}}">
+                    <label for=""> العنوان   </label>
+                    <input type="text" name="name" class="form-control" disabled readonly value="{{$blog['name']}}">
                 </div>
                 <div class="modal-footer">
                     <button class="btn ripple btn-danger" type="submit"> حذف

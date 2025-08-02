@@ -51,3 +51,72 @@
 <script src="{{ URL::asset('assets/admin/js/custom.js') }}"></script><!-- Left-menu js-->
 <script src="{{ URL::asset('assets/admin/plugins/side-menu/sidemenu.js') }}"></script>
 <script src="https://cdn.tiny.cloud/1/c8u902w1qjlgsxdu73djug5kw4ckg9n6ggwi5lynenmwrw25/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/locales/LANG.js"></script>
+<!-- Start file Input  -->
+<script>
+    var lang = "ar";
+    $("#single-image").fileinput({
+        theme: 'bs5',
+        allowedFileTypes: ['image'],
+        language: lang,
+        maxFileCount: 1,
+        enableResumableUpload: false,
+        showUpload: false,
+    });
+    $("#single-image2").fileinput({
+        theme: 'bs5',
+        allowedFileTypes: ['image'],
+        language: lang,
+        maxFileCount: 1,
+        enableResumableUpload: false,
+        showUpload: false,
+    });
+</script>
+<!--- Start tinymce -->
+<script>
+    tinymce.init({
+        selector: '.tinymce',
+        height: 300,
+        directionality: 'rtl', // لجعل المحرر يعمل من اليمين إلى اليسار
+        language: 'ar',
+        plugins: [
+            'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
+            'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code', 'fullscreen',
+            'insertdatetime',
+            'media', 'table', 'emoticons', 'help'
+        ],
+        toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
+            'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+            'forecolor backcolor emoticons',
+        menu: {
+            favs: {
+                title: 'My Favorites',
+                items: 'code visualaid | searchreplace | emoticons'
+            }
+        },
+        image_title: true, // السماح بتعديل العنوان
+        automatic_uploads: true,
+        images_upload_url: 'post_uploads', // مسار API لاستقبال الصور
+        file_picker_types: 'image',
+        file_picker_callback: function(cb, value, meta) {
+            if (meta.filetype === 'image') {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+                input.onchange = function() {
+                    var file = this.files[0];
+                    var reader = new FileReader();
+                    reader.onload = function() {
+                        cb(reader.result, {
+                            title: file.name
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                };
+                input.click();
+            }
+        }
+    });
+</script>
+<!-- End File Input -->

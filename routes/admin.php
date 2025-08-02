@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\admin\JobController;
+use App\Http\Controllers\admin\BlogController;
 use \App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\OrderController;
@@ -11,13 +13,13 @@ use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProjectController;
 use \App\Http\Controllers\admin\ServiceController;
 use \App\Http\Controllers\admin\SettingController;
-use \App\Http\Controllers\admin\CategoryController;
-use App\Http\Controllers\admin\JobController;
 use App\Http\Controllers\admin\MessagesController;
+use \App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ProperityController;
 use \App\Http\Controllers\admin\SubCategoryController;
-use App\Http\Controllers\admin\ProperityMaintainController;
+use App\Http\Controllers\admin\BlogCategoryController;
 use App\Http\Controllers\admin\WithdrawRequestController;
+use App\Http\Controllers\admin\ProperityMaintainController;
 
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
@@ -162,5 +164,25 @@ Route::group(['prefix' => 'admin'], function () {
         });
         ############# End Withdraw Controller ###############
 
-    });
+           ///////////////////  Start Blog Category //////////////////
+        ///
+
+            Route::controller(BlogCategoryController::class)->group(function () {
+                Route::get('blog_category', 'index');
+                Route::match(['post', 'get'], 'blog_category/add', 'store');
+                Route::match(['post', 'get'], 'blog_category/update/{id}', 'update');
+                Route::post('blog_category/delete/{id}', 'delete');
+            });
+            ///////////////////  Start Blog //////////////////
+            ///
+            Route::controller(BlogController::class)->group(function () {
+                Route::get('blogs', 'index');
+                Route::match(['post', 'get'], 'blog/add', 'store');
+                Route::match(['post', 'get'], 'blog/update/{id}', 'update');
+                Route::post('blog/delete/{id}', 'delete');
+                Route::get('blog/schedule', 'schedule');
+                Route::get('blog/archived', 'archived');
+            });
+
+});
 });

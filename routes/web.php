@@ -16,6 +16,7 @@ use App\Http\Controllers\front\CheckOutController;
 use App\Http\Controllers\front\WithDrawController;
 use App\Http\Controllers\front\ProperityController;
 use App\Http\Controllers\Auth\SocialMediaController;
+use App\Http\Controllers\front\BlogController;
 use App\Http\Controllers\front\ConversationController;
 use App\Http\Controllers\front\ProductOrderController;
 use App\Http\Controllers\front\ProjectOfferController;
@@ -280,6 +281,16 @@ Route::group(
             Route::get('chatgpt', 'index');
             Route::post('chatgpt', 'chatgpt');
         });
+
+        #################### Start Blog Routes ########################
+
+        Route::controller(BlogController::class)->group(function(){
+
+            Route::get('categories','categories')->name('blogCategories');
+            Route::get('category/{slug}','categoryDetails')->name('blogCategoryDetails');
+            Route::get('blog/{slug}','blogDetails')->name('blogDetails');
+        });
+        #################### End Blog Routes ##########################
 
         Route::group(['middleware' => ['auth']], function () {
             Route::get('/course/payment/success', [CourseRegisterController::class, 'payment_success'])->name('course.payment.success');
