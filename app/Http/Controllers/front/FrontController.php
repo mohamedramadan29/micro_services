@@ -26,8 +26,10 @@ class FrontController extends Controller
         $main_categories = Category::where('status', 1)->where('home_page', 1)->limit(6)->get();
         $categories = Category::where('status', 1)->get();
         $sub_categories = SubCategory::where('status', 1)->where('home_page', 1)->limit(8)->get();
+        $services = Service::where('status',1)->latest()->limit(8)->get();
+        //dd($services);
         //dd($main_categories);
-        return view('website.index', compact('main_categories', 'sub_categories','categories'));
+        return view('website.index', compact('main_categories', 'sub_categories','categories','services'));
     }
 
     public function services(Request $request)

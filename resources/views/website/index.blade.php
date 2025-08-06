@@ -4,25 +4,6 @@
 @endsection
 @section('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <style>
-        .payment-slider {
-            width: 90%;
-            margin: 30px auto;
-            overflow: hidden;
-        }
-
-        .swiper-slide {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .swiper-slide img {
-            width: 100px;
-            height: 100px;
-            filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.1));
-        }
-    </style>
 @endsection
 @section('content')
     <!-- ============================ Hero Banner  Start================================== -->
@@ -59,11 +40,15 @@
 
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/visa.png') }}" alt="Visa"></div>
-                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/master.png') }}" alt="MasterCard">
+                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/visa.png') }}"
+                            alt="Visa"></div>
+                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/master.png') }}"
+                            alt="MasterCard">
                     </div>
-                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/paypal.png') }}" alt="PayPal"></div>
-                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/apple-pay.png') }}" alt="ApplePay">
+                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/paypal.png') }}"
+                            alt="PayPal"></div>
+                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/apple-pay.png') }}"
+                            alt="ApplePay">
                     </div>
                 </div>
             </div>
@@ -131,6 +116,143 @@
     </section>
     <!-- ============================ How It Work End ==================================== -->
 
+    <!-- ############################# Start Last Services ################# -->
+
+    <section class="min-sec categories home_services" dir="rtl">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-7 col-md-9">
+                    <div class="sec-heading">
+                        <h2> احدث الخدمات </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="swiper services-slider">
+                        <div class="swiper-wrapper">
+                            <!-- Single Item -->
+                            @foreach ($services as $serv)
+                                <!-- Single Item -->
+                                <div class="swiper-slide">
+                                    <div class="ser_110 shadow_0 serv_data_new_details">
+                                        <div class="ser_110_thumb">
+                                            <a href="{{ url('service/' . $serv['id'] . '-' . $serv['slug']) }}"
+                                                class="ser_100_link"><img
+                                                    src="{{ asset('assets/uploads/services/' . $serv['image']) }}"
+                                                    class="img-fluid" alt=""></a>
+                                        </div>
+                                        <div class="ser_110_footer bott">
+                                            <div class="_110_foot_left">
+                                                <div class="_autho098">
+                                                    @if (empty($serv['user']['image']))
+                                                        <img src="{{ asset('assets/website/img/avatar.png') }}"
+                                                            class="img-fluid circle" alt="">
+                                                    @else
+                                                        <img src="{{ asset('assets/uploads/users_image/' . $serv['user']['image']) }}"
+                                                            class="img-fluid circle" alt="">
+                                                    @endif
+
+                                                    <img src="{{ asset('assets/website/img/verify.svg') }}"
+                                                        class="verified" width="12" alt="">
+                                                </div>
+
+                                                <div class="_autho097">
+                                                    <h5>
+                                                        <a href="{{ url('user/' . $serv['user']['user_name']) }}">{{ Str::limit($serv['user']['user_name'], 15, '...') }}
+                                                        </a>
+                                                    </h5>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="ser_110_caption">
+                                            <div class="ser_rev098">
+                                                @for ($i = 0; $i < 5; $i++)
+                                                    @if ($i < $serv['rate'])
+                                                        <i class="fa fa-star filled"></i>
+                                                    @else
+                                                        <i class="fa fa-star"></i>
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                            <div class="ser_title098">
+                                                <h4 class="_ser_title"><a
+                                                        href="{{ url('service/' . $serv['id'] . '-' . $serv['slug']) }}">
+                                                        {{ Str::limit($serv['name'], 15, '...')  }} </a>
+                                                </h4>
+                                            </div>
+                                            <div class="_oi0po price_section"><i class="fa fa-bolt"></i>
+                                                {{ __('services.serive_price') }} <strong class="theme-cl">
+                                                    {{ number_format($serv['price'], 2) }} $ </strong>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <!-- Add Pagination (optional) -->
+                    <div class="swiper-pagination" style="margin-top: 15px"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Include Swiper JS and initialization script -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const swiper = new Swiper('.services-slider', {
+                    slidesPerView: 1,
+                    spaceBetween: 20,
+                    loop: true, // Enable continuous looping
+                    autoplay: {
+                        delay: 3000, // Slide every 3 seconds
+                        disableOnInteraction: false, // Continue autoplay after user interaction
+                    },
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                    breakpoints: {
+                        576: {
+                            slidesPerView: 2,
+                        },
+                        768: {
+                            slidesPerView: 3,
+                        },
+                        992: {
+                            slidesPerView: 4,
+                        },
+                    },
+                });
+            });
+        </script>
+        <!-- Inline CSS for basic styling -->
+       <!-- Inline CSS for basic styling -->
+    <style>
+        .services-slider .swiper-slide {
+            display: flex;
+            justify-content: center;
+        }
+        .services-slider .ser_110 {
+            max-width: 300px; /* Adjust as needed */
+            width: 100%;
+        }
+        .swiper-pagination-bullet {
+            background: #333;
+            opacity: 0.5;
+        }
+        .swiper-pagination-bullet-active {
+            background: #3FB698;
+            opacity: 1;
+        }
+    </style>
+    </section>
+
+
+    <!-- ############################# End Last Services ################# -->
+
     <!-- =========================== Start Categories ========================================== -->
     <section class="min-sec categories" dir="rtl">
         <div class="container">
@@ -150,7 +272,8 @@
                         <div class="ser_110">
                             <div class="ser_110_thumb">
                                 <a href="{{ url('services/' . $category['slug']) }}" class="ser_100_link">
-                                    <img loading="lazy" style="width: 120px; height:120px;margin:auto;padding-top: 15px;display:block;"
+                                    <img loading="lazy"
+                                        style="width: 120px; height:120px;margin:auto;padding-top: 15px;display:block;"
                                         src=" {{ asset('assets/uploads/service_category/' . $category['image']) }}"
                                         class="img-fluid" alt=""></a>
                             </div>
@@ -222,7 +345,8 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="inner-flexible-box subscribe-box">
-                        <img loading="lazy"  class="animate-pulse" src="{{ asset('assets/website/img/gift.png') }}" alt="">
+                        <img loading="lazy" class="animate-pulse" src="{{ asset('assets/website/img/gift.png') }}"
+                            alt="">
                     </div>
                     <div class="clt-caption text-center mb-4">
                         <h2 class="text-light">هدية مميزة بانتظارك </h2>
