@@ -77,8 +77,8 @@
                                                     <select name="type" id="" class="form-select" required>
                                                         <option value="" selected disabled> -- حدد نوع العقار --
                                                         </option>
-                                                        <option {{ old('type') == 'بيع' ? 'selected' : '' }}
-                                                            value="بيع">بيع</option>
+                                                        <option {{ old('type') == 'بيع' ? 'selected' : '' }} value="بيع">
+                                                            بيع</option>
                                                         <option {{ old('type') == 'ايجار' ? 'selected' : '' }}
                                                             value="ايجار">ايجار</option>
                                                     </select>
@@ -115,10 +115,36 @@
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <label> السعر </label>
-                                                    <input type="text" id="formatted-price"
+                                                    <input type="text" id="formatted-price" value="{{ old('price') }}"
                                                         class="form-control with-light" required>
                                                     <input type="hidden" id="actual-price" name="price"
                                                         value="{{ old('price') }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label> حدد العملة </label>
+                                                    <select name="currency" id="" class="form-select" required>
+                                                        <option value="" selected disabled> -- حدد العملة -- </option>
+                                                        <option {{ old('currency') == 'دولار أمريكي' ? 'selected' : '' }}
+                                                            value="دولار أمريكي"> دولار أمريكي </option>
+                                                        <option {{ old('currency') == 'ريال سعودي' ? 'selected' : '' }}
+                                                            value="ريال سعودي"> ريال سعودي </option>
+                                                        <option {{ old('currency') == 'دينار أردني' ? 'selected' : '' }}
+                                                            value="دينار أردني"> دينار أردني </option>
+                                                        <option {{ old('currency') == 'يورو' ? 'selected' : '' }}
+                                                            value="يورو"> يورو </option>
+                                                        <option {{ old('currency') == 'ليرة لبنانية' ? 'selected' : '' }}
+                                                            value="ليرة لبنانية"> ليرة لبنانية </option>
+                                                        <option {{ old('currency') == 'جنيه مصري' ? 'selected' : '' }}
+                                                            value="جنيه مصري"> جنيه مصري </option>
+                                                        <option {{ old('currency') == 'دينار كويتي' ? 'selected' : '' }}
+                                                            value="دينار كويتي"> دينار كويتي </option>
+                                                        <option {{ old('currency') == 'درهم إماراتي' ? 'selected' : '' }}
+                                                            value="درهم إماراتي"> درهم إماراتي </option>
+                                                        <option {{ old('currency') == 'ليرة سورية' ? 'selected' : '' }}
+                                                            value="ليرة سورية"> ليرة سورية </option>
+                                                    </select>
                                                 </div>
                                             </div>
 

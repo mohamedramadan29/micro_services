@@ -36,13 +36,14 @@ class ProperityController extends Controller
                 'type' => 'required',
                 'category' => 'required',
                 'price' => 'required',
+                'currency' => 'required',
                 'area' => 'required',
                 //'rooms'=>'required',
                 'location' => 'required',
                 'city' => 'required',
                 'country' => 'required',
                 'images' => 'required|array|min:2', // يجب رفع صورتين على الأقل
-                'images.*' => 'mimes:jpeg,jpg,png,gif|required',
+                'images.*' => 'mimes:jpeg,jpg,png,gif,webp|required',
             ];
             $messages = [
                 'title.required' => 'من فضلك ادخل العنوان',
@@ -50,6 +51,7 @@ class ProperityController extends Controller
                 'type.required' => 'من فضلك ادخل نوع العقار',
                 'category.required' => 'من فضلك ادخل القسم',
                 'price.required' => 'من فضلك ادخل السعر',
+                'currency.required' => 'من فضلك ادخل العملة',
                 'area.required' => 'من فضلك ادخل المساحة',
                 'location.required' => 'من فضلك ادخل الموقع',
                 'city.required' => 'من فضلك ادخل المدينة',
@@ -58,7 +60,7 @@ class ProperityController extends Controller
                 'images.array' => 'يجب اختيار صور متعددة للعقار',
                 'images.min' => 'يجب رفع صورتين على الأقل',
                 'images.*.required' => 'من فضلك اختر صورة بشكل صحيح',
-                'images.*.mimes' => 'يجب أن تكون الصورة بصيغة jpeg, jpg, png, gif فقط',
+                'images.*.mimes' => 'يجب أن تكون الصورة بصيغة jpeg, jpg, png, webp,gif فقط',
             ];
             $validator = Validator::make($data, $rules, $messages);
             if ($validator->fails()) {
@@ -77,6 +79,7 @@ class ProperityController extends Controller
             $properity->type = $data['type'];
             $properity->category = $data['category'];
             $properity->price = $data['price'] ?: 0;
+            $properity->currency = $data['currency'];
             $properity->area = $data['area'] ?: 0;
             $properity->rooms = $data['rooms'] ?: 0;
             $properity->bathrooms = $data['bathrooms'] ?: 0;
@@ -116,6 +119,7 @@ class ProperityController extends Controller
                 'type' => 'required',
                 'category' => 'required',
                 'price' => 'required',
+                'currency' => 'required',
                 'area' => 'required',
                 'location' => 'required',
                 'city' => 'required',
@@ -127,6 +131,7 @@ class ProperityController extends Controller
                 'type.required' => 'من فضلك ادخل نوع العقار',
                 'category.required' => 'من فضلك ادخل القسم',
                 'price.required' => 'من فضلك ادخل السعر',
+                'currency.required' => 'من فضلك ادخل العملة',
                 'area.required' => 'من فضلك ادخل المساحة',
                 'location.required' => 'من فضلك ادخل الموقع',
                 'city.required' => 'من فضلك ادخل المدينة',
@@ -144,6 +149,7 @@ class ProperityController extends Controller
             $property->type = $data['type'];
             $property->category = $data['category'];
             $property->price = $data['price'];
+            $property->currency = $data['currency'];
             $property->area = $data['area'] ?: 0;
             $property->rooms = $data['rooms'] ?: 0;
             $property->bathrooms = $data['bathrooms'] ?: 0;

@@ -69,7 +69,7 @@
                                         </div>
                                         <div class="_oi0po"><i class="fa fa-bolt"></i> السعر
 
-                                            <strong class="theme-cl"> {{ number_format($properity['price'], 2) }} $
+                                            <strong class="theme-cl"> {{ number_format($properity['price'], 2) }} {{ $properity['currency']?:'دولار' }}
                                             </strong>
 
                                         </div>

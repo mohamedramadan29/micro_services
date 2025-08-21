@@ -71,7 +71,7 @@
                         <div class="_view_dis_908 price_section">
                             <ul class="exlio_list p-2">
                                 <li> السعر <span style="color: #3fb699"> {{ number_format($property['price'], 2) }}
-                                        $</span>
+                                        {{ $property['currency']?:'دولار' }}</span>
                                 </li>
 
                                 <li> نوع العقار <span style="color: #3fb699"> {{ $property['type'] }}</span> </li>

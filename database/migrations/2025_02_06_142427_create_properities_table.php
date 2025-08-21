@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('type',['بيع','ايجار'])->default('بيع');
             $table->string('category');
             $table->double('price',8,2)->nullable();
+            $table->string('currency')->default('دولار');
             $table->double('area',8,2)->nullable();
             $table->integer('rooms')->nullable();
             $table->integer('bathrooms')->nullable();

@@ -137,6 +137,33 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label> حدد العملة </label>
+                                                    <select name="currency" id="" class="form-select" required>
+                                                        <option value="" selected disabled> -- حدد العملة -- </option>
+                                                        <option {{ $property['currency'] == 'دولار أمريكي' ? 'selected' : '' }}
+                                                            value="دولار أمريكي"> دولار أمريكي </option>
+                                                        <option {{ $property['currency'] == 'ريال سعودي' ? 'selected' : '' }}
+                                                            value="ريال سعودي"> ريال سعودي </option>
+                                                        <option {{ $property['currency'] == 'دينار أردني' ? 'selected' : '' }}
+                                                            value="دينار أردني"> دينار أردني </option>
+                                                        <option {{ $property['currency'] == 'يورو' ? 'selected' : '' }}
+                                                            value="يورو"> يورو </option>
+                                                        <option {{ $property['currency'] == 'ليرة لبنانية' ? 'selected' : '' }}
+                                                            value="ليرة لبنانية"> ليرة لبنانية </option>
+                                                        <option {{ $property['currency'] == 'جنيه مصري' ? 'selected' : '' }}
+                                                            value="جنيه مصري"> جنيه مصري </option>
+                                                        <option {{ $property['currency'] == 'دينار كويتي' ? 'selected' : '' }}
+                                                            value="دينار كويتي"> دينار كويتي </option>
+                                                        <option {{ $property['currency'] == 'درهم إماراتي' ? 'selected' : '' }}
+                                                            value="درهم إماراتي"> درهم إماراتي </option>
+                                                        <option {{ $property['currency'] == 'ليرة سورية' ? 'selected' : '' }}
+                                                            value="ليرة سورية"> ليرة سورية </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                             <script src="https://cdnjs.cloudflare.com/ajax/libs/autoNumeric/4.5.4/autoNumeric.min.js"></script>
                                             <script>
                                                 document.addEventListener("DOMContentLoaded", function() {
