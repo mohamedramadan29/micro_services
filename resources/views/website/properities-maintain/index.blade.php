@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-    خدمات الصيانة
+خدمات صيانة العقارات
 @endsection
 @section('content')
     <!-- ============================ Main Section Start ================================== -->
@@ -37,7 +37,7 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"> خدمات الصيانة </li>
+                                        <li class="breadcrumb-item active" aria-current="page">  خدمات صيانة العقارات  </li>
                                     </ol>
                                 </nav>
                             </div>
@@ -52,8 +52,10 @@
                                 <!-- Single Wrap -->
                                 <div class="_dashboard_content">
                                     <div class="_dashboard_content_header">
-                                        <div class="_dashboard__header_flex">
-                                            <h4><i class="ti-lock mr-1"></i> خدمات الصيانة </h4>
+                                        <div class="" style="display: flex;justify-content:space-between;width: 100%;">
+                                            <h4><i class="ti-lock mr-1"></i>  خدمات صيانة العقارات  </h4>
+                                            <a href="{{ url('my/property/maintain/add') }}" class="btn btn-primary btn-sm">
+                                                اضافة خدمة جديدة   <i class="bi bi-plus"></i> </a>
                                         </div>
                                     </div>
 

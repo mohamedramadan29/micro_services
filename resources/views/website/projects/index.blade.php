@@ -37,7 +37,7 @@
                         </div>
 
                         @include('website.layouts.dashboard-sidebar')
- 
+
                     </div>
                 </div>
 
@@ -65,8 +65,10 @@
                                 <!-- Single Wrap -->
                                 <div class="_dashboard_content">
                                     <div class="_dashboard_content_header">
-                                        <div class="_dashboard__header_flex">
+                                        <div class="" style="display: flex;justify-content:space-between;width: 100%;">
                                             <h4><i class="ti-lock mr-1"></i> مشاريعي </h4>
+                                            <a href="{{ url('my/project/add') }}" class="btn btn-primary btn-sm">
+                                                اضف مشروع جديد <i class="bi bi-plus"></i> </a>
                                         </div>
                                     </div>
 

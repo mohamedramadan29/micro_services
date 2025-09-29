@@ -158,33 +158,24 @@
                                                     class="bi bi-cart-check-fill"></i> </a></li>
                                         <li><a class="dropdown-item" href="{{ url('my/project/index') }}"> المشاريع <i
                                                     class="bi bi-cast"></i></a></li>
-                                        <li><a class="dropdown-item" href="{{ url('my/project/add') }}"> اضف مشروع جديد
-                                                <i class="ti-plus"></i></a></li>
+
                                         <li><a class="dropdown-item" href="{{ url('my/courses') }}"> الكورسات <i
                                                     class="bi bi-mortarboard-fill"></i> </a>
                                         </li>
-                                        <li><a class="dropdown-item" href="{{ url('my/course/add') }}"> اضف كورس جديد
-                                                <i class="ti-plus"></i> </a></li>
+
                                         <li><a class="dropdown-item" href="{{ url('service/index') }}">الخدمات
                                                 <i class="bi bi-database-fill-check"></i> </a></li>
-                                        <li><a class="dropdown-item" href="{{ url('service/add') }}"> اضف خدمة جديدة
-                                                <i class="ti-plus"></i></a></li>
+
                                         <li><a class="dropdown-item" href="{{ url('my/properties/index') }}">
                                                 العقارات
                                                 <i class="bi bi-building"></i> </a></li>
-                                        <li><a class="dropdown-item" href="{{ url('my/property/add') }}"> اضف عقار
-                                                جديد
-                                                <i class="ti-plus"></i> </a> </li>
+
                                         <li><a class="dropdown-item" href="{{ url('my/property/maintain/index') }}">
-                                                خدمات
-                                                الصيانة <i class="bi bi-database-fill"></i> </a></li>
-                                        <li><a class="dropdown-item" href="{{ url('my/property/maintain/add') }}">
-                                                اضف
-                                                خدمة صيانة <i class="ti-plus"></i> </a></li>
+                                               خدمات صيانة العقارات  <i class="bi bi-database-fill"></i> </a></li>
+
                                         <li><a class="dropdown-item" href="{{ url('my/jobs') }}">
                                                 وظائفي <i class="bi bi-database-fill"></i> </a></li>
-                                        <li><a class="dropdown-item" href="{{ url('my/job/add') }}">
-                                                اضف وظيفة جديدة <i class="ti-plus"></i> </a></li>
+                                         
                                         <li><a class="dropdown-item" href="{{ url('chats') }}"> المحادثات <i
                                                     class="bi bi-chat-dots-fill"></i></a>
                                         </li>

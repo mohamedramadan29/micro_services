@@ -3,18 +3,6 @@
     مشتريات المنتجات
 @endsection
 @section('content')
-    @if (Session::has('Success_message'))
-        @php
-            toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-        @endphp
-    @endif
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            @php
-                toastify()->error($error);
-            @endphp
-        @endforeach
-    @endif
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
         <div class="container-fluid">
@@ -76,13 +64,13 @@
                                             <div class="table-responsive">
                                             <table class="table table-bordered">
                                                 <thead>
-                                                    <tr>
-                                                        <th>المنتج</th>
-                                                        <th>السعر</th>
-                                                        <th> الدولة  </th>
-                                                        <th> المدينة   </th>
-                                                        <th> العنوان   </th>
-                                                        <th>الحالة</th>
+                                                    <tr style="border-color: #eaeff5">
+                                                        <th style="border-color: #eaeff5">المنتج</th>
+                                                        <th style="border-color: #eaeff5">السعر</th>
+                                                        <th style="border-color: #eaeff5"> الدولة  </th>
+                                                        <th style="border-color: #eaeff5"> المدينة   </th>
+                                                        <th style="border-color: #eaeff5"> العنوان   </th>
+                                                        <th style="border-color: #eaeff5"> الحالة</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

@@ -23,10 +23,7 @@
                             <h4> {{ Auth::user()->user_name }} </h4>
                             <span> {{ Auth::user()->email }} </span>
                         </div>
-
                          @include('website.layouts.dashboard-sidebar')
-
-
                     </div>
                 </div>
 
@@ -112,7 +109,7 @@
                                                     <div class="col-xl-6 col-lg-6">
                                                         <div class="form-group">
                                                             <label> البريد الالكتروني </label>
-                                                            <input required type="email" class="form-control with-light"
+                                                            <input style="text-align: right;direction:rtl" required type="email" class="form-control with-light"
                                                                 name="email" value="{{ old('email', Auth::user()->email) }}">
                                                         </div>
                                                     </div>

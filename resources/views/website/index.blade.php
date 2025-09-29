@@ -177,7 +177,7 @@
                                                 @endfor
                                             </div>
                                             <div class="ser_title098">
-                                                <h4 class="_ser_title"><a
+                                                <h4 class="_ser_title" style="height: 40px;overflow:hidden"><a
                                                         href="{{ url('service/' . $serv['id'] . '-' . $serv['slug']) }}">
                                                         {{ Str::limit($serv['name'], 15, '...')  }} </a>
                                                 </h4>

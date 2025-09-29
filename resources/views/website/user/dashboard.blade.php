@@ -21,7 +21,7 @@
                             <h4> {{ Auth::user()->user_name }} </h4>
                             <span> {{ Auth::user()->email }} </span>
                         </div>
-                         @include('website.layouts.dashboard-sidebar')
+                        @include('website.layouts.dashboard-sidebar')
                     </div>
                 </div>
 
@@ -113,7 +113,9 @@
                                             <div class="col-xl-12 col-lg-12">
                                                 <div class="form-group">
                                                     <label> نبذة عني </label>
-                                                    <textarea class="form-control with-light">{{ Auth::user()->info }}</textarea>
+                                                    <p style="margin-top: 5px;background: #f9f9f9;padding: 10px;">
+                                                        {{ Auth::user()->info }}
+                                                    </p>
                                                 </div>
                                             </div>
 
@@ -121,38 +123,41 @@
                                     </div>
                                 </div>
                                 <!-- Single Wrap End -->
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
 
-                                <!-- Single Wrap -->
-                                <div class="_dashboard_content">
-                                    <div class="_dashboard_content_header">
-                                        <div class="_dashboard__header_flex">
-                                            <h4><i class="ti-lock mr-1"></i> خدماتي </h4>
+                                    <!-- Single Wrap -->
+                                    <div class="_dashboard_content">
+                                        <div class="_dashboard_content_header">
+                                            <div class="_dashboard__header_flex">
+                                                <h4><i class="ti-lock mr-1"></i> خدماتي </h4>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="_dashboard_content_body">
-                                        <div class="row">
-                                            <!-- Single Item -->
-                                            @if ($services->count() > 0)
-                                                @foreach ($services as $serv)
-                                                    <div class="col-lg-4 col-md-6 col-sm-12">
-                                                        <div class="ser_110">
-                                                            <div class="ser_110_thumb">
-                                                                <a href="{{ url('service/' . $serv['id'] . '-' . $serv['slug']) }}"
-                                                                    class="ser_100_link"><img
-                                                                        src=" {{ asset('assets/uploads/services/' . $serv['image']) }}"
-                                                                        class="img-fluid" alt=""></a>
-                                                            </div>
-                                                            <div class="ser_110_footer bott">
-                                                                <div class="_110_foot_left">
-                                                                    <div>
-                                                                        <h5>
-                                                                            <a
-                                                                                href="{{ url('service/' . $serv['id'] . '-' . $serv['slug']) }}">
-                                                                                {{ $serv['name'] }} </a>
-                                                                        </h5>
-                                                                        <span> {{ $serv['category']['name'] }} <span>
-                                                                                {{-- <div class="_dash_usr_rates mb-1">
+                                        <div class="_dashboard_content_body">
+                                            <div class="row">
+                                                <!-- Single Item -->
+                                                @if ($services->count() > 0)
+                                                    @foreach ($services as $serv)
+                                                        <div class="col-lg-4 col-md-6 col-sm-12">
+                                                            <div class="ser_110">
+                                                                <div class="ser_110_thumb">
+                                                                    <a href="{{ url('service/' . $serv['id'] . '-' . $serv['slug']) }}"
+                                                                        class="ser_100_link"><img
+                                                                            src=" {{ asset('assets/uploads/services/' . $serv['image']) }}"
+                                                                            class="img-fluid" alt=""></a>
+                                                                </div>
+                                                                <div class="ser_110_footer bott">
+                                                                    <div class="_110_foot_left">
+                                                                        <div>
+                                                                            <h5>
+                                                                                <a
+                                                                                    href="{{ url('service/' . $serv['id'] . '-' . $serv['slug']) }}">
+                                                                                    {{ $serv['name'] }} </a>
+                                                                            </h5>
+                                                                            <span> {{ $serv['category']['name'] }} <span>
+                                                                                    {{-- <div class="_dash_usr_rates mb-1">
                                                                                     <span class="good">
                                                                                         {{ $serv['rate'] }} </span>
                                                                                     @for ($i = 0; $i < 5; $i++)
@@ -163,28 +168,30 @@
                                                                                         @endif
                                                                                     @endfor
                                                                                 </div> --}}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="buttons" style="text-align: center;padding:10px">
-                                                                <a href="{{ url('service/update/' . $serv['id']) }}"
-                                                                    class="btn btn-primary btn-sm"> تعديل <i
-                                                                        class="fa fa-edit"></i> </a>
-                                                                <a style="height: 30px"
-                                                                    href="{{ url('service/delete/' . $serv['id']) }}"
-                                                                    class="btn btn-danger btn-sm"
-                                                                    onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')">
-                                                                    حذف <i class="fa fa-trash"></i> </a>
+                                                                <div class="buttons"
+                                                                    style="text-align: center;padding:10px">
+                                                                    <a href="{{ url('service/update/' . $serv['id']) }}"
+                                                                        class="btn btn-primary btn-sm"> تعديل <i
+                                                                            class="fa fa-edit"></i> </a>
+                                                                    <a style="height: 30px"
+                                                                        href="{{ url('service/delete/' . $serv['id']) }}"
+                                                                        class="btn btn-danger btn-sm"
+                                                                        onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')">
+                                                                        حذف <i class="fa fa-trash"></i> </a>
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                    @endforeach
+                                                @else
+                                                    <div class="alert alert-info"> لا يوجد لديك اي خدمات :: ادخل خدمتك
+                                                        الاولي
                                                     </div>
-                                                @endforeach
-                                            @else
-                                                <div class="alert alert-info"> لا يوجد لديك اي خدمات :: ادخل خدمتك
-                                                    الاولي
-                                                </div>
-                                            @endif
+                                                @endif
 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
