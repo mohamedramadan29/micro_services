@@ -14,8 +14,10 @@
                     <div class="footer-widget">
                         <img src="{{ asset('assets/website/img/logo.png') }}" class="img-fluid f-logo" width="120"
                             alt="">
-                         <p style='line-height:1.3;font-weight:bold'>  منصة "نفذها": وجهتك الأولى لتوظيف أفضل المستقلين  .  </p>
-                         <p  style='line-height:1.3;'> اجمع بين أصحاب المشاريع والمستقلين لإنجاز  الأعمال <br>  باحترافية وسرعة، مع حلول مبتكرة تلبي جميع احتياجاتك.   </p>
+                        <p style='line-height:1.3;font-weight:bold'> منصة "نفذها": وجهتك الأولى لتوظيف أفضل المستقلين .
+                        </p>
+                        <p style='line-height:1.3;'> اجمع بين أصحاب المشاريع والمستقلين لإنجاز الأعمال <br> باحترافية
+                            وسرعة، مع حلول مبتكرة تلبي جميع احتياجاتك. </p>
 
 
                     </div>
@@ -24,7 +26,7 @@
                     <div class="footer-widget">
                         <h4 class="widget-title"> {{ __('public.links') }} </h4>
                         <ul class="footer-menu">
-                            <li><a href="{{ route('blogCategories') }}"> المدونة  </a></li>
+                            <li><a href="{{ route('blogCategories') }}"> المدونة </a></li>
                             <li><a href="{{ '/about' }}"> {{ __('public.about_us') }} </a></li>
                             <li><a href="{{ '/faq' }}"> {{ __('public.faqs') }} </a></li>
                             <li><a href="{{ '/privacy-policy' }}"> {{ __('public.privacy') }} </a></li>
@@ -37,14 +39,21 @@
                     <div class="footer-widget">
                         <h4 class="widget-title"> {{ __('public.follow_us') }} </h4>
                         <ul class="footer-bottom-social">
-                            <li><a style="background-color: #1877f2" href="https://www.facebook.com/profile.php?id=61571368633513"><i
+                            <li><a style="background-color: #1877f2"
+                                    href="https://www.facebook.com/profile.php?id=61571368633513"><i
                                         class="ti-facebook"></i></a></li>
-                            <li><a style="background-color: #1da1f2;" href="https://x.com/NafizhaWeb17206?t=MyM30nyRqryQi5xUkq0Ecw&s=09"><i
+                            <li><a style="background-color: #1da1f2;"
+                                    href="https://x.com/NafizhaWeb17206?t=MyM30nyRqryQi5xUkq0Ecw&s=09"><i
                                         class="bi bi-x"></i></a></li>
-                            <li><a style="background-color: #c32aa3;" href="https://www.instagram.com/nafizha.com0/"><i class="ti-instagram"></i></a></li>
-                            <li><a style="background-color: #ff0000;" href="https://www.youtube.com/@Nafizha-e3m"><i class="ti-youtube"></i></a></li>
-                            <li><a style="background-color: #fffc00;" href="https://www.snapchat.com/add/nfizha900?share_id=4P1IjTfMpzI&locale=en-EG"><i class="bi bi-snapchat"></i></a></li>
-                            <li><a style="background-color: #010101;" href="https://www.tiktok.com/@nafizha.como"><i class="bi bi-tiktok"></i></a></li>
+                            <li><a style="background-color: #c32aa3;" href="https://www.instagram.com/nafizha.com0/"><i
+                                        class="ti-instagram"></i></a></li>
+                            <li><a style="background-color: #ff0000;" href="https://www.youtube.com/@Nafizha-e3m"><i
+                                        class="ti-youtube"></i></a></li>
+                            <li><a style="background-color: #fffc00;"
+                                    href="https://www.snapchat.com/add/nfizha900?share_id=4P1IjTfMpzI&locale=en-EG"><i
+                                        class="bi bi-snapchat"></i></a></li>
+                            <li><a style="background-color: #010101;" href="https://www.tiktok.com/@nafizha.como"><i
+                                        class="bi bi-tiktok"></i></a></li>
                             <li><a style="background-color: #0a66c2;"
                                     href="https://www.linkedin.com/in/nafizha-%D9%86%D9%81%D8%B0%D9%87%D8%A7-4528a8344/"><i
                                         class="ti-linkedin"></i></a></li>

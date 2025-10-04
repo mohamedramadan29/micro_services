@@ -20,6 +20,7 @@ use \App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\BlogCategoryController;
 use App\Http\Controllers\admin\WithdrawRequestController;
 use App\Http\Controllers\admin\ProperityMaintainController;
+use App\Http\Controllers\admin\PublicCoursesPageController;
 
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
@@ -164,25 +165,38 @@ Route::group(['prefix' => 'admin'], function () {
         });
         ############# End Withdraw Controller ###############
 
-           ///////////////////  Start Blog Category //////////////////
+        ///////////////////  Start Blog Category //////////////////
         ///
 
-            Route::controller(BlogCategoryController::class)->group(function () {
-                Route::get('blog_category', 'index');
-                Route::match(['post', 'get'], 'blog_category/add', 'store');
-                Route::match(['post', 'get'], 'blog_category/update/{id}', 'update');
-                Route::post('blog_category/delete/{id}', 'delete');
-            });
-            ///////////////////  Start Blog //////////////////
-            ///
-            Route::controller(BlogController::class)->group(function () {
-                Route::get('blogs', 'index');
-                Route::match(['post', 'get'], 'blog/add', 'store');
-                Route::match(['post', 'get'], 'blog/update/{id}', 'update');
-                Route::post('blog/delete/{id}', 'delete');
-                Route::get('blog/schedule', 'schedule');
-                Route::get('blog/archived', 'archived');
-            });
+        Route::controller(BlogCategoryController::class)->group(function () {
+            Route::get('blog_category', 'index');
+            Route::match(['post', 'get'], 'blog_category/add', 'store');
+            Route::match(['post', 'get'], 'blog_category/update/{id}', 'update');
+            Route::post('blog_category/delete/{id}', 'delete');
+        });
+        ///////////////////  Start Blog //////////////////
+        ///
+        Route::controller(BlogController::class)->group(function () {
+            Route::get('blogs', 'index');
+            Route::match(['post', 'get'], 'blog/add', 'store');
+            Route::match(['post', 'get'], 'blog/update/{id}', 'update');
+            Route::post('blog/delete/{id}', 'delete');
+            Route::get('blog/schedule', 'schedule');
+            Route::get('blog/archived', 'archived');
+        });
 
-});
+
+        ################ Start Public Courses ###############
+
+        Route::controller(PublicCoursesPageController::class)->group(function () {
+            Route::get('public-courses/index', 'index');
+            Route::match(['post', 'get'], 'public-courses/add', 'store')->name('public-courses.add');
+            Route::match(['post', 'get'], 'public-courses/update/{id}', 'update')->name('public-courses.update');
+            Route::post('public-courses/delete/{id}', 'delete');
+            Route::get('public-courses/registers/{id}', 'registers');
+        });
+
+        ################### End Public Courses ##################
+
+    });
 });

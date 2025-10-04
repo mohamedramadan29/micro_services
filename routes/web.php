@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\front\JobOfferController;
+use App\Http\Controllers\front\PublicCourseRegisterController;
 use App\Livewire\Chat\Main;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\front\CartController;
@@ -47,7 +48,7 @@ Route::group(
             return view('website.faq');
         });
         Route::controller(FrontController::class)->group(function () {
-            Route::get('/', 'index');
+            Route::get('/', 'index')->name('home');
             Route::get('categories', 'categories');
             Route::get('services', 'services');
             Route::get('service/{id}-{slug}', 'service_details');
@@ -241,8 +242,8 @@ Route::group(
             });
             ############# End Jobs Controller ####################
             ############ Start User Product Purches ##############
-            Route::controller(UserProductPurchesController::class)->group(function(){
-                Route::get('my/products/purches','index')->name('user.products.purches');
+            Route::controller(UserProductPurchesController::class)->group(function () {
+                Route::get('my/products/purches', 'index')->name('user.products.purches');
             });
             ############ End User Product Purches ################
         });
@@ -284,11 +285,11 @@ Route::group(
 
         #################### Start Blog Routes ########################
 
-        Route::controller(BlogController::class)->group(function(){
+        Route::controller(BlogController::class)->group(function () {
 
-            Route::get('categories','categories')->name('blogCategories');
-            Route::get('category/{slug}','categoryDetails')->name('blogCategoryDetails');
-            Route::get('blog/{slug}','blogDetails')->name('blogDetails');
+            Route::get('categories', 'categories')->name('blogCategories');
+            Route::get('category/{slug}', 'categoryDetails')->name('blogCategoryDetails');
+            Route::get('blog/{slug}', 'blogDetails')->name('blogDetails');
         });
         #################### End Blog Routes ##########################
 
@@ -300,7 +301,12 @@ Route::group(
 
         Route::get('auth/{provider}/redirect', [SocialMediaController::class, 'redirect'])->name('auth.google.redirect');
         Route::get('auth/{provider}/callback', [SocialMediaController::class, 'callback'])->name('auth.google.callback');
+
+        ############## Public Course Route
+        Route::match(['post', 'get'], 'course/public/{url}', [PublicCourseRegisterController::class, 'RegisterCourse'])->name('registercourse');
     }
 );
+
+
 
 include 'admin.php';
