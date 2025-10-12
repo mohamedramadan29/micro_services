@@ -154,8 +154,7 @@
                                                     <div class="tg_grouping">
                                                         <input type="text" required id="lg-input" name="tags"
                                                             class="form-control with-light"
-                                                            placeholder="برمجة , تصميم , ... "
-                                                            value="{{ old('tags') }}">
+                                                            placeholder="برمجة , تصميم , ... " value="{{ old('tags') }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -172,6 +171,10 @@
 
                                             </div>
 
+                                        </div>
+                                        <div class="alert alert-danger">
+                                            <p> تنويه: بإرسال هذه الخدمة، فإنك تؤكد أن جميع المعلومات والمحتوى الوارد أصلي
+                                                وغير منسوخ من أي خدمة أخرى على الموقع. </p>
                                         </div>
                                         <button type="submit" class="btn btn-save" id="submitBtn"> اضف الخدمة <i
                                                 class="fa fa-save"></i></button>

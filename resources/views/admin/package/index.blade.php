@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title')
-    مشاهده المستخدمين
+    ادارة الباقات
 @endsection
 @section('css')
     <link href="{{ URL::asset('assets/admin/plugins/datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
@@ -15,8 +15,8 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">الرئيسية </h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                    المستخدمين </span>
+                <h4 class="content-title mb-0 my-auto">الرئيسية </h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ ادارة
+                    الباقات </span>
             </div>
         </div>
     </div>
@@ -41,14 +41,14 @@
                             </ul>
                         </div>
                     @endif
-                    <div class="mb-4 main-content-label"> المستخدمين</div>
+                    <div class="mb-4 main-content-label"> ادارة الباقات </div>
                     <div class="card-header">
-                        <button data-target="#add_model" data-toggle="modal" class="btn btn-primary"> اضف مستخدم جديد <i
+                        <a href="{{ url('admin/package/add') }}" class="btn btn-primary btn-sm"> اضافة باقة <i
                                 class="fa fa-plus"></i>
-                        </button>
+                        </a>
                     </div>
                     <!-- Add New Section -->
-                    @include('admin.users.add')
+
                     <div class="card-body">
 
                         <div class="table-responsive">
@@ -56,52 +56,40 @@
                                 <thead>
                                     <tr>
                                         <th class="wd-15p border-bottom-0"> #</th>
-                                        <th class="wd-15p border-bottom-0"> الأسم</th>
-                                        <th class="wd-15p border-bottom-0"> رقم الهاتف</th>
-                                        <th class="wd-20p border-bottom-0"> البريد الألكتروني</th>
-                                        <th class="wd-20p border-bottom-0"> نوع المستخدم </th>
-                                        <th class="wd-15p border-bottom-0"> حالة تفعيل الايميل </th>
+                                        <th class="wd-15p border-bottom-0"> عنوان الباقة </th>
+                                        <th class="wd-15p border-bottom-0"> محتوي الباقة </th>
+                                        <th class="wd-15p border-bottom-0"> سعر الباقة </th>
+                                        <th class="wd-15p border-bottom-0"> عدد الاشتراكات  </th>
                                         <th class="wd-15p border-bottom-0"> العمليات</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $i = 1;
-                                    @endphp
-                                    @foreach ($users as $user)
+                                    @foreach ($packages as $package)
                                         <tr>
-                                            <td> {{ $i++ }} </td>
-                                            <td> {{ $user['name'] }} </td>
-                                            <td> {{ $user['phone'] }} </td>
-                                            <td> {{ $user['email'] }} </td>
-                                            <td> {{ $user['account_type'] }} </td>
+                                            <td> {{ $loop->iteration }} </td>
+                                            <td> {{ $package['name'] }} </td>
+                                            <td> {{ $package['description'] }}</td>
+                                            <td> {{ number_format($package['price'], 2) }} $ </td>
+                                            <td>{{ $package->subscribes->count() }}</td>
                                             <td>
-                                                @if ($user['status'] == 1)
-                                                    <span class="badge badge-success"> فعال </span>
-                                                @elseif($user['status'] == 0)
-                                                    <span class="badge badge-danger"> غير فعال </span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <form action="{{ url('admin/block_status/' . $user['id']) }}"
+                                                <a class="btn btn-primary btn-sm"
+                                                    href="{{ url('admin/package/edit/' . $package['id']) }}">
+                                                    تعديل <i class="fa fa-edit"></i></a>
+
+                                                    <a class="btn btn-warning btn-sm"
+                                                    href="{{ url('admin/package/subscribes/' . $package['id']) }}">
+                                                    مشاهدة الاشتراكات <i class="fa fa-eye"></i></a>
+
+                                                <form action="{{ url('admin/package/delete/' . $package->id) }}"
                                                     method="post">
                                                     @csrf
-                                                    @if ($user->block_status == 1)
-                                                        <button class="btn btn-danger btn-sm"> حظر المستخدم
-                                                        </button>
-                                                    @else
-                                                        <button class="btn btn-primary btn-sm"> فك الحظر
-                                                        </button>
-                                                    @endif
-
+                                                    <button type="submit" class="btn btn-danger btn-sm"> حذف </button>
                                                 </form>
                                             </td>
                                         </tr>
-                                        <!-- Edit Sections -->
-                                        @include('admin.users.edit')
 
                                         <!-- Delete Section Model  -->
-                                        @include('admin.users.delete')
+                                        {{-- @include('admin.categories.delete') --}}
                                     @endforeach
                                 </tbody>
                             </table>

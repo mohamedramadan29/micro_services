@@ -1,37 +1,38 @@
 <?php
 
-use App\Http\Controllers\front\JobOfferController;
-use App\Http\Controllers\front\PublicCourseRegisterController;
 use App\Livewire\Chat\Main;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\front\JobController;
+use App\Http\Controllers\front\BlogController;
 use App\Http\Controllers\front\CartController;
 use App\Http\Controllers\front\UserController;
 use App\Http\Controllers\front\FrontController;
 use App\Http\Controllers\front\CourseController;
 use App\Http\Controllers\front\ChatgptController;
+use App\Http\Controllers\front\PackageController;
 use App\Http\Controllers\front\ProductController;
 use App\Http\Controllers\front\ProjectController;
 use App\Http\Controllers\front\serviceController;
 use App\Http\Controllers\front\TicketsController;
 use App\Http\Controllers\front\CheckOutController;
+use App\Http\Controllers\front\EmployeeController;
+use App\Http\Controllers\front\FrontJobController;
+use App\Http\Controllers\front\JobOfferController;
 use App\Http\Controllers\front\WithDrawController;
 use App\Http\Controllers\front\ProperityController;
 use App\Http\Controllers\Auth\SocialMediaController;
-use App\Http\Controllers\front\BlogController;
 use App\Http\Controllers\front\ConversationController;
 use App\Http\Controllers\front\ProductOrderController;
 use App\Http\Controllers\front\ProjectOfferController;
 use App\Http\Controllers\front\ChargeBalanceController;
 use App\Http\Controllers\front\TicketMessageController;
 use App\Http\Controllers\front\CourseRegisterController;
-use App\Http\Controllers\front\FrontJobController;
 use App\Http\Controllers\front\FrontProperityController;
 use App\Http\Controllers\front\ProperityMaintainController;
-use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use App\Http\Controllers\front\FrontProperityMaintainController;
-use App\Http\Controllers\front\JobController;
 use App\Http\Controllers\front\UserProductPurchesController;
-use App\Http\Controllers\front\EmployeeController;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Http\Controllers\front\PublicCourseRegisterController;
+use App\Http\Controllers\front\FrontProperityMaintainController;
 
 Route::group(
     [
@@ -304,6 +305,16 @@ Route::group(
 
         ############## Public Course Route
         Route::match(['post', 'get'], 'course/public/{url}', [PublicCourseRegisterController::class, 'RegisterCourse'])->name('registercourse');
+
+        ######################### Start Package Controller #############################
+
+        Route::controller(PackageController::class)->group(function () {
+            Route::get('packages','index')->name('packages.index');
+            Route::post('package/subscribe/{id}','subscribePlan')->name('subscribe.plan');
+            Route::get('/package/payment/success', 'paymentSuccess')->name('package.order.success');
+            Route::get('/package/payment/cancel', 'PaymentCancel')->name('package.order.cancel');
+        });
+        ######################### End Package Controller ################################
     }
 );
 

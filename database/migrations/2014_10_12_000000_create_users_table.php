@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('account_type')->nullable()->comment('user, employee, admin');
             $table->integer('rate')->nullable();
             $table->tinyInteger('status')->default('1');
-
+            $table->tinyInteger('block_status')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });

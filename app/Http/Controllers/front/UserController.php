@@ -64,6 +64,10 @@ class UserController extends Controller
                         Auth::logout();
                         return Redirect::back()->withInput()->withErrors('  من فضلك يجب تفعيل الحساب الخاص بك اولا  ');
                     }
+                    if (Auth::user()->block_status == 0) {
+                        Auth::logout();
+                        return Redirect::back()->withInput()->withErrors('  تم حظر الحساب الخاص بك من فضلك تواصل مع الادارة  ');
+                    }
                     // Update User Cart Put User Id
                     if (!empty(Session::get('session_id'))) {
                         $user_id = Auth::user()->id;
@@ -310,7 +314,6 @@ class UserController extends Controller
             $notification->markAsRead();
         }
         return view('website.user.orders', compact('orders'));
-
     }
 
     public function balance()

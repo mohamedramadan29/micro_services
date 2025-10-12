@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\front;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Traits\Slug_Trait;
 use App\Models\front\Properity;
@@ -20,7 +21,7 @@ class ProperityController extends Controller
     use Upload_Images;
     public function index()
     {
-        $properties = Properity::with('ProperityFirstImage','ProperityImages')->where('user_id', Auth::user()->id)->get();
+        $properties = Properity::with('ProperityFirstImage', 'ProperityImages')->where('user_id', Auth::user()->id)->get();
         return view('website.properities.index', compact('properties'));
     }
 
@@ -42,7 +43,7 @@ class ProperityController extends Controller
                 'location' => 'required',
                 'city' => 'required',
                 'country' => 'required',
-                'images' => 'required|array|min:2', // يجب رفع صورتين على الأقل
+                'images' => 'required', // يجب رفع صورتين على الأقل
                 'images.*' => 'mimes:jpeg,jpg,png,gif,webp|required',
             ];
             $messages = [
@@ -57,8 +58,6 @@ class ProperityController extends Controller
                 'city.required' => 'من فضلك ادخل المدينة',
                 'country.required' => 'من فضلك ادخل الدولة',
                 'images.required' => 'من فضلك اختر صورة للعقار',
-                'images.array' => 'يجب اختيار صور متعددة للعقار',
-                'images.min' => 'يجب رفع صورتين على الأقل',
                 'images.*.required' => 'من فضلك اختر صورة بشكل صحيح',
                 'images.*.mimes' => 'يجب أن تكون الصورة بصيغة jpeg, jpg, png, webp,gif فقط',
             ];
@@ -74,7 +73,8 @@ class ProperityController extends Controller
             $properity = new Properity();
             $properity->user_id = Auth::user()->id;
             $properity->title = $data['title'];
-            $properity->slug = $this->CustomeSlug($data['title']);
+            // $properity->slug = $this->CustomeSlug($data['title']);
+            $properity->slug = Str::slug($data['title']);
             $properity->description = $data['description'];
             $properity->type = $data['type'];
             $properity->category = $data['category'];
@@ -144,7 +144,7 @@ class ProperityController extends Controller
             DB::beginTransaction();
 
             $property->title = $data['title'];
-            $property->slug = $this->CustomeSlug($data['title']);
+            $property->slug = Str::slug($data['title']);
             $property->description = $data['description'];
             $property->type = $data['type'];
             $property->category = $data['category'];
@@ -176,7 +176,7 @@ class ProperityController extends Controller
     ########### End Update Properity ############
 
     ############ Start Delete Properity ############
-    public function delete(Request $request,$id)
+    public function delete(Request $request, $id)
     {
 
         $property = Properity::find($id);
@@ -192,7 +192,6 @@ class ProperityController extends Controller
         $property->ProperityImages()->delete();
         $property->delete();
         return $this->success_message('تم حذف العقار بنجاح');
-
     }
     ########### End Delete Properity ############
 
@@ -221,7 +220,8 @@ class ProperityController extends Controller
 
     ########### Delete Properity Image
 
-    public function deletePropertyImage(Request $request, $id){
+    public function deletePropertyImage(Request $request, $id)
+    {
         $image = ProperityImage::find($id);
         $path = public_path('assets/uploads/properities/' . $image->image);
         if (file_exists($path)) {
@@ -230,6 +230,4 @@ class ProperityController extends Controller
         $image->delete();
         return $this->success_message('تم حذف الصورة بنجاح');
     }
-
-
 }

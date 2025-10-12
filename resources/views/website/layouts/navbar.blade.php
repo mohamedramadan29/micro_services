@@ -57,12 +57,13 @@
                                                 </li>
                                                 <hr>
                                             @empty
-                                                <li><a class="dropdown-item"> لا يوجد لديك رسائل في الوقت
-                                                        الحالي </a></li>
+                                                <li><a class="dropdown-item" href="{{ url('chats') }}"> عرض جميع
+                                                        المحادثات </a></li>
                                                 <hr>
                                             @endforelse
                                         @else
-                                            <li><a class="dropdown-item"> لا يوجد لديك رسائل في الوقت الحالي </a>
+                                            <li><a class="dropdown-item" href="{{ url('chats') }}"> عرض جميع المحادثات
+                                                </a>
                                             </li>
                                             <hr>
                                         @endif
@@ -154,8 +155,8 @@
                                         </li>
                                         <li><a class="dropdown-item" href="{{ url('balance') }}"> الرصيد <i
                                                     class="bi bi-credit-card"></i> </a></li>
-                                        <li><a class="dropdown-item" href="{{ url('my/products/purches') }}"> مشتريات المنتجات  <i
-                                                    class="bi bi-cart-check-fill"></i> </a></li>
+                                        <li><a class="dropdown-item" href="{{ url('my/products/purches') }}"> مشتريات
+                                                المنتجات <i class="bi bi-cart-check-fill"></i> </a></li>
                                         <li><a class="dropdown-item" href="{{ url('my/project/index') }}"> المشاريع <i
                                                     class="bi bi-cast"></i></a></li>
 
@@ -171,11 +172,11 @@
                                                 <i class="bi bi-building"></i> </a></li>
 
                                         <li><a class="dropdown-item" href="{{ url('my/property/maintain/index') }}">
-                                               خدمات صيانة العقارات  <i class="bi bi-database-fill"></i> </a></li>
+                                                خدمات صيانة العقارات <i class="bi bi-database-fill"></i> </a></li>
 
                                         <li><a class="dropdown-item" href="{{ url('my/jobs') }}">
                                                 وظائفي <i class="bi bi-database-fill"></i> </a></li>
-                                         
+
                                         <li><a class="dropdown-item" href="{{ url('chats') }}"> المحادثات <i
                                                     class="bi bi-chat-dots-fill"></i></a>
                                         </li>
@@ -231,12 +232,13 @@
                                                 </li>
                                                 <hr>
                                             @empty
-                                                <li><a class="dropdown-item"> لا يوجد لديك رسائل في الوقت
-                                                        الحالي </a></li>
+                                                <li><a class="dropdown-item" href="{{ url('chats') }}"> عرض جميع
+                                                        المحادثات </a></li>
                                                 <hr>
                                             @endforelse
                                         @else
-                                            <li><a class="dropdown-item"> لا يوجد لديك رسائل في الوقت الحالي </a>
+                                            <li><a class="dropdown-item" href="{{ url('chats') }}"> عرض جميع
+                                                    المحادثات </a>
                                             </li>
                                             <hr>
                                         @endif
@@ -407,6 +409,8 @@
                                     href="{{ url('employees') }}"> الموظفين </a></li>
                             <li class="{{ request()->is('properties/maintain') ? 'active' : '' }}"><a
                                     href="{{ url('properties/maintain') }}"> خدمات الصيانة </a></li>
+                            <li class="{{ request()->is('packages') ? 'active' : '' }}"><a
+                                    href="{{ url('packages') }}"> Vip خطط   </a></li>
                             @if (\Illuminate\Support\Facades\Auth::check())
                                 <li><a href="{{ url('service/add') }}"> اضافة خدمة </a></li>
                             @endif

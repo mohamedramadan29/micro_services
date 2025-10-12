@@ -29,6 +29,7 @@ class User extends Authenticatable
         'account_type',
         'rate',
         'status',
+        'block_status',
         'job_title'
     ];
 

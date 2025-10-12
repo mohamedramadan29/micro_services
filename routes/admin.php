@@ -18,6 +18,7 @@ use \App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ProperityController;
 use \App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\BlogCategoryController;
+use App\Http\Controllers\admin\PackageController;
 use App\Http\Controllers\admin\WithdrawRequestController;
 use App\Http\Controllers\admin\ProperityMaintainController;
 use App\Http\Controllers\admin\PublicCoursesPageController;
@@ -49,6 +50,7 @@ Route::group(['prefix' => 'admin'], function () {
         });
         Route::controller(UserController::class)->group(function () {
             Route::get('users', 'index');
+            Route::post('block_status/{id}', 'blockStatus');
         });
 
         Route::controller(CategoryController::class)->group(function () {
@@ -197,6 +199,18 @@ Route::group(['prefix' => 'admin'], function () {
         });
 
         ################### End Public Courses ##################
+
+        ################### Start Package Controller ################
+        Route::controller(PackageController::class)->group(function () {
+            Route::get('packages', 'index');
+            Route::get('package/add', 'create');
+            Route::post('package/store', 'store');
+            Route::get('package/edit/{id}', 'edit');
+            Route::post('package/update/{id}', 'update');
+            Route::post('package/delete/{id}', 'delete');
+            Route::get('package/subscribes/{id}','showSubscribe');
+        });
+        ################## End Package Controller ###################
 
     });
 });
