@@ -140,7 +140,10 @@ Route::group(
             Route::post('product_order', 'store');
             Route::get('/product/payment/success', 'paymentSuccess')->name('product.order.success');
             Route::get('/product/payment/cancel', 'PaymentCancel')->name('product.order.cancel');
+            Route::get('/download/product/{order}', 'downloadProduct')->name('download.product');
         });
+
+
 
         ////////////////// Start Projects Controller
         ///
@@ -309,8 +312,8 @@ Route::group(
         ######################### Start Package Controller #############################
 
         Route::controller(PackageController::class)->group(function () {
-            Route::get('packages','index')->name('packages.index');
-            Route::post('package/subscribe/{id}','subscribePlan')->name('subscribe.plan');
+            Route::get('packages', 'index')->name('packages.index');
+            Route::post('package/subscribe/{id}', 'subscribePlan')->name('subscribe.plan');
             Route::get('/package/payment/success', 'paymentSuccess')->name('package.order.success');
             Route::get('/package/payment/cancel', 'PaymentCancel')->name('package.order.cancel');
         });

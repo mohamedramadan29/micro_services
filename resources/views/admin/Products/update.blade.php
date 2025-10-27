@@ -20,7 +20,7 @@
                     @endphp
                 @endforeach
             @endif
-            <form method="post" action="{{ url('admin/product/update/' . $product['slug']) }}" enctype="multipart/form-data">
+            <form method="post" action="{{ url('admin/product/update/' . $product->slug) }}" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
 
@@ -35,7 +35,7 @@
                                         <div class="mb-3">
                                             <label for="name" class="form-label"> اسم المنتج </label>
                                             <input required type="text" id="name" name="name"
-                                                class="form-control" placeholder="" value="{{ $product['name'] }}">
+                                                class="form-control" placeholder="" value="{{ $product->name }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-12">
@@ -43,7 +43,18 @@
                                             <label for="name" class="form-label"> اضف اسم خاص للرابط ( اختياري )
                                             </label>
                                             <input required type="text" id="slug" name="slug"
-                                                class="form-control" placeholder="" value="{{ $product['slug'] }}">
+                                                class="form-control" placeholder="" value="{{ $product->slug }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="type" class="form-label"> نوع المنتج </label>
+                                            <select class="form-control" id="type" name="type" required>
+                                                <option value=""> -- حدد نوع المنتج --</option>
+                                                <option value="physical" {{ $product->type == 'physical' ? 'selected' : '' }}> فيزيكال (مادي) </option>
+                                                <option value="digital" {{ $product->type == 'digital' ? 'selected' : '' }}> رقمي (رقمي) </option>
+                                            </select>
                                         </div>
                                     </div>
 
@@ -53,10 +64,10 @@
                                             <select class="form-control" id="status" data-choices data-choices-groups
                                                 data-placeholder="Select Categories" name="status">
                                                 <option value=""> -- حدد حالة المنتج --</option>
-                                                <option @if ($product['status'] == 1) selected @endif value="1">
+                                                <option @if ($product->status == 1) selected @endif value="1">
                                                     مفعل
                                                 </option>
-                                                <option @if ($product['status'] == 0) selected @endif value="0">
+                                                <option @if ($product->status == 0) selected @endif value="0">
                                                     ارشيف
                                                 </option>
                                             </select>
@@ -67,14 +78,14 @@
                                             <label for="short_description" class="form-label"> وصف مختصر عن
                                                 المنتج </label>
                                             <textarea class="form-control bg-light-subtle" id="short_description" rows="5" placeholder=""
-                                                name="short_description">{{ $product['short_description'] }}</textarea>
+                                                name="short_description">{{ $product->short_description }}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label for="description" class="form-label"> وصف المنتج </label>
                                             <textarea required class="form-control bg-light-subtle tinymce" id="description" rows="7" placeholder=""
-                                                name="description">{{ $product['description'] }}</textarea>
+                                                name="description">{{ $product->description }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -95,7 +106,7 @@
                                                 accept="image/*">
                                             <br>
                                             <img width="80px" class="img-thumbnail img-prod"
-                                                src="{{ asset('assets/uploads/product_images/' . $product['image']) }}"
+                                                src="{{ asset('assets/uploads/product_images/' . $product->image) }}"
                                                 alt="">
                                         </div>
                                     </div>
@@ -117,6 +128,32 @@
                                 </div>
                             </div>
                         </div>
+
+                        {{-- قسم الملف الرقمي - يظهر فقط إذا كان النوع رقمي --}}
+                        <div class="card" id="digital-file-section" style="display: none;">
+                            <div class="card-header">
+                                <h4 class="card-title"> ملف المنتج الرقمي </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label for="digital_file" class="form-label"> رفع الملف الرقمي (مثل PDF، ZIP، إلخ) </label>
+                                            <input type="file" id="digital_file" name="digital_file"
+                                                class="form-control" accept=".pdf,.zip,.rar,.exe,.mp3,.mp4">
+                                            <small class="form-text text-muted">يجب أن يكون الملف رقميًا قابلًا للتنزيل.</small>
+                                            @if ($product->digital_file)
+                                                <br>
+                                                <strong>الملف الحالي:</strong> <a href="{{ asset('assets/uploads/digital_products/' . $product->digital_file) }}" target="_blank" class="btn btn-info btn-sm">عرض/تنزيل</a>
+                                                <br>
+                                                <small class="form-text text-muted">سيتم استبدال هذا الملف إذا قمت برفع ملف جديد.</small>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="card" id="simple-product-fields">
                             <div class="card-header">
                                 <h4 class="card-title"> تفاصيل السعر </h4>
@@ -128,7 +165,7 @@
                                         <div class="input-group mb-3">
                                             <span class="input-group-text fs-20"><i class='bx bx-dollar'></i></span>
                                             <input step="0.01" type="number" id="price" name="price"
-                                                class="form-control" placeholder="000" value="{{ $product['price'] }}">
+                                                class="form-control" placeholder="000" value="{{ $product->price }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -137,7 +174,7 @@
                                             <span class="input-group-text fs-20"><i class='bx bx-dollar'></i></span>
                                             <input step="0.01" type="number" id="discount" name="discount"
                                                 class="form-control" placeholder="000"
-                                                value="{{ $product['discount'] }}">
+                                                value="{{ $product->discount }}">
                                         </div>
                                     </div>
 
@@ -157,7 +194,7 @@
                                         <div class="mb-3">
                                             <label for="meta_title" class="form-label"> العنوان </label>
                                             <input type="text" id="meta_title" name="meta_title" class="form-control"
-                                                placeholder="" value="{{ $product['meta_title'] }}">
+                                                placeholder="" value="{{ $product->meta_title }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -165,7 +202,7 @@
                                             <label for="meta_keywords" class="form-label"> الكلمات المفتاحية </label>
                                             <input type="text" id="meta_keywords" name="meta_keywords"
                                                 class="form-control" placeholder=""
-                                                value="{{ $product['meta_keywords'] }}">
+                                                value="{{ $product->meta_keywords }}">
                                         </div>
                                     </div>
 
@@ -173,7 +210,7 @@
                                         <div class="mb-3">
                                             <label for="meta_description" class="form-label"> الوصف </label>
                                             <textarea class="form-control bg-light-subtle" id="meta_description" rows="7" placeholder=""
-                                                name="meta_description">{{ $product['meta_description'] }}</textarea>
+                                                name="meta_description">{{ $product->meta_description }}</textarea>
                                         </div>
                                     </div>
 
@@ -202,7 +239,7 @@
                 <div class="card-body">
                     <form action="" method="post" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" id="product_id" value="{{ $product['id'] }}">
+                        <input type="hidden" id="product_id" value="{{ $product->id }}">
                         <input type="file" id="videoUpload" />
                         <button type="button" onclick="uploadVideo(event)" class="btn btn-primary">
                             رفع الفيديو <i class="fa fa-upload"></i>
@@ -212,11 +249,11 @@
                     </form>
                     <br>
                     <!-- عرض الفيديو -->
-                    @if (!empty($product['video']))
+                    @if (!empty($product->video))
                         <div class="video-container" style="margin-top: 20px;">
                             <video controls width="400"
                                 style="border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
-                                <source src="{{ asset('assets/uploads/product_videos/' . $product['video']) }}"
+                                <source src="{{ asset('assets/uploads/product_videos/' . $product->video) }}"
                                     type="video/mp4">
                                 <!-- نص بديل إذا كان المتصفح لا يدعم الفيديو -->
                                 Your browser does not support the video tag.
@@ -243,10 +280,10 @@
                                 @foreach ($gallaries as $gallary)
                                     <tr>
                                         <td><img width="80px" class="img-thumbnail img-prod"
-                                                src="{{ asset('assets/uploads/product_gallery/' . $gallary['image']) }}"
+                                                src="{{ asset('assets/uploads/product_gallery/' . $gallary->image) }}"
                                                 alt=""></td>
                                         <td>
-                                            <button data-target="#delete_gallary_{{ $gallary['id'] }}"
+                                            <button data-target="#delete_gallary_{{ $gallary->id }}"
                                                 data-toggle="modal" class="btn btn-danger btn-sm"> حذف <i
                                                     class="fa fa-trash"></i>
                                             </button>
@@ -270,6 +307,22 @@
 @section('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        $(document).ready(function() {
+            // إظهار/إخفاء قسم الملف الرقمي بناءً على نوع المنتج
+            $('#type').change(function() {
+                if ($(this).val() === 'digital') {
+                    $('#digital-file-section').show();
+                } else {
+                    $('#digital-file-section').hide();
+                }
+            });
+
+            // تحميل القيمة الحالية عند تحميل الصفحة
+            if ($('#type').val() === 'digital') {
+                $('#digital-file-section').show();
+            }
+        });
+
         tinymce.init({
             selector: '.tinymce',
             height: 300,

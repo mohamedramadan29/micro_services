@@ -69,7 +69,7 @@
             <div class="row align-items-center">
 
                 <div class="col-lg-12 col-md-12 text-center">
-                    <p class="mb-0"> {{ __('public.copy_right') }} </p>
+                    <p class="mb-0"> جميع الحقوق محفوظة @ {{ date('Y') }} لدي نفذها </p>
                 </div>
 
             </div>

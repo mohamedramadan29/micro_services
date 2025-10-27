@@ -75,14 +75,11 @@
                 فريقنا موجود لمساعدتك في اختيار الباقة المناسبة والإجابة على جميع استفساراتك
             </p>
             <div class="contact-buttons">
-                <a href="tel:+9647700000000" class="contact-btn primary">
+                <a href="https://wa.me/+963997610723" class="contact-btn primary">
                     <i class="bi bi-telephone-fill"></i>
                     <span>اتصل بنا</span>
                 </a>
-                <a href="mailto:info@sehaty.iq" class="contact-btn secondary">
-                    <i class="bi bi-envelope-fill"></i>
-                    <span>راسلنا</span>
-                </a>
+
             </div>
         </div>
     </div>
@@ -108,8 +105,8 @@
 
 <style>
     :root {
-        --primary-color: #0EA5E9;
-        --primary-dark: #0284C7;
+        --primary-color: #3FB699;
+        --primary-dark: #3FB699;
         --success-color: #10B981;
         --danger-color: #EF4444;
         --warning-color: #F59E0B;
@@ -541,4 +538,18 @@
             justify-content: center;
         }
     }
+    footer.skin-dark-footer ul.footer-bottom-social li a {
+    font-size: 17px;
+    background: #3fb697;
+    color: #fff !important;
+    text-align: center;
+    width: 40px;
+    height: 40px;
+    display: inline;
+    line-height: 136px;
+    /* text-align: center; */
+    border-radius: 10px 0;
+    padding: 8px 0px;
+    margin: 5px;
+}
 </style>

@@ -37,7 +37,7 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"> مشتريات المنتجات  </li>
+                                        <li class="breadcrumb-item active" aria-current="page"> مشتريات المنتجات </li>
                                     </ol>
                                 </nav>
                             </div>
@@ -61,32 +61,45 @@
                                         <div class="row">
                                             <!-- Single Item -->
                                             @if ($purches->count() > 0)
-                                            <div class="table-responsive">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr style="border-color: #eaeff5">
-                                                        <th style="border-color: #eaeff5">المنتج</th>
-                                                        <th style="border-color: #eaeff5">السعر</th>
-                                                        <th style="border-color: #eaeff5"> الدولة  </th>
-                                                        <th style="border-color: #eaeff5"> المدينة   </th>
-                                                        <th style="border-color: #eaeff5"> العنوان   </th>
-                                                        <th style="border-color: #eaeff5"> الحالة</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($purches as $purch)
-                                                        <tr>
-                                                            <td>{{ $purch->product_name }}</td>
-                                                            <td>{{ $purch->price }} $</td>
-                                                            <td>{{ $purch->country }}</td>
-                                                            <td>{{ $purch->city }}</td>
-                                                            <td>{{ $purch->address }}</td>
-                                                            <td>{{ $purch->order_status }}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                            </div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr style="border-color: #eaeff5">
+                                                                <th style="border-color: #eaeff5">المنتج</th>
+                                                                <th style="border-color: #eaeff5">السعر</th>
+                                                                <th style="border-color: #eaeff5"> الدولة </th>
+                                                                <th style="border-color: #eaeff5"> المدينة </th>
+                                                                <th style="border-color: #eaeff5"> العنوان </th>
+                                                                <th style="border-color: #eaeff5"> الحالة</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($purches as $purch)
+                                                                <tr>
+                                                                    <td>{{ $purch->product_name }}</td>
+                                                                    <td>{{ $purch->price }} $</td>
+                                                                    <td>{{ $purch->country }}</td>
+                                                                    <td>{{ $purch->city }}</td>
+                                                                    <td>{{ $purch->address }}</td>
+                                                                    <td>
+
+                                                                        @if ($purch->product->type == 'digital' && $purch->product->digital_file)
+                                                                            <a href="{{ route('download.product', $purch->id) }}"
+                                                                                class="btn btn-success">
+                                                                                <i class="bi bi-download"></i> تنزيل الملف
+                                                                                الرقمي
+                                                                            </a>
+                                                                        @else
+                                                                            {{ $purch->order_status }}
+                                                                        @endif
+
+
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             @else
                                                 <div class="alert alert-info">
                                                     لا يوجد لديك مشتريات في الوقت الحالي

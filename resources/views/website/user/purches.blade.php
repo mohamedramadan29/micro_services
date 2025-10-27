@@ -54,7 +54,7 @@
                             <div class="_dashboard_content">
                                 <div class="_dashboard_content_header">
                                     <div class="_dashboard__header_flex">
-                                        <h4><i class="fa fa-user mr-1"></i> مشترياتي </h4>
+                                        <h4><i class="fa fa-user mr-1"></i> مشترياتي sdsdsd</h4>
                                     </div>
                                 </div>
                                 <div class="_dashboard_content">
@@ -78,7 +78,7 @@
                                                                         <li><span>  {{$purche['service_price']}} $   <i
                                                                                     class="ti-credit-card"></i> </span>
                                                                         </li>
-                                                                        <li><span><i class="ti-location-pin"></i> {{$purche['status']}} </span>
+                                                                        <li><span><i class="ti-location-pin"></i> {{$purche['status']}} wsdsdsd. sdsd </span>
                                                                         </li>
                                                                         <li><span><i class="ti-timer"></i> {{$purche['created_at']->diffForHumans()}} </span>
                                                                         </li>

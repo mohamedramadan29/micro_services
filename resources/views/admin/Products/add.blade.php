@@ -15,7 +15,7 @@
             @endif
             @if ($errors->any())
                 @foreach ($errors->all() as $error)
-                {{ $error }}
+                    {{ $error }}
                     @php
 
                         toastify()->error($error);
@@ -49,6 +49,18 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="type" class="form-label"> نوع المنتج </label>
+                                            <select class="form-control" id="type" name="type" required>
+                                                <option value=""> -- حدد نوع المنتج --</option>
+                                                <option value="physical" {{ old('type') == 'physical' ? 'selected' : '' }}>
+                                                    فيزيكال (مادي) </option>
+                                                <option value="digital" {{ old('type') == 'digital' ? 'selected' : '' }}>
+                                                    رقمي (رقمي) </option>
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <div class="col-lg-6">
                                         <div class="mb-3">
@@ -73,7 +85,7 @@
                                         <div class="mb-3">
                                             {{-- tinymce --}}
                                             <label for="description" class="form-label"> وصف المنتج </label>
-                                            <textarea required class="form-control bg-light-subtle " id="description" rows="7" placeholder=""
+                                            <textarea required class="form-control bg-light-subtle" id="description" rows="7" placeholder=""
                                                 name="description">{{ old('description') }}</textarea>
                                         </div>
                                     </div>
@@ -91,8 +103,8 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="image" class="form-label"> صورة المنتج </label>
-                                            <input type="file" id="image" name="image"
-                                                class="form-control" accept="image/*">
+                                            <input type="file" id="image" name="image" class="form-control"
+                                                accept="image/*">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -114,6 +126,28 @@
                                 </div>
                             </div>
                         </div>
+
+                        {{-- قسم الملف الرقمي - يظهر فقط إذا كان النوع رقمي --}}
+                        <div class="card" id="digital-file-section" style="display: none;">
+                            <div class="card-header">
+                                <h4 class="card-title"> ملف المنتج الرقمي </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label for="digital_file" class="form-label"> رفع الملف الرقمي (مثل PDF، ZIP،
+                                                إلخ) </label>
+                                            <input type="file" id="digital_file" name="digital_file"
+                                                class="form-control" accept=".pdf,.zip,.rar,.exe,.mp3,.mp4">
+                                            <small class="form-text text-muted">يجب أن يكون الملف رقميًا قابلًا
+                                                للتنزيل.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="card" id="simple-product-fields">
                             <div class="card-header">
                                 <h4 class="card-title"> تفاصيل السعر </h4>
@@ -202,6 +236,22 @@
 @section('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        $(document).ready(function() {
+            // إظهار/إخفاء قسم الملف الرقمي بناءً على نوع المنتج
+            $('#type').change(function() {
+                if ($(this).val() === 'digital') {
+                    $('#digital-file-section').show();
+                } else {
+                    $('#digital-file-section').hide();
+                }
+            });
+
+            // تحميل القيمة الحالية عند تحميل الصفحة
+            if ($('#type').val() === 'digital') {
+                $('#digital-file-section').show();
+            }
+        });
+
         tinymce.init({
             selector: '.tinymce',
             height: 300,

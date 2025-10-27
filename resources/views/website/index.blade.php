@@ -8,9 +8,18 @@
 @section('content')
     <!-- ============================ Hero Banner  Start================================== -->
     <div class="hero-banner full bg-cover center"
-        style="background:#00000057 url({{ asset('assets/website/img/nafizha.jpg') }}) no-repeat;" data-overlay="7">
+        style="background:#00000057 url({{ asset('assets/website/img/nafizha2.jpg') }}) no-repeat;" data-overlay="7">
         <div class="container">
-            <h1> {{ __('index.index_h1') }} </h1>
+            <h1 style="line-height: 2">
+                <span> نفّذها… وخلّي فكرتك واقع بسهولة منصة عربية تربط أصحاب  </span>
+                <br>
+                <span> المشاريع بأفضل المستقلين لتنفيذ أعمالهم باحتراف وسرعة </span>
+                <br>
+                <span> تصميم ، البرمجة، التسويق، الكتابة والمزيد </span>
+
+
+
+            </h1>
             <p class="lead"> دليل شامل لاختيار وتوظيف أفضل المستقلين لعملك </p>
             {{-- <button data-bs-toggle="modal" data-bs-target="#FreeConsultModel" class="btn btn-primary free_consult_button"><i
                     class="bi bi-patch-question-fill"></i> احصل علي استشارة مجانية </button> --}}
@@ -179,7 +188,7 @@
                                             <div class="ser_title098">
                                                 <h4 class="_ser_title" style="height: 40px;overflow:hidden"><a
                                                         href="{{ url('service/' . $serv['id'] . '-' . $serv['slug']) }}">
-                                                        {{ Str::limit($serv['name'], 15, '...')  }} </a>
+                                                        {{ Str::limit($serv['name'], 15, '...') }} </a>
                                                 </h4>
                                             </div>
                                             <div class="_oi0po price_section"><i class="fa fa-bolt"></i>
@@ -193,7 +202,7 @@
                             @endforeach
                         </div>
                         <!-- Add Pagination (optional) -->
-                    <div class="swiper-pagination" style="margin-top: 15px"></div>
+                        <div class="swiper-pagination" style="margin-top: 15px"></div>
                     </div>
                 </div>
             </div>
@@ -229,25 +238,29 @@
             });
         </script>
         <!-- Inline CSS for basic styling -->
-       <!-- Inline CSS for basic styling -->
-    <style>
-        .services-slider .swiper-slide {
-            display: flex;
-            justify-content: center;
-        }
-        .services-slider .ser_110 {
-            max-width: 300px; /* Adjust as needed */
-            width: 100%;
-        }
-        .swiper-pagination-bullet {
-            background: #333;
-            opacity: 0.5;
-        }
-        .swiper-pagination-bullet-active {
-            background: #3FB698;
-            opacity: 1;
-        }
-    </style>
+        <!-- Inline CSS for basic styling -->
+        <style>
+            .services-slider .swiper-slide {
+                display: flex;
+                justify-content: center;
+            }
+
+            .services-slider .ser_110 {
+                max-width: 300px;
+                /* Adjust as needed */
+                width: 100%;
+            }
+
+            .swiper-pagination-bullet {
+                background: #333;
+                opacity: 0.5;
+            }
+
+            .swiper-pagination-bullet-active {
+                background: #3FB698;
+                opacity: 1;
+            }
+        </style>
     </section>
 
 

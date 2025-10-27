@@ -16,7 +16,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#"> الرئيسية </a></li>
-                            <li class="breadcrumb-item"><a href="#"> المنتجات  </a></li>
+                            <li class="breadcrumb-item"><a href="#"> المنتجات </a></li>
                             <li class="breadcrumb-item active" aria-current="page"> {{ $product['name'] }} </li>
                         </ol>
                     </nav>
@@ -85,7 +85,6 @@
                         </div>
                         <div class="_jb_summary_body">
                             <div class="_view_dis_908 d-flex">
-
                                 <button type="button" class="btn global_button" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal">
                                     شراء المنتج <i class="bi bi-bag"></i>
@@ -103,12 +102,15 @@
                                         </div>
                                         <div class="modal-body">
                                             <ul>
+                                                @if ($product->type == 'physical')
+                                                    <li style="color: red"> تترواح مدة الشحن بين 10 - 15 يوم من تاريخ الطلب
+                                                    </li>
+                                                @else
+                                                    <li style="color: green"> سيتم إرسال رابط التنزيل فورًا بعد الدفع عبر
+                                                        الإيميل وحسابك </li>
+                                                @endif
                                                 <li> منصة نفذها تضمن حقوقك بنسبة 100% .</li>
-                                                <li> لا تتردد ابداً في التواصل معنا إذا احتجت أي مساعدة وسنسعد
-                                                    بخدمتك.
-                                                </li>
-                                                <li style="color: red"> تترواح مدة الشحن بين 10 - 15 يوم من تاريخ الطلب
-                                                </li>
+                                                <li> لا تتردد ابداً في التواصل معنا إذا احتجت أي مساعدة وسنسعد بخدمتك. </li>
                                             </ul>
                                         </div>
                                         <div class="modal-footer">
@@ -130,21 +132,27 @@
                                                         <input style="height: 45px" class="form-control" name="email"
                                                             required value="{{ Auth::user()->email }}">
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label> الدولة </label>
-                                                        <input style="height: 45px" class="form-control" name="country"
-                                                            required>
+
+                                                    {{-- حقول الشحن - مخفية للرقمي --}}
+                                                    <div id="shipping-fields"
+                                                        style="{{ $product->type == 'digital' ? 'display: none;' : '' }}">
+                                                        <div class="form-group">
+                                                            <label> الدولة </label>
+                                                            <input style="height: 45px" class="form-control" name="country"
+                                                                required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label> المدينة </label>
+                                                            <input style="height: 45px" class="form-control" name="city"
+                                                                required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label> العنوان بشكل تفصيلي </label>
+                                                            <input style="height: 45px" class="form-control"
+                                                                name="address" required>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label> المدينة </label>
-                                                        <input style="height: 45px" class="form-control" name="city"
-                                                            required>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label> العنوان بشكل تفصيلي </label>
-                                                        <input style="height: 45px" class="form-control" name="address"
-                                                            required>
-                                                    </div>
+
                                                     <div class="form-group">
                                                         <label> ملاحظات اضافية </label>
                                                         <textarea style="height: 90px" name="note" id="" class="form-control"></textarea>
@@ -156,22 +164,29 @@
                                                     <input type="hidden" name="product_price"
                                                         value="{{ $product['price'] }}">
                                                     <input type="hidden" name="qty" value="1">
+                                                    <input type="hidden" name="product_type"
+                                                        value="{{ $product->type }}"> {{-- إضافة النوع --}}
                                                     @csrf
                                                     <button type="submit" class="btn global_button"> شراء المنتج <i
                                                             class="bi bi-bag"></i></button>
                                                 </form>
                                             @else
                                                 <a href="{{ url('login') }}" type="button" class="btn btn-primary">
-                                                    سجل
-                                                    دخولك الان لتكملة الشراء </a>
+                                                    سجل دخولك الان لتكملة الشراء </a>
                                             @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
+
+                        <script>
+                            // إذا غير المستخدم المنتج (إذا كان dynamic)، لكن هنا ثابت
+                            const productType = '{{ $product->type }}';
+                            if (productType === 'digital') {
+                                document.querySelectorAll('#shipping-fields input').forEach(input => input.removeAttribute('required'));
+                            }
+                        </script>
                     </div>
 
                     <div class="_jb_summary light_box p-4">

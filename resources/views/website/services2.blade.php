@@ -125,7 +125,8 @@
                                             <div class="ser_title098">
                                                 <h4 class="_ser_title"><a
                                                         href="{{ url('service/' . $serv['id'] . '-' . $serv['slug']) }}">
-                                                        {{ $serv['name'] }} </a>
+
+                                                        {{ Str::limit($serv['name'],35,'...')  }} </a>
                                                 </h4>
                                             </div>
                                             <div class="_oi0po price_section"><i class="fa fa-bolt"></i>
