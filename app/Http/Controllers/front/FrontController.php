@@ -11,6 +11,7 @@ use App\Models\admin\SubCategory;
 use App\Http\Traits\Message_Trait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\front\Course;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -26,10 +27,11 @@ class FrontController extends Controller
         $main_categories = Category::where('status', 1)->where('home_page', 1)->limit(6)->get();
         $categories = Category::where('status', 1)->get();
         $sub_categories = SubCategory::where('status', 1)->where('home_page', 1)->limit(8)->get();
-        $services = Service::where('status',1)->latest()->limit(8)->get();
+        $services = Service::where('status',1)->latest()->limit(4)->get();
+        $courses = Course::with('user')->where('status',1)->latest()->limit(8)->get();
         //dd($services);
         //dd($main_categories);
-        return view('website.index', compact('main_categories', 'sub_categories','categories','services'));
+        return view('website.index', compact('main_categories', 'sub_categories','categories','services','courses'));
     }
 
     public function services(Request $request)

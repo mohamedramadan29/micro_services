@@ -11,14 +11,11 @@
         style="background:#00000057 url({{ asset('assets/website/img/nafizha2.jpg') }}) no-repeat;" data-overlay="7">
         <div class="container">
             <h1 style="line-height: 2">
-                <span> نفّذها… وخلّي فكرتك واقع بسهولة منصة عربية تربط أصحاب  </span>
+                <span> نفّذها… وخلّي فكرتك واقع بسهولة منصة عربية تربط أصحاب </span>
                 <br>
                 <span> المشاريع بأفضل المستقلين لتنفيذ أعمالهم باحتراف وسرعة </span>
                 <br>
                 <span> تصميم ، البرمجة، التسويق، الكتابة والمزيد </span>
-
-
-
             </h1>
             <p class="lead"> دليل شامل لاختيار وتوظيف أفضل المستقلين لعملك </p>
             {{-- <button data-bs-toggle="modal" data-bs-target="#FreeConsultModel" class="btn btn-primary free_consult_button"><i
@@ -39,6 +36,9 @@
                     </div>
                 </div>
             </form>
+            <br>
+            <a href="{{ url('service/add') }}" style="padding:12px 25px" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                اضف خدمتك </a>
         </div>
     </div>
     <!-- ============================ Hero Banner End ================================== -->
@@ -265,6 +265,39 @@
 
 
     <!-- ############################# End Last Services ################# -->
+
+    <!--############################# Start Latest Courses ############### -->
+
+    <section class="latest-courses">
+        <div class="header-courses">
+            <h2>أحدث الكورسات</h2>
+            <a href="{{ url('courses') }}" class="enroll-btn"> جميع الكورسات </a>
+        </div>
+
+        <div class="courses-container">
+            @foreach ($courses as $course)
+                <div class="course-card">
+                    <img src="" alt="">
+                    @if ($course['User']['image'] == '')
+                        <img class="instructor-img" src="{{ asset('assets/uploads/user.png') }}" alt="صورة المحاضر">
+                    @else
+                        <img class="instructor-img"
+                            src="{{ asset('assets/uploads/users_image/' . $course['User']['image']) }}"
+                            alt="صورة المحاضر">
+                    @endif
+                    <h3 class="course-title"> {{ Str::limit($course['title'], 30, '...') }} </h3>
+                    <p class="course-summary"> {{ Str::limit($course['desc'], 100, '...') }} </p>
+                    <div class="rating">★★★★★</div>
+                    <p class="course-price">السعر: {{ number_format($course['price'], 2) }} دولار </p>
+                    <a class="enroll-btn" href="{{ url('course/' . $course['id'] . '-' . $course['slug']) }}"> تفاصيل
+                        الكورس </a>
+                </div>
+            @endforeach
+
+        </div>
+    </section>
+
+    <!-- ########################### End Latest Courses ###########################-->
 
     <!-- =========================== Start Categories ========================================== -->
     <section class="min-sec categories" dir="rtl">

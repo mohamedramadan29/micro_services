@@ -196,7 +196,7 @@
                             </ul>
                         </div>
                     @endif
-                    <div class="nav-menus-wrapper">
+                    <div class="nav-menus-wrapper d-flex">
                         @if (\Illuminate\Support\Facades\Auth::user())
                             <ul class="nav-menu nav-menu-social large_desktop_notification">
                                 <!----------------- Message Alerts --------------->
@@ -395,7 +395,7 @@
                                 <a href="{{ url('courses') }}"> {{ __('public.courses') }} </a>
                             </li>
                             <li class="{{ request()->is('products') ? 'active' : '' }}">
-                                <a href="{{ url('products') }}"> {{ __('public.products') }} </a>
+                                <a href="{{ url('products') }}"> المنتجات </a>
                             </li>
                             <li class="{{ request()->is('services') ? 'active' : '' }}">
                                 <a href="{{ url('services') }}"> {{ __('public.services') }} </a>
