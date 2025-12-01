@@ -53,7 +53,7 @@ Route::group(
             Route::get('categories', 'categories');
             Route::get('services', 'services');
             Route::get('service/{id}-{slug}', 'service_details');
-            Route::get('category/{slug}', 'sub_categories');
+            Route::get('category/service/{slug}', 'sub_categories');
             Route::get('services/{slug}', 'category_services');
             Route::match(['post', 'get'], 'forget-password', 'forget_password');
             Route::match(['post', 'get'], 'user/change-forget-password/{code}', 'change_forget_password');

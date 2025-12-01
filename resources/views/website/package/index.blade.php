@@ -17,53 +17,69 @@
 
         <!-- Pricing Cards -->
         <div class="pricing-container" dir="rtl" style="text-align: right">
-            <!-- Basic Plan -->
-            @foreach ($packages as $package)
-                <div class="pricing-card basic">
 
+            @foreach ($packagesGrouped as $category => $packages)
+                <!-- عنوان الفئة (مثلاً: تصميم المواقع - برمجة - تطبيقات موبايل ...) -->
+                <h2 style="text-align:center; margin:50px 0 30px; font-size:2rem; color:#333;">
+                    {{ $category }}
+                </h2>
 
-                    <div class="card-icon">
+                <!-- نقسم الباكدجات كل 3 في صف واحد -->
+                @foreach ($packages->chunk(3) as $threePackages)
+                    <div class="row justify-content-center" style="margin-bottom:40px;">
 
-                        <i class="bi bi-box"></i>
-                    </div>
-                    <h2 class="card-title"> {{ $package->name }} </h2>
-                    {{-- <p class="card-description">
-                        مثالية للأفراد الذين يبحثون عن الخدمات الصحية الأساسية
-                    </p> --}}
+                        @foreach ($threePackages as $package)
+                            <div class="col-lg-4 col-md-6 col-sm-12">
 
-                    <div class="pricing">
-                        <div class="price">
-                            <span id="basicPrice"> {{ number_format($package->price, 2) }} </span>
-                            <span class="currency"> دولار </span>
-                        </div>
-                    </div>
+                                <!-- الكرت بتاعك بالظبط زي ما كتبته من غير أي تغيير -->
+                                <div class="pricing-card basic">
 
-                    <ul class="features-list">
-                        @php
+                                    <div class="card-icon">
+                                        <i class="bi bi-box"></i>
+                                    </div>
 
-                            $features = explode(',', $package->description);
+                                    <h2 class="card-title"> {{ $package->name }} </h2>
 
-                        @endphp
-                        @foreach ($features as $feature)
-                            <li class="feature-item">
-                                <div class="feature-icon">
-                                    <i class="bi bi-check"></i>
+                                    <div class="pricing">
+                                        <div class="price">
+                                            <span id="basicPrice"> {{ number_format($package->price, 2) }} </span>
+                                            <span class="currency"> دولار </span>
+                                        </div>
+                                    </div>
+
+                                    <ul class="features-list">
+                                        @php
+                                            $features = explode(',', $package->description);
+                                        @endphp
+                                        @foreach ($features as $feature)
+                                            <li class="feature-item">
+                                                <div class="feature-icon">
+                                                    <i class="bi bi-check"></i>
+                                                </div>
+                                                <span class="feature-text"> {{ trim($feature) }} </span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    <form action="{{ route('subscribe.plan', $package->id) }}" method="post">
+                                        @csrf
+                                        <button class="cta-button">
+                                            <span> اشترك الان </span>
+                                            <i class="bi bi-arrow-left"></i>
+                                        </button>
+                                    </form>
+
                                 </div>
-                                <span class="feature-text"> {{ $feature }} </span>
-                            </li>
+                                <!-- نهاية الكرت الأصلي بتاعك -->
+
+                            </div>
                         @endforeach
 
-                    </ul>
+                    </div>
+                @endforeach
 
-                    <form action="{{ route('subscribe.plan',$package->id) }}" method="post">
-                        @csrf
-                        <button class="cta-button">
-                            <span> اشترك الان </span>
-                            <i class="bi bi-arrow-left"></i>
-                        </button>
-                    </form>
-
-                </div>
+                <!-- مسافة بين كل فئة واللي بعدها -->
+                <div style="margin-bottom:60px;"></div>
             @endforeach
 
         </div>
@@ -179,9 +195,9 @@
     .packages .pricing-container {
         max-width: 1200px;
         margin: 0 auto;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 2rem;
+        /* display: grid; */
+        /* /    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); */
+        /* gap: 2rem; */
         padding: 0 1rem;
     }
 
@@ -195,6 +211,7 @@
         position: relative;
         overflow: hidden;
         animation: fadeInUp 0.6s ease-out both;
+        height: 100%;
     }
 
     .packages .pricing-card:nth-child(1) {
@@ -409,6 +426,12 @@
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 95%;
+        margin: 10px;
+
     }
 
     .packages .pricing-card.basic .cta-button {
@@ -538,18 +561,19 @@
             justify-content: center;
         }
     }
+
     footer.skin-dark-footer ul.footer-bottom-social li a {
-    font-size: 17px;
-    background: #3fb697;
-    color: #fff !important;
-    text-align: center;
-    width: 40px;
-    height: 40px;
-    display: inline;
-    line-height: 136px;
-    /* text-align: center; */
-    border-radius: 10px 0;
-    padding: 8px 0px;
-    margin: 5px;
-}
+        font-size: 17px;
+        background: #3fb697;
+        color: #fff !important;
+        text-align: center;
+        width: 40px;
+        height: 40px;
+        display: inline;
+        line-height: 136px;
+        /* text-align: center; */
+        border-radius: 10px 0;
+        padding: 8px 0px;
+        margin: 5px;
+    }
 </style>

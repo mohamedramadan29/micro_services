@@ -1,14 +1,39 @@
 <!-- Start Navigation -->
-<div class="header header-transparent change-logo">
+<div class="header header-transparent change-logo" style="background-color:#f1fffc">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <nav id="navigation" class="navigation navigation-landscape">
                     <div class="nav-header">
-                        <a class="nav-brand static-logo" href="{{ url('/') }}"><img
-                                src="{{ asset('assets/website/img/logo.png') }}" class="logo" alt="" /></a>
-                        <a class="nav-brand fixed-logo" href="{{ url('/') }}"><img
-                                src="{{ asset('assets/website/img/logo.png') }}" class="logo" alt="" /></a>
+                        <a class="nav-brand static-logo" href="{{ url('/') }}" style="padding: 0 15px">
+                             <video style="width: 120px; height: auto;"
+                                src="{{ asset('assets/uploads/logo.mp4') }}"
+                                autoplay
+                                loop
+                                muted
+                                playsinline
+                                preload="auto">
+                                <!-- fallback لو المتصفح ما يدعم الفيديو -->
+
+                            </video>
+                            {{-- <img
+                                src="{{ asset('assets/website/img/logo.png') }}" class="logo" alt="" /> --}}
+                            </a>
+                        <a class="nav-brand fixed-logo" href="{{ url('/') }}" style="padding: 0 15px">
+                            {{-- <img
+                                src="{{ asset('assets/website/img/logo.png') }}" class="logo" alt="" />
+                             --}}
+                              <video style="width: 120px; height: auto;"
+                                src="{{ asset('assets/uploads/logo.mp4') }}"
+                                autoplay
+                                loop
+                                muted
+                                playsinline
+                                preload="auto">
+                                <!-- fallback لو المتصفح ما يدعم الفيديو -->
+
+                            </video>
+                            </a>
                         <div class="nav-toggle"></div>
                     </div>
                     @if (!Auth::check())

@@ -36,6 +36,7 @@ class FrontController extends Controller
 
     public function services(Request $request)
     {
+
         $query = Service::with('category', 'user', 'subcategory');
         if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
@@ -83,7 +84,7 @@ class FrontController extends Controller
         $category = Category::where('slug', $slug)->first();
         $category_id = $category['id'];
         if ($category) {
-            $sub_categories = SubCategory::where('parent_id', $category_id)->paginate(12);
+            $sub_categories = SubCategory::where('parent_id', $category_id)->where('status',1)->paginate(12);
             return view('website.sub-categories', compact('category', 'sub_categories'));
         } else {
             abort(404);
@@ -92,11 +93,14 @@ class FrontController extends Controller
 
     public function category_services(Request $request, $slug)
     {
-        $category = Category::where('slug', $slug)->first();
+       // $category = Category::where('slug', $slug)->first();
+       $category = SubCategory::where('slug', $slug)->first();
+       //dd($category);
 
         $category_id = $category['id'];
 
-        $query = Service::where('cat_id', $category_id)->where('status', 1);
+       // $query = Service::where('cat_id', $category_id)->where('status', 1);
+        $query = Service::where('sub_cat_id', $category_id)->where('status', 1);
         if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }

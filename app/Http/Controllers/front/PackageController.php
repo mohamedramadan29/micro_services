@@ -18,11 +18,19 @@ class PackageController extends Controller
 {
     use Message_Trait;
 
+    // public function index()
+    // {
+    //     $packages = Package::all();
+    //     return view("website.package.index", compact("packages"));
+    // }
+
     public function index()
     {
-        $packages = Package::all();
-        return view("website.package.index", compact("packages"));
+        $packagesGrouped = Package::orderBy('title')->get()->groupBy('title');
+
+        return view("website.package.index", compact("packagesGrouped"));
     }
+
 
     public function subscribePlan(Request $request, $id)
     {

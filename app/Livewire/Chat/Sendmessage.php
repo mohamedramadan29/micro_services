@@ -22,7 +22,7 @@ class Sendmessage extends Component
 
     public $conversation_id;
 
-    public $listeners = ['UpdateSendMessage','dispatchMessageSend'];
+    public $listeners = ['UpdateSendMessage', 'dispatchMessageSend'];
 
     public function mount($conversation_id)
     {
@@ -77,12 +77,12 @@ class Sendmessage extends Component
         // إعادة تعيين الرسالة
         $this->reset('body');
         // تحديث المكونات الأخرى
-        $this->dispatch('pushMessage',$message->id)->to('chat.chatbox');
+        $this->dispatch('pushMessage', $message->id)->to('chat.chatbox');
     }
 
     public function dispatchMessageSend()
     {
-        broadcast(new MessageSend(Auth::user(),$this->selectedConversation,$this->createMessage,$this->reciever_user));
+        broadcast(new MessageSend(Auth::user(), $this->selectedConversation, $this->createMessage, $this->reciever_user));
     }
     public function render()
     {

@@ -1,13 +1,12 @@
 @extends('website.layouts.master')
 @section('title')
-    {{$category['name']}}
+    {{ $category['name'] }}
 @endsection
 @section('content')
-
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg text-right profile_page" dir="rtl">
         <div class="container">
-            
+
             <div class="row">
                 <!-- Item Wrap Start -->
                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -16,29 +15,30 @@
                             <!-- Filter Search -->
                             <div class="_filt_tag786">
                                 <div class="_tag782">
-                                    <div class="_tag780"> {{count($sub_categories)}} اقسام فرعيه</div>
+                                    <div class="_tag780"> {{ count($sub_categories) }} اقسام فرعيه</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <!-- Single Item -->
-                        @foreach($sub_categories as $category)
+                        @foreach ($sub_categories as $category)
                             <div class="col-lg-3 col-md-6 col-sm-12">
-                                <div class="ser_110">
+                                <div class="ser_110" style="min-height:365px">
                                     <div class="ser_110_thumb">
-                                        <a href="{{url('services/'.$category['slug'])}}" class="ser_100_link">
-                                            <img src=" {{asset('assets/uploads/service_category/'.$category['image'])}}"
-                                                 class="img-fluid" alt="">
+                                        <a href="{{ url('services/' . $category['slug']) }}" class="ser_100_link">
+                                            <img src=" {{ asset('assets/uploads/service_category/' . $category['image']) }}"
+                                                class="img-fluid" alt="">
                                         </a>
                                     </div>
-                                    <div class="ser_110_footer bott">
+                                    <div class="ser_110_footer">
                                         <div class="_110_foot_left">
                                             <div>
                                                 <h5>
-                                                    <a href="{{url('services/'.$category['slug'])}}"> {{$category['name']}} </a>
+                                                    <a href="{{ url('services/' . $category['slug']) }}">
+                                                        {{ Str::limit($category['name'], 40, '...') }} </a>
                                                 </h5>
-                                               <span> عدد الخدمات :: {{ $category->CountServices() }} </span>
+                                                <span> عدد الخدمات :: {{ $category->CountServices() }} </span>
                                             </div>
                                         </div>
                                     </div>
@@ -48,7 +48,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
-                            {{$sub_categories->links()}}
+                            {{ $sub_categories->links() }}
                         </div>
                     </div>
 
@@ -60,8 +60,7 @@
     <!-- ============================ Main Section End ================================== -->
 
     <!-- ============================ Call To Action Start ================================== -->
-    <section class="call-to-act"
-             style="background:#0b85ec url({{asset('assets/website/img/landing-bg.png')}}) no-repeat">
+    <section class="call-to-act" style="background:#0b85ec url({{ asset('assets/website/img/landing-bg.png') }}) no-repeat">
         <div class="container">
             <div class="row justify-content-center">
 

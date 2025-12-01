@@ -50,7 +50,9 @@
                     <div class="row">
                         @foreach ($categories as $category)
                             <div class="col-lg-3 col-6">
-                                <a href="{{ url('services/' . $category['slug']) }}">
+                                    {{-- <a href="{{ url('services/' . $category['slug']) }}"> {{ $category['name'] }}
+                                                </a> --}}
+                                <a href="{{ url('category/service/' . $category['slug']) }}">
                                     <div class="info">
                                         <img src="{{ asset('assets/uploads/service_category/' . $category['image'] . '') }}"
                                             alt="">
@@ -126,7 +128,7 @@
                                                 <h4 class="_ser_title"><a
                                                         href="{{ url('service/' . $serv['id'] . '-' . $serv['slug']) }}">
 
-                                                        {{ Str::limit($serv['name'],35,'...')  }} </a>
+                                                        {{ Str::limit($serv['name'], 35, '...') }} </a>
                                                 </h4>
                                             </div>
                                             <div class="_oi0po price_section"><i class="fa fa-bolt"></i>
