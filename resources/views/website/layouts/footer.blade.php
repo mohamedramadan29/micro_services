@@ -14,7 +14,7 @@
                     <div class="footer-widget">
                         <img src="{{ asset('assets/website/img/logo.png') }}" class="img-fluid f-logo" width="120"
                             alt="">
-                        <p style='line-height:1.3;font-weight:bold'> منصة "نفذها": وجهتك الأولى لتوظيف أفضل المستقلين .
+                        <p style='line-height:1.3;font-weight:bold'>   وجهتك الأولى لتوظيف أفضل المستقلين .
                         </p>
                         <p style='line-height:1.3;'> اجمع بين أصحاب المشاريع والمستقلين لإنجاز الأعمال <br> باحترافية
                             وسرعة، مع حلول مبتكرة تلبي جميع احتياجاتك. </p>
@@ -26,6 +26,7 @@
                     <div class="footer-widget">
                         <h4 class="widget-title"> {{ __('public.links') }} </h4>
                         <ul class="footer-menu">
+                            <li><a href="{{ route('reviews.index') }}"> اضف تقيمك </a></li>
                             <li><a href="{{ route('blogCategories') }}"> المدونة </a></li>
                             <li><a href="{{ '/about' }}"> {{ __('public.about_us') }} </a></li>
                             <li><a href="{{ '/faq' }}"> {{ __('public.faqs') }} </a></li>

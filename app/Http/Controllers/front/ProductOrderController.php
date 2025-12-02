@@ -30,6 +30,10 @@ class ProductOrderController extends Controller
             $product = Product::findOrFail($data['product_id']);
             $isDigital = $product->type === 'digital';
 
+            $final_price = $product->discount > 0 ? $product->discount : $product->price;
+            if ($final_price == 0) {
+                return $this->processFreeOrder($product, $request);
+            }
             $rules = [
                 'name' => 'required',
                 'phone' => 'required',
@@ -195,5 +199,74 @@ class ProductOrderController extends Controller
     public function PaymentCancel()
     {
         return $this->Error_message('تم الغاء الدفع');
+    }
+
+    ###################### Free Product Price ########################
+
+    private function processFreeOrder($product, $request)
+    {
+        $isDigital = $product->type === 'digital';
+
+        // فاليديشن بسيط للمنتجات المجانية
+        $request->validate([
+            'name' => 'required',
+            'phone' => 'required',
+            'email' => 'required|email',
+        ] + (!$isDigital ? [
+            'country' => 'required',
+            'city' => 'required',
+            'address' => 'required',
+        ] : []));
+
+        DB::beginTransaction();
+
+        $order = new ProductOrder();
+        $order->user_id = Auth::id() ?? null; // لو مش مسجل دخول، خليه null
+        $order->product_id = $product->id;
+        $order->product_name = $product->name;
+        $order->price = 0;
+        $order->name = $request->name;
+        $order->email = $request->email;
+        $order->phone = $request->phone;
+        $order->order_status = 'تم الدفع'; // مجاني = مدفوع فورًا
+
+        if (!$isDigital) {
+            $order->country = $request->country;
+            $order->city = $request->city;
+            $order->address = $request->address;
+        }
+
+        $order->save();
+
+        // لو رقمي → ابعت إيميل + خليه يحمل فورًا
+        if ($isDigital && $product->digital_file) {
+            $purchasesLink = route('user.products.purches');
+
+
+            // Send Activation Email To User
+            $email = $order['email'];
+            $MessageDate = [
+                'name' => $order['name'],
+                "email" => $order['email'],
+                'purchasesPageLink' => $purchasesLink,
+                'productName' => $product->name,
+            ];
+            Mail::send('website.emails.DigitalProductMail', $MessageDate, function ($message) use ($email) {
+                $message->to($email)->subject(' شراء المنتج الرقمي من نفذها   ');
+            });
+
+            // لو اليوزر مسجل دخول → نرحّب بيه ونقوله روح حمل
+            if (Auth::check()) {
+                DB::commit();
+                return redirect()->route('user.products.purches')
+                    ->with('success', 'تم إضافة المنتج المجاني لحسابك بنجاح! يمكنك تحميله الآن.');
+            }
+        }
+
+        DB::commit();
+
+        // لو مش مسجل دخول أو منتج فيزيكال مجاني → نرحّب بيه
+        return redirect()->route('user.products.purches')
+            ->with('success', 'تم تسجيل طلبك المجاني بنجاح! تم إرسال التفاصيل على الإيميل.');
     }
 }

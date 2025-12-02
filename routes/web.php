@@ -33,6 +33,7 @@ use App\Http\Controllers\front\UserProductPurchesController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Http\Controllers\front\PublicCourseRegisterController;
 use App\Http\Controllers\front\FrontProperityMaintainController;
+use App\Http\Controllers\front\ReviewsController;
 
 Route::group(
     [
@@ -318,6 +319,14 @@ Route::group(
             Route::get('/package/payment/cancel', 'PaymentCancel')->name('package.order.cancel');
         });
         ######################### End Package Controller ################################
+
+        ######################### Start Reviews Controller #############################
+
+        Route::controller(ReviewsController::class)->group(function () {
+            Route::get('reviews', 'index')->name('reviews.index');
+            Route::post('reviews/post', 'store')->name('front.reviews.post');
+        });
+        ######################## End Reviews Controller ##################################
     }
 );
 

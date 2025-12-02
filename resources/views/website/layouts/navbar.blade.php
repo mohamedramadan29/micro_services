@@ -6,34 +6,24 @@
                 <nav id="navigation" class="navigation navigation-landscape">
                     <div class="nav-header">
                         <a class="nav-brand static-logo" href="{{ url('/') }}" style="padding: 0 15px">
-                             <video style="width: 120px; height: auto;"
-                                src="{{ asset('assets/uploads/logo.mp4') }}"
-                                autoplay
-                                loop
-                                muted
-                                playsinline
-                                preload="auto">
+                            <video style="width: 120px; height: auto;" src="{{ asset('assets/uploads/logo.mp4') }}"
+                                autoplay loop muted playsinline preload="auto">
                                 <!-- fallback لو المتصفح ما يدعم الفيديو -->
 
                             </video>
                             {{-- <img
                                 src="{{ asset('assets/website/img/logo.png') }}" class="logo" alt="" /> --}}
-                            </a>
+                        </a>
                         <a class="nav-brand fixed-logo" href="{{ url('/') }}" style="padding: 0 15px">
                             {{-- <img
                                 src="{{ asset('assets/website/img/logo.png') }}" class="logo" alt="" />
                              --}}
-                              <video style="width: 120px; height: auto;"
-                                src="{{ asset('assets/uploads/logo.mp4') }}"
-                                autoplay
-                                loop
-                                muted
-                                playsinline
-                                preload="auto">
+                            <video style="width: 120px; height: auto;" src="{{ asset('assets/uploads/logo.mp4') }}"
+                                autoplay loop muted playsinline preload="auto">
                                 <!-- fallback لو المتصفح ما يدعم الفيديو -->
 
                             </video>
-                            </a>
+                        </a>
                         <div class="nav-toggle"></div>
                     </div>
                     @if (!Auth::check())
@@ -192,12 +182,12 @@
                                         <li><a class="dropdown-item" href="{{ url('service/index') }}">الخدمات
                                                 <i class="bi bi-database-fill-check"></i> </a></li>
 
-                                        <li><a class="dropdown-item" href="{{ url('my/properties/index') }}">
+                                        {{-- <li><a class="dropdown-item" href="{{ url('my/properties/index') }}">
                                                 العقارات
                                                 <i class="bi bi-building"></i> </a></li>
 
                                         <li><a class="dropdown-item" href="{{ url('my/property/maintain/index') }}">
-                                                خدمات صيانة العقارات <i class="bi bi-database-fill"></i> </a></li>
+                                                خدمات صيانة العقارات <i class="bi bi-database-fill"></i> </a></li> --}}
 
                                         <li><a class="dropdown-item" href="{{ url('my/jobs') }}">
                                                 وظائفي <i class="bi bi-database-fill"></i> </a></li>
@@ -426,16 +416,16 @@
                                 <a href="{{ url('services') }}"> {{ __('public.services') }} </a>
                             </li>
 
-                            <li class="{{ request()->is('properties') ? 'active' : '' }}"><a
-                                    href="{{ url('properties') }}"> عقارات </a></li>
+                            {{-- <li class="{{ request()->is('properties') ? 'active' : '' }}"><a
+                                    href="{{ url('properties') }}"> عقارات </a></li> --}}
                             <li class="{{ request()->is('jobs') ? 'active' : '' }}"><a href="{{ url('jobs') }}">
                                     الوظائف </a></li>
                             <li class="{{ request()->is('employees') ? 'active' : '' }}"><a
                                     href="{{ url('employees') }}"> الموظفين </a></li>
-                            <li class="{{ request()->is('properties/maintain') ? 'active' : '' }}"><a
-                                    href="{{ url('properties/maintain') }}"> خدمات الصيانة </a></li>
+                            {{-- <li class="{{ request()->is('properties/maintain') ? 'active' : '' }}"><a
+                                    href="{{ url('properties/maintain') }}"> خدمات الصيانة </a></li> --}}
                             <li class="{{ request()->is('packages') ? 'active' : '' }}"><a
-                                    href="{{ url('packages') }}"> Vip خطط   </a></li>
+                                    href="{{ url('packages') }}"> Vip خطط </a></li>
                             @if (\Illuminate\Support\Facades\Auth::check())
                                 <li><a href="{{ url('service/add') }}"> اضافة خدمة </a></li>
                             @endif

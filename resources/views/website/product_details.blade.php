@@ -70,15 +70,21 @@
                         </div>
                         <div class="_view_dis_908 price_section">
                             <ul class="exlio_list">
-                                @if ($product['discount'] > 0)
-                                    <li> السعر <span style="color: #3fb699"> {{ number_format($product['discount'], 2) }}
-                                            $</span>
-                                        <span style="text-decoration: line-through;margin-left:10px">
-                                            {{ number_format($product['price'], 2) }} $</span>
-                                    </li>
+                                @if ($product['price'] > 0)
+                                    @if ($product['discount'] > 0)
+                                        <li> السعر <span style="color: #3fb699">
+                                                {{ number_format($product['discount'], 2) }}
+                                                $</span>
+                                            <span style="text-decoration: line-through;margin-left:10px">
+                                                {{ number_format($product['price'], 2) }} $</span>
+                                        </li>
+                                    @else
+                                        <li> السعر <span style="color: #3fb699"> {{ number_format($product['price'], 2) }}
+                                                $</span>
+                                        </li>
+                                    @endif
                                 @else
-                                    <li> السعر <span style="color: #3fb699"> {{ number_format($product['price'], 2) }}
-                                            $</span>
+                                    <li> السعر <span style="color: #3fb699"> منتج مجاني </span>
                                     </li>
                                 @endif
                             </ul>
@@ -143,8 +149,8 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label> المدينة </label>
-                                                            <input style="height: 45px" class="form-control" name="city"
-                                                                required>
+                                                            <input style="height: 45px" class="form-control"
+                                                                name="city" required>
                                                         </div>
                                                         <div class="form-group">
                                                             <label> العنوان بشكل تفصيلي </label>

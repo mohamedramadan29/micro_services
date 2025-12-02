@@ -22,6 +22,7 @@ use App\Http\Controllers\admin\PackageController;
 use App\Http\Controllers\admin\WithdrawRequestController;
 use App\Http\Controllers\admin\ProperityMaintainController;
 use App\Http\Controllers\admin\PublicCoursesPageController;
+use App\Http\Controllers\admin\ReviewsController;
 
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
@@ -208,9 +209,17 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('package/edit/{id}', 'edit');
             Route::post('package/update/{id}', 'update');
             Route::post('package/delete/{id}', 'delete');
-            Route::get('package/subscribes/{id}','showSubscribe');
+            Route::get('package/subscribes/{id}', 'showSubscribe');
         });
         ################## End Package Controller ###################
+
+        ################# Start Review Controller ###################
+
+        Route::controller(ReviewsController::class)->group(function () {
+            Route::get('reviews','index');
+            Route::get('review/{id}','details');
+        });
+        ################# End Review Controller #####################
 
     });
 });
