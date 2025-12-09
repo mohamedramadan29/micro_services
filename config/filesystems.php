@@ -72,6 +72,15 @@ return [
             'throw' => false,
         ],
 
+        'digital_files' => [
+            'driver' => 'local',
+            'root' => public_path('assets/uploads/digital_products'),
+            'url' => env('APP_URL'),
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

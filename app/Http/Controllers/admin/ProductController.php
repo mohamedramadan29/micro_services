@@ -110,7 +110,7 @@ class ProductController extends Controller
                 $product->meta_keywords = $data['meta_keywords'];
                 $product->meta_description = $data['meta_description'];
                 $product->image = $file_name;
-                $product->digital_file = $digital_file_name; // حفظ مسار الملف الرقمي
+                $product->digital_file = $request['digital_file_path']; // حفظ مسار الملف الرقمي
                 // $product->video = $video_name;
                 $product->save();
 

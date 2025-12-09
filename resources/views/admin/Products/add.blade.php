@@ -135,14 +135,15 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <div class="mb-3">
+                                        @livewire('digital-file-upload')
+                                        {{-- <div class="mb-3">
                                             <label for="digital_file" class="form-label"> رفع الملف الرقمي (مثل PDF، ZIP،
                                                 إلخ) </label>
                                             <input type="file" id="digital_file" name="digital_file"
                                                 class="form-control" accept=".pdf,.zip,.rar,.exe,.mp3,.mp4">
                                             <small class="form-text text-muted">يجب أن يكون الملف رقميًا قابلًا
                                                 للتنزيل.</small>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
