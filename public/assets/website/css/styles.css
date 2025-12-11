@@ -3921,7 +3921,7 @@ body .nav-menu.nav-menu-social>li.add-listing.bg-whit a {
 .nav-brand img {
     max-width: 100px;
     position: relative;
-    top: 10px;
+    top: 22px;
 }
 
 .input-group-append,
@@ -13236,7 +13236,7 @@ textarea.form-control::placeholder {
     .nav-brand img {
         max-width: 85px;
         position: relative;
-        top: 0px;
+        top: 20px;
         right: -25px;
     }
 
@@ -14274,7 +14274,7 @@ a {
 
 @media(max-width: 991px) {
     .header.header-transparent .nav-menu>li>a {
-        padding: 20px 25px !important;
+        padding: 20px 10px !important;
         font-size: 15px !important;
     }
 
