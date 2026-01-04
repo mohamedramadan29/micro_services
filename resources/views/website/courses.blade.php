@@ -6,7 +6,7 @@
     <section class="gray-bg text-right" dir="rtl">
         <!-- ============================ Hero Banner  Start================================== -->
         <div class="hero-banner bg-cover center"
-            style="background:#00000057 url({{ asset('assets/website/img/courses_background.jpg') }}) no-repeat;"
+            style="background:#00000057 url({{ asset('assets/website/img/courses-hero.jpeg') }}) no-repeat;"
             data-overlay="7">
             <div class="container">
                 <h1> {{ __('courses.courses_h1') }} </h1>

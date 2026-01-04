@@ -128,7 +128,7 @@ html body .mdi-set {
 }
 
 section {
-    padding: 80px 0 80px;
+    padding: 70px 0 80px;
 }
 
 section.min-sec {
@@ -14810,9 +14810,10 @@ a {
         display: none;
     }
 
-    form [type="radio"]:checked+label:before, form [type="radio"]:checked+label:before, form [type="radio"]:not(:checked)+label:before{
+    form [type="radio"]:checked+label:before, form [type="radio"]:checked+label:before, form [type="radio"]:not(:checked)+label:before {
         display: none;
     }
+
     .star-rating label {
         cursor: pointer;
         font-size: 3rem;
@@ -14821,14 +14822,16 @@ a {
         position: relative;
     }
 
-    @media(max-width:991px){
-        .star-rating label{
-            font-size:2rem;
+    @media(max-width:991px) {
+        .star-rating label {
+            font-size: 2rem;
         }
-        .review-form-card{
+
+        .review-form-card {
             padding: 1rem;
         }
     }
+
     .star-rating label:hover,
     .star-rating label:hover~label,
     .star-rating input:checked~label {
@@ -14959,3 +14962,44 @@ a {
 }
 
 /* ############################# END  Reviewes Pages #####################################*/
+
+
+.main_alert {
+    color: #3fb697;
+    background-color: #3fb69730;
+    border-color: #3fb69730;
+}
+
+
+
+
+/* ################################## Start Public Portfoilio Page ####################### */
+.public_portfolio_page .ser_110_thumb img {
+    width: 100%;
+    height: 250px;
+    object-fit: fill;
+}
+
+
+.public_portfolio_page .ser_110 {
+    height: 370px;
+    /* غير الرقم حسب تصميمك */
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #efefef;
+}
+
+.public_portfolio_page .ser_110_thumb {
+    flex: 0 0 250px;
+    /* ارتفاع ثابت للصورة */
+    overflow: hidden;
+}
+
+.public_portfolio_page .ser_110_caption {
+    flex: 1;
+    /* ياخد الباقي ويوزع المساحة بالتساوي */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* عشان العنوان والكاتيغوري يبقوا مرتبين */
+}

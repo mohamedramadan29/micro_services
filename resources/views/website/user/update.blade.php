@@ -192,7 +192,7 @@
                                     </div>
                                 </div>
                                 <!-- Single Wrap End -->
-                                <button type="submit" class="btn btn-save"> حفظ التغيرات <i class="fa fa-save"></i>
+                                <button type="submit" class="btn btn-save btn-primary"> حفظ التغيرات <i class="fa fa-save"></i>
                                 </button>
                             </div>
                         </div>

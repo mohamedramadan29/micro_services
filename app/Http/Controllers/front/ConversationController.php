@@ -19,15 +19,15 @@ class ConversationController extends Controller
         $userId = Auth::id();
 
         $conversations = Conversation::where('sender_id', $userId)
-        ->orWhere('receiver_id', $userId)
-        ->with([
-            'messages' => function ($query) {
-                $query->latest()->take(1); // جلب آخر رسالة فقط
-            },
-            'sender',  // لجلب بيانات المرسل
-            'receiver' // لجلب بيانات المستقبل
-        ])
-        ->get();
+            ->orWhere('receiver_id', $userId)
+            ->with([
+                'messages' => function ($query) {
+                    $query->latest()->take(1); // جلب آخر رسالة فقط
+                },
+                'sender',  // لجلب بيانات المرسل
+                'receiver' // لجلب بيانات المستقبل
+            ])
+            ->get();
 
         return view('website.chat.index', compact('conversations'));
     }
@@ -35,8 +35,10 @@ class ConversationController extends Controller
     {
         $data = $request->all();
         $receiverId = $data['receiver_id'];
+
         /////////////  Get The Services Data
         ///
+
         $service = Service::findOrFail($data['service_id']);
         $service_data = $service['name'];
         $checkConversation = Conversation::where('sender_id', Auth::id())->where('receiver_id', $receiverId)
@@ -143,11 +145,4 @@ class ConversationController extends Controller
             return Redirect::to('chat-main/' . $checkConversation->id);
         }
     }
-
-
-
-
 }
-
-
-

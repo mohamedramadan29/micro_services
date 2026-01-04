@@ -12,6 +12,7 @@ use App\Http\Controllers\front\ChatgptController;
 use App\Http\Controllers\front\PackageController;
 use App\Http\Controllers\front\ProductController;
 use App\Http\Controllers\front\ProjectController;
+use App\Http\Controllers\front\ReviewsController;
 use App\Http\Controllers\front\serviceController;
 use App\Http\Controllers\front\TicketsController;
 use App\Http\Controllers\front\CheckOutController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\front\EmployeeController;
 use App\Http\Controllers\front\FrontJobController;
 use App\Http\Controllers\front\JobOfferController;
 use App\Http\Controllers\front\WithDrawController;
+
 use App\Http\Controllers\front\ProperityController;
 use App\Http\Controllers\Auth\SocialMediaController;
 use App\Http\Controllers\front\ConversationController;
@@ -33,7 +35,8 @@ use App\Http\Controllers\front\UserProductPurchesController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Http\Controllers\front\PublicCourseRegisterController;
 use App\Http\Controllers\front\FrontProperityMaintainController;
-use App\Http\Controllers\front\ReviewsController;
+use App\Http\Controllers\front\User\PortfolioController;
+use App\Http\Controllers\front\PortfolioController as publicPortfolioController;
 
 Route::group(
     [
@@ -327,6 +330,27 @@ Route::group(
             Route::post('reviews/post', 'store')->name('front.reviews.post');
         });
         ######################## End Reviews Controller ##################################
+
+        ########################## Start User Portfolio Controller #######################
+        Route::group(['middleware' => ['auth']], function () {
+            Route::controller(PortfolioController::class)->prefix('portfolio/user')->group(function () {
+                Route::get('index', 'index')->name('user.portfolio.index');
+                Route::get('create', 'create')->name('user.portfolio.create');
+                Route::post('store', 'store')->name('user.portfolio.store');
+                Route::get('edit/{id}-{slug}', 'edit')->name('user.portfolio.edit');
+                Route::post('update/{id}-{slug}', 'update')->name('user.portfolio.update');
+                Route::get('delete/{id}', 'delete')->name('user.portfolio.delete');
+            });
+        });
+        ######################### End User Portfolio Controller ##########################
+
+        ####################### Start Public Portfolio ###################
+
+        Route::controller(publicPortfolioController::class)->group(function () {
+            Route::get('portfolios', 'index');
+            Route::get('portfolio/{id}-{slug}', 'details');
+        });
+        ####################### End Public Portfolio ###################
     }
 );
 

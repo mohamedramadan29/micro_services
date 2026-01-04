@@ -85,7 +85,7 @@ class UserController extends Controller
             }
         }
         if (Auth::user()) {
-            return \redirect('user/dashboard');
+            return \redirect('dashboard');
         }
         return view('website.login');
     }
@@ -146,7 +146,7 @@ class UserController extends Controller
             return $this->exception_message($e);
         }
         if (Auth::user()) {
-            return \redirect('user/dashboard');
+            return \redirect('/dashboard');
         }
         return view('website.register');
     }

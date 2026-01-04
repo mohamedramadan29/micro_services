@@ -6,7 +6,7 @@
     <section class="gray-bg text-right" dir="rtl">
         <!-- ============================ Hero Banner  Start================================== -->
         <div class="hero-banner bg-cover center"
-            style="background:#00000057 url({{ asset('assets/website/img/jobbackground.jpg') }}) no-repeat;" data-overlay="7">
+            style="background:#00000057 url({{ asset('assets/website/img/jobs_hero.jpeg') }}) no-repeat;" data-overlay="7">
             <div class="container">
                 <h1>الوظائف المتاحة</h1>
                 <a href="{{ url('my/job/add') }}" class="btn btn-primary free_consult_button">

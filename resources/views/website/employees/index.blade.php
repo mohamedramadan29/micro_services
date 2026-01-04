@@ -5,7 +5,7 @@
 @section('content')
     <!-- ============================ Hero Banner  Start================================== -->
     <div class="hero-banner bg-cover center"
-        style="background:#00000057 url({{ asset('assets/website/img/jobbackground.jpg') }}) no-repeat;" data-overlay="7">
+        style="background:#00000057 url({{ asset('assets/website/img/jober_hero.jpeg') }}) no-repeat;" data-overlay="7">
         <div class="container">
             <h1>الموظفين</h1>
             <form class="mt-4" dir="rtl" method="get" action="{{ url('employees') }}">

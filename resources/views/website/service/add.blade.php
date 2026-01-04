@@ -172,11 +172,11 @@
                                             </div>
 
                                         </div>
-                                        <div class="alert alert-danger">
+                                        <div class="alert main_alert">
                                             <p> تنويه: بإرسال هذه الخدمة، فإنك تؤكد أن جميع المعلومات والمحتوى الوارد أصلي
                                                 وغير منسوخ من أي خدمة أخرى على الموقع. </p>
                                         </div>
-                                        <button type="submit" class="btn btn-save" id="submitBtn"> اضف الخدمة <i
+                                        <button type="submit" class="btn btn-save btn-primary" id="submitBtn"> اضف الخدمة <i
                                                 class="fa fa-save"></i></button>
                                         <span id="loader" style="display: none;">جاري الإرسال...</span>
 

@@ -8,7 +8,7 @@
 @section('content')
     <!-- ============================ Hero Banner  Start================================== -->
     <div class="hero-banner full bg-cover center"
-        style="background:#00000057 url({{ asset('assets/website/img/nafizha2.jpg') }}) no-repeat;" data-overlay="7">
+        style="background:#00000057 url({{ asset('assets/website/img/hero.jpeg') }}) no-repeat;" data-overlay="7">
         <div class="container">
             <h1 style="line-height: 2">
                 <span> نفّذها… وخلّي فكرتك واقع بسهولة منصة عربية تربط أصحاب </span>
@@ -17,7 +17,7 @@
                 <br>
                 <span> تصميم ، البرمجة، التسويق، الكتابة والمزيد </span>
             </h1>
-            <p class="lead"> دليل شامل لاختيار وتوظيف أفضل المستقلين لعملك </p>
+            <p class="lead" style="margin-top: -15px;"> دليل شامل لاختيار وتوظيف أفضل المستقلين لعملك </p>
             {{-- <button data-bs-toggle="modal" data-bs-target="#FreeConsultModel" class="btn btn-primary free_consult_button"><i
                     class="bi bi-patch-question-fill"></i> احصل علي استشارة مجانية </button> --}}
             <form class="mt-4" dir="rtl" method="get" action="{{ url('search') }}">
@@ -385,7 +385,7 @@
 
     <!-- ########################################### Presit Section ######################## -->
 
-    <section class="call-to-act gift_section"
+    {{-- <section class="call-to-act gift_section"
         style="background:#3fb697 url({{ asset('assets/website/img/landing-bg.png') }}) no-repeat">
         <div class="container">
             <div class="row justify-content-center">
@@ -410,7 +410,7 @@
             </div>
         </div>
 
-    </section>
+    </section> --}}
 
     <!------------------------------------- End Present Section ##################### -->
 @endsection

@@ -137,7 +137,7 @@
                                                     </div>
                                                 @endforeach
                                             @else
-                                                <div class="alert alert-info">
+                                                <div class="alert main_alert">
                                                     لا يوجد لديك مشاريع في الوقت الحالي
                                                 </div>
                                             @endif

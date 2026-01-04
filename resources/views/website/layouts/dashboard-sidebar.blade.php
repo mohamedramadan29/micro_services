@@ -6,6 +6,9 @@
         <li class="{{ request()->is('update-account') ? 'active' : '' }}">
             <a href="{{ url('update-account') }}"> <i class="bi bi-gear-fill"></i> تعديل الملف الشخصي </a>
         </li>
+        <li class="{{ request()->is('portfolio/user/index') ? 'active' : '' }}">
+            <a href="{{ url('portfolio/user/index') }}"> <i class="bi bi-sliders"></i> الاعمال </a>
+        </li>
         <li class="{{ request()->is('balance') ? 'active' : '' }}">
             <a href="{{ url('balance') }}"><i class="bi bi-credit-card"></i> الرصيد </a>
         </li>
@@ -25,8 +28,8 @@
             <a href="{{ url('my/properties/index') }}"><i class="bi bi-building"></i> العقارات </a>
         </li>
         <li class="{{ request()->is('my/property/maintain/index') ? 'active' : '' }}">
-            <a href="{{ url('my/property/maintain/index') }}"><i class="ti-support"></i> خدمات صيانة العقارات  </a>
-        </li> 
+            <a href="{{ url('my/property/maintain/index') }}"><i class="ti-support"></i> خدمات صيانة العقارات </a>
+        </li>
         <li class="{{ request()->is('my/jobs') ? 'active' : '' }}">
             <a href="{{ url('my/jobs') }}"><i class="ti-plus"></i> وظائفي </a>
         </li>

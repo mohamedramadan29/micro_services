@@ -112,7 +112,7 @@
                                                     </div>
                                                 @endforeach
                                             @else
-                                                <div class="alert alert-info"> لا يوجد لديك اي خدمات :: ادخل خدمتك
+                                                <div class="alert main_alert"> لا يوجد لديك اي خدمات :: ادخل خدمتك
                                                     الاولي
                                                 </div>
                                             @endif

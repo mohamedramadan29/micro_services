@@ -230,7 +230,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button style="margin: auto;display: block" type="submit" class="btn btn-save"
+                                    <button style="margin: auto;display: block" type="submit" class="btn btn-save btn-primary"
                                         id="submitBtn"> اضافة العقار <i class="fa fa-save"></i></button>
                                     <span id="loader" style="display: none;">جاري الإرسال...</span>
                                 </div>

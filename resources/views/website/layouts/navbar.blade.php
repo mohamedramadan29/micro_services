@@ -424,6 +424,8 @@
                                     href="{{ url('properties/maintain') }}"> خدمات الصيانة </a></li> --}}
                             <li class="{{ request()->is('packages') ? 'active' : '' }}"><a
                                     href="{{ url('packages') }}"> Vip خطط </a></li>
+                            <li class="{{ request()->is('portfolios') ? 'active' : '' }}"><a
+                                    href="{{ url('portfolios') }}"> الاعمال  </a></li>
                             @if (\Illuminate\Support\Facades\Auth::check())
                                 <li><a href="{{ url('service/add') }}"> اضافة خدمة </a></li>
                             @endif

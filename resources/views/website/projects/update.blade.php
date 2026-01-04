@@ -183,7 +183,7 @@
                                     {{--                                <button type="submit" class="btn btn-sm btn-save"> اضف الخدمة <i class="fa fa-save"></i> --}}
                                     {{--                                </button> --}}
 
-                                    <button style="margin: auto;display: block" type="submit" class="btn btn-save"
+                                    <button style="margin: auto;display: block" type="submit" class="btn btn-save btn-primary"
                                         id="submitBtn"> تعديل المشروع <i class="fa fa-save"></i></button>
                                     <span id="loader" style="display: none;">جاري الإرسال...</span>
                                 </div>

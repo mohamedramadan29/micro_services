@@ -149,7 +149,7 @@
 
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-save" id="submitBtn"> تعديل الخدمة <i
+                                <button type="submit" class="btn btn-save btn-primary" id="submitBtn"> تعديل الخدمة <i
                                         class="fa fa-save"></i></button>
                                 <span id="loader" style="display: none;">جاري الإرسال...</span>
                         </form>

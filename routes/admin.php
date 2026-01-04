@@ -73,7 +73,7 @@ Route::group(['prefix' => 'admin'], function () {
         });
         ////////////////////// Start Products ///////////////////////////////
         Route::controller(ProductController::class)->group(function () {
-            Route::get('products', 'index');
+            Route::get('products', 'index')->name('admin.products.index');
             Route::match(['post', 'get'], 'product/add', 'store');
             Route::match(['post', 'get'], 'product/update/{slug}', 'update')->name('product.update');
             Route::post('product/delete/{id}', 'delete');

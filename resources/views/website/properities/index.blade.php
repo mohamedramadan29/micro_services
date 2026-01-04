@@ -100,7 +100,7 @@
                                                     </div>
                                                 @endforeach
                                             @else
-                                                <div class="alert alert-info"> لا يوجد لديك اي عقارات :: ادخل العقار الاول
+                                                <div class="alert main_alert"> لا يوجد لديك اي عقارات :: ادخل العقار الاول
 
                                                 </div>
                                             @endif

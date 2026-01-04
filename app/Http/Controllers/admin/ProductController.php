@@ -26,95 +26,101 @@ class ProductController extends Controller
     }
 
 
+
     public function store(Request $request)
     {
         if ($request->isMethod('post')) {
             try {
                 $data = $request->all();
-                // dd($data);
+
                 $rules = [
-                    'name' => 'required',
-                    'type' => 'required|in:physical,digital', // قاعدة جديدة لنوع المنتج
-                    'description' => 'required'
+                    'name' => 'required|string|max:255',
+                    'type' => 'required|in:physical,digital',
+                    'description' => 'required',
+                    'price' => 'required|numeric|min:0',
+                    'status' => 'required|in:0,1',
                 ];
 
-                // قواعد ديناميكية بناءً على النوع
-                if ($data['type'] === 'digital') {
-                    $rules['digital_file'] = 'required|file|mimes:pdf,zip,rar,exe,mp3,mp4|max:102400'; // 100MB max
+                // لو المنتج رقمي → مطلوب مسار الملف (من Livewire hidden input)
+                if (isset($data['type']) && $data['type'] === 'digital') {
+                    $rules['digital_file_path'] = 'required|string';
+                    $messages['digital_file_path.required'] = 'من فضلك ارفع الملف الرقمي';
                 }
 
+                // صورة المنتج الرئيسية
                 if ($request->hasFile('image')) {
                     $rules['image'] = 'image|mimes:jpg,png,jpeg,webp';
                 }
 
                 $messages = [
-                    'name.required' => ' من فضلك ادخل اسم المنتج  ',
-                    'type.required' => ' من فضلك حدد نوع المنتج ',
-                    'type.in' => ' نوع المنتج غير صالح ',
-                    'description.required' => ' من فضلك ادخل الوصف الخاص بالمنتج ',
-                    'digital_file.required' => ' من فضلك ارفع الملف الرقمي ',
-                    'digital_file.mimes' => ' نوع الملف غير مدعوم (pdf, zip, rar, exe, mp3, mp4) ',
-                    'digital_file.max' => ' حجم الملف كبير جداً (حد أقصى 100MB) ',
-                    'image.mimes' => 'من فضلك يجب ان يكون نوع الصورة jpg,png,jpeg,webp',
-                    'image.image' => 'من فضلك ادخل الصورة بشكل صحيح',
+                    'name.required' => 'من فضلك ادخل اسم المنتج',
+                    'type.required' => 'من فضلك حدد نوع المنتج',
+                    'type.in' => 'نوع المنتج غير صالح',
+                    'description.required' => 'من فضلك ادخل الوصف الخاص بالمنتج',
+                    'price.required' => 'من فضلك ادخل سعر المنتج',
+                    'price.numeric' => 'سعر المنتج يجب أن يكون رقم',
+                    'image.image' => 'من فضلك ادخل صورة صحيحة',
+                    'image.mimes' => 'نوع الصورة يجب أن يكون jpg, png, jpeg, webp',
                 ];
 
-                $validator = Validator::make($data, $rules, $messages);
+                $validator = Validator::make($data, $rules, $messages ?? []);
                 if ($validator->fails()) {
                     return Redirect::back()->withInput()->withErrors($validator);
                 }
 
+                // رفع الصورة الرئيسية
                 $file_name = null;
                 if ($request->hasFile('image')) {
-                    $file_name = $this->saveImage($request->image, public_path('assets/uploads/product_images'));
+                    $file_name = $this->saveImage($request->image, 'assets/uploads/product_images');
                 }
 
-                ########## Check If Product Has Video
+                // رفع الفيديو (لو موجود)
                 $video_name = null;
                 if ($request->hasFile('video')) {
                     if ($request->file('video')->isValid()) {
-                        $video_name = $this->saveImage($request->video, public_path('assets/uploads/product_videos'));
+                        $video_name = $this->saveImage($request->video, 'assets/uploads/product_videos');
                     } else {
                         return back()->withErrors(['video' => 'هناك مشكلة في رفع الفيديو.']);
                     }
                 }
 
-                /////// رفع الملف الرقمي إذا كان النوع رقمي
-                $digital_file_name = null;
-                if ($request->hasFile('digital_file')) {
-                    $digital_file_name = $this->saveImage($request->digital_file, public_path('assets/uploads/digital_products')); // مسار جديد للملفات الرقمية
-                }
+                // الملف الرقمي: نأخذ اسمه من hidden input (digital_file_path) اللي جاي من Livewire
+                $digital_file_name = ($data['type'] === 'digital') ? $data['digital_file_path'] : null;
 
-                /////// Check if This Product In Db Or Not
+                // التحقق من تكرار اسم المنتج
                 $count_old_product = Product::where('name', $data['name'])->count();
                 if ($count_old_product > 0) {
-                    return Redirect::back()->withInput()->withErrors(' اسم المنتج متواجد من قبل من فضلك ادخل منتج جديد  ');
+                    return Redirect::back()->withInput()->withErrors('اسم المنتج متواجد من قبل، من فضلك ادخل اسم جديد');
                 }
 
                 DB::beginTransaction();
+
                 $product = new Product();
                 $product->name = $data['name'];
-                if ($data['slug'] && $data['slug'] != '') {
+
+                // Slug
+                if (!empty($data['slug'])) {
                     $slug = $this->CustomeSlug($data['slug']);
                 } else {
                     $slug = $this->CustomeSlug($data['name']);
                 }
                 $product->slug = $slug;
-                $product->type = $data['type']; // حفظ نوع المنتج الجديد
-                $product->status = $data['status'];
-                $product->short_description = $data['short_description'];
+
+                $product->type = $data['type'];
+                $product->status = $data['status'] ?? 1;
+                $product->short_description = $data['short_description'] ?? null;
                 $product->description = $data['description'];
                 $product->price = $data['price'];
                 $product->discount = $data['discount'] ?? null;
-                $product->meta_title = $data['meta_title'];
-                $product->meta_keywords = $data['meta_keywords'];
-                $product->meta_description = $data['meta_description'];
+                $product->meta_title = $data['meta_title'] ?? null;
+                $product->meta_keywords = $data['meta_keywords'] ?? null;
+                $product->meta_description = $data['meta_description'] ?? null;
                 $product->image = $file_name;
-                $product->digital_file = $request['digital_file_path']; // حفظ مسار الملف الرقمي
-                // $product->video = $video_name;
+                $product->video = $video_name;
+                $product->digital_file = $digital_file_name; // حفظ اسم الملف الرقمي من Livewire
                 $product->save();
 
-                ///////// Check If Product Gallary Not Empty
+                // رفع صور المعرض (gallery)
                 if ($request->hasFile('gallery')) {
                     foreach ($request->file('gallery') as $gallery) {
                         $gallery_name = $this->saveImage($gallery, 'assets/uploads/product_gallery');
@@ -126,112 +132,134 @@ class ProductController extends Controller
                 }
 
                 DB::commit();
-                return $this->success_message(' تم اضافة المنتج بنجاح  ');
+
+                return $this->success_message('تم إضافة المنتج بنجاح');
             } catch (\Exception $e) {
+                DB::rollback();
                 return $this->exception_message($e);
             }
         }
+
         return view('admin.Products.add');
     }
 
     public function update(Request $request, $slug)
     {
-        // جلب المنتج مع الفئة الفرعية والمتغيرات المرتبطة به
         $product = Product::where('slug', $slug)->first();
+        if(!$product){
+            return to_route('admin.products.index');
+        }
         $gallaries = ProductGallary::where('product_id', $product->id)->get();
 
         if ($request->isMethod('post')) {
-            // التحقق من صحة المدخلات
-            $data = $request->all();
-            $rules = [
-                'name' => 'required|string|max:255',
-                'type' => 'required|in:physical,digital', // قاعدة جديدة لنوع المنتج
-            ];
-
-            // قواعد ديناميكية بناءً على النوع
-            if ($data['type'] === 'digital') {
-                $rules['digital_file'] = 'file|mimes:pdf,zip,rar,exe,mp3,mp4|max:102400'; // 100MB max، غير مطلوب لأنه تحديث
-            }
-
-            if ($request->hasFile('image')) {
-                $rules['image'] = 'image|mimes:jpg,png,jpeg,webp';
-            }
-
-            $messages = [
-                'name.required' => ' من فضلك ادخل اسم المنتج  ',
-                'type.required' => ' من فضلك حدد نوع المنتج ',
-                'type.in' => ' نوع المنتج غير صالح ',
-                'digital_file.mimes' => ' نوع الملف غير مدعوم (pdf, zip, rar, exe, mp3, mp4) ',
-                'digital_file.max' => ' حجم الملف كبير جداً (حد أقصى 100MB) ',
-                'image.mimes' => 'من فضلك يجب ان يكون نوع الصورة jpg,png,jpeg,webp',
-                'image.image' => 'من فضلك ادخل الصورة بشكل صحيح',
-            ];
-
-            $validator = Validator::make($data, $rules, $messages);
-            if ($validator->fails()) {
-                return Redirect::back()->withInput()->withErrors($validator);
-            }
-
-            DB::beginTransaction();
-
             try {
-                /////// تحديث الصورة إذا كانت موجودة
+                $data = $request->all();
+
+                $rules = [
+                    'name' => 'required|string|max:255',
+                    'type' => 'required|in:physical,digital',
+                    'description' => 'required',
+                    'price' => 'required|numeric|min:0',
+                    'status' => 'required|in:0,1',
+                ];
+
+                // صورة المنتج الرئيسية (اختياري في التعديل)
                 if ($request->hasFile('image')) {
-                    $old_image = public_path('assets/uploads/product_images/' . $product->image);
-                    if (file_exists($old_image)) {
-                        unlink($old_image);
-                    }
-                    $file_name = $this->saveImage($request->image, public_path('assets/uploads/product_images'));
-                    $product->update(['image' => $file_name]);
+                    $rules['image'] = 'image|mimes:jpg,png,jpeg,webp';
                 }
 
-                ############## Check If Update Video
-                if ($request->hasFile('video')) {
-                    $old_video = public_path('assets/uploads/product_videos/' . $product->video);
-                    if (file_exists($old_video)) {
-                        unlink($old_video);
-                    }
-                    $video_name = $this->saveImage($request->video, public_path('assets/uploads/product_videos'));
-                    $product->update(['video' => $video_name]);
+                // لو المنتج رقمي ورفع ملف جديد → نطلب digital_file_path كـ string (من Livewire)
+                if (isset($data['type']) && $data['type'] === 'digital' && $request->filled('digital_file_path')) {
+                    $rules['digital_file_path'] = 'string';
                 }
 
-                /////// تحديث الملف الرقمي إذا كان النوع رقمي وتم رفع ملف جديد
-                if ($data['type'] === 'digital' && $request->hasFile('digital_file')) {
-                    // حذف الملف القديم إذا كان موجودًا
-                    if ($product->digital_file) {
-                        $old_digital_file = public_path('assets/uploads/digital_products/' . $product->digital_file);
-                        if (file_exists($old_digital_file)) {
-                            unlink($old_digital_file);
+                $messages = [
+                    'name.required' => 'من فضلك ادخل اسم المنتج',
+                    'type.required' => 'من فضلك حدد نوع المنتج',
+                    'type.in' => 'نوع المنتج غير صالح',
+                    'description.required' => 'من فضلك ادخل الوصف الخاص بالمنتج',
+                    'price.required' => 'من فضلك ادخل سعر المنتج',
+                    'price.numeric' => 'سعر المنتج يجب أن يكون رقم',
+                    'image.image' => 'من فضلك ادخل صورة صحيحة',
+                    'image.mimes' => 'نوع الصورة يجب أن يكون jpg, png, jpeg, webp',
+                ];
+
+                $validator = Validator::make($data, $rules, $messages ?? []);
+                if ($validator->fails()) {
+                    return Redirect::back()->withInput()->withErrors($validator);
+                }
+
+                DB::beginTransaction();
+
+                // تحديث الصورة الرئيسية إذا تم رفع واحدة جديدة
+                if ($request->hasFile('image')) {
+                    // حذف القديمة
+                    if ($product->image) {
+                        $old_image = public_path('assets/uploads/product_images/' . $product->image);
+                        if (file_exists($old_image)) {
+                            unlink($old_image);
                         }
                     }
-                    $digital_file_name = $this->saveImage($request->digital_file, public_path('assets/uploads/digital_products'));
-                    $product->update(['digital_file' => $digital_file_name]);
+                    $file_name = $this->saveImage($request->image, public_path('assets/uploads/product_images'));
+                    $product->image = $file_name;
                 }
 
-                // تحديث معلومات المنتج
-                if ($data['slug'] && $data['slug'] != '') {
-                    $slug = $this->CustomeSlug($data['slug']);
-                } else {
-                    $slug = $this->CustomeSlug($data['name']);
+                // تحديث الفيديو إذا تم رفع واحد جديد
+                if ($request->hasFile('video')) {
+                    if ($product->video) {
+                        $old_video = public_path('assets/uploads/product_videos/' . $product->video);
+                        if (file_exists($old_video)) {
+                            unlink($old_video);
+                        }
+                    }
+                    $video_name = $this->saveImage($request->video, public_path('assets/uploads/product_videos'));
+                    $product->video = $video_name;
                 }
+
+                // تحديث الملف الرقمي (من Livewire)
+                $digital_file_name = $product->digital_file; // احتفظ بالقديم افتراضيًا
+
+                if ($data['type'] === 'digital' && $request->filled('digital_file_path')) {
+                    $new_digital_file = $request->digital_file_path;
+
+                    // لو الملف الجديد مختلف عن القديم → نحذف القديم
+                    if ($product->digital_file && $product->digital_file !== $new_digital_file) {
+                        $old_digital_path = public_path('assets/uploads/digital_products/' . $product->digital_file);
+                        if (file_exists($old_digital_path)) {
+                            unlink($old_digital_path);
+                        }
+                    }
+
+                    $digital_file_name = $new_digital_file;
+                }
+
+                // Slug
+                if (!empty($data['slug'])) {
+                    $new_slug = $this->CustomeSlug($data['slug']);
+                } else {
+                    $new_slug = $this->CustomeSlug($data['name']);
+                }
+
+                // تحديث باقي البيانات
                 $product->update([
                     'name' => $data['name'],
-                    'slug' => $slug,
-                    'type' => $data['type'], // تحديث النوع
-                    'status' => $data['status'],
-                    'short_description' => $data['short_description'],
+                    'slug' => $new_slug,
+                    'type' => $data['type'],
+                    'status' => $data['status'] ?? 1,
+                    'short_description' => $data['short_description'] ?? null,
                     'description' => $data['description'],
                     'price' => $data['price'],
                     'discount' => $data['discount'] ?? null,
-                    'meta_title' => $data['meta_title'],
-                    'meta_keywords' => $data['meta_keywords'],
-                    'meta_description' => $data['meta_description']
+                    'meta_title' => $data['meta_title'] ?? null,
+                    'meta_keywords' => $data['meta_keywords'] ?? null,
+                    'meta_description' => $data['meta_description'] ?? null,
+                    'digital_file' => $digital_file_name,
                 ]);
 
-                ///////// تحديث معرض الصور إذا كان موجودًا
+                // إضافة صور معرض جديدة
                 if ($request->hasFile('gallery')) {
                     foreach ($request->file('gallery') as $gallery) {
-                        $gallery_name = $this->saveImage($gallery, 'assets/uploads/product_gallery');
+                        $gallery_name = $this->saveImage($gallery, public_path('assets/uploads/product_gallery'));
                         $gallery_image = new ProductGallary();
                         $gallery_image->product_id = $product->id;
                         $gallery_image->image = $gallery_name;
@@ -240,14 +268,14 @@ class ProductController extends Controller
                 }
 
                 DB::commit();
-                // بعد تحديث المنتج بنجاح
-                return Redirect::route('product.update', ['slug' => $product->slug])
-                    ->with('Success_message', 'تم تعديل المنتج بنجاح');
+
+                return Redirect::route('admin.products.index')->with('Success_message', 'تم تعديل المنتج بنجاح');
             } catch (\Exception $e) {
                 DB::rollback();
-                return $this->error_message('حدث خطأ أثناء عملية التعديل.');
+                return $this->exception_message($e);
             }
         }
+
         // عرض صفحة التعديل
         return view('admin.Products.update', compact('product', 'gallaries'));
     }

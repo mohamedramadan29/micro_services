@@ -3,50 +3,67 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use App\Http\Utils\Imagemanager;
 
 class DigitalFileUpload extends Component
 {
-
     use WithFileUploads;
 
     public $digital_file;
-    public $progress = 0;
     public $uploadedPath = '';
-    public $isUploading = false;
+    public $currentFile = ''; // الملف الحالي من الداتابيز
 
-    protected $listeners = ['startUpload'];
+    protected Imagemanager $imagemanager;
 
+    public function mount($currentFile = null)
+    {
+        $this->currentFile = $currentFile;
+        // لو في ملف حالي → نعرضه كـ uploaded من الأول
+        if ($currentFile) {
+            $this->uploadedPath = $currentFile;
+        }
+    }
 
-      protected Imagemanager $imagemanager;
     public function boot(Imagemanager $imagemanager)
     {
         $this->imagemanager = $imagemanager;
     }
 
-
-    public function startUpload()
+    public function updatedDigitalFile()
     {
         $this->validate([
-            'digital_file' => 'required|file|max:2048000', // 2 جيجا (بالكيلوبايت)
+            'digital_file' => 'required|file|max:2048000|mimes:pdf,zip,rar,exe,mp3,mp4,7z',
         ]);
 
-        $this->isUploading = true;
-        $this->progress = 0;
+        // رفع الملف الجديد
+        $filename = $this->imagemanager->UploadSingleImage('/', $this->digital_file, 'digital_files');
 
-        $digital_file = $this->digital_file;
+        // حذف الملف القديم لو موجود (اختياري - لو عايز تحذفه من السيرفر)
+        if ($this->currentFile) {
+            $oldPath = public_path('assets/uploads/digital_products/' . $this->currentFile);
+            if (file_exists($oldPath)) {
+                unlink($oldPath);
+            }
+        }
 
-        // $filename = Str::random(40) . '.' . $this->digital_file->getClientOriginalExtension();
-        // $path = $this->digital_file->storeAs('digital_uploads', $filename, 'local');
+        $this->uploadedPath = $filename;
+        $this->currentFile = $filename; // تحديث الحالي
+        $this->digital_file = null; // رست الـ input
+    }
 
-        $path = $this->imagemanager->UploadSingleImage('/', $digital_file, 'digital_files');
-        $this->uploadedPath = $path;
-        $this->isUploading = false;
-        $this->progress = 100;
+    public function removeFile()
+    {
+        // حذف الملف من السيرفر لو عايز
+        if ($this->uploadedPath) {
+            $path = public_path('assets/uploads/digital_products/' . $this->uploadedPath);
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
 
-        $this->dispatch('fileUploaded', $path);
+        $this->uploadedPath = '';
+        $this->currentFile = '';
     }
 
     public function render()

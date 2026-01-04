@@ -133,7 +133,7 @@
                                         </div>
                                     </div>
                                     <button style="margin: auto;display: block" type="submit" class="btn btn-save"
-                                        id="submitBtn"> اضافة الكورس  <i class="fa fa-save"></i></button>
+                                        id="submitBtn"> اضافة الكورس  <i class="fa fa-save btn-primary"></i></button>
                                     <span id="loader" style="display: none;">جاري الإرسال...</span>
                                 </div>
                             </div>

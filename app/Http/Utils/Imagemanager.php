@@ -15,7 +15,6 @@ class Imagemanager
             $filename = $this->GenerateImageName($image);
             $this->StoreImageLocale($image, '/', $filename, $disk);
             $model->images()->create([
-
                 'file_name' => $filename,
             ]);
         }
