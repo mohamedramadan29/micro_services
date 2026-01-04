@@ -136,7 +136,7 @@ class PortfolioController extends Controller
             'description'   => $request->description,
             'link'          => $request->link,
             'image'         => $mainImage,
-            'more_images'   => json_encode(array_values($additionalImages)), // نضمن إنه array نظيف
+            'more_images'   => $additionalImages, // نضمن إنه array نظيف
             'tools'         =>  is_array($request['skills'])
                 ? implode(',', $request['skills'])
                 : $request['skills'],

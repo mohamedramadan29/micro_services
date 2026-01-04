@@ -29,7 +29,7 @@ class PortfolioUpload extends Component
             $this->uploadedMainImage = $portfolio->image;
 
             // more_images محفوظ كـ JSON string → نحوله لـ array
-            $more = $portfolio->more_images ? json_decode($portfolio->more_images, true) : [];
+            $more = $portfolio->more_images ? $portfolio->more_images : [];
             $this->uploadedAdditionalImages = is_array($more) ? $more : [];
         }
     }
