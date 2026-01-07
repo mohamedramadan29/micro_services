@@ -118,6 +118,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('course/update_status/{id}', 'update_status');
             Route::post('course/delete/{id}', 'delete');
             Route::match(['post', 'get'], 'course/update/{id}', 'update');
+            Route::get('course/user_register/{id}', 'register_users')->name('course.register_users');
         });
         ################# End Courses ####################
         ################## Start Order Controller ################
@@ -216,8 +217,8 @@ Route::group(['prefix' => 'admin'], function () {
         ################# Start Review Controller ###################
 
         Route::controller(ReviewsController::class)->group(function () {
-            Route::get('reviews','index');
-            Route::get('review/{id}','details');
+            Route::get('reviews', 'index');
+            Route::get('review/{id}', 'details');
         });
         ################# End Review Controller #####################
 

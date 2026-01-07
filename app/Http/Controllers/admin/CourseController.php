@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Traits\Message_Trait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\front\CourseRegister;
 use App\Notifications\AdminActiveCourse;
 use Illuminate\Support\Facades\Notification;
 
@@ -35,21 +36,32 @@ class CourseController extends Controller
         return $this->success_message(' تم تفعيل الكورس  وظهورة علي الموقع ');
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $course = Course::find($id);
-        if($request->isMethod('post')){
+        if ($request->isMethod('post')) {
             $status = $request->get('status');
             $course->update([
                 'status' => $status
             ]);
             return $this->success_message('تم تعديل حالة الكورس بنجاح');
         }
-        return view('admin.courses.view',compact('course'));
+        return view('admin.courses.view', compact('course'));
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $course = Course::find($id);
         $course->delete();
         return  $this->success_message('تم حذف الكورس بنجاح ');
+    }
+
+    ################### Start Show Registeration In Courses
+
+    public function register_users($id)
+    {
+        $users = CourseRegister::where('course_id', $id)->latest()->get();
+        $course = Course::find($id);
+        return view('admin.courses.course_registers', compact('users','course'));
     }
 }
