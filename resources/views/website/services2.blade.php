@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg text-right" dir="rtl">
+    <section class="gray-bg text-right services_page" dir="rtl">
         <!-- ============================ Hero Banner  Start================================== -->
         <div class="hero-banner bg-cover center"
             style="background:#00000057 url({{ asset('assets/website/img/services-hero.jpeg') }}) no-repeat;"

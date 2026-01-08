@@ -15003,3 +15003,17 @@ a {
     justify-content: space-between;
     /* عشان العنوان والكاتيغوري يبقوا مرتبين */
 }
+
+
+.products-page .ser_title098 {
+    max-height: 120px;
+    min-height: 120px;
+    overflow: hidden;
+}
+
+
+.services_page .ser_title098{
+     max-height: 65px;
+    min-height: 65px;
+    overflow: hidden;
+}

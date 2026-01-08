@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Traits\Message_Trait;
-use App\Http\Traits\Slug_Trait;
 use Illuminate\Http\Request;
 use App\Models\admin\Package;
+use App\Http\Traits\Slug_Trait;
+use App\Http\Traits\Message_Trait;
+use App\Models\admin\PackageTitle;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,7 +22,8 @@ class PackageController extends Controller
 
     public function create()
     {
-        return view("admin.package.create");
+        $titles = PackageTitle::all();
+        return view("admin.package.create",compact('titles'));
     }
 
     public function store(Request $request)
@@ -31,11 +33,13 @@ class PackageController extends Controller
             'title' => 'required',
             'description' => 'required',
             'price' => 'required',
+            'category'=>'required'
         ];
         $messages = [
             'title.required' => ' من فضلك ادخل العنوان',
             'description.required' => ' من فضلك ادخل محتوي الباقة',
             'price.required' => ' من فضلك ادخل سعر الباقة',
+            'category.required'=>' من فضلك حدد قسم الباقة  ',
         ];
         $validator = Validator::make($data, $rules, $messages);
         if ($validator->fails()) {
@@ -46,6 +50,7 @@ class PackageController extends Controller
         $package->slug = $this->CustomeSlug($data['title']);
         $package->description = $data['description'];
         $package->price = $data['price'];
+        $package->title = $data['category'];
         $package->save();
         return $this->success_message(' تم اضافة الباقة بنجاح  ');
     }
@@ -53,7 +58,8 @@ class PackageController extends Controller
     public function edit($id)
     {
         $package = Package::findOrFail($id);
-        return view('admin.package.edit', compact('package'));
+           $titles = PackageTitle::all();
+        return view('admin.package.edit', compact('package','titles'));
     }
 
     public function update(Request $request, $id)
@@ -63,11 +69,13 @@ class PackageController extends Controller
             'title' => 'required',
             'description' => 'required',
             'price' => 'required',
+            'category'=>'required'
         ];
         $messages = [
             'title.required' => ' من فضلك ادخل العنوان  ',
             'description.required' => ' من فضلك ادخل محتوي الباقة  ',
             'price.required' => ' من فضلك ادخل سعر الباقة  ',
+            'category.required'=>' من فضلك حدد قسم الباقة  ',
         ];
         $validator = Validator::make($data, $rules, $messages);
         if ($validator->fails()) {
@@ -77,6 +85,7 @@ class PackageController extends Controller
         $package->name = $data['title'];
         $package->description = $data['description'];
         $package->price = $data['price'];
+        $package->title = $data['category'];
         $package->save();
         return $this->success_message(' تم تعديل الباقة بنجاح  ');
     }
@@ -92,4 +101,6 @@ class PackageController extends Controller
         $subscribes = $package->subscribes()->orderBy('id','desc')->get();
         return view('admin.package.subscribes', compact('subscribes','package'));
     }
+
+
 }

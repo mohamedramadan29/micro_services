@@ -19,10 +19,12 @@ use App\Http\Controllers\admin\ProperityController;
 use \App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\BlogCategoryController;
 use App\Http\Controllers\admin\PackageController;
+use App\Http\Controllers\admin\PackagetitleController;
 use App\Http\Controllers\admin\WithdrawRequestController;
 use App\Http\Controllers\admin\ProperityMaintainController;
 use App\Http\Controllers\admin\PublicCoursesPageController;
 use App\Http\Controllers\admin\ReviewsController;
+use App\Models\admin\PackageTitle;
 
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
@@ -213,6 +215,15 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('package/subscribes/{id}', 'showSubscribe');
         });
         ################## End Package Controller ###################
+
+        ################## Start PackageTitle Controller ############
+        Route::controller(PackagetitleController::class)->group(function () {
+            Route::get('package-titles', 'index');
+            Route::match(['post', 'get'], 'package-title/add', 'create');
+            Route::match(['post', 'get'], 'package-title/edit/{id}', 'update');
+            Route::post('package-title/delete/{id}', 'delete');
+        });
+        ################# End PackageTitle Controller ################
 
         ################# Start Review Controller ###################
 

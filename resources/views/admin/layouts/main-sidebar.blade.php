@@ -228,6 +228,8 @@
                     <ul class="slide-menu">
                         <li><a class="slide-item" href="{{ url('admin/packages') }}"> ادارة الباقات </a>
                         </li>
+                         <li><a class="slide-item" href="{{ url('admin/package-titles') }}"> تصنيف الباقات  </a>
+                        </li>
                     </ul>
                 </li>
 

@@ -57,6 +57,7 @@
                                     <tr>
                                         <th class="wd-15p border-bottom-0"> #</th>
                                         <th class="wd-15p border-bottom-0"> عنوان الباقة </th>
+                                        <th class="wd-15p border-bottom-0"> تصنيف الباقة </th>
                                         <th class="wd-15p border-bottom-0"> محتوي الباقة </th>
                                         <th class="wd-15p border-bottom-0"> سعر الباقة </th>
                                         <th class="wd-15p border-bottom-0"> عدد الاشتراكات  </th>
@@ -68,6 +69,7 @@
                                         <tr>
                                             <td> {{ $loop->iteration }} </td>
                                             <td> {{ $package['name'] }} </td>
+                                            <td> {{ $package['title'] }} </td>
                                             <td> {{ $package['description'] }}</td>
                                             <td> {{ number_format($package['price'], 2) }} $ </td>
                                             <td>{{ $package->subscribes->count() }}</td>
