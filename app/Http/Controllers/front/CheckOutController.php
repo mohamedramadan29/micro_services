@@ -119,7 +119,7 @@ class CheckOutController extends Controller
             // Create Stripe checkout session
             Stripe::setApiKey(env('STRIPE_SECRET'));
             $session = StripeSession::create([
-                'payment_method_types' => ['card', 'alipay'],
+                'payment_method_types' => ['card'],
                 'line_items' => [
                     [
                         'price_data' => [

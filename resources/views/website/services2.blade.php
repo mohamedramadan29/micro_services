@@ -72,7 +72,7 @@
                         <h4> خدمات {{ $category['name'] }} </h4>
                     </div>
                     <div>
-                        <a class="btn btn-global-button" href="{{ url('services/' . $category['slug']) }}"> مشاهدة المزيد
+                        <a class="btn btn-global-button" href="{{ url('category/service/' . $category['slug']) }}"> مشاهدة المزيد
                             <i class="fa fa-plus"></i> </a>
                     </div>
                 </div>
