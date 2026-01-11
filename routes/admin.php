@@ -24,6 +24,7 @@ use App\Http\Controllers\admin\WithdrawRequestController;
 use App\Http\Controllers\admin\ProperityMaintainController;
 use App\Http\Controllers\admin\PublicCoursesPageController;
 use App\Http\Controllers\admin\ReviewsController;
+use App\Http\Controllers\admin\ServiceOrdersController;
 use App\Models\admin\PackageTitle;
 
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
@@ -232,6 +233,14 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('review/{id}', 'details');
         });
         ################# End Review Controller #####################
+
+        ################### Start Service Orders Controller #########
+
+        Route::controller(ServiceOrdersController::class)->group(function () {
+            Route::get('service-orders/index', 'index');
+            Route::get('service-order/{id}', 'details');
+        });
+        ################### End Service Orders Controller ############
 
     });
 });

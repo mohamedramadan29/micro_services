@@ -33,7 +33,6 @@ class CheckOutController extends Controller
         if ($count_items > 0) {
             return view('website.checkout');
         }
-
     }
 
     public function order(Request $request)
@@ -179,6 +178,23 @@ class CheckOutController extends Controller
                 $order->seller_commission = $metadata->service_price - ($metadata->service_price * $metadata->website_commission);
                 $order->status = 'جديد';
                 $order->save();
+
+                ####### Create OrderDetails
+                $order_details = new OrderDetail();
+                $order_details->order_id = $order->id;
+                $order_details->order_number = $new_order_number;
+                $order_details->user_buyer = $metadata->user_id;
+                $order_details->user_seller = $metadata->seller_id;
+                $order_details->service_id = $metadata->service_id;
+                $order_details->service_name = $metadata->service_name;
+                $order_details->order_price = $metadata->service_price;
+                $order_details->quantity = 1;
+                $order_details->website_commission = $metadata->service_price * $metadata->website_commission;
+                $order_details->seller_commission = $metadata->service_price - ($metadata->service_price * $metadata->website_commission);
+                $order_details->status = 'جديد';
+                $order_details->save();
+
+
 
                 // Send notification to seller
                 $user = User::find($metadata->seller_id);
