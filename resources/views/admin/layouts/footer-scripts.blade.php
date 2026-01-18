@@ -120,3 +120,6 @@
     });
 </script>
 <!-- End File Input -->
+
+@notifyJs
+@toastifyJs

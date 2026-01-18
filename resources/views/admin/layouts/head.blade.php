@@ -28,3 +28,5 @@
 <link href="{{ URL::asset('assets/admin/css-rtl/skin-modes.css') }}" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
+    @notifyCss
+    @toastifyCss

@@ -37,6 +37,7 @@ use App\Http\Controllers\front\PublicCourseRegisterController;
 use App\Http\Controllers\front\FrontProperityMaintainController;
 use App\Http\Controllers\front\User\PortfolioController;
 use App\Http\Controllers\front\PortfolioController as publicPortfolioController;
+use App\Http\Controllers\front\NafizhaPortfolioController;
 
 Route::group(
     [
@@ -349,6 +350,13 @@ Route::group(
         Route::controller(publicPortfolioController::class)->group(function () {
             Route::get('portfolios', 'index');
             Route::get('portfolio/{id}-{slug}', 'details');
+        });
+        ####################### End Public Portfolio ###################
+          ####################### Start Public Portfolio ###################
+
+        Route::controller(NafizhaPortfolioController::class)->group(function () {
+            Route::get('nafizha/portfolios', 'index');
+            Route::get('nafizha/portfolio/{id}-{slug}', 'details');
         });
         ####################### End Public Portfolio ###################
     }

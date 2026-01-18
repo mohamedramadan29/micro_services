@@ -18,6 +18,7 @@ use \App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ProperityController;
 use \App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\BlogCategoryController;
+use App\Http\Controllers\admin\NafizhaPortfolioController;
 use App\Http\Controllers\admin\PackageController;
 use App\Http\Controllers\admin\PackagetitleController;
 use App\Http\Controllers\admin\WithdrawRequestController;
@@ -241,6 +242,18 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('service-order/{id}', 'details');
         });
         ################### End Service Orders Controller ############
+
+        #################### Start Nafizha Portfolio ################
+
+        Route::controller(NafizhaPortfolioController::class)->group(function () {
+            Route::get('nafizha-portfolio', 'index');
+            Route::get('nafizha-portfolio/add', 'create');
+            Route::post('nafizha-portfolio/store', 'store')->name('nafizha-portfolio.store');
+            Route::get('nafizha-portfolio/edit/{id}', 'edit');
+            Route::post('nafizha-portfolio/update/{id}', 'update');
+            Route::get('nafizha-portfolio/delete/{id}', 'delete');
+        });
+        #################### End Nafizha Portfolio ###################
 
     });
 });
