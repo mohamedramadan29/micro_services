@@ -86,6 +86,16 @@
                 </ul>
             </li>
 
+            <li class="side-item side-item-category"> الكورسات الجديدة </li>
+            <li class="slide">
+                <a class="side-menu__item" data-toggle="slide" href="">
+                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-graduation-cap"></i>
+                    <span class="side-menu__label"> الكورسات الجديدة </span><i class="angle fe fe-chevron-down"></i></a>
+                <ul class="slide-menu">
+                    <li><a class="slide-item" href="{{ route('admin.new-courses.index') }}"> ادارة الكورسات </a></li>
+                </ul>
+            </li>
+
             <li class="side-item side-item-category"> صفحات الكورسات العامة </li>
             <li class="slide">
                 <a class="side-menu__item" data-toggle="slide" href="">

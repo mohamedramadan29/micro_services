@@ -38,6 +38,7 @@ use App\Http\Controllers\front\FrontProperityMaintainController;
 use App\Http\Controllers\front\User\PortfolioController;
 use App\Http\Controllers\front\PortfolioController as publicPortfolioController;
 use App\Http\Controllers\front\NafizhaPortfolioController;
+use App\Http\Controllers\front\NewCourseController;
 
 Route::group(
     [
@@ -183,6 +184,18 @@ Route::group(
             Route::get('courses', 'index');
             Route::get('course/{id}-{slug}', 'course_details')->name('course_details');
         });
+
+        ##################### Start New Courses System ###################
+        Route::controller(NewCourseController::class)->group(function () {
+            Route::get('new-courses', 'index')->name('courses.index');
+            Route::get('courses/{slug}', 'show')->name('courses.show');
+            Route::get('courses/{courseSlug}/topic/{topicId}', 'topic')->name('courses.topic');
+            Route::get('courses/{courseSlug}/topic/{topicId}/lesson/{lessonId}', 'lesson')->name('courses.lesson');
+        });
+
+        // API route for video URL
+        Route::get('api/courses/video/{lessonId}', [NewCourseController::class, 'getVideoUrl'])->middleware('video.protection');
+        Route::get('courses/video-stream/{lessonId}', [NewCourseController::class, 'videoStream'])->middleware('video.protection')->name('courses.video-stream');
 
         Route::group(['middleware' => ['auth']], function () {
             Route::controller(TicketsController::class)->group(function () {

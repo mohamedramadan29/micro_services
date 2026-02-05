@@ -26,6 +26,9 @@ use App\Http\Controllers\admin\ProperityMaintainController;
 use App\Http\Controllers\admin\PublicCoursesPageController;
 use App\Http\Controllers\admin\ReviewsController;
 use App\Http\Controllers\admin\ServiceOrdersController;
+use App\Http\Controllers\admin\NewCourseController;
+use App\Http\Controllers\admin\NewCourseTopicController;
+use App\Http\Controllers\admin\NewCourseLessonController;
 use App\Models\admin\PackageTitle;
 
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
@@ -254,6 +257,40 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('nafizha-portfolio/delete/{id}', 'delete');
         });
         #################### End Nafizha Portfolio ###################
+
+        #################### Start New Course System ###################
+        Route::controller(NewCourseController::class)->group(function () {
+            Route::get('new-courses', 'index')->name('admin.new-courses.index');
+            Route::get('new-course/create', 'create')->name('admin.new-courses.create');
+            Route::post('new-course/store', 'store')->name('admin.new-courses.store');
+            Route::get('new-course/{newCourse}', 'show')->name('admin.new-courses.show');
+            Route::get('new-course/{newCourse}/edit', 'edit')->name('admin.new-courses.edit');
+            Route::post('new-course/{newCourse}/update', 'update')->name('admin.new-courses.update');
+            Route::post('new-course/{newCourse}/delete', 'destroy')->name('admin.new-courses.destroy');
+            Route::post('new-course/{newCourse}/toggle-status', 'toggleStatus')->name('admin.new-courses.toggle-status');
+        });
+
+        Route::controller(NewCourseTopicController::class)->group(function () {
+            Route::get('new-course/{course}/topics', 'index')->name('admin.new-courses.topics.index');
+            Route::get('new-course/{course}/topic/create', 'create')->name('admin.new-courses.topics.create');
+            Route::post('new-course/{course}/topic/store', 'store')->name('admin.new-courses.topics.store');
+            Route::get('new-course/{course}/topic/{topic}', 'show')->name('admin.new-courses.topics.show');
+            Route::get('new-course/{course}/topic/{topic}/edit', 'edit')->name('admin.new-courses.topics.edit');
+            Route::post('new-course/{course}/topic/{topic}/update', 'update')->name('admin.new-courses.topics.update');
+            Route::post('new-course/{course}/topic/{topic}/delete', 'destroy')->name('admin.new-courses.topics.destroy');
+        });
+
+        Route::controller(NewCourseLessonController::class)->group(function () {
+            Route::get('new-course/{course}/topic/{topic}/lessons', 'index')->name('admin.new-courses.lessons.index');
+            Route::get('new-course/{course}/topic/{topic}/lesson/create', 'create')->name('admin.new-courses.lessons.create');
+            Route::post('new-course/{course}/topic/{topic}/lesson/store', 'store')->name('admin.new-courses.lessons.store');
+            Route::get('new-course/{course}/topic/{topic}/lesson/{lesson}', 'show')->name('admin.new-courses.lessons.show');
+            Route::get('new-course/{course}/topic/{topic}/lesson/{lesson}/edit', 'edit')->name('admin.new-courses.lessons.edit');
+            Route::post('new-course/{course}/topic/{topic}/lesson/{lesson}/update', 'update')->name('admin.new-courses.lessons.update');
+            Route::post('new-course/{course}/topic/{topic}/lesson/{lesson}/delete', 'destroy')->name('admin.new-courses.lessons.destroy');
+            Route::post('new-course/{course}/topic/{topic}/lesson/{lesson}/toggle-free', 'toggleFree')->name('admin.new-courses.lessons.toggle-free');
+        });
+        ################## End New Course System ####################
 
     });
 });

@@ -54,7 +54,8 @@
                                 <!-- Single Wrap -->
                                 <div class="_dashboard_content">
                                     <div class="_dashboard_content_header">
-                                        <div class="" style="display: flex;justify-content:space-between;width: 100%;">
+                                        <div class=""
+                                            style="display: flex;justify-content:space-between;width: 100%;">
                                             <h4><i class="ti-lock mr-1"></i> كورساتي </h4>
                                             <a href="{{ url('my/course/add') }}" class="btn btn-primary btn-sm">
                                                 اضف كورس جديد <i class="bi bi-plus"></i> </a>

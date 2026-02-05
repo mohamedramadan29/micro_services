@@ -88,8 +88,7 @@
                                         <select required class="form-control form-select" name="category">
                                             <option disabled>-- حدد من القائمة --</option>
                                             @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}" {{ in_array($category->id,
-                                                old('category', [])) ? 'selected' : '' }}>
+                                            <option value="{{ $category->id }}">
                                                 {{ $category->name }}
                                             </option>
                                             @endforeach
