@@ -3,7 +3,7 @@
         <a href="{{ url('tickets') }}" class="btn"> مركز المساعدة <i class="bi bi-person-raised-hand"></i> </a>
     </div>
     <div class="help_center help_center_products">
-        <a target="_blank" href="https://wa.me/+963997610723" class="btn btn-primary"> المسؤول عن الخدمات والمنتجات  <i
+        <a target="_blank" href="https://wa.me/+963997610723" class="btn btn-primary"> المسؤول عن الخدمات والمنتجات <i
                 class="bi bi-person-raised-hand"></i> </a>
     </div>
     <div>
@@ -14,7 +14,7 @@
                     <div class="footer-widget">
                         <img src="{{ asset('assets/website/img/logo.png') }}" class="img-fluid f-logo" width="120"
                             alt="">
-                        <p style='line-height:1.3;font-weight:bold'>   وجهتك الأولى لتوظيف أفضل المستقلين .
+                        <p style='line-height:1.3;font-weight:bold'> وجهتك الأولى لتوظيف أفضل المستقلين .
                         </p>
                         <p style='line-height:1.3;'> اجمع بين أصحاب المشاريع والمستقلين لإنجاز الأعمال <br> باحترافية
                             وسرعة، مع حلول مبتكرة تلبي جميع احتياجاتك. </p>
@@ -43,21 +43,25 @@
                             <li><a style="background-color: #1877f2"
                                     href="https://www.facebook.com/share/1AMrSXDyaD/?ref=1"><i
                                         class="ti-facebook"></i></a></li>
-                            <li><a style="background-color: #1da1f2;"
-                                    href="https://x.com/Nafizhacom"><i
+                            <li><a style="background-color: #1da1f2;" href="https://x.com/Nafizhacom"><i
                                         class="bi bi-x"></i></a></li>
                             <li><a style="background-color: #c32aa3;" href="https://www.instagram.com/nafizha.com0/"><i
                                         class="ti-instagram"></i></a></li>
-                            <li><a style="background-color: #ff0000;" href="https://youtube.com/channel/UCgKHmloU0POMrTEktarwFzA?si=v_ChKb29St1WVKKJ"><i
+                            <li><a style="background-color: #ff0000;"
+                                    href="https://youtube.com/channel/UCgKHmloU0POMrTEktarwFzA?si=v_ChKb29St1WVKKJ"><i
                                         class="ti-youtube"></i></a></li>
                             <li><a style="background-color: #fffc00;"
                                     href="https://www.snapchat.com/add/nafizhacom?share_id=WdKBnTWhDhY&locale=ar-EG"><i
                                         class="bi bi-snapchat"></i></a></li>
-                            <li><a style="background-color: #010101;" href="https://www.tiktok.com/@nafizhacom?_r=1&_t=ZS-92AdhkLa0Yc"><i
+                            <li><a style="background-color: #010101;"
+                                    href="https://www.tiktok.com/@nafizhacom?_r=1&_t=ZS-92AdhkLa0Yc"><i
                                         class="bi bi-tiktok"></i></a></li>
                             <li><a style="background-color: #0a66c2;"
                                     href="https://www.linkedin.com/in/nafizha-com-273539350?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i
                                         class="ti-linkedin"></i></a></li>
+                            <li><a style="background-color: #ED0C6F;"
+                                    href="https://share.upscrolled.com/ar/user/f43e57ed-8627-469c-a473-1eced16bf46c"> Up
+                                </a></li>
                         </ul>
                     </div>
                 </div>

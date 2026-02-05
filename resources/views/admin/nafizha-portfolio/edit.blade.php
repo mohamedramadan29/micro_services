@@ -54,8 +54,37 @@
                                     </div>
                                 </div>
                                 <div>
-                                    {{-- ####################### Images ######################## --}}
-                                    @livewire('portfolio-upload', ['portfolio' => $portfolio])
+                                    <div class="form-group mb-4">
+                                        <label>الصورة الرئيسية <span class="text-danger">*</span></label>
+                                        <input type="file" name="image" accept="image/*" class="form-control">
+                                        <small class="text-muted d-block mt-2">الامتدادات: jpg, png, jpeg, webp | الحجم الأقصى: 4MB</small>
+
+                                        @if($portfolio->image)
+                                            <div class="mt-3">
+                                                <p class="mb-1">الصورة الحالية:</p>
+                                                <img src="{{ asset('assets/uploads/portfolios/' . $portfolio['image']) }}" class="img-thumbnail" style="max-height: 200px;">
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label>صور إضافية للعمل (اختياري)</label>
+                                        <input type="file" name="additional_images[]" multiple accept="image/*" class="form-control">
+                                        <small class="text-muted d-block mt-2">الامتدادات: jpg, png, jpeg, webp | الحجم الأقصى لكل ملف: 4MB</small>
+
+                                        @if($portfolio->more_images && count($portfolio->more_images) > 0)
+                                            <div class="mt-3">
+                                                <p class="mb-1">الصور الإضافية الحالية:</p>
+                                                <div class="row">
+                                                    @foreach($portfolio->more_images as $img)
+                                                        <div class="col-md-3 mb-2">
+                                                            <img src="{{ asset('assets/uploads/portfolios/' . $img) }}" class="img-thumbnail" style="max-height: 150px;">
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
 
                                 <div class="col-xl-12 col-lg-12">

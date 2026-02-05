@@ -1,153 +1,161 @@
 @extends('admin.layouts.master')
 @section('title')
-اضافة عمل جديد
+    اضافة عمل جديد
 @endsection
 @section('blog-active', 'active')
 @section('blog-collapse', 'show')
 @section('css')
 @endsection
 @section('content')
-<!-- ==================================================== -->
-<div class="page-content">
-    <!-- Start Container Fluid -->
-    <div class="container-xxl">
-        <form method="post" action="{{ route('nafizha-portfolio.store') }}" enctype="multipart/form-data">
-            @csrf
+    <!-- ==================================================== -->
+    <div class="page-content">
+        <!-- Start Container Fluid -->
+        <div class="container-xxl">
+            <form method="post" action="{{ route('nafizha-portfolio.store') }}" enctype="multipart/form-data">
+                @csrf
 
-            <div class="row">
-                <div class="col-xl-12 col-lg-12">
-                    @if (Session::has('Success_message'))
-                    @php
-                    toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-                    @endphp
-                    @endif
-                    @if ($errors->any())
-                    @foreach ($errors->all() as $error)
-                    @php
-                    toastify()->error($error);
-                    @endphp
-                    @endforeach
-                    @endif
-                    <div class="card" style="background-color: #F2F2F8">
-                        <div class="card-header">
-                            <h4 class="card-title"> اضافة عمل جديد للمنصة </h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-6 col-12">
-                                    <div class="mb-3">
-                                        <label for="name" class="form-label"> عنوان العمل <span class="star"
-                                                style="color: red"> * </span>
-                                        </label>
-                                        <input type="text" class="form-control with-light" name="title" required
-                                            value="{{ old('title') }}">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12">
+                        @if (Session::has('Success_message'))
+                            @php
+                                toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
+                            @endphp
+                        @endif
+                        @if ($errors->any())
+                            @foreach ($errors->all() as $error)
+                                @php
+                                    toastify()->error($error);
+                                @endphp
+                            @endforeach
+                        @endif
+                        <div class="card" style="background-color: #F2F2F8">
+                            <div class="card-header">
+                                <h4 class="card-title"> اضافة عمل جديد للمنصة </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6 col-12">
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label"> عنوان العمل <span class="star"
+                                                    style="color: red"> * </span>
+                                            </label>
+                                            <input type="text" class="form-control with-light" name="title" required
+                                                value="{{ old('title') }}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="mt-2 col-lg-12">
-                                    <div class="mb-3">
-                                        <label for="description" class="form-label"> قم بوصف المشروع <span class="star"
-                                                style="color: red"> * </span></label>
-                                        <textarea class="form-control bg-light-subtle" id="description" rows="7"
-                                            placeholder="" name="description">{{ old('description') }}</textarea>
+                                    <div class="mt-2 col-lg-12">
+                                        <div class="mb-3">
+                                            <label for="description" class="form-label"> قم بوصف المشروع <span
+                                                    class="star" style="color: red"> * </span></label>
+                                            <textarea class="form-control bg-light-subtle" id="description" rows="7" placeholder="" name="description">{{ old('description') }}</textarea>
+                                        </div>
                                     </div>
-                                </div>
-                                <div>
-                                    {{-- ####################### Images ######################## --}}
-                                    @livewire('portfolio-upload')
-                                </div>
+                                    <div>
+                                        <div class="form-group mb-4">
+                                            <label>الصورة الرئيسية <span class="text-danger">*</span></label>
+                                            <input type="file" name="image" accept="image/*" class="form-control" required>
+                                            <small class="text-muted d-block mt-2">الامتدادات: jpg, png, jpeg, webp | الحجم الأقصى: 4MB</small>
+                                        </div>
 
-                                <div class="col-xl-12 col-lg-12">
-                                    <div class="form-group">
-                                        <label> مهارات متعلقة بالمشروع </label>
-                                        <select required class="form-control select2" multiple name="skills[]">
-                                            <option disabled>-- حدد من القائمة --</option>
-                                            @foreach ($sub_categories as $sub_category)
-                                            <option value="{{ $sub_category->id }}" {{ in_array($sub_category->id,
-                                                old('skills', [])) ? 'selected' : '' }}>
-                                                {{ $sub_category->name }}
-                                            </option>
-                                            @endforeach
-
-                                        </select>
-
+                                        <div class="form-group mb-4">
+                                            <label>صور إضافية للعمل (اختياري)</label>
+                                            <input type="file" name="additional_images[]" multiple accept="image/*" class="form-control">
+                                            <small class="text-muted d-block mt-2">الامتدادات: jpg, png, jpeg, webp | الحجم الأقصى لكل ملف: 4MB</small>
+                                        </div>
                                     </div>
-                                </div>
-                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                                <script>
-                                    $(document).ready(function() {
-                                                    $('.select2').select2({
-                                                        placeholder: "حدد المهارات",
-                                                        allowClear: true
-                                                    });
-                                                });
-                                </script>
 
-                                <div class="col-xl-12 col-lg-12">
-                                    <div class="form-group">
-                                        <label> القسم الرئيسي للعمل </label>
-                                        <select required class="form-control form-select" name="category">
-                                            <option disabled>-- حدد من القائمة --</option>
-                                            @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">
-                                                {{ $category->name }}
-                                            </option>
-                                            @endforeach
+                                    <div class="col-xl-12 col-lg-12">
+                                        <div class="form-group">
+                                            <label> مهارات متعلقة بالمشروع </label>
+                                            <select required class="form-control select2" multiple name="skills[]">
+                                                <option disabled>-- حدد من القائمة --</option>
+                                                @foreach ($sub_categories as $sub_category)
+                                                    <option value="{{ $sub_category->id }}"
+                                                        {{ in_array($sub_category->id, old('skills', [])) ? 'selected' : '' }}>
+                                                        {{ $sub_category->name }}
+                                                    </option>
+                                                @endforeach
 
-                                        </select>
+                                            </select>
 
+                                        </div>
                                     </div>
-                                </div>
+                                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                    <script>
+                                        $(document).ready(function() {
+                                            $('.select2').select2({
+                                                placeholder: "حدد المهارات",
+                                                allowClear: true
+                                            });
+                                        });
+                                    </script>
 
-                                <div class="col-xl-12 col-lg-12">
-                                    <div class="form-group">
-                                        <label> رابط العمل ( اختياري ) </label>
-                                        <input type="text" class="form-control with-light" name="link"
-                                            value="{{ old('link') }}">
+                                    <div class="col-xl-12 col-lg-12">
+                                        <div class="form-group">
+                                            <label> القسم الرئيسي للعمل </label>
+                                            <select required class="form-control form-select" name="category">
+                                                <option disabled>-- حدد من القائمة --</option>
+                                                @foreach ($categories as $category)
+                                                    <option value="{{ $category->id }}">
+                                                        {{ $category->name }}
+                                                    </option>
+                                                @endforeach
+
+                                            </select>
+
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-lg-6 col-12">
-                                    <div class="mb-3">
-                                        <label for="status" class="form-label"> حالة المشروع </label>
-                                        <select required class="form-control" id="status" data-choices
-                                            data-choices-groups data-placeholder="Select Categories" name="status">
-                                            <option value=""> -- حدد حالة الكورس --</option>
-                                            <option value="0"> ارشيف </option>
-                                            <option value="1" selected> نشط </option>
-                                        </select>
+                                    <div class="col-xl-12 col-lg-12">
+                                        <div class="form-group">
+                                            <label> رابط العمل ( اختياري ) </label>
+                                            <input type="text" class="form-control with-light" name="link"
+                                                value="{{ old('link') }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6 col-12">
+                                        <div class="mb-3">
+                                            <label for="status" class="form-label"> حالة المشروع </label>
+                                            <select required class="form-control" id="status" data-choices
+                                                data-choices-groups data-placeholder="Select Categories" name="status">
+                                                <option value=""> -- حدد حالة الكورس --</option>
+                                                <option value="0"> ارشيف </option>
+                                                <option value="1" selected> نشط </option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="p-3 mb-3 rounded bg-light">
+                            <div class="row justify-content-start g-2">
+                                <div class="col-lg-3">
+                                    <button type="submit" class="btn btn-primary w-100"> حفظ <i
+                                            class='bx bxs-save'></i></button>
+                                </div>
+                                <div class="col-lg-3">
+                                    <a href="{{ url('admin/blogs') }}" class="btn btn-danger w-100"> الغاء </a>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="p-3 mb-3 rounded bg-light">
-                        <div class="row justify-content-start g-2">
-                            <div class="col-lg-3">
-                                <button type="submit" class="btn btn-primary w-100"> حفظ <i
-                                        class='bx bxs-save'></i></button>
-                            </div>
-                            <div class="col-lg-3">
-                                <a href="{{ url('admin/blogs') }}" class="btn btn-danger w-100"> الغاء </a>
-                            </div>
-
-                        </div>
-                    </div>
-
                 </div>
-            </div>
-        </form>
-    </div>
-    <!-- End Container Fluid -->
+            </form>
+        </div>
+        <!-- End Container Fluid -->
 
 
-    <!-- ==================================================== -->
-    <!-- End Page Content -->
-    <!-- ==================================================== -->
+        <!-- ==================================================== -->
+        <!-- End Page Content -->
+        <!-- ==================================================== -->
     @endsection
 
     @section('js')
-    <script>
-        // دالة لتحديث الحقل المخفي
+        <script>
+            // دالة لتحديث الحقل المخفي
             function updateHiddenKeywords() {
                 let keywords = [];
                 document.querySelectorAll('#keywordList .badge').forEach(badge => {
@@ -178,9 +186,9 @@
                     updateHiddenKeywords();
                 }
             });
-    </script>
-    <script>
-        // دالة لتحويل النص إلى slug
+        </script>
+        <script>
+            // دالة لتحويل النص إلى slug
             function toSlug(text) {
                 return text
                     .toLowerCase()
@@ -197,5 +205,5 @@
                 document.getElementById('slugPreview').textContent = slug || 'عنوان-المنتج';
                 document.getElementById('meta_url_final').value = slug; // تحديث الحقل المخفي
             });
-    </script>
+        </script>
     @endsection
