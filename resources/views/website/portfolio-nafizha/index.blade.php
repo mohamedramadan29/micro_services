@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
- معرض اعمال نفذها
+ معرض أعمال نفذها
 @endsection
 @section('content')
 <!-- ============================ Main Section Start ================================== -->
@@ -10,7 +10,7 @@
         style="background:#00000057 url({{ asset('assets/website/img/products_hero.jpeg') }}) no-repeat;"
         data-overlay="7">
         <div class="container">
-            <h1> معرض اعمال نفذها </h1>
+            <h1> معرض أعمال نفذها </h1>
             <form class="mt-4" dir="rtl" method="get" action="{{ url('products') }}">
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-md-10 col-sm-12">

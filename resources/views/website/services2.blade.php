@@ -12,11 +12,11 @@
             <div class="container">
                 <h1> خدمات تساعدك على نمو مشاريعك </h1>
 
-                <p> يقدم المستقلون على كاف مجموعة متنوعة من الخدمات الإحترافية التى تساعدك على تطوير أعمالك و نمو
-                    مشاريعك
+                <p>
+                    منصة تجمع نخبة من المستقلين المحترفين لتقديم خدمات متخصصة تساعد الأفراد والشركات على تطوير أعمالهم، وتنفيذ مشاريعهم بكفاءة، وتحقيق نمو مستدام عبر حلول عملية وموثوقة
                 </p>
                 <a href="{{ url('service/add') }}" class="btn btn-primary free_consult_button">
-                    اضف خدمك الان <i class="fa fa-plus"></i> </a>
+                    أضف خدمتك  من فضلك<i class="fa fa-plus"></i> </a>
                 <form class="mt-4" dir="rtl" method="get" action="{{ url('search') }}">
                     <div class="row justify-content-center">
                         <div class="col-lg-8 col-md-10 col-sm-12">

@@ -462,7 +462,7 @@
         max-width: 600px;
         margin: 3rem auto 0;
         padding: 2rem;
-        background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgb(63 182 151 / 31%));
+        background: #CCEBE6;
         border-radius: 1.5rem;
         animation: fadeInUp 0.6s ease-out 0.5s both;
         margin-bottom: 20px;

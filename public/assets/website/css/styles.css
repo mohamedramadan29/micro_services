@@ -14632,7 +14632,7 @@ a {
 }
 
 .latest-courses .course-card {
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgb(63 182 151 / 31%));
+    background: #CCEBE6;
     /* متدرج خفيف */
     border-radius: 12px;
     padding: 20px;

@@ -61,7 +61,7 @@
     <!-- ========================== About Elements ============================= -->
     <!-- ########################################### Presit Section ######################## -->
 
-    <section class="call-to-act gift_section"
+    {{-- <section class="call-to-act gift_section"
         style="background:#3fb697 url({{ asset('assets/website/img/landing-bg.png') }}) no-repeat">
         <div class="container">
             <div class="row justify-content-center">
@@ -85,7 +85,7 @@
             </div>
         </div>
 
-    </section>
+    </section> --}}
 
     <!------------------------------------- End Present Section ##################### -->
 @endsection

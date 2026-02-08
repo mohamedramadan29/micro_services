@@ -38,7 +38,7 @@
             </form>
             <br>
             <a href="{{ url('service/add') }}" style="padding:12px 25px" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                اضف خدمتك </a>
+                  أضف خدمتك  من فضلك </a>
         </div>
     </div>
     <!-- ============================ Hero Banner End ================================== -->
