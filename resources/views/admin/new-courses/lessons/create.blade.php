@@ -40,7 +40,7 @@
 
                 <form action="{{ route('admin.new-courses.lessons.store', [$course, $topic]) }}" method="POST">
                     @csrf
-                    
+
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
@@ -63,7 +63,9 @@
                                         <strong>أمثلة للروابط المقبولة:</strong><br>
                                         • https://www.youtube.com/watch?v=VIDEO_ID<br>
                                         • https://youtu.be/VIDEO_ID<br>
-                                        • https://www.youtube.com/embed/VIDEO_ID
+                                        • https://www.youtube.com/embed/VIDEO_ID<br>
+                                        • https://www.youtube.com/shorts/VIDEO_ID<br>
+                                        • https://www.youtube.com/watch?v=VIDEO_ID&feature=shorts
                                     </small>
                                 </div>
                             </div>
@@ -170,7 +172,7 @@ $(document).ready(function() {
     $('#video_url').on('input', function() {
         var url = $(this).val();
         var videoId = extractYouTubeVideoId(url);
-        
+
         if (videoId) {
             $('#video-id-display').text(videoId);
             $('#video-thumbnail').attr('src', 'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg');
@@ -184,9 +186,13 @@ $(document).ready(function() {
 
     function extractYouTubeVideoId(url) {
         var patterns = [
+            // Regular YouTube URLs
             /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/,
             /youtube\.com\/embed\/([a-zA-Z0-9_-]+)/,
-            /youtu\.be\/([a-zA-Z0-9_-]+)/
+            /youtu\.be\/([a-zA-Z0-9_-]+)/,
+            // YouTube Shorts URLs
+            /youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/,
+            /youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]+).*&feature=shorts/
         ];
 
         for (var i = 0; i < patterns.length; i++) {

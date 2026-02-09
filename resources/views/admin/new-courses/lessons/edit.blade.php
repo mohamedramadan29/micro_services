@@ -59,6 +59,16 @@
                                 <label for="video_url">رابط فيديو يوتيوب <span class="text-danger">*</span></label>
                                 <input type="url" class="form-control" id="video_url" name="video_url" value="{{ old('video_url', $lesson->video_url) }}" required>
                                 <small class="text-muted">يجب أن يكون رابط فيديو unlisted من يوتيوب</small>
+                                <div class="mt-2">
+                                    <small class="text-info">
+                                        <strong>أمثلة للروابط المقبولة:</strong><br>
+                                        • https://www.youtube.com/watch?v=VIDEO_ID<br>
+                                        • https://youtu.be/VIDEO_ID<br>
+                                        • https://www.youtube.com/embed/VIDEO_ID<br>
+                                        • https://www.youtube.com/shorts/VIDEO_ID<br>
+                                        • https://www.youtube.com/watch?v=VIDEO_ID&feature=shorts
+                                    </small>
+                                </div>
                                 @if($lesson->video_id)
                                     <div class="mt-2">
                                         <small class="text-info">

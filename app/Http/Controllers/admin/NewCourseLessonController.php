@@ -26,10 +26,16 @@ class NewCourseLessonController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'video_url' => 'required|url',
+            'video_url' => [
+                'required',
+                'url',
+                'regex:/^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|shorts\/)|youtu\.be\/)[a-zA-Z0-9_-]+(\?[^\s]*)?$/'
+            ],
             'duration_minutes' => 'nullable|integer|min:1',
             'is_free' => 'boolean',
             'sort_order' => 'integer|min:0',
+        ], [
+            'video_url.regex' => 'يجب أن يكون رابط فيديو يوتيوب صحيح (روابط عادية أو شورتس)'
         ]);
 
         $data = $request->all();
@@ -61,10 +67,16 @@ class NewCourseLessonController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'video_url' => 'required|url',
+            'video_url' => [
+                'required',
+                'url',
+                'regex:/^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|shorts\/)|youtu\.be\/)[a-zA-Z0-9_-]+(\?[^\s]*)?$/'
+            ],
             'duration_minutes' => 'nullable|integer|min:1',
             'is_free' => 'boolean',
             'sort_order' => 'integer|min:0',
+        ], [
+            'video_url.regex' => 'يجب أن يكون رابط فيديو يوتيوب صحيح (روابط عادية أو شورتس)'
         ]);
 
         $data = $request->all();
@@ -92,7 +104,7 @@ class NewCourseLessonController extends Controller
     public function toggleFree(NewCourse $course, NewCourseTopic $topic, NewCourseLesson $lesson)
     {
         $lesson->update(['is_free' => !$lesson->is_free]);
-        
+
         return response()->json([
             'success' => true,
             'message' => $lesson->is_free ? 'تم جعل الدرس مجانياً' : 'تم جعل الدرس مدفوعاً'

@@ -77,6 +77,12 @@
                                     @else
                                         <span class="badge badge-info">مدفوع</span>
                                     @endif
+
+                                    @if($lesson->isShort())
+                                        <span class="badge badge-warning ml-1" title="فيديو شورتس">
+                                            <i class="fas fa-video"></i> شورتس
+                                        </span>
+                                    @endif
                                 </td>
                                 <td>{{ $lesson->sort_order }}</td>
                                 <td>

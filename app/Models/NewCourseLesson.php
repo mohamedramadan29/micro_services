@@ -66,9 +66,13 @@ class NewCourseLesson extends Model
     public static function extractYouTubeVideoId(string $url): ?string
     {
         $patterns = [
+            // Regular YouTube URLs
             '/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/',
             '/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/',
             '/youtu\.be\/([a-zA-Z0-9_-]+)/',
+            // YouTube Shorts URLs
+            '/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/',
+            '/youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]+).*&feature=shorts/',
         ];
 
         foreach ($patterns as $pattern) {
@@ -94,5 +98,18 @@ class NewCourseLesson extends Model
         }
 
         return $minutes . ' دقيقة';
+    }
+
+    public function isShort(): bool
+    {
+        return $this->video_url && (
+            strpos($this->video_url, 'youtube.com/shorts') !== false ||
+            strpos($this->video_url, 'feature=shorts') !== false
+        );
+    }
+
+    public function getVideoTypeAttribute(): string
+    {
+        return $this->isShort() ? 'short' : 'regular';
     }
 }
