@@ -436,7 +436,7 @@
                             <li class="{{ request()->is('nafizha/portfolios') ? 'active' : '' }}"><a
                                     href="{{ url('nafizha/portfolios') }}"> فريق نفذها </a></li>
                             @if (\Illuminate\Support\Facades\Auth::check())
-                                <li><a href="{{ url('service/add') }}"> اضافة خدمة </a></li>
+                                <li><a href="{{ url('service/add') }}"> إضافة خدمة </a></li>
                             @endif
                             @php
                                 $count_items = count(\App\Models\front\Cart::getCartItems());

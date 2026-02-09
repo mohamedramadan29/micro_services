@@ -10,7 +10,7 @@
             data-overlay="7">
             <div class="container">
                 <h1> المشاريع المعروضة </h1>
-                <a href="{{ url('my/project/add') }}" class="btn btn-primary free_consult_button"> اضف مشروعك الان <i
+                <a href="{{ url('my/project/add') }}" class="btn btn-primary free_consult_button"> أضف مشروعك من فضلك   <i
                         class="fa fa-plus"></i> </a>
                 <form class="mt-4" dir="rtl" method="get" action="{{ url('projects') }}">
                     <div class="row justify-content-center">

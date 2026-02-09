@@ -14418,6 +14418,7 @@ a {
     border: 1px solid #f1f1f1;
     text-align: center;
     margin-bottom: 10px;
+    min-height: 230px;
 }
 
 .services_page .categories .info img {

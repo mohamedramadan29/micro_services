@@ -127,12 +127,12 @@
 
     <!-- ############################# Start Last Services ################# -->
 
-    <section class="min-sec categories home_services" dir="rtl">
+    <section class="min-sec categories home_services" dir="rtl" style="background-color: #CCEBE6">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-7 col-md-9">
                     <div class="sec-heading">
-                        <h2> احدث الخدمات </h2>
+                        <h2> أحدث الخدمات </h2>
                     </div>
                 </div>
             </div>
