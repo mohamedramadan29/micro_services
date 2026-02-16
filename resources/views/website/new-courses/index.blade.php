@@ -136,8 +136,10 @@
                         <div class="card course-card h-100">
                             <div class="position-relative">
                                 @if ($course->image)
-                                    <img src="{{ asset($course->image) }}" class="card-img-top course-image"
-                                        alt="{{ $course->title }}">
+                                    <a href="{{ route('courses.show', $course->slug) }}">
+                                        <img src="{{ asset($course->image) }}" class="card-img-top course-image"
+                                            alt="{{ $course->title }}">
+                                    </a>
                                 @else
                                     <img src="{{ asset('assets/admin/img/default-course.jpg') }}"
                                         class="card-img-top course-image" alt="Default Course">
@@ -152,7 +154,12 @@
                             </div>
 
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">{{ $course->title }}</h5>
+                                <h5 class="card-title">
+                                    <a href="{{ route('courses.show', $course->slug) }}">
+                                        {{ $course->title }}
+                                    </a>
+                                </h5>
+
 
                                 @if ($course->short_description)
                                     <p class="card-text text-muted">{{ Str::limit($course->short_description, 100) }}</p>
@@ -160,11 +167,11 @@
 
                                 <div class="course-meta">
                                     <div class="d-flex align-items-center">
-                                        <i class="fas fa-book me-2 text-primary"></i>
+                                        <i class="fas fa-book me-2 text-success"></i>
                                         <span>{{ $course->topics_count }} موضوع</span>
                                     </div>
                                     <div class="d-flex align-items-center">
-                                        <i class="fas fa-play-circle me-2 text-info"></i>
+                                        <i class="fas fa-play-circle me-2 text-success"></i>
                                         <span>{{ $course->lessons_count }} درس</span>
                                     </div>
                                 </div>

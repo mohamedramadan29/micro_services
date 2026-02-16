@@ -10,13 +10,29 @@
             style="background:#00000057 url({{ asset('assets/website/img/services-hero.jpeg') }}) no-repeat;"
             data-overlay="7">
             <div class="container">
-                <h1> خدمات تساعدك على نمو مشاريعك </h1>
-
-                <p>
-                    منصة تجمع نخبة من المستقلين المحترفين لتقديم خدمات متخصصة تساعد الأفراد والشركات على تطوير أعمالهم، <br> وتنفيذ مشاريعهم بكفاءة، وتحقيق نمو مستدام عبر حلول عملية وموثوقة
-                </p>
+                <h1>
+                    <span>
+                        خدمات تساعدك على نمو مشاريعك
+                    </span>
+                    <br>
+                    <span>
+                        منصة تجمع نخبة من المستقلين المحترفين لتقديم خدمات متخصصة تساعد
+                    </span>
+                    <br>
+                    <span>
+                      الأفراد والشركات على تطوير أعمالهم، وتنفيذ مشاريعهم بكفاءة،
+                    </span>
+                    <br>
+                    <span>
+                      وتحقيق نمو مستدام عبر حلول عملية وموثوقة
+                    </span>
+                </h1>
+                {{-- <p>
+                    منصة تجمع نخبة من المستقلين المحترفين لتقديم خدمات متخصصة تساعد الأفراد والشركات على تطوير أعمالهم، <br>
+                    وتنفيذ مشاريعهم بكفاءة، وتحقيق نمو مستدام عبر حلول عملية وموثوقة
+                </p> --}}
                 <a href="{{ url('service/add') }}" class="btn btn-primary free_consult_button">
-                    أضف خدمتك  من فضلك<i class="fa fa-plus"></i> </a>
+                    أضف خدمتك من فضلك<i class="fa fa-plus"></i> </a>
                 <form class="mt-4" dir="rtl" method="get" action="{{ url('search') }}">
                     <div class="row justify-content-center">
                         <div class="col-lg-8 col-md-10 col-sm-12">
@@ -50,7 +66,7 @@
                     <div class="row">
                         @foreach ($categories as $category)
                             <div class="col-lg-3 col-6">
-                                    {{-- <a href="{{ url('services/' . $category['slug']) }}"> {{ $category['name'] }}
+                                {{-- <a href="{{ url('services/' . $category['slug']) }}"> {{ $category['name'] }}
                                                 </a> --}}
                                 <a href="{{ url('category/service/' . $category['slug']) }}">
                                     <div class="info">
@@ -72,7 +88,8 @@
                         <h4> خدمات {{ $category['name'] }} </h4>
                     </div>
                     <div>
-                        <a class="btn btn-global-button" href="{{ url('category/service/' . $category['slug']) }}"> مشاهدة المزيد
+                        <a class="btn btn-global-button" href="{{ url('category/service/' . $category['slug']) }}"> مشاهدة
+                            المزيد
                             <i class="fa fa-plus"></i> </a>
                     </div>
                 </div>

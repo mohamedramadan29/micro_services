@@ -38,7 +38,7 @@
         .topic-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3fb697 0%, #57bea3 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -78,7 +78,7 @@
         }
 
         .price-badge {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
             padding: 10px 20px;
             border-radius: 50px;
@@ -130,7 +130,7 @@
             </nav>
 
             <div class="row align-items-center">
-                <div class="col-lg-8">
+                <div class="col-lg-8" style="text-align: right">
                     <h1 class="display-4 fw-bold mb-4">{{ $course->title }}</h1>
                     @if ($course->is_free)
                         <div class="price-badge free-badge mb-3">
@@ -196,7 +196,7 @@
     </section> --}}
 
     <!-- Course Topics -->
-    <section class="py-5 bg-light">
+    <section class="py-5 bg-light" dir="rtl">
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="display-5 fw-bold">محتوى الكورس</h2>
@@ -222,11 +222,11 @@
 
                                         <div class="d-flex justify-content-between align-items-center mt-3">
                                             <div class="d-flex align-items-center">
-                                                <i class="fas fa-play-circle me-2 text-primary"></i>
+                                                <i class="fas fa-play-circle me-2 text-success"></i>
                                                 <span>{{ $topic->lessons_count }} درس</span>
                                             </div>
                                             <div class="d-flex align-items-center">
-                                                <i class="fas fa-clock me-2 text-info"></i>
+                                                <i class="fas fa-clock me-2 text-success"></i>
                                                 <span>{{ $topic->total_duration }} دقيقة</span>
                                             </div>
                                         </div>
@@ -263,16 +263,16 @@
 
                     @if ($course->is_free)
                         <a href="{{ route('courses.topic', [$course->slug, $course->topics->first()->id]) }}"
-                            class="btn btn-success btn-lg me-3">
+                            class="btn me-3" style="background-color: #3fb697; color:#fff !important">
                             <i class="fas fa-play me-2"></i>ابدأ الكورس المجانى
                         </a>
                     @else
-                        <button class="btn btn-primary btn-lg me-3" onclick="showPurchaseModal()">
+                        <button class="btn btn-primary me-3" onclick="showPurchaseModal()">
                             <i class="fas fa-shopping-cart me-2"></i>اشترك الآن
                         </button>
                     @endif
 
-                    <a href="{{ route('courses.index') }}" class="btn btn-outline-secondary btn-lg">
+                    <a href="{{ route('courses.index') }}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-right me-2"></i>المزيد من الكورسات
                     </a>
                 </div>

@@ -83,7 +83,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background: rgba(102, 126, 234, 0.9);
+            background: rgb(63 182 151);
             color: white;
             width: 30px;
             height: 30px;
@@ -173,7 +173,8 @@
 @section('content')
     <!-- ============================ Hero Banner  Start================================== -->
     <div class="hero-banner bg-cover"
-        style="background:#00000057 url({{ asset('assets/website/img/courses-hero.jpeg') }}) no-repeat; direction: rtl;text-align:right" data-overlay="7">
+        style="background:#00000057 url({{ asset('assets/website/img/courses-hero.jpeg') }}) no-repeat; direction: rtl;text-align:right"
+        data-overlay="7">
         <div class="container">
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb breadcrumb-custom">
@@ -214,7 +215,7 @@
                 <div class="col-lg-4">
                     <div class="text-center">
                         <div class="topic-icon mx-auto mb-3" style="width: 100px; height: 100px; font-size: 3rem;">
-                            <i class="fas fa-book"></i>
+                            <i class="fas fa-book" style="color: #fff"></i>
                         </div>
                         <h4>{{ $course->title }}</h4>
                         <p class="text-white-50">الموضوع {{ $topic->sort_order + 1 }} من {{ $course->topics->count() }}
@@ -282,8 +283,8 @@
                                         @endif
                                     </div>
 
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ $lesson->title }}</h5>
+                                    <div class="card-body" style="min-height: 145px;">
+                                        <h5 class="card-title"> {{ Str::limit($lesson->title, 80, '...') }}</h5>
                                         @if ($lesson->description)
                                             <p class="card-text text-muted">{{ Str::limit($lesson->description, 80) }}</p>
                                         @endif
