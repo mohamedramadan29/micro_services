@@ -572,9 +572,7 @@
         height: 40px;
         display: inline;
         line-height: 136px;
-        /* text-align: center; */
         border-radius: 10px 0;
         padding: 8px 0px;
-        margin: 5px;
     }
 </style>
