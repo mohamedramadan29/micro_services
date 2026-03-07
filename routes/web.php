@@ -13,12 +13,10 @@ use App\Http\Controllers\front\PackageController;
 use App\Http\Controllers\front\ProductController;
 use App\Http\Controllers\front\ProjectController;
 use App\Http\Controllers\front\ReviewsController;
-use App\Http\Controllers\front\serviceController;
 use App\Http\Controllers\front\TicketsController;
 use App\Http\Controllers\front\CheckOutController;
 use App\Http\Controllers\front\EmployeeController;
 use App\Http\Controllers\front\FrontJobController;
-use App\Http\Controllers\front\JobOfferController;
 use App\Http\Controllers\front\WithDrawController;
 
 use App\Http\Controllers\front\ProperityController;
@@ -36,7 +34,6 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Http\Controllers\front\PublicCourseRegisterController;
 use App\Http\Controllers\front\FrontProperityMaintainController;
 use App\Http\Controllers\front\User\PortfolioController;
-use App\Http\Controllers\front\PortfolioController as publicPortfolioController;
 use App\Http\Controllers\front\NafizhaPortfolioController;
 use App\Http\Controllers\front\NewCourseController;
 
@@ -88,12 +85,12 @@ Route::group(
                 Route::get('chat', 'chat');
                 Route::get('balance', 'balance')->name('user_balance');
 
-                Route::get('chat-main/{conversation_id}', \App\Livewire\Chat\Main::class)->name('chat.main');
+                Route::get('chat-main/{conversation_id}', Main::class)->name('chat.main');
             });
         });
         // Start User Service
         Route::group(['middleware' => ['auth']], function () {
-            Route::controller(serviceController::class)->group(function () {
+            Route::controller(\App\Http\Controllers\front\serviceController::class)->group(function () {
                 Route::get('service/index', 'index');
                 Route::match(['post', 'get'], 'service/add', 'add');
                 Route::match(['post', 'get'], 'service/update/{id}', 'update');
@@ -360,7 +357,7 @@ Route::group(
 
         ####################### Start Public Portfolio ###################
 
-        Route::controller(publicPortfolioController::class)->group(function () {
+        Route::controller(\App\Http\Controllers\front\PortfolioController::class)->group(function () {
             Route::get('portfolios', 'index');
             Route::get('portfolio/{id}-{slug}', 'details');
         });
@@ -372,6 +369,12 @@ Route::group(
             Route::get('nafizha/portfolio/{id}-{slug}', 'details');
         });
         ####################### End Public Portfolio ###################
+
+        ####################### Start Testimonials ###################
+        Route::get('testimonials', function() {
+            return view('website.testimonials.index');
+        })->name('testimonials.index');
+        ####################### End Testimonials ###################
     }
 );
 

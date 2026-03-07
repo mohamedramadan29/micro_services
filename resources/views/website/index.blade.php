@@ -4,6 +4,166 @@
 @endsection
 @section('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <style>
+        /* Testimonials Section Styles */
+        .testimonials-section {
+            background: linear-gradient(135deg, #3fb697 0%, #138b6f 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonials-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 100px;
+            color: rgba(255, 255, 255, 0.1);
+            font-family: Georgia, serif;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .testimonial-content {
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stars {
+            color: #ffd700;
+            font-size: 1.2rem;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 0;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .author-image img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .author-name {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .author-position {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+
+        .author-company {
+            color: #ffd700;
+        }
+
+        /* Swiper Custom Styles */
+        .testimonialSwiper {
+            padding: 2rem 0;
+        }
+
+        .swiper-pagination-bullet {
+            background: white;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: #ffd700;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+            font-size: 20px;
+        }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .testimonial-card {
+                padding: 1.5rem;
+            }
+
+            .testimonial-text {
+                font-size: 1rem;
+            }
+        }
+    </style>
 @endsection
 @section('content')
     <!-- ============================ Hero Banner  Start================================== -->
@@ -267,7 +427,6 @@
     <!-- ############################# End Last Services ################# -->
 
     <!--############################# Start Latest Courses ############### -->
-
     <section class="latest-courses">
         <div class="header-courses">
             <h2>أحدث الكورسات</h2>
@@ -413,11 +572,116 @@
     </section> --}}
 
     <!------------------------------------- End Present Section ##################### -->
+
+    <!-- ============================ Testimonials Section Start ============================ -->
+    <section class="testimonials-section py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-header text-center mb-5">
+                        <h2 class="section-title">آراء عملائنا</h2>
+                        <p class="section-subtitle">ماذا يقول عملاؤنا عنا</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="testimonials-slider">
+                        <div class="swiper testimonialSwiper">
+                            <div class="swiper-wrapper">
+                                @php
+                                    $reviews = \App\Models\front\Review::active()->approved()->ordered()->get();
+                                @endphp
+                                @forelse($reviews as $review)
+                                <div class="swiper-slide">
+                                    <div class="testimonial-card">
+                                        <div class="testimonial-content">
+                                            <div class="stars mb-3">
+                                                {!! $review->rating_stars !!}
+                                            </div>
+                                            <p class="testimonial-text">"{{ $review->content }}"</p>
+                                        </div>
+                                        <div class="testimonial-author">
+                                            <div class="author-image">
+                                                @if($review->client_image)
+                                                    <img src="{{ asset('assets/uploads/reviews/' . $review->client_image) }}" alt="{{ $review->client_name }}">
+                                                @else
+                                                    <img src="{{ asset('assets/website/img/user-default.png') }}" alt="Default">
+                                                @endif
+                                            </div>
+                                            <div class="author-info">
+                                                <h5 class="author-name">{{ $review->client_name }}</h5>
+                                                <p class="author-position">
+                                                    {{ $review->client_position }}
+                                                    @if($review->client_company)
+                                                        <span class="author-company">@ {{ $review->client_company }}</span>
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @empty
+                                <div class="swiper-slide">
+                                    <div class="testimonial-card">
+                                        <div class="testimonial-content">
+                                            <p class="testimonial-text">سيتم إضافة آراء العملاء قريباً</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforelse
+                            </div>
+                            <div class="swiper-pagination"></div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ Testimonials Section End ============================ -->
+
 @endsection
 
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
+        // Testimonials Slider
+        const testimonialSwiper = new Swiper('.testimonialSwiper', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                },
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                },
+            },
+        });
+
         window.onload = () => {
             confetti({
                 particleCount: 300,

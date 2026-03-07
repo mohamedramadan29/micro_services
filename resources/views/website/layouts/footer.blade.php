@@ -1,10 +1,9 @@
 <footer class="dark-footer skin-dark-footer text-right" dir="rtl">
     <div class="help_center">
-        <a href="{{ url('tickets') }}" class="btn"> مركز المساعدة <i class="bi bi-person-raised-hand"></i> </a>
+        <a href="{{ url('tickets') }}" class="btn"> <i class="bi bi-chat-square-dots-fill"></i> </a>
     </div>
     <div class="help_center help_center_products">
-        <a target="_blank" href="https://wa.me/+963997610723" class="btn btn-primary"> المسؤول عن الخدمات والمنتجات <i
-                class="bi bi-person-raised-hand"></i> </a>
+        <a target="_blank" href="https://wa.me/+963997610723" class="btn btn-primary"> <i class="bi bi-person-raised-hand"></i> </a>
     </div>
     <div>
         <div class="container">
@@ -27,6 +26,7 @@
                         <h4 class="widget-title"> {{ __('public.links') }} </h4>
                         <ul class="footer-menu">
                             <li><a href="{{ route('reviews.index') }}"> اضف تقيمك </a></li>
+                            <li><a href="{{ url('testimonials') }}"> آراء العملاء </a></li>
                             <li><a href="{{ route('blogCategories') }}"> المدونة </a></li>
                             <li><a href="{{ '/about' }}"> {{ __('public.about_us') }} </a></li>
                             <li><a href="{{ '/faq' }}"> {{ __('public.faqs') }} </a></li>

@@ -29,7 +29,7 @@ use App\Http\Controllers\admin\ServiceOrdersController;
 use App\Http\Controllers\admin\NewCourseController;
 use App\Http\Controllers\admin\NewCourseTopicController;
 use App\Http\Controllers\admin\NewCourseLessonController;
-use App\Models\admin\PackageTitle;
+use App\Http\Controllers\admin\ReviewController;
 
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
@@ -38,7 +38,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::match(['post', 'get'], 'register', [AdminController::class, 'register']);
     Route::group(['middleware' => ['auth']], function () {
         Route::controller(AdminController::class)->group(function () {
-            Route::get('dashboard', 'dashboard');
+            Route::get('dashboard', 'dashboard')->name('admin.dashboard');
             Route::post('logout', 'logout')->name('logout');
             // Start Update Admin Details
             Route::match(['post', 'get'], 'update_admin_password', 'update_admin_password');
@@ -291,6 +291,21 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('new-course/{course}/topic/{topic}/lesson/{lesson}/toggle-free', 'toggleFree')->name('admin.new-courses.lessons.toggle-free');
         });
         ################## End New Course System ####################
+
+        #################### Start Reviews/Testimonials ###################
+        Route::controller(ReviewController::class)->group(function () {
+            Route::get('reviews', 'index')->name('admin.reviews.index');
+            Route::get('reviews/create', 'create')->name('admin.reviews.create');
+            Route::post('reviews/store', 'store')->name('admin.reviews.store');
+            Route::get('reviews/{review}', 'show')->name('admin.reviews.show');
+            Route::get('reviews/{review}/edit', 'edit')->name('admin.reviews.edit');
+            Route::post('reviews/{review}/update', 'update')->name('admin.reviews.update');
+            Route::post('reviews/{review}/delete', 'destroy')->name('admin.reviews.destroy');
+            Route::post('reviews/{review}/toggle-status', 'toggleStatus')->name('admin.reviews.toggle-status');
+            Route::post('reviews/{review}/toggle-approved', 'toggleApproved')->name('admin.reviews.toggle-approved');
+            Route::post('reviews/{review}/toggle-featured', 'toggleFeatured')->name('admin.reviews.toggle-featured');
+        });
+        #################### End Reviews/Testimonials ####################
 
     });
 });
