@@ -130,12 +130,18 @@
             </nav>
 
             <div class="row align-items-center">
+                @php
+                    $firstTopic = $course->topics->first();
+                    $targetUrl = $firstTopic ? route('courses.topic', [$course->slug, $firstTopic->id]) : '#course-content';
+                @endphp
                 <div class="col-lg-8" style="text-align: right">
                     <h1 class="display-4 fw-bold mb-4">{{ $course->title }}</h1>
                     @if ($course->is_free)
-                        <div class="price-badge free-badge mb-3">
-                            <i class="fas fa-gift me-2"></i>مجاني
-                        </div>
+                        <a href="{{ $targetUrl }}" class="text-decoration-none">
+                            <div class="price-badge free-badge mb-3">
+                                <i class="fas fa-gift me-2"></i>مجاني
+                            </div>
+                        </a>
                     @else
                         <div class="price-badge paid-badge mb-3">
                             <i class="fas fa-crown me-2"></i>{{ number_format($course->price, 2) }} ريال
@@ -144,12 +150,14 @@
                 </div>
 
                 <div class="col-lg-4">
-                    @if ($course->image)
-                        <img src="{{ asset($course->image) }}" class="course-image-header" alt="{{ $course->title }}">
-                    @else
-                        <img src="{{ asset('assets/admin/img/default-course.jpg') }}" class="course-image-header"
-                            alt="Default Course">
-                    @endif
+                    <a href="{{ $targetUrl }}">
+                        @if ($course->image)
+                            <img src="{{ asset($course->image) }}" class="course-image-header" alt="{{ $course->title }}">
+                        @else
+                            <img src="{{ asset('assets/admin/img/default-course.jpg') }}" class="course-image-header"
+                                alt="Default Course">
+                        @endif
+                    </a>
                 </div>
             </div>
         </div>
@@ -196,7 +204,7 @@
     </section> --}}
 
     <!-- Course Topics -->
-    <section class="py-5 bg-light" dir="rtl">
+    <section class="py-5 bg-light" dir="rtl" id="course-content">
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="display-5 fw-bold">محتوى الكورس</h2>

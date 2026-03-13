@@ -101,7 +101,6 @@
                                                 </button>
                                                 <form action="{{ route('admin.reviews.destroy', $review) }}" method="POST" style="display: inline;">
                                                     @csrf
-                                                    @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger"
                                                             onclick="return confirm('هل أنت متأكد من حذف هذا الرأي؟')" title="حذف">
                                                         <i class="fas fa-trash"></i>
