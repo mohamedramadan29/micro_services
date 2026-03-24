@@ -288,7 +288,7 @@
                                 @endif
                             </div>
 
-                            <div class="card-body" style="min-height: 145px;">
+                            <div class="card-body" style="min-height: 195px;max-height:195px">
                                 <h5 class="card-title"> {{ Str::limit($lesson->title, 80, '...') }}</h5>
                                 @if ($lesson->description)
                                 <p class="card-text text-muted">{{ Str::limit($lesson->description, 80) }}</p>

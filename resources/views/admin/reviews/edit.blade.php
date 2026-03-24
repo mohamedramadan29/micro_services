@@ -34,7 +34,7 @@
                         </div>
                         <form action="{{ route('admin.reviews.update', $review) }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
+                            {{-- @method('PUT') --}}
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">

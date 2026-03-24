@@ -600,7 +600,7 @@
                                             <div class="stars mb-3">
                                                 {!! $review->rating_stars !!}
                                             </div>
-                                            <p class="testimonial-text">"{{ $review->content }}"</p>
+                                            <p class="testimonial-text">{{ $review->content }}</p>
                                         </div>
                                         <div class="testimonial-author">
                                             <div class="author-image">
