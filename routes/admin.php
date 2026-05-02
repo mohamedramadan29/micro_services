@@ -30,6 +30,8 @@ use App\Http\Controllers\admin\NewCourseController;
 use App\Http\Controllers\admin\NewCourseTopicController;
 use App\Http\Controllers\admin\NewCourseLessonController;
 use App\Http\Controllers\admin\ReviewController;
+use App\Http\Controllers\admin\SocialMediaController;
+use App\Http\Controllers\admin\SocialPostController;
 
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
@@ -306,6 +308,51 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('reviews/{review}/toggle-featured', 'toggleFeatured')->name('admin.reviews.toggle-featured');
         });
         #################### End Reviews/Testimonials ####################
+
+        #################### Start Social Media Manager ####################
+        // لوحة تحكم السوشيال ميديا
+        Route::controller(SocialMediaController::class)->group(function () {
+            Route::get('social-media', 'index')->name('admin.social.index');
+            Route::get('social-media/accounts', 'accounts')->name('admin.social.accounts');
+            Route::post('social-media/account/{account}/toggle', 'toggleAccount')->name('admin.social.toggle');
+            Route::post('social-media/account/{account}/delete', 'deleteAccount')->name('admin.social.delete');
+
+            // OAuth - Facebook
+            Route::get('social-media/connect/facebook', 'connectFacebook')->name('admin.social.facebook.connect');
+            Route::get('social-media/callback/facebook', 'facebookCallback')->name('admin.social.facebook.callback');
+
+            // OAuth - Instagram
+            Route::get('social-media/connect/instagram', 'connectInstagram')->name('admin.social.instagram.connect');
+            Route::get('social-media/callback/instagram', 'instagramCallback')->name('admin.social.instagram.callback');
+
+            // OAuth - TikTok
+            Route::get('social-media/connect/tiktok', 'connectTikTok')->name('admin.social.tiktok.connect');
+            Route::get('social-media/callback/tiktok', 'tikTokCallback')->name('admin.social.tiktok.callback');
+
+            // OAuth - YouTube
+            Route::get('social-media/connect/youtube', 'connectYouTube')->name('admin.social.youtube.connect');
+            Route::get('social-media/callback/youtube', 'youTubeCallback')->name('admin.social.youtube.callback');
+
+            // OAuth - LinkedIn
+            Route::get('social-media/connect/linkedin', 'connectLinkedIn')->name('admin.social.linkedin.connect');
+            Route::get('social-media/callback/linkedin', 'linkedInCallback')->name('admin.social.linkedin.callback');
+
+            // OAuth - Twitter
+            Route::get('social-media/connect/twitter', 'connectTwitter')->name('admin.social.twitter.connect');
+            Route::get('social-media/callback/twitter', 'twitterCallback')->name('admin.social.twitter.callback');
+        });
+
+        // إدارة البوستات
+        Route::controller(SocialPostController::class)->group(function () {
+            Route::get('social-media/post/create', 'create')->name('admin.social.post.create');
+            Route::post('social-media/post/store', 'store')->name('admin.social.post.store');
+            Route::get('social-media/posts/scheduled', 'scheduled')->name('admin.social.scheduled');
+            Route::get('social-media/posts/published', 'published')->name('admin.social.published');
+            Route::get('social-media/post/{post}', 'show')->name('admin.social.post.show');
+            Route::post('social-media/post/{post}/retry', 'retry')->name('admin.social.post.retry');
+            Route::post('social-media/post/{post}/delete', 'destroy')->name('admin.social.post.delete');
+        });
+        #################### End Social Media Manager ####################
 
     });
 });

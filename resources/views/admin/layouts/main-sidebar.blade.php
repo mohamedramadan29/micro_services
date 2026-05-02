@@ -296,6 +296,42 @@
                     </li>
                 </ul>
             </li>
+            {{-- ======================== السوشيال ميديا ======================== --}}
+            <li class="side-item side-item-category"> السوشيال ميديا </li>
+            <li class="slide">
+                <a class="side-menu__item" data-toggle="slide" href="">
+                    <i style="font-size: 22px;margin-left: 10px" class="fas fa-share-alt"></i>
+                    <span class="side-menu__label"> إدارة السوشيال ميديا </span>
+                    <i class="angle fe fe-chevron-down"></i>
+                </a>
+                <ul class="slide-menu">
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.social.index') }}">
+                            <i class="fas fa-tachometer-alt ml-1"></i> لوحة التحكم
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.social.post.create') }}">
+                            <i class="fas fa-plus-circle ml-1"></i> بوست جديد
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.social.scheduled') }}">
+                            <i class="fas fa-calendar-alt ml-1"></i> البوستات المجدولة
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.social.published') }}">
+                            <i class="fas fa-check-double ml-1"></i> البوستات المنشورة
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.social.accounts') }}">
+                            <i class="fas fa-link ml-1"></i> ربط الحسابات
+                        </a>
+                    </li>
+                </ul>
+            </li>
             @endif
 
         </ul>

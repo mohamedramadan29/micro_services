@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Jobs\PublishSocialPostJob;
+use App\Models\SocialPost;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -12,7 +14,17 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // كل دقيقة: ابحث عن البوستات المجدولة وانشرها
+        $schedule->call(function () {
+            $posts = SocialPost::where('status', 'scheduled')
+                ->whereNotNull('scheduled_at')
+                ->where('scheduled_at', '<=', now())
+                ->get();
+
+            foreach ($posts as $post) {
+                PublishSocialPostJob::dispatch($post);
+            }
+        })->everyMinute()->name('publish-scheduled-posts')->withoutOverlapping();
     }
 
     /**
