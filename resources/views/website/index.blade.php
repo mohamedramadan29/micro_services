@@ -170,14 +170,21 @@
     <div class="hero-banner full bg-cover center"
         style="background:#00000057 url({{ asset('assets/website/img/hero.jpeg') }}) no-repeat;" data-overlay="7">
         <div class="container">
-            <h1 style="line-height: 2">
+            {{-- <h1 style="line-height: 2">
                 <span> نفّذها… وخلّي فكرتك واقع بسهولة منصة عربية تربط أصحاب </span>
                 <br>
                 <span> المشاريع بأفضل المستقلين لتنفيذ أعمالهم باحتراف وسرعة </span>
                 <br>
                 <span> تصميم ، البرمجة، التسويق، الكتابة والمزيد </span>
+            </h1> --}}
+              <h1 style="line-height: 2">
+                <span> نفّذها منصّة تجمع خبراء التسويق والإعلام مع أصحاب المشاريع، لتسهيل الوصول إلى الكفاءات المناسبة وتنفيذ الأعمال باحترافية وسرعة </span>
+                <br>
+                <span>   إذا كنت تعمل في التسويق، الإعلام، صناعة المحتوى، التصميم أو الإنتاج   </span>
+                <br>
+                <span> سجّل خدماتك وخلّي العملاء يوصلون لك بسهولة </span>
             </h1>
-            <p class="lead" style="margin-top: -15px;"> دليل شامل لاختيار وتوظيف أفضل المستقلين لعملك </p>
+            {{-- <p class="lead" style="margin-top: -15px;"> دليل شامل لاختيار وتوظيف أفضل المستقلين لعملك </p> --}}
             {{-- <button data-bs-toggle="modal" data-bs-target="#FreeConsultModel" class="btn btn-primary free_consult_button"><i
                     class="bi bi-patch-question-fill"></i> احصل علي استشارة مجانية </button> --}}
             <form class="mt-4" dir="rtl" method="get" action="{{ url('search') }}">

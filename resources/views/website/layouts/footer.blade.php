@@ -41,27 +41,27 @@
                         <h4 class="widget-title"> {{ __('public.follow_us') }} </h4>
                         <ul class="footer-bottom-social">
                             <li><a style="background-color: #1877f2"
-                                    href="https://www.facebook.com/share/1AMrSXDyaD/?ref=1"><i
+                                    href="https://www.facebook.com/profile.php?id=61589983756521"><i
                                         class="ti-facebook"></i></a></li>
-                            <li><a style="background-color: #1da1f2;" href="https://x.com/Nafizhacom"><i
-                                        class="bi bi-x"></i></a></li>
-                            <li><a style="background-color: #c32aa3;" href="https://www.instagram.com/nafizha.com0/"><i
+                            {{-- <li><a style="background-color: #1da1f2;" href="https://x.com/Nafizhacom"><i
+                                        class="bi bi-x"></i></a></li> --}}
+                            <li><a style="background-color: #c32aa3;" href="https://www.instagram.com/nafizhacom80?igsh=cWNyMXBweW9kNjk0"><i
                                         class="ti-instagram"></i></a></li>
                             <li><a style="background-color: #ff0000;"
-                                    href="https://youtube.com/channel/UCgKHmloU0POMrTEktarwFzA?si=v_ChKb29St1WVKKJ"><i
+                                    href="https://youtube.com/@nafizha80?si=UnmGhF_ahqgWBCkN"><i
                                         class="ti-youtube"></i></a></li>
-                            <li><a style="background-color: #fffc00;"
+                            {{-- <li><a style="background-color: #fffc00;"
                                     href="https://www.snapchat.com/add/nafizhacom?share_id=WdKBnTWhDhY&locale=ar-EG"><i
-                                        class="bi bi-snapchat"></i></a></li>
+                                        class="bi bi-snapchat"></i></a></li> --}}
                             <li><a style="background-color: #010101;"
-                                    href="https://www.tiktok.com/@nafizhacom?_r=1&_t=ZS-92AdhkLa0Yc"><i
+                                    href="https://www.tiktok.com/@nafizha.com?_r=1&_t=ZN-96b7WzNOrNW"><i
                                         class="bi bi-tiktok"></i></a></li>
-                            <li><a style="background-color: #0a66c2;"
+                            {{-- <li><a style="background-color: #0a66c2;"
                                     href="https://www.linkedin.com/in/nafizha-com-273539350?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i
-                                        class="ti-linkedin"></i></a></li>
-                            <li><a style="background-color: #ED0C6F;"
+                                        class="ti-linkedin"></i></a></li> --}}
+                            {{-- <li><a style="background-color: #ED0C6F;"
                                     href="https://share.upscrolled.com/ar/user/f43e57ed-8627-469c-a473-1eced16bf46c"> Up
-                                </a></li>
+                                </a></li> --}}
                         </ul>
                     </div>
                 </div>
