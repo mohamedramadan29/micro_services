@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\admin\Service;
 use App\Models\admin\Category;
 use App\Models\admin\Consultant;
+use App\Models\admin\Setting;
 use App\Models\admin\SubCategory;
 use App\Http\Traits\Message_Trait;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +32,8 @@ class FrontController extends Controller
         $courses = Course::with('user')->where('status',1)->latest()->limit(8)->get();
         //dd($services);
         //dd($main_categories);
-        return view('website.index', compact('main_categories', 'sub_categories','categories','services','courses'));
+        $setting = Setting::first();
+        return view('website.index', compact('main_categories', 'sub_categories','categories','services','courses','setting'));
     }
 
     public function services(Request $request)

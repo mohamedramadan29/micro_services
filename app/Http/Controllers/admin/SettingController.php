@@ -20,6 +20,12 @@ class SettingController extends Controller
     public function index()
     {
         $setting = Setting::first();
+        if (!$setting) {
+            $setting = Setting::create([
+                'website_commission' => '0',
+                'hero_overlay_color' => '#00000057',
+            ]);
+        }
         return view('admin/website_settings.index', compact('setting'));
     }
 
@@ -48,11 +54,27 @@ class SettingController extends Controller
                     ]);
                 }
 
+                if ($request->hasFile('hero_image')) {
+                    if(isset($setting['hero_image']) && $setting['hero_image'] !='' && $setting['hero_image'] !=null){
+                        $old_hero = public_path('assets/uploads/public_setting/' . $setting['hero_image']);
+                        if (file_exists($old_hero)) {
+                            unlink($old_hero);
+                        }
+                    }
+                    $heroImage = $this->saveImage($request->hero_image, public_path('assets/uploads/public_setting'));
+                    $setting->update(['hero_image' => $heroImage]);
+                }
+
                 $setting->update([
                     'website_title' => $data['website_title'],
                     'website_desc' => $data['website_desc'],
                     'website_color' => $data['website_color'],
                     'website_commission' => $data['website_commission'],
+                    'hero_title_1' => $data['hero_title_1'] ?? '',
+                    'hero_title_2' => $data['hero_title_2'] ?? '',
+                    'hero_title_3' => $data['hero_title_3'] ?? '',
+                    'hero_subtitle' => $data['hero_subtitle'] ?? '',
+                    'hero_overlay_color' => $data['hero_overlay_color'] ?? '#00000057',
                 ]);
 
                 return $this->success_message(' تم تعديل الاعدادات بنجاح  ');

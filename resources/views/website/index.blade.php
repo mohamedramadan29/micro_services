@@ -167,26 +167,29 @@
 @endsection
 @section('content')
     <!-- ============================ Hero Banner  Start================================== -->
+    @php
+        $heroBg = $setting && $setting->hero_image
+            ? asset('assets/uploads/public_setting/' . $setting->hero_image)
+            : asset('assets/website/img/hero.jpeg');
+        $overlay = $setting->hero_overlay_color ?? '#00000057';
+    @endphp
     <div class="hero-banner full bg-cover center"
-        style="background:#00000057 url({{ asset('assets/website/img/hero.jpeg') }}) no-repeat;" data-overlay="7">
+        style="background:{{ $overlay }} url({{ $heroBg }}) no-repeat;" data-overlay="7">
         <div class="container">
-            {{-- <h1 style="line-height: 2">
-                <span> نفّذها… وخلّي فكرتك واقع بسهولة منصة عربية تربط أصحاب </span>
+            <h1 style="line-height: 2">
+                <span>{{ $setting->hero_title_1 ?? 'نفّذها منصّة تجمع خبراء التسويق والإعلام مع أصحاب المشاريع، لتسهيل الوصول إلى الكفاءات المناسبة وتنفيذ الأعمال باحترافية وسرعة' }}</span>
+                @if($setting->hero_title_2 ?? false)
                 <br>
-                <span> المشاريع بأفضل المستقلين لتنفيذ أعمالهم باحتراف وسرعة </span>
+                <span>{{ $setting->hero_title_2 }}</span>
+                @endif
+                @if($setting->hero_title_3 ?? false)
                 <br>
-                <span> تصميم ، البرمجة، التسويق، الكتابة والمزيد </span>
-            </h1> --}}
-              <h1 style="line-height: 2">
-                <span> نفّذها منصّة تجمع خبراء التسويق والإعلام مع أصحاب المشاريع، لتسهيل الوصول إلى الكفاءات المناسبة وتنفيذ الأعمال باحترافية وسرعة </span>
-                <br>
-                <span>   إذا كنت تعمل في التسويق، الإعلام، صناعة المحتوى، التصميم أو الإنتاج   </span>
-                <br>
-                <span> سجّل خدماتك وخلّي العملاء يوصلون لك بسهولة </span>
+                <span>{{ $setting->hero_title_3 }}</span>
+                @endif
             </h1>
-            {{-- <p class="lead" style="margin-top: -15px;"> دليل شامل لاختيار وتوظيف أفضل المستقلين لعملك </p> --}}
-            {{-- <button data-bs-toggle="modal" data-bs-target="#FreeConsultModel" class="btn btn-primary free_consult_button"><i
-                    class="bi bi-patch-question-fill"></i> احصل علي استشارة مجانية </button> --}}
+            @if($setting->hero_subtitle ?? false)
+            <p class="lead" style="margin-top: 15px;">{{ $setting->hero_subtitle }}</p>
+            @endif
             <form class="mt-4" dir="rtl" method="get" action="{{ url('search') }}">
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-md-10 col-sm-12">
