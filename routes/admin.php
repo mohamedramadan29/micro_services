@@ -32,6 +32,12 @@ use App\Http\Controllers\admin\NewCourseLessonController;
 use App\Http\Controllers\admin\ReviewController;
 use App\Http\Controllers\admin\SocialMediaController;
 use App\Http\Controllers\admin\SocialPostController;
+use App\Http\Controllers\admin\EmailListController;
+use App\Http\Controllers\admin\EmailTemplateController;
+use App\Http\Controllers\admin\EmailCampaignController;
+use App\Http\Controllers\admin\EmailAnalyticsController;
+use App\Http\Controllers\admin\EmailFollowUpController;
+use App\Http\Controllers\admin\EmailAIController;
 
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
@@ -353,6 +359,79 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('social-media/post/{post}/delete', 'destroy')->name('admin.social.post.delete');
         });
         #################### End Social Media Manager ####################
+
+        #################### Start Email Campaigns ####################
+        Route::controller(EmailListController::class)->group(function () {
+            Route::get('email/lists', 'index')->name('admin.email.lists.index');
+            Route::get('email/lists/create', 'create')->name('admin.email.lists.create');
+            Route::post('email/lists/store', 'store')->name('admin.email.lists.store');
+            Route::get('email/lists/{emailList}', 'show')->name('admin.email.lists.show');
+            Route::get('email/lists/{emailList}/edit', 'edit')->name('admin.email.lists.edit');
+            Route::post('email/lists/{emailList}/update', 'update')->name('admin.email.lists.update');
+            Route::post('email/lists/{emailList}/delete', 'destroy')->name('admin.email.lists.destroy');
+            Route::post('email/lists/{emailList}/toggle-status', 'toggleStatus')->name('admin.email.lists.toggle-status');
+            Route::get('email/lists/{emailList}/import', 'importForm')->name('admin.email.lists.import');
+            Route::post('email/lists/{emailList}/import/store', 'importStore')->name('admin.email.lists.import.store');
+            Route::post('email/lists/{emailList}/contacts/store', 'contactStore')->name('admin.email.lists.contact.store');
+            Route::post('email/lists/{emailList}/contacts/{contact}/delete', 'contactDestroy')->name('admin.email.lists.contact.destroy');
+            Route::post('email/lists/{emailList}/import-users', 'importUsers')->name('admin.email.lists.import.users');
+        });
+
+        Route::controller(EmailTemplateController::class)->group(function () {
+            Route::get('email/templates', 'index')->name('admin.email.templates.index');
+            Route::get('email/templates/create', 'create')->name('admin.email.templates.create');
+            Route::post('email/templates/store', 'store')->name('admin.email.templates.store');
+            Route::get('email/templates/{emailTemplate}', 'show')->name('admin.email.templates.show');
+            Route::get('email/templates/{emailTemplate}/edit', 'edit')->name('admin.email.templates.edit');
+            Route::post('email/templates/{emailTemplate}/update', 'update')->name('admin.email.templates.update');
+            Route::post('email/templates/{emailTemplate}/delete', 'destroy')->name('admin.email.templates.destroy');
+            Route::post('email/templates/{emailTemplate}/toggle-status', 'toggleStatus')->name('admin.email.templates.toggle-status');
+        });
+
+        Route::controller(EmailCampaignController::class)->group(function () {
+            Route::get('email/campaigns', 'index')->name('admin.email.campaigns.index');
+            Route::get('email/campaigns/create', 'create')->name('admin.email.campaigns.create');
+            Route::post('email/campaigns/store', 'store')->name('admin.email.campaigns.store');
+            Route::get('email/campaigns/{emailCampaign}', 'show')->name('admin.email.campaigns.show');
+            Route::get('email/campaigns/{emailCampaign}/edit', 'edit')->name('admin.email.campaigns.edit');
+            Route::post('email/campaigns/{emailCampaign}/update', 'update')->name('admin.email.campaigns.update');
+            Route::post('email/campaigns/{emailCampaign}/delete', 'destroy')->name('admin.email.campaigns.destroy');
+            Route::post('email/campaigns/{emailCampaign}/toggle-status', 'toggleStatus')->name('admin.email.campaigns.toggle-status');
+            Route::get('email/campaigns/{emailCampaign}/send', 'send')->name('admin.email.campaigns.send');
+            Route::post('email/campaigns/{emailCampaign}/duplicate', 'duplicate')->name('admin.email.campaigns.duplicate');
+        });
+
+        Route::controller(EmailAnalyticsController::class)->group(function () {
+            Route::get('email/analytics', 'index')->name('admin.email.analytics');
+        });
+
+        Route::controller(EmailFollowUpController::class)->group(function () {
+            Route::get('email/campaigns/{emailCampaign}/follow-ups/create', 'create')->name('admin.email.follow-ups.create');
+            Route::post('email/campaigns/{emailCampaign}/follow-ups/store', 'store')->name('admin.email.follow-ups.store');
+            Route::get('email/campaigns/{emailCampaign}/follow-ups/{emailFollowUp}/edit', 'edit')->name('admin.email.follow-ups.edit');
+            Route::post('email/campaigns/{emailCampaign}/follow-ups/{emailFollowUp}/update', 'update')->name('admin.email.follow-ups.update');
+            Route::post('email/campaigns/{emailCampaign}/follow-ups/{emailFollowUp}/delete', 'destroy')->name('admin.email.follow-ups.destroy');
+            Route::post('email/campaigns/{emailCampaign}/follow-ups/{emailFollowUp}/toggle', 'toggle')->name('admin.email.follow-ups.toggle');
+        });
+
+        Route::controller(EmailAIController::class)->group(function () {
+            Route::post('email/ai/generate', 'generate')->name('admin.email.ai.generate');
+            Route::post('email/ai/embed-video', 'embedVideo')->name('admin.email.ai.embed-video');
+        });
+
+        Route::controller(SettingController::class)->group(function () {
+            Route::get('email/gmail/settings', 'gmailSettings')->name('admin.email.gmail.settings');
+            Route::post('email/gmail/update', 'gmailUpdate')->name('admin.email.gmail.update');
+            Route::get('email/gmail/callback', 'gmailCallback')->name('admin.email.gmail.callback');
+            Route::post('email/gmail/disconnect', 'gmailDisconnect')->name('admin.email.gmail.disconnect');
+            Route::get('email/sheets/auth', 'sheetsAuth')->name('admin.email.sheets.auth');
+            Route::get('email/sheets/callback', 'sheetsCallback')->name('admin.email.sheets.callback');
+        });
+
+        Route::controller(EmailListController::class)->group(function () {
+            Route::post('email/lists/{emailList}/import-sheets', 'importSheets')->name('admin.email.lists.import.sheets');
+        });
+        #################### End Email Campaigns ####################
 
     });
 });

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
 use App\Http\Traits\Upload_Images;
 use App\Models\admin\Setting;
+use App\Services\GmailService;
+use App\Services\GoogleSheetsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -58,5 +60,86 @@ class SettingController extends Controller
                 return $this->exception_message($e);
             }
         }
+    }
+
+    public function gmailSettings()
+    {
+        $setting = Setting::first();
+        $gmailService = app(GmailService::class);
+        $authUrl = $gmailService->getAuthUrl();
+        $isConnected = $gmailService->isReady();
+        return view('admin.email.gmail_settings', compact('setting', 'authUrl', 'isConnected'));
+    }
+
+    public function gmailUpdate(Request $request)
+    {
+        $request->validate([
+            'gmail_credentials_json' => 'required|json',
+        ], [
+            'gmail_credentials_json.required' => 'محتوى JSON الخاص بـ Google API مطلوب',
+            'gmail_credentials_json.json' => 'يرجى إدخال JSON صحيح',
+        ]);
+
+        $setting = Setting::first();
+        $setting->gmail_credentials_json = $request->gmail_credentials_json;
+        $setting->save();
+
+        return redirect()->route('admin.email.gmail.settings')
+            ->with('success', 'تم حفظ بيانات Google API بنجاح. يرجى تفويض الوصول.');
+    }
+
+    public function gmailCallback(Request $request)
+    {
+        $request->validate(['code' => 'required']);
+
+        $gmailService = app(GmailService::class);
+        $success = $gmailService->handleCallback($request->code);
+
+        if ($success) {
+            return redirect()->route('admin.email.gmail.settings')
+                ->with('success', 'تم ربط Gmail بنجاح! يمكنك الآن الإرسال عبر Gmail API.');
+        }
+
+        return redirect()->route('admin.email.gmail.settings')
+            ->with('error', 'فشل الربط مع Gmail. يرجى المحاولة مرة أخرى.');
+    }
+
+    public function gmailDisconnect()
+    {
+        $setting = Setting::first();
+        $setting->gmail_token_json = null;
+        $setting->save();
+
+        return redirect()->route('admin.email.gmail.settings')
+            ->with('success', 'تم فصل Gmail بنجاح.');
+    }
+
+    public function sheetsAuth()
+    {
+        $sheetsService = app(GoogleSheetsService::class);
+        $authUrl = $sheetsService->getAuthUrl();
+
+        if (!$authUrl) {
+            return redirect()->route('admin.email.gmail.settings')
+                ->with('error', 'يرجى إدخال بيانات Google API أولاً في إعدادات Gmail.');
+        }
+
+        return redirect($authUrl);
+    }
+
+    public function sheetsCallback(Request $request)
+    {
+        $request->validate(['code' => 'required']);
+
+        $sheetsService = app(GoogleSheetsService::class);
+        $success = $sheetsService->handleCallback($request->code);
+
+        if ($success) {
+            return redirect()->route('admin.email.lists.index')
+                ->with('success', 'تم ربط Google Sheets بنجاح! يمكنك الآن استيراد جهات الاتصال.');
+        }
+
+        return redirect()->route('admin.email.gmail.settings')
+            ->with('error', 'فشل الربط مع Google Sheets. يرجى المحاولة مرة أخرى.');
     }
 }

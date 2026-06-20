@@ -380,4 +380,8 @@ Route::group(
 
 
 
+Route::get('track/open/{token}', [App\Http\Controllers\api\EmailTrackingController::class, 'open'])->name('track.open');
+Route::get('track/click/{token}', [App\Http\Controllers\api\EmailTrackingController::class, 'click'])->name('track.click');
+Route::get('track/unsubscribe/{token}', [App\Http\Controllers\api\EmailTrackingController::class, 'unsubscribe'])->name('track.unsubscribe');
+
 include 'admin.php';

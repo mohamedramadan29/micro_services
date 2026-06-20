@@ -332,6 +332,42 @@
                     </li>
                 </ul>
             </li>
+            {{-- ======================== البريد الإلكتروني ======================== --}}
+            <li class="side-item side-item-category"> البريد الإلكتروني </li>
+            <li class="slide">
+                <a class="side-menu__item" data-toggle="slide" href="#">
+                    <i style="font-size: 22px;margin-left: 10px" class="fas fa-envelope"></i>
+                    <span class="side-menu__label"> إدارة البريد الإلكتروني </span>
+                    <i class="angle fe fe-chevron-down"></i>
+                </a>
+                <ul class="slide-menu">
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.email.analytics') }}">
+                            <i class="fas fa-chart-bar ml-1"></i> التقارير
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.email.campaigns.index') }}">
+                            <i class="fas fa-bullhorn ml-1"></i> الحملات البريدية
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.email.lists.index') }}">
+                            <i class="fas fa-list ml-1"></i> القوائم البريدية
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.email.templates.index') }}">
+                            <i class="fas fa-file-code ml-1"></i> قوالب الإيميلات
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.email.gmail.settings') }}">
+                            <i class="fab fa-google ml-1"></i> إعدادات Gmail API
+                        </a>
+                    </li>
+                </ul>
+            </li>
             @endif
 
         </ul>
