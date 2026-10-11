@@ -38,6 +38,7 @@ class CategoryController extends Controller
                 'image' => $filename,
                 'parent_id' => $data['parent_id'],
                 'status' => $data['status'],
+                'home_page' => $data['home_page'] ?? 0,
             ]);
             return $this->success_message('تم اضافة القسم بنجاح ');
 
@@ -72,6 +73,7 @@ class CategoryController extends Controller
                 'slug' => $this->CustomeSlug($data['name']),
                 'parent_id' => $data['parent_id'],
                 'status' => $data['status'],
+                'home_page' => $data['home_page'] ?? 0,
             ]);
             return $this->success_message(' تم تعديل القسم بنجاح  ');
 

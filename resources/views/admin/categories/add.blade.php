@@ -44,6 +44,12 @@
                             <option value="0"> غير فعال</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="home_page_add" name="home_page" value="1">
+                            <label class="custom-control-label" for="home_page_add">الظهور في الواجهة</label>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="modal-footer">

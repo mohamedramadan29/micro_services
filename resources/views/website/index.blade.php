@@ -486,7 +486,7 @@
                     <div class="col-lg-3 col-md-6 col-6">
                         <div class="ser_110">
                             <div class="ser_110_thumb">
-                                <a href="{{ url('services/' . $category['slug']) }}" class="ser_100_link">
+                                <a href="{{ url('category/service/' . $category['slug']) }}" class="ser_100_link">
                                     <img loading="lazy"
                                         style="width: 120px; height:120px;margin:auto;padding-top: 15px;display:block;"
                                         src=" {{ asset('assets/uploads/service_category/' . $category['image']) }}"

@@ -39,6 +39,12 @@
                             <option @if($category['status'] == 0) selected @endif value="0"> غير فعال</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="home_page_{{$category['id']}}" name="home_page" value="1" {{ $category['home_page'] == 1 ? 'checked' : '' }}>
+                            <label class="custom-control-label" for="home_page_{{$category['id']}}">الظهور في الواجهة</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn ripple btn-primary" type="submit">  تعديل
