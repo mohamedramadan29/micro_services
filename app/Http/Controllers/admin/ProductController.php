@@ -304,10 +304,10 @@ class ProductController extends Controller
     {
         $file = $request->file('chunk');
         $chunkIndex = $request->input('chunkIndex');
-        $fileIdentifier = $request->input('fileIdentifier');
+        $fileIdentifier = preg_replace('/[^A-Za-z0-9_-]/', '', (string) $request->input('fileIdentifier'));
         $totalChunks = $request->input('totalChunks');
 
-        $uploadPath = storage_path("app/chunks/$fileIdentifier");
+        $uploadPath = public_path("uploads/private/chunks/$fileIdentifier");
         if (!file_exists($uploadPath)) {
             mkdir($uploadPath, 0777, true);
         }
@@ -319,9 +319,11 @@ class ProductController extends Controller
 
     public function mergeChunks(Request $request, $id)
     {
-        $fileIdentifier = $request->input('fileIdentifier');
-        $originalFileName = $request->input('originalFileName');
-        $uploadPath = storage_path("app/chunks/$fileIdentifier");
+        $fileIdentifier = preg_replace('/[^A-Za-z0-9_-]/', '', (string) $request->input('fileIdentifier'));
+        // Only a plain file name: no folders, nothing that could leave product_videos.
+        $originalFileName = preg_replace('/[^\p{L}\p{N}._ -]/u', '', basename((string) $request->input('originalFileName')));
+        abort_if($fileIdentifier === '' || $originalFileName === '' || str_starts_with($originalFileName, '.'), 422, 'اسم الملف غير صالح');
+        $uploadPath = public_path("uploads/private/chunks/$fileIdentifier");
         $finalPath = public_path("assets/uploads/product_videos");
 
         if (!file_exists($finalPath)) {

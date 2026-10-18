@@ -36,6 +36,14 @@ return [
             'throw' => false,
         ],
 
+        // Private uploads (user decision 2026-10-16: no files under storage/). Kept in public/uploads/private,
+        // which public/uploads/private/.htaccess closes to direct access; downloads go through the site.
+        'private_uploads' => [
+            'driver' => 'local',
+            'root' => public_path('uploads/private'),
+            'throw' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

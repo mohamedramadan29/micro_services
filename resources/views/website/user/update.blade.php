@@ -13,7 +13,7 @@
 
                         <div class="d-user-avater">
                             @if (Auth::user()->image != '')
-                                <img src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
+                                <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
                                     class="img-fluid rounded" alt="">
                             @else
                                 <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
@@ -95,10 +95,10 @@
                                                                 name="account_type">
                                                                 <option value=""> -- حدد نوع الحساب --</option>
                                                                 <option @if (old('account_type', Auth::user()->account_type) == 'مشتري') selected @endif
-                                                                    value="مشتري"> مشتري
+                                                                    value="مشتري"> عميل (مشتري)
                                                                 </option>
                                                                 <option @if (old('account_type', Auth::user()->account_type) == 'بائع') selected @endif
-                                                                    value="بائع"> بائع
+                                                                    value="بائع"> مستقل (بائع)
                                                                 </option>
                                                                 <option @if (old('account_type', Auth::user()->account_type) == 'موظف') selected @endif
                                                                     value="موظف"> موظف

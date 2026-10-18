@@ -4,6 +4,7 @@ namespace App\Http\Controllers\front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
+use App\Models\admin\Service;
 use App\Models\front\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,9 +26,11 @@ class CartController extends Controller
     public function AddToCart(Request $request)
     {
         $cartData = $request->all();
-        // dd($cartData);
-
-//        dd($cartData);
+        // Name, price and seller always come from the service itself, never from the form.
+        $service = Service::where('id', $cartData['service_id'] ?? 0)->firstOrFail();
+        if (Auth::check() && (int) $service->user_id === (int) Auth::id()) {
+            return redirect()->back()->withErrors('لا يمكنك اضافة خدمتك الخاصة الي السله');
+        }
         // Generate Session Id If Not Exists
         $session_id = Session::get('session_id');
         if (empty($session_id)) {
@@ -51,19 +54,23 @@ class CartController extends Controller
         $item = new Cart();
         $item->session_id = $session_id;
         $item->user_id = $user_id;
-        $item->service_id = $cartData['service_id'];
-        $item->service_name = $cartData['service_name'];
-        $item->price = $cartData['service_price'];
-        $item->user_serv = $cartData['user_serv'];
-        $item->quantity = $cartData['qty'];
+        $item->service_id = $service->id;
+        $item->service_name = $service->name;
+        $item->price = $service->price;
+        $item->user_serv = $service->user_id;
+        $item->quantity = 1;
         $item->save();
+        app(\App\Services\Analytics\Tracker::class)->record('cart_add', ['sub_category_id' => $service->sub_cat_id]);
         return $this->success_message(' تم اضافه الخدمة الي السله');
     }
     public function deleteCart(Request $request)
     {
-        $alldata = $request->all();
-        //dd($alldata);
-        Cart::where('id', $alldata['cartId'])->delete();
+        // Only rows of this visitor's own cart.
+        Cart::where('id', $request->input('cartId'))
+            ->where(fn ($q) => Auth::check()
+                ? $q->where('user_id', Auth::id())
+                : $q->where('user_id', 0)->where('session_id', Session::get('session_id')))
+            ->delete();
         return $this->success_message(' تم حذف الخدمة من السلة  ');
     }
 

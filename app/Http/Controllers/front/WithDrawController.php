@@ -32,7 +32,7 @@ class WithDrawController extends Controller
         $messages = [
             'amount.required' => ' من فضلك حدد الميلغ  ',
             'amount.numeric' => ' من فضلك ادخل مبلغ صحيح للسحب  ',
-            'amount.min' => ' اقل مبلغ للسحب هو 1 دولار  ',
+            'amount.min' => ' اقل مبلغ للسحب هو 1 جنيه  ',
             'amount.max' => ' الرصيد المتاح للسحب اقل من المبلغ المطلوب  ',
             'method.required' => ' من فضلك حدد طريقة السحب  ',
             'country.required' => ' من فضلك حدد الدولة  ',
@@ -42,35 +42,39 @@ class WithDrawController extends Controller
             'swift_code.required' => ' من فضلك حدد كود السويفت  ',
             'iban_code.required' => ' من فضلك حدد كود الايبان  ',
         ];
-        $withdraw_transactions = WithDraw::where('user_id',Auth::id())->where('status',0)->get();
-        if($withdraw_transactions->count() > 0){
-            return Redirect()->back()->withErrors(' هناك عملية سحب في الوقت الحالي من فضلك انتظر حتي اتمام العملية الاولي  ');
-        }
-        if($user->balance < $request->amount){
-            return Redirect()->back()->withErrors(' الرصيد المتاح للسحب اقل من المبلغ المطلوب  ');
+        $rules['method'] .= '|string|max:50';
+        foreach (['country', 'account_name', 'account_number', 'bank_name', 'swift_code', 'iban_code'] as $field) {
+            $rules[$field] .= '|string|max:255';
         }
         $validator = Validator::make($data, $rules, $messages);
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        DB::beginTransaction();
-        $withdraw = new WithDraw();
-        $withdraw->user_id = Auth::id();
-        $withdraw->amount = $data['amount'];
-        $withdraw->method = $data['method'];
-        $withdraw->account_name = $data['account_name'];
-        $withdraw->account_number = $data['account_number'];
-        $withdraw->bank_name = $data['bank_name'];
-        $withdraw->swift_code = $data['swift_code'];
-        $withdraw->iban_code = $data['iban_code'];
-        $withdraw->country = $data['country'];
-        $withdraw->status = 0;
-        $withdraw->save();
-        ################## Update User Balance ############################
-        $user->balance -= $request->amount;
-        $user->save();
-        DB::commit();
+        // One pending withdrawal at a time and the balance check happen under a row lock, so two
+        // simultaneous requests cannot both pass (the deduction is atomic).
+        try {
+            DB::transaction(function () use ($data) {
+                $user = User::whereKey(Auth::id())->lockForUpdate()->first();
+                if (WithDraw::where('user_id', $user->id)->where('status', 0)->exists()) {
+                    throw new \RuntimeException(' هناك عملية سحب في الوقت الحالي من فضلك انتظر حتي اتمام العملية الاولي  ');
+                }
+                $amount = round((float) $data['amount'], 2);
+                if ((float) $user->balance + 0.001 < $amount) {
+                    throw new \RuntimeException(' الرصيد المتاح للسحب اقل من المبلغ المطلوب  ');
+                }
+                WithDraw::create([
+                    'user_id' => $user->id, 'amount' => $amount, 'method' => $data['method'], 'account_name' => $data['account_name'],
+                    'account_number' => $data['account_number'], 'bank_name' => $data['bank_name'], 'swift_code' => $data['swift_code'],
+                    'iban_code' => $data['iban_code'], 'country' => $data['country'], 'status' => 0,
+                ]);
+                $user->update(['balance' => round((float) $user->balance - $amount, 2)]);
+                \App\Models\WalletTransaction::create(['user_id' => $user->id, 'type' => 'withdraw', 'amount' => $amount, 'description' => 'طلب سحب ' . \App\Support\Money::format($amount) . ' (بانتظار التحويل)']);
+            });
+        } catch (\RuntimeException $e) {
+            return Redirect::back()->withErrors($e->getMessage())->withInput();
+        }
+
         return $this->success_message(' تم اضافة طلب السحب الخاص بك بنجاح  ');
     }
 }

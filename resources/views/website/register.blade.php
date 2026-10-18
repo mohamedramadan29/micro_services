@@ -53,6 +53,30 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label> نوع الحساب </label>
+                                        <div class="account-type-options">
+                                            <input type="radio" class="btn-check" name="account_type" id="type_client"
+                                                value="{{ \App\Models\User::TYPE_CLIENT }}" required
+                                                @checked(old('account_type', request('type') === 'freelancer' ? \App\Models\User::TYPE_FREELANCER : null) == \App\Models\User::TYPE_CLIENT)>
+                                            <label class="account-type-option" for="type_client">
+                                                <i class="bi bi-briefcase"></i>
+                                                <strong> عميل </strong>
+                                                <span> أطلب تنفيذ مشاريعي وأستقبل العروض </span>
+                                            </label>
+
+                                            <input type="radio" class="btn-check" name="account_type" id="type_freelancer"
+                                                value="{{ \App\Models\User::TYPE_FREELANCER }}"
+                                                @checked(old('account_type', request('type') === 'freelancer' ? \App\Models\User::TYPE_FREELANCER : null) == \App\Models\User::TYPE_FREELANCER)>
+                                            <label class="account-type-option" for="type_freelancer">
+                                                <i class="bi bi-person-workspace"></i>
+                                                <strong> مستقل </strong>
+                                                <span> أقدّم عروضي على طلبات العملاء </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @include('website.user.partials.whatsapp-field')
+
+                                    <div class="form-group">
                                         <label> {{ __('login.password') }} </label>
                                         <input required type="password" class="form-control" placeholder="*******"
                                             name="password">

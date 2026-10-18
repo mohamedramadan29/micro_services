@@ -37,9 +37,12 @@ class ReviewsController extends Controller
             return Redirect()->back()->withInput()->withErrors($validator);
         }
         $review = new Review();
-        $review->name = $data['name'];
-        $review->reviews_count = $data['rating'];
-        $review->more_notes = $data['notes'];
+        // The reviews table now holds testimonials (columns renamed in 2026_03_06);
+        // site visitors' reviews wait for admin approval.
+        $review->client_name = $data['name'];
+        $review->rating = (int) $data['rating'];
+        $review->content = $data['notes'];
+        $review->is_approved = false;
         $review->save();
         return $this->success_message(' شكرا لك علي تقيمك لنا ');
     }

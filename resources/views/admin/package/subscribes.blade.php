@@ -62,7 +62,7 @@
                                             <td> {{ $subscribe->package['name'] }} </td>
                                             <td> {{ $subscribe->user['name'] }}</td>
                                             <td> {{ $subscribe->user['email'] }}</td>
-                                            <td> {{ number_format($package['price'], 2) }} $ </td>
+                                            <td> {{ number_format($package['price'], 2) }} ج.م </td>
                                             <td>{{ $subscribe->created_at }}</td>
 
                                         </tr>

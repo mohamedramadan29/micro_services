@@ -13,7 +13,7 @@
 
                         <div class="d-user-avater">
                             @if (Auth::user()->image != '')
-                                <img src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
+                                <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
                                     class="img-fluid rounded" alt="">
                             @else
                                 <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
@@ -84,9 +84,7 @@
                                                             <li> لا تتردد ابداً في التواصل معنا إذا احتجت أي مساعدة وسنسعد
                                                                 بخدمتك.
                                                             </li>
-                                                            <li class="text-danger">
-                                                                سيتم خصم عمولة Stripe بنسبة 2.9%
-                                                                + 0.30 دولار من المبلغ المدفوع. </li>
+                                                            <li> الدفع عبر EasyKash (بطاقة، فوري، محفظة) بالجنيه المصري، ويُضاف المبلغ لرصيدك فور تأكيد الدفع. </li>
                                                         </ul>
                                                     </div>
                                                     <div class="modal-footer">
@@ -96,20 +94,12 @@
                                                                 @csrf
 
                                                                 <div class="form-group">
-                                                                    <label> ادخل المبلغ </label>
-                                                                    <input id="price-input" style="height: 45px"
+                                                                    <label> ادخل المبلغ ({{ config('services.easykash.currency_label', 'ج.م') }}) </label>
+                                                                    <input style="height: 45px"
                                                                         type="number" class="form-control" name="price"
-                                                                        required>
+                                                                        min="1" step="0.01" required>
                                                                 </div>
-                                                                <div class="form-group">
-                                                                    <label> المبلغ الصافي بعد خصم العمولة </label>
-                                                                    <input id="net-amount" style="height: 45px"
-                                                                        type="text" class="form-control" readonly>
-                                                                </div>
-                                                                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="{{ env('STRIPE_KEY') }}"
-                                                                    data-amount="" data-name="شحن رصيد" data-description="إدخال المبلغ المطلوب لشحن الرصيد"
-                                                                    data-image="{{ asset('assets/website/img/favicon.png') }}" data-locale="auto" data-currency="usd"
-                                                                    data-label="شحن الرصيد"></script>
+                                                                <button type="submit" class="btn btn-primary mt-2"> متابعة للدفع </button>
                                                             </form>
                                                         @else
                                                             <a href="{{ url('login') }}" type="button"
@@ -117,18 +107,6 @@
                                                         @endif
                                                     </div>
 
-                                                    <script>
-                                                        document.getElementById('price-input').addEventListener('input', function() {
-                                                            const price = parseFloat(this.value) || 0; // المبلغ المدخل
-                                                            const feePercentage = 2.9 / 100; // نسبة العمولة
-                                                            const fixedFee = 0.30; // العمولة الثابتة بالدولار
-                                                            const commission = (price * feePercentage) + fixedFee; // حساب العمولة
-                                                            const netAmount = price - commission; // المبلغ الصافي
-
-                                                            // عرض المبلغ الصافي
-                                                            document.getElementById('net-amount').value = netAmount > 0 ? netAmount.toFixed(2) + ' USD' : '';
-                                                        });
-                                                    </script>
                                                 </div>
                                             </div>
                                         </div>
@@ -210,18 +188,6 @@
                                                         @endif
                                                     </div>
 
-                                                    <script>
-                                                        document.getElementById('price-input').addEventListener('input', function() {
-                                                            const price = parseFloat(this.value) || 0; // المبلغ المدخل
-                                                            const feePercentage = 2.9 / 100; // نسبة العمولة
-                                                            const fixedFee = 0.30; // العمولة الثابتة بالدولار
-                                                            const commission = (price * feePercentage) + fixedFee; // حساب العمولة
-                                                            const netAmount = price - commission; // المبلغ الصافي
-
-                                                            // عرض المبلغ الصافي
-                                                            document.getElementById('net-amount').value = netAmount > 0 ? netAmount.toFixed(2) + ' USD' : '';
-                                                        });
-                                                    </script>
                                                 </div>
                                             </div>
                                         </div>
@@ -234,19 +200,19 @@
                                                 <div class="col-lg-4 col-6">
                                                     <div class="info">
                                                         <h4> الرصيد القابل للسحب </h4>
-                                                        <span> {{ Auth::user()->balance }} $ </span>
+                                                        <span> {{ \App\Support\Money::show(Auth::user()->balance) }} </span>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-6">
                                                     <div class="info">
                                                         <h4> طلبات السحب </h4>
-                                                        <span> {{ $WithDrawLastOrder['amount'] ?? '0' }} $ </span>
+                                                        <span> {{ \App\Support\Money::show($WithDrawLastOrder['amount'] ?? '0') }} </span>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-6">
                                                     <div class="info">
                                                         <h4> الرصيد الكلي </h4>
-                                                        <span> {{ number_format(Auth::user()->balance, 2) }} $ </span>
+                                                        <span> {{ \App\Support\Money::show(Auth::user()->balance) }} </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -260,7 +226,7 @@
                                                                         $charge['payment_amount'] -
                                                                         $charge['payment_fee'];
                                                                 @endphp
-                                                                <div class="count_add_balance"> + {{ $lasttotal }} $
+                                                                <div class="count_add_balance"> + {{ \App\Support\Money::show($lasttotal) }}
                                                                 </div>
                                                                 <div class="_list_110_caption">
                                                                     <h4 class="_jb_title">
@@ -269,7 +235,7 @@
                                                                         </a>
                                                                     </h4>
                                                                     <ul class="_grouping_list">
-                                                                        <li><span> {{ $lasttotal }} $ <i
+                                                                        <li><span> {{ \App\Support\Money::show($lasttotal) }} <i
                                                                                     class="ti-credit-card"></i>
                                                                             </span>
                                                                         </li>
@@ -291,14 +257,14 @@
                                                         <div class="_list_jobs_f1ex first">
                                                             <div class="_list_110">
                                                                 <div class="minues_balance"> -
-                                                                    {{ $transaction['amount'] }} $ </div>
+                                                                    {{ \App\Support\Money::show($transaction['amount']) }} </div>
                                                                 <div class="_list_110_caption">
                                                                     <h4 class="_jb_title"><a href="#">
                                                                             طلب سحب اموال
                                                                         </a>
                                                                     </h4>
                                                                     <ul class="_grouping_list">
-                                                                        <li><span> {{ $transaction['amount'] }} $ <i
+                                                                        <li><span> {{ \App\Support\Money::show($transaction['amount']) }} <i
                                                                                     class="ti-credit-card"></i>
                                                                             </span>
                                                                         </li>

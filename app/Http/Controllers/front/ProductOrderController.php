@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\front;
 
-use Stripe\Stripe;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Stripe\Checkout\Session;
 use App\Models\admin\Product;
 use App\Http\Traits\Message_Trait;
 use App\Models\front\ProductOrder;
+use App\Models\OnlinePayment;
+use App\Services\Payments\OnlinePaymentService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Stripe\Exception\ApiErrorException;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +22,8 @@ class ProductOrderController extends Controller
     use Message_Trait;
 
 
-    public function store(Request $request)
+    /** Paid products go to EasyKash; the order is created once EasyKash confirms the payment. */
+    public function store(Request $request, OnlinePaymentService $payments)
     {
         try {
             $data = $request->all();
@@ -64,106 +64,25 @@ class ProductOrderController extends Controller
                 return Redirect::back()->withInput()->withErrors($validator);
             }
 
-            $product_price = $product->discount ? $product->discount : $product->price;
-
-            Stripe::setApiKey(env('STRIPE_SECRET'));
-
-            $metadata = [
-                'user_id' => Auth::id(),
+            $payload = [
+                'product_id' => $product->id,
+                'product_name' => $product->name,
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'product_id' => $product->id,
-                'product_type' => $product->type, // إضافة النوع
+                'back_url' => url()->previous(),
             ];
-
-            // أضف الشحن إذا فيزيكال
-            if (!$isDigital) {
-                $metadata['country'] = $request->country;
-                $metadata['city'] = $request->city;
-                $metadata['address'] = $request->address;
-            }
-
-            $session = Session::create([
-                'payment_method_types' => ['card', 'alipay'],
-                'line_items' => [
-                    [
-                        'price_data' => [
-                            'currency' => 'usd',
-                            'product_data' => ['name' => $product->name],
-                            'unit_amount' => $product_price * 100,
-                        ],
-                        'quantity' => 1,
-                    ]
-                ],
-                'mode' => 'payment',
-                'metadata' => $metadata,
-                'success_url' => route('product.order.success') . '?session_id={CHECKOUT_SESSION_ID}&product_id=' . $product->id,
-                'cancel_url' => route('product.order.cancel'),
-            ]);
-
-            return redirect($session->url);
-        } catch (\Exception $e) {
-            return $this->exception_message($e);
-        }
-    }
-
-
-    public function paymentSuccess(Request $request)
-    {
-        try {
-            Stripe::setApiKey(env('STRIPE_SECRET'));
-
-            $session = Session::retrieve($request->session_id);
-            if (!$session) {
-                return Redirect::route('home')->withErrors(['حدث خطأ أثناء التحقق من الدفع.']);
-            }
-
-            $metadata = $session->metadata;
-            $product = Product::findOrFail($metadata->product_id);
-            $product_price = $product->discount ? $product->discount : $product->price;
-            $isDigital = $product->type === 'digital';
-
-            DB::beginTransaction();
-            $order = new ProductOrder();
-            $order->user_id = $metadata->user_id;
-            $order->product_id = $metadata->product_id;
-            $order->product_name = $product->name;
-            $order->price = $product_price;
-            $order->name = $metadata->name;
-            $order->email = $metadata->email;
-            $order->phone = $metadata->phone;
-
             // الشحن إذا فيزيكال
             if (!$isDigital) {
-                $order->country = $metadata->country;
-                $order->city = $metadata->city;
-                $order->address = $metadata->address;
+                $payload['country'] = $request->country;
+                $payload['city'] = $request->city;
+                $payload['address'] = $request->address;
             }
 
-            $order->order_status = 'تم الدفع';
-            $order->save();
-
-            // إذا رقمي، أرسل إيميل مع رابط صفحة المشتريات (مش رابط تنزيل مباشر)
-            if ($isDigital && $product->digital_file) {
-                $purchasesPageLink = route('user.products.purches'); // رابط صفحة المشتريات
-                // Send Activation Email To User
-                $email = $order['email'];
-                $MessageDate = [
-                    'name' => $order['name'],
-                    "email" => $order['email'],
-                    'purchasesPageLink' => $purchasesPageLink,
-                    'productName' => $product->name,
-                ];
-                Mail::send('website.emails.DigitalProductMail', $MessageDate, function ($message) use ($email) {
-                    $message->to($email)->subject(' شراء المنتج الرقمي من نفذها   ');
-                });
-            }
-
-            DB::commit();
-            return Redirect()->route('user.products.purches')->with('success', 'تمت عملية الشراء بنجاح.');
-        } catch (ApiErrorException $e) {
-            return $this->exception_message($e);
+            return redirect()->away($payments->start(OnlinePayment::PURPOSE_PRODUCT_ORDER, Auth::user(), (float) $final_price, 'شراء المنتج ' . $product->name, $payload,
+                ['name' => $request->name, 'email' => $request->email, 'mobile' => $request->phone]));
+        } catch (\Throwable $e) {
+            return $this->payment_error($e);
         }
     }
 
@@ -195,11 +114,6 @@ class ProductOrderController extends Controller
             ->deleteFileAfterSend(false);
     }
 
-
-    public function PaymentCancel()
-    {
-        return $this->Error_message('تم الغاء الدفع');
-    }
 
     ###################### Free Product Price ########################
 

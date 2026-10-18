@@ -14,7 +14,7 @@
 
                         <div class="d-user-avater">
                             @if(Auth::user()->image !='')
-                                <img src="{{asset('assets/uploads/users_image/'.Auth::user()->image)}}"
+                                <img src="{{optional(Auth::user())->avatarUrl(128)}}"
                                      class="img-fluid rounded" alt="">
                             @else
                                 <img src="{{asset('assets/website/img/avatar.png')}}" class="img-fluid rounded" alt="">
@@ -74,7 +74,7 @@
                                                                                     href="{{'user/'.$order['seller']['user_name']}}"> <i
                                                                                         class="ti-user"></i>  {{$order['seller']['name']}} </span> </a>
                                                                         </li>
-                                                                        <li><span>  {{$order['service_price']}} $   <i
+                                                                        <li><span>  {{ \App\Support\Money::show($order['service_price']) }}   <i
                                                                                     class="ti-credit-card"></i> </span>
                                                                         </li>
                                                                         <li><span><i class="ti-location-pin"></i> {{$order['status']}} </span>

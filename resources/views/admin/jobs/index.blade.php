@@ -66,7 +66,7 @@
                                             <td> {{ $loop->iteration }} </td>
                                             <td> {{ $job->User->name }} </td>
                                             <td> {{ $job->title }} </td>
-                                            <td> {{ $job->salary }} دولار </td>
+                                            <td> {{ $job->salary }} ج.م </td>
                                             <td> {{ $job->city }} </td>
                                             <td> {{ $job->country }} </td>
                                             <td> {{ $job->address }} </td>

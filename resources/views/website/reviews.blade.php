@@ -122,7 +122,7 @@
         <section class="py-5 bg-light">
             <div class="container">
                 <div class="row justify-content-center mb-5">
-                    <div class="col-lg-4 col-md-6 mb-4" data-aos="zoom-in">
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0" data-aos="zoom-in">
                         <div class="rating-stats">
                             <h3 class="mb-3">التقييم الإجمالي</h3>
                             <div class="overall-rating">4.8</div>

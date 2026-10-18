@@ -67,7 +67,7 @@
                                             <td> {{ $properity->title }} </td>
                                             <td> {{ $properity->type }} </td>
                                             <td> {{ $properity->category }} </td>
-                                            <td> {{ number_format($properity->price,2) }} دولار </td>
+                                            <td> {{ number_format($properity->price,2) }} {{ $properity->currency ?: 'ج.م' }} </td>
                                             <td>
                                                 @if ($properity['active'] == 1)
                                                     <span class="badge badge-success"> مفعل  </span>

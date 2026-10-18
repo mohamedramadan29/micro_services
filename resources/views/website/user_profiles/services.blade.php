@@ -13,15 +13,16 @@
                     <div class="dashboard-navbar">
 
                         <div class="d-user-avater">
-                            @if($user->image !='')
-                                <img src="{{asset('assets/uploads/users_image/'.$user->image)}}"
+                            @if ($user->professional_photo)
+                                <img src="{{ $user->avatarUrl(512) }}" class="img-fluid rounded" alt="{{ $user->name }}" width="256" height="256">
+                            @elseif ($user->image != '')
+                                <img src="{{optional($user)->avatarUrl(128)}}"
                                      class="img-fluid rounded" alt="">
                             @else
                                 <img src="{{asset('assets/website/img/avatar.png')}}" class="img-fluid rounded" alt="">
                             @endif
 
                             <h4> {{$user->user_name}} </h4>
-                            <span> {{$user->email}} </span>
                         </div>
 
                         <div class="d-navigation">

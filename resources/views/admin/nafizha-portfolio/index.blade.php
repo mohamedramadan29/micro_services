@@ -78,9 +78,9 @@
                                     <td>
                                         <a class="btn btn-primary btn-sm" href="{{ url('admin/nafizha-portfolio/edit/'.$portfolio['id']) }}" > تعديل <i
                                                 class="fa fa-edit"></i></a>
-                                        <a onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')" href="{{ url('admin/nafizha-portfolio/delete/'.$portfolio['id']) }}"
+                                        <form method="POST" action="{{ url('admin/nafizha-portfolio/delete/'.$portfolio['id']) }}" class="d-inline" onsubmit="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')">@csrf<button type="submit" style="background:none;border:0;padding:0" 
                                             class="btn btn-danger btn-sm"> حذف <i class="fa fa-trash"></i>
-                                        </a>
+                                        </button></form>
                                     </td>
                                 </tr>
 

@@ -112,7 +112,7 @@
                                                         <div class="user_info">
                                                             <div>
                                                                 <img
-                                                                    src="{{ asset('assets/uploads/users_image/' . $job->User->image) }}">
+                                                                    src="{{ optional($job->User)->avatarUrl(128) }}">
                                                             </div>
                                                             <div>
                                                                 <p> {{ $job->User->name }} </p>

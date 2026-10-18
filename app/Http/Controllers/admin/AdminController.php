@@ -44,8 +44,10 @@ class AdminController extends Controller
             $password = $data_lgoin['password'];
             if (Auth::attempt(['email' => $email, 'password' => $password])) {
                 if (Auth::user()->status == 1 && Auth::user()->account_type == 'admin') {
+                    $request->session()->regenerate();
                     return redirect('admin/dashboard');
                 } else {
+                    Auth::logout();
                     return $this->Error_message('غير مصرح لك بالدخول كادمن');
                 }
             } else {
@@ -137,6 +139,8 @@ class AdminController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect('/');
     }
 }

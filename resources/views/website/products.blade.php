@@ -70,11 +70,11 @@
                                     @if ($product['price'] > 0)
                                     @if ($product['discount'] > 0)
                                     <strong class="theme-cl" style="opacity: .5; text-decoration:line-through">
-                                        {{ number_format($product['price'], 2) }} $ </strong>
-                                    <strong class="theme-cl"> {{ number_format($product['discount'], 2) }} $
+                                        {{ \App\Support\Money::show($product['price']) }} </strong>
+                                    <strong class="theme-cl"> {{ \App\Support\Money::show($product['discount']) }}
                                     </strong>
                                     @else
-                                    <strong class="theme-cl"> {{ number_format($product['price'], 2) }} $
+                                    <strong class="theme-cl"> {{ \App\Support\Money::show($product['price']) }}
                                     </strong>
                                     @endif
                                     @else

@@ -1,86 +1,68 @@
+@php
+    $footer = \App\Support\SiteContent::first('footer.main');
+    $footerLinks = \App\Support\SiteContent::items('footer.links');
+    $footerSocial = \App\Support\SiteContent::items('footer.social');
+    $floatingWhatsapp = preg_replace('/\D/', '', (string) $footer['whatsapp']);
+@endphp
 <footer class="dark-footer skin-dark-footer text-right" dir="rtl">
-    <div class="help_center">
-        <a href="{{ url('tickets') }}" class="btn"> <i class="bi bi-chat-square-dots-fill"></i> </a>
-    </div>
-    <div class="help_center help_center_products">
-        <a target="_blank" href="https://wa.me/+963997610723" class="btn btn-primary"> <i class="bi bi-person-raised-hand"></i> </a>
-    </div>
+    @if ($footer['show_tickets'] !== '0')
+        <div class="help_center">
+            <a href="{{ url('tickets') }}" class="btn" aria-label="الدعم"> <i class="bi bi-chat-square-dots-fill"></i> </a>
+        </div>
+    @endif
+    @if ($floatingWhatsapp)
+        <div class="help_center help_center_products">
+            <a target="_blank" rel="noopener" href="https://wa.me/{{ $floatingWhatsapp }}" class="btn btn-primary" aria-label="واتساب"> <i class="bi bi-person-raised-hand"></i> </a>
+        </div>
+    @endif
     <div>
         <div class="container">
             <div class="row">
-
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-widget">
                         <img src="{{ asset('assets/website/img/logo.png') }}" class="img-fluid f-logo" width="120"
                             alt="">
-                        <p style='line-height:1.3;font-weight:bold'> وجهتك الأولى لتوظيف أفضل المستقلين .
-                        </p>
-                        <p style='line-height:1.3;'> اجمع بين أصحاب المشاريع والمستقلين لإنجاز الأعمال <br> باحترافية
-                            وسرعة، مع حلول مبتكرة تلبي جميع احتياجاتك. </p>
-
-
+                        @if ($footer['tagline'])<p style='line-height:1.3;font-weight:bold'> {{ $footer['tagline'] }} </p>@endif
+                        @if ($footer['text'])<p style='line-height:1.3; white-space: pre-line'>{{ $footer['text'] }}</p>@endif
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-4">
                     <div class="footer-widget">
-                        <h4 class="widget-title"> {{ __('public.links') }} </h4>
+                        <h4 class="widget-title"> {{ $footer['links_title'] ?: __('public.links') }} </h4>
                         <ul class="footer-menu">
-                            <li><a href="{{ route('reviews.index') }}"> اضف تقيمك </a></li>
-                            <li><a href="{{ url('testimonials') }}"> آراء العملاء </a></li>
-                            <li><a href="{{ route('blogCategories') }}"> المدونة </a></li>
-                            <li><a href="{{ '/about' }}"> {{ __('public.about_us') }} </a></li>
-                            <li><a href="{{ '/faq' }}"> {{ __('public.faqs') }} </a></li>
-                            <li><a href="{{ '/privacy-policy' }}"> {{ __('public.privacy') }} </a></li>
-                            <li><a href="{{ '/terms' }}"> {{ __('public.terms') }} </a></li>
+                            @foreach ($footerLinks as $link)
+                                <li><a href="{{ \App\Support\SiteContent::url($link['link']) }}"> {{ $link['label'] }} </a></li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
-
                 <div class="col-lg-6 col-md-4">
                     <div class="footer-widget">
-                        <h4 class="widget-title"> {{ __('public.follow_us') }} </h4>
+                        <h4 class="widget-title"> {{ $footer['social_title'] ?: __('public.follow_us') }} </h4>
                         <ul class="footer-bottom-social">
-                            <li><a style="background-color: #1877f2"
-                                    href="https://www.facebook.com/profile.php?id=61589983756521"><i
-                                        class="ti-facebook"></i></a></li>
-                            {{-- <li><a style="background-color: #1da1f2;" href="https://x.com/Nafizhacom"><i
-                                        class="bi bi-x"></i></a></li> --}}
-                            <li><a style="background-color: #c32aa3;" href="https://www.instagram.com/nafizhacom80?igsh=cWNyMXBweW9kNjk0"><i
-                                        class="ti-instagram"></i></a></li>
-                            <li><a style="background-color: #ff0000;"
-                                    href="https://youtube.com/@nafizha80?si=UnmGhF_ahqgWBCkN"><i
-                                        class="ti-youtube"></i></a></li>
-                            {{-- <li><a style="background-color: #fffc00;"
-                                    href="https://www.snapchat.com/add/nafizhacom?share_id=WdKBnTWhDhY&locale=ar-EG"><i
-                                        class="bi bi-snapchat"></i></a></li> --}}
-                            <li><a style="background-color: #010101;"
-                                    href="https://www.tiktok.com/@nafizha.com?_r=1&_t=ZN-96b7WzNOrNW"><i
-                                        class="bi bi-tiktok"></i></a></li>
-                            {{-- <li><a style="background-color: #0a66c2;"
-                                    href="https://www.linkedin.com/in/nafizha-com-273539350?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i
-                                        class="ti-linkedin"></i></a></li> --}}
-                            {{-- <li><a style="background-color: #ED0C6F;"
-                                    href="https://share.upscrolled.com/ar/user/f43e57ed-8627-469c-a473-1eced16bf46c"> Up
-                                </a></li> --}}
+                            @foreach ($footerSocial as $account)
+                                <li><a style="background-color: {{ $account['color'] ?: '#3FB699' }}" href="{{ \App\Support\SiteContent::url($account['link']) }}" target="_blank" rel="noopener" aria-label="{{ $account['label'] }}" title="{{ $account['label'] }}"><i
+                                        class="bi {{ $account['icon'] ?: 'bi-link-45deg' }}"></i></a></li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="footer-bottom">
         <div class="container">
             <div class="row align-items-center">
-
                 <div class="col-lg-12 col-md-12 text-center">
-                    <p class="mb-0"> جميع الحقوق محفوظة @ {{ date('Y') }} لدي نفذها </p>
+                    <p class="mb-0"> {{ str_replace(':year', date('Y'), $footer['copyright'] ?: 'جميع الحقوق محفوظة @ :year لدي نفذها') }} </p>
                 </div>
-
             </div>
         </div>
     </div>
 </footer>
+@auth
+<form id="site-logout-form" method="POST" action="{{ url('logout') }}" hidden>@csrf</form>
+@endauth
 <!-- =========================== Footer End ========================================= -->
 </div>
 
@@ -89,14 +71,14 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
 </script>
-<script src="{{ asset('assets/website/js/select2.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="{{ asset('assets/website/js/owl.carousel.min.js') }}"></script>
 <script src="{{ asset('assets/website/js/ion.rangeSlider.min.js') }}"></script>
 <script src="{{ asset('assets/website/js/counterup.min.js') }}"></script>
 <script src="{{ asset('assets/website/js/materialize.min.js') }}"></script>
 <script src="{{ asset('assets/website/js/metisMenu.min.js') }}"></script>
 <script src="{{ asset('assets/website/js/custom.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script src="{{ \App\Support\AssetVersion::url('assets/website/js/phone-picker.js') }}"></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
 

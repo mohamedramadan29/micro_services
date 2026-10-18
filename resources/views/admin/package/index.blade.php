@@ -71,7 +71,7 @@
                                             <td> {{ $package['name'] }} </td>
                                             <td> {{ $package['title'] }} </td>
                                             <td> {{ $package['description'] }}</td>
-                                            <td> {{ number_format($package['price'], 2) }} $ </td>
+                                            <td> {{ number_format($package['price'], 2) }} ج.م </td>
                                             <td>{{ $package->subscribes->count() }}</td>
                                             <td>
                                                 <a class="btn btn-primary btn-sm"

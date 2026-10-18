@@ -73,8 +73,7 @@
                                                     </div>
                                                     <div class="_oi0po price_section"><i class="fa fa-bolt"></i>
                                                         سعر الخدمة <strong class="theme-cl">
-                                                            {{ number_format($serv['price'], 2) }}
-                                                            $ </strong>
+                                                            {{ \App\Support\Money::show($serv['price']) }} </strong>
                                                     </div>
                                                 </div>
                                             </div>
@@ -95,7 +94,7 @@
                     </div>
                     <div class="_jb_summary_thumb">
                         <img style="width: 75px;height: 75px;border-radius: 100%;border: 2px solid #ccc;"
-                            src="{{ asset('assets/uploads/users_image/' . $service['user']['image']) }}"
+                            src="{{ optional($service['user'])->avatarUrl(128) }}"
                             class="img-fluid circle" alt="">
                     </div>
                     <div class="_jb_summary_caption">
@@ -190,7 +189,7 @@
                                 --}}
                                 {{-- <li> طلبات جاري تنفيذها <span class="text-info">1</span></li> --}}
                                 <li> سعر الخدمة <span class="" style="font-size: 17px;color: #3fb699;">
-                                        {{ $service['price'] }} $</span>
+                                        {{ \App\Support\Money::show($service['price']) }}</span>
                                 </li>
                             </ul>
                         </div>

@@ -104,6 +104,10 @@
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                         @forelse ($unreadNotificationsUsers as $notification)
+                                            @if (isset($notification['data']['url']))
+                                                @include('website.layouts.partials.notification-item', ['notification' => $notification])
+                                                @continue
+                                            @endif
                                             @if ($notification['type'] == 'App\Notifications\AcceptJobFromAdmin')
                                                 <li><a class="dropdown-item"
                                                         href="{{ url('service/' . $notification['data']['serv_id'] . '-' . $notification['data']['serv_slug']) }}">
@@ -130,20 +134,6 @@
 
                                                 </li>
                                                 <hr>
-                                            @elseif($notification['type'] == 'App\Notifications\OfferAccepted')
-                                                <li><a class="dropdown-item"
-                                                        href="{{ url('project/' . $notification['data']['project_id'] . '-' . $notification['data']['project_slug']) }}">
-                                                        تمت الموافقة علي العرض الخاص بك علي المشروع
-
-                                                        : {{ $notification['data']['project_title'] }}
-                                                        <br>
-                                                        <span class="timer"> <i class="fa fa-clock"></i>
-                                                            {{ $notification->created_at->diffForHumans() }}
-                                                        </span>
-                                                    </a>
-
-                                                </li>
-                                                <hr>
                                             @endif
                                         @empty
                                             <li><a class="dropdown-item"> لا يوجد لديك اشعارات في الوقت الحالي </a>
@@ -156,7 +146,7 @@
                                     <button class="btn btn-secondary dropdown-toggle" type="button"
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         @if (Auth::user()->image != '')
-                                            <img src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
+                                            <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
                                                 class="img-fluid rounded" alt="">
                                         @else
                                             <img src="{{ asset('assets/website/img/avatar.png') }}"
@@ -171,12 +161,19 @@
                                                     class="bi bi-credit-card"></i> </a></li>
                                         <li><a class="dropdown-item" href="{{ url('my/products/purches') }}"> مشتريات
                                                 المنتجات <i class="bi bi-cart-check-fill"></i> </a></li>
-                                        <li><a class="dropdown-item" href="{{ url('my/project/index') }}"> المشاريع <i
-                                                    class="bi bi-cast"></i></a></li>
-
-                                        <li><a class="dropdown-item" href="{{ url('my/courses') }}"> الكورسات <i
-                                                    class="bi bi-mortarboard-fill"></i> </a>
-                                        </li>
+                                        @if (\App\Models\Contract::involving(Auth::user())->exists())
+                                            <li><a class="dropdown-item" href="{{ route('contracts.index') }}"> مشاريعي <i
+                                                        class="bi bi-kanban-fill"></i></a></li>
+                                        @endif
+                                        @if (Auth::user()->isFreelancer())
+                                            <li><a class="dropdown-item" href="{{ route('freelancer.offers.index') }}"> عروضي <i
+                                                        class="bi bi-send-check-fill"></i></a></li>
+                                            <li><a class="dropdown-item" href="{{ route('freelancer.profile.edit') }}"> ملفي كمستقل <i
+                                                        class="bi bi-person-badge"></i></a></li>
+                                        @else
+                                            <li><a class="dropdown-item" href="{{ route('requests.index') }}"> طلباتي <i
+                                                        class="bi bi-clipboard-check"></i></a></li>
+                                        @endif
 
                                         <li><a class="dropdown-item" href="{{ url('service/index') }}">الخدمات
                                                 <i class="bi bi-database-fill-check"></i> </a></li>
@@ -201,7 +198,7 @@
                                         <li><a class="dropdown-item" href="{{ url('update-account') }}"> تعديل الملف
                                                 الشخصي
                                                 <i class="bi bi-gear-fill"></i> </a></li>
-                                        <li><a class="dropdown-item" href="{{ url('logout') }}"> تسجيل خروج <i
+                                        <li><a class="dropdown-item" href="{{ url('logout') }}" onclick="event.preventDefault(); document.getElementById('site-logout-form').submit();"> تسجيل خروج <i
                                                     class="ti-power-off"></i> </a></li>
                                     </ul>
                                 </div>
@@ -282,6 +279,10 @@
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                         @forelse ($unreadNotificationsUsers as $notification)
+                                            @if (isset($notification['data']['url']))
+                                                @include('website.layouts.partials.notification-item', ['notification' => $notification])
+                                                @continue
+                                            @endif
                                             @if ($notification['type'] == 'App\Notifications\AcceptJobFromAdmin')
                                                 <li><a class="dropdown-item"
                                                         href="{{ url('service/' . $notification['data']['serv_id'] . '-' . $notification['data']['serv_slug']) }}">
@@ -305,46 +306,6 @@
                                                             {{ $notification->created_at->diffForHumans() }}
                                                         </span>
                                                     </a>
-                                                </li>
-                                                <hr>
-                                            @elseif($notification['type'] == 'App\Notifications\OfferAccepted')
-                                                <li><a class="dropdown-item"
-                                                        href="{{ url('project/' . $notification['data']['project_id'] . '-' . $notification['data']['project_slug']) }}">
-                                                        تمت الموافقة علي العرض الخاص بك علي المشروع
-
-                                                        : {{ $notification['data']['project_title'] }}
-                                                        <br>
-                                                        <span class="timer"> <i class="fa fa-clock"></i>
-                                                            {{ $notification->created_at->diffForHumans() }}
-                                                        </span>
-                                                    </a>
-
-                                                </li>
-                                                <hr>
-                                            @elseif($notification['type'] == 'App\Notifications\AcceptProjectFromAdmin')
-                                                <li><a class="dropdown-item"
-                                                        href="{{ url('project/' . $notification['data']['project_id'] . '-' . $notification['data']['project_slug']) }}">
-                                                        تمت الموافقة علي المشروع الخاص بك
-                                                        : {{ $notification['data']['project_name'] }}
-                                                        <br>
-                                                        <span class="timer"> <i class="fa fa-clock"></i>
-                                                            {{ $notification->created_at->diffForHumans() }}
-                                                        </span>
-                                                    </a>
-
-                                                </li>
-                                                <hr>
-                                            @elseif($notification['type'] == 'App\Notifications\ProjectDelivery')
-                                                <li><a class="dropdown-item"
-                                                        href="{{ url('project/' . $notification['data']['project_id'] . '-' . $notification['data']['project_slug']) }}">
-                                                        {{ $notification['data']['noti_title'] }}
-                                                        : {{ $notification['data']['project_title'] }}
-                                                        <br>
-                                                        <span class="timer"> <i class="fa fa-clock"></i>
-                                                            {{ $notification->created_at->diffForHumans() }}
-                                                        </span>
-                                                    </a>
-
                                                 </li>
                                                 <hr>
                                             @elseif($notification['type'] == 'App\Notifications\AdminActiveCourse')
@@ -401,42 +362,23 @@
                         @endif
 
                         <ul class="nav-menu">
-                            <li class="{{ request()->is('/') ? 'active' : '' }}">
-                                <a href="{{ url('/') }}"> {{ __('public.home') }} </a>
-                            </li>
-                            <li class="{{ request()->is('projects') ? 'active' : '' }}">
-                                <a href="{{ url('projects') }}"> {{ __('public.projects') }} </a>
-                            </li>
-                            <li class="{{ request()->is('courses') ? 'active' : '' }}">
-                                <a href="{{ url('courses') }}"> {{ __('public.courses') }} </a>
-                            </li>
-                            <li class="{{ request()->is('new-courses') ? 'active' : '' }}">
-                                <a href="{{ route('courses.index') }}"> الكورسات المجانية </a>
-                            </li>
-                            <li class="{{ request()->is('products') ? 'active' : '' }}">
-                                <a href="{{ url('products') }}"> المنتجات </a>
-                            </li>
-                            <li class="{{ request()->is('services') ? 'active' : '' }}">
-                                <a href="{{ url('services') }}"> {{ __('public.services') }} </a>
-                            </li>
-
-                            {{-- <li class="{{ request()->is('properties') ? 'active' : '' }}"><a
-                                    href="{{ url('properties') }}"> عقارات </a></li> --}}
-                            {{-- <li class="{{ request()->is('jobs') ? 'active' : '' }}"><a href="{{ url('jobs') }}">
-                                    الوظائف </a></li>
-                            <li class="{{ request()->is('employees') ? 'active' : '' }}"><a
-                                    href="{{ url('employees') }}"> الموظفين </a></li> --}}
-                            {{-- <li class="{{ request()->is('properties/maintain') ? 'active' : '' }}"><a
-                                    href="{{ url('properties/maintain') }}"> خدمات الصيانة </a></li> --}}
-                            <li class="{{ request()->is('packages') ? 'active' : '' }}"><a
-                                    href="{{ url('packages') }}">
-                                    Vip خطط </a></li>
-                            <li class="{{ request()->is('portfolios') ? 'active' : '' }}"><a
-                                    href="{{ url('portfolios') }}"> الأعمال </a></li>
-                            <li class="{{ request()->is('nafizha/portfolios') ? 'active' : '' }}"><a
-                                    href="{{ url('nafizha/portfolios') }}"> فريق نفذها </a></li>
-                            @if (\Illuminate\Support\Facades\Auth::check())
-                                <li><a href="{{ url('service/add') }}"> إضافة خدمة </a></li>
+                            {{-- Links managed in admin «إدارة محتوى الواجهة» → Navbar. --}}
+                            @foreach (\App\Support\SiteContent::items('navbar.links') as $navLink)
+                                @if (\App\Support\SiteContent::shownTo($navLink['audience']))
+                                    <li class="{{ \App\Support\SiteContent::isActive($navLink['link']) ? 'active' : '' }}">
+                                        <a href="{{ \App\Support\SiteContent::url($navLink['link']) }}"> {{ $navLink['label'] }} </a>
+                                    </li>
+                                @endif
+                            @endforeach
+                            @if (\App\Support\Money::usdAvailable())
+                                {{-- Approximate dollar prices; payment always in EGP. --}}
+                                <li class="rf-fx-switch">
+                                    @if (\App\Support\Money::wantsUsd())
+                                        <a href="{{ route('currency.switch', 'EGP') }}" class="active" title="تعرض الأسعار مع ما يعادلها بالدولار تقريبيًا (الدفع بالجنيه). اضغط للعرض بالجنيه فقط">$</a>
+                                    @else
+                                        <a href="{{ route('currency.switch', 'USD') }}" title="اعرض ما يعادل الأسعار بالدولار تقريبيًا (الدفع يبقى بالجنيه)">$</a>
+                                    @endif
+                                </li>
                             @endif
                             @php
                                 $count_items = count(\App\Models\front\Cart::getCartItems());

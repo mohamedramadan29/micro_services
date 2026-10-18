@@ -82,16 +82,16 @@
         </div>
         <div class="email-body">
             <h2>مرحبًا {{ $name }}!</h2>
-            <p>شكرًا لتسجيلك في نفذها. من فضلك قم بتفعيل الحساب الخاص بك عن طريق الضغط على الرابط أدناه:</p>
+            <p>شكرًا لتسجيلك في نفذها. من فضلك أكّد بريدك الإلكتروني بالضغط على الرابط أدناه (صالح لمدة {{ \App\Support\EmailVerification::VALID_DAYS }} أيام):</p>
             <p>
-                <a href="{{ url('user/confirm/' . $code) }}" target="_blank">تفعيل الحساب</a>
+                <a href="{{ $url }}" target="_blank">تأكيد البريد الإلكتروني</a>
             </p>
             <p>إذا كنت تواجه أي مشكلة، يُرجى نسخ الرابط أدناه ولصقه في متصفحك:</p>
-            <p>{{ url('user/confirm/' . $code) }}</p>
+            <p style="word-break: break-all">{{ $url }}</p>
             <p>شكرًا لانضمامك إلينا!</p>
         </div>
         <div class="email-footer">
-            &copy; 2024 نفذها - جميع الحقوق محفوظة
+            &copy; {{ date('Y') }} نفذها - جميع الحقوق محفوظة
         </div>
     </div>
 </body>

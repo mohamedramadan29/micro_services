@@ -72,8 +72,8 @@
                                             <select required class="form-control" id="status" data-choices
                                                 data-choices-groups data-placeholder="Select Categories" name="status">
                                                 <option value=""> -- حدد حالة المقال --</option>
-                                                <option value="0"> ارشيف </option>
-                                                <option value="1" selected> نشط </option>
+                                                <option value="0"> مسودة / أرشيف (لا يظهر للزوار) </option>
+                                                <option value="1" selected> منشور </option>
                                             </select>
                                         </div>
                                     </div>

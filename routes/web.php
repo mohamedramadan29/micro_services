@@ -11,7 +11,6 @@ use App\Http\Controllers\front\CourseController;
 use App\Http\Controllers\front\ChatgptController;
 use App\Http\Controllers\front\PackageController;
 use App\Http\Controllers\front\ProductController;
-use App\Http\Controllers\front\ProjectController;
 use App\Http\Controllers\front\ReviewsController;
 use App\Http\Controllers\front\TicketsController;
 use App\Http\Controllers\front\CheckOutController;
@@ -23,11 +22,20 @@ use App\Http\Controllers\front\ProperityController;
 use App\Http\Controllers\Auth\SocialMediaController;
 use App\Http\Controllers\front\ConversationController;
 use App\Http\Controllers\front\ProductOrderController;
-use App\Http\Controllers\front\ProjectOfferController;
+use App\Http\Controllers\front\OnlinePaymentController;
+use App\Http\Controllers\front\ServicesPageController;
+use App\Http\Controllers\front\SiteTestController;
 use App\Http\Controllers\front\ChargeBalanceController;
 use App\Http\Controllers\front\TicketMessageController;
 use App\Http\Controllers\front\CourseRegisterController;
 use App\Http\Controllers\front\FrontProperityController;
+use App\Http\Controllers\front\AccountTypeController;
+use App\Http\Controllers\front\SpecializationController;
+use App\Http\Controllers\front\ServiceRequestController;
+use App\Http\Controllers\front\FreelancerRequestController;
+use App\Http\Controllers\front\OfferController;
+use App\Http\Controllers\front\NotificationController;
+use App\Http\Controllers\front\RequestPaymentController;
 use App\Http\Controllers\front\ProperityMaintainController;
 use App\Http\Controllers\front\UserProductPurchesController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -40,21 +48,64 @@ use App\Http\Controllers\front\NewCourseController;
 Route::group(
     [
         'prefix' => LaravelLocalization::setLocale(),
-        'middleware' => ['localeViewPath']
+        'middleware' => ['localeViewPath', 'track.visit']
     ],
     function () {
 
         Route::get('/', [FrontController::class, 'index'])->name('index');
+        Route::get('go/{card}', [\App\Http\Controllers\front\HomeCardController::class, 'go'])->whereNumber('card')->name('home.card');
         Route::get('about', function () {
             return view('website.about');
         });
         Route::get('faq', function () {
             return view('website.faq');
         });
+        Route::get('freelancers', [\App\Http\Controllers\front\FreelancerDirectoryController::class, 'index'])->name('freelancers.index');
+        Route::get('freelancers/join', [\App\Http\Controllers\front\FreelancerJoinController::class, 'show'])->name('freelancers.join');
+        // Journey analytics (client file «تعديلات», item 08): consent first, then anonymous events.
+        Route::controller(\App\Http\Controllers\front\AnalyticsController::class)->group(function () {
+            Route::post('analytics/consent', 'consent')->name('analytics.consent');
+            Route::post('analytics/form-start', 'formStart')->middleware('throttle:60,1')->name('analytics.form-start');
+            Route::post('analytics/abandon-reason', 'abandonReason')->middleware('throttle:10,1')->name('analytics.abandon-reason');
+        });
+
+        // Show prices with an approximate USD amount (display only; payments stay EGP).
+        Route::get('currency/{code}', function (string $code) {
+            return redirect()->back(302, [], url('/'))->withCookie(cookie()->forever(\App\Support\Money::COOKIE, $code));
+        })->whereIn('code', ['EGP', 'USD'])->name('currency.switch');
+
+        // Free site check (client file «اختبر موقعك مجاناً»): no login until the client asks to execute.
+        Route::controller(SiteTestController::class)->group(function () {
+            Route::get('site-test', 'index')->name('site-tests.index');
+            Route::post('site-test', 'store')->name('site-tests.store');
+            Route::get('site-test/{siteTest}', 'show')->name('site-tests.show');
+            Route::get('site-test/{siteTest}/status', 'status')->name('site-tests.status');
+            Route::post('site-test/{siteTest}/report', 'report')->middleware('throttle:10,60')->name('site-tests.report');
+            Route::post('site-test/{siteTest}/choice/{choice}', 'choose')->whereIn('choice', ['yes', 'no'])->name('site-tests.choose');
+            Route::middleware(['auth', 'account.type'])->group(function () {
+                Route::get('site-test/{siteTest}/execute', 'execute')->name('site-tests.execute');
+                Route::post('site-test/{siteTest}/execute', 'publish')->name('site-tests.publish');
+            });
+        });
+        // Service 3: the public dispute policy (texts in the content admin).
+        Route::view('dispute-policy', 'website.policy.disputes')->name('policy.disputes');
+        // Landing pages built in the admin (client file «تعديلات», item 07).
+        Route::get('lp/{slug}', [\App\Http\Controllers\front\LandingPageController::class, 'show'])->where('slug', '[a-z0-9-]+')->name('landing.show');
+        // Services page (client brief «متطلبات تطوير قسم الخدمات»).
+        Route::get('services', [ServicesPageController::class, 'index'])->name('services.index');
+        // Homepage entry points (client file «المربعات الخمسة»): open to visitors; publishing needs a client account.
+        Route::get('projects/diagnose', [\App\Http\Controllers\front\DiagnoseController::class, 'show'])->name('diagnose');
+        Route::post('projects/diagnose', [\App\Http\Controllers\front\DiagnoseController::class, 'store'])->middleware('throttle:30,60')->name('diagnose.store');
+        Route::get('projects/diagnose/result', [\App\Http\Controllers\front\DiagnoseController::class, 'result'])->name('diagnose.result');
+        Route::get('projects/new', [\App\Http\Controllers\front\ProjectPostController::class, 'create'])->name('projects.new');
+        Route::post('projects/new', [\App\Http\Controllers\front\ProjectPostController::class, 'store'])->middleware('throttle:10,60')->name('projects.store');
+        Route::middleware('auth')->group(function () {
+            Route::get('services/help', [ServicesPageController::class, 'helpLogin'])->name('services.help.login');
+            Route::post('services/help', [ServicesPageController::class, 'storeHelp'])->middleware('throttle:5,60')->name('services.help.store');
+        });
         Route::controller(FrontController::class)->group(function () {
             Route::get('/', 'index')->name('home');
             Route::get('categories', 'categories');
-            Route::get('services', 'services');
             Route::get('service/{id}-{slug}', 'service_details');
             Route::get('category/service/{slug}', 'sub_categories');
             Route::get('services/{slug}', 'category_services');
@@ -66,14 +117,15 @@ Route::group(
             Route::get('search', 'search');
             Route::get('consultants', 'getConsultantsByCategory');
         });
-        // Confirm User Email
+        // Old unsigned activation links (base64 of the email) are no longer accepted.
         Route::get('user/confirm/{code}', [UserController::class, 'UserConfirm']);
+        Route::post('user/verify/resend', [\App\Http\Controllers\front\EmailVerificationController::class, 'resend'])->middleware('throttle:3,60')->name('email.verify.resend');
 
         // Start User Dashboard
         Route::controller(UserController::class)->group(function () {
             Route::match(['get', 'post'], 'login', 'login')->name('user_login');
             Route::match(['get', 'post'], 'register', 'register');
-            Route::get('logout', 'logout');
+            Route::match(['get', 'post'], 'logout', 'logout'); // GET kept for old links; the site's own menus POST
             Route::get('user/{username}', 'show_profile');
             Route::get('user/{username}/services', 'user_services');
             Route::group(['middleware' => ['auth']], function () {
@@ -86,6 +138,95 @@ Route::group(
                 Route::get('balance', 'balance')->name('user_balance');
 
                 Route::get('chat-main/{conversation_id}', Main::class)->name('chat.main');
+            });
+        });
+        // Account type (Google sign-ups / old accounts) and freelancer specializations
+        Route::group(['middleware' => ['auth']], function () {
+            Route::get('notifications/{id}', [NotificationController::class, 'open'])->name('notifications.open');
+            Route::get('account-type', [AccountTypeController::class, 'edit'])->name('account.type');
+            Route::post('account-type', [AccountTypeController::class, 'update'])->name('account.type.update');
+            Route::group(['middleware' => ['account.type']], function () {
+                Route::get('my/specializations', [SpecializationController::class, 'edit'])->name('specializations.edit');
+                Route::post('my/specializations', [SpecializationController::class, 'update'])->name('specializations.update');
+                Route::get('my/freelancer-profile', [\App\Http\Controllers\front\FreelancerProfileController::class, 'edit'])->name('freelancer.profile.edit');
+                Route::post('my/freelancer-profile', [\App\Http\Controllers\front\FreelancerProfileController::class, 'update'])->name('freelancer.profile.update');
+
+                // Service requests (client side)
+                Route::controller(ServiceRequestController::class)->group(function () {
+                    Route::get('request', 'create')->name('requests.create');
+                    Route::get('staged-project', 'createStaged')->name('requests.staged');
+                    Route::post('request', 'store')->name('requests.store');
+                    Route::get('request/service/{subCategory}/fields', 'fields')->name('requests.fields');
+                    Route::get('my/requests', 'index')->name('requests.index');
+                    Route::get('my/requests/{serviceRequest}', 'show')->name('requests.show');
+                    Route::post('my/requests/{serviceRequest}/publish', 'publish')->name('requests.publish');
+                    Route::post('my/requests/{serviceRequest}/cancel', 'cancel')->name('requests.cancel');
+                    Route::get('my/requests/{serviceRequest}/edit', 'edit')->name('requests.edit');
+                    Route::get('projects/{serviceRequest}/edit', [\App\Http\Controllers\front\ProjectPostController::class, 'edit'])->name('projects.edit');
+                    Route::post('projects/{serviceRequest}/edit', [\App\Http\Controllers\front\ProjectPostController::class, 'update'])->name('projects.update');
+                    Route::post('my/requests/{serviceRequest}/edit', 'update')->name('requests.update');
+                    Route::post('my/requests/{serviceRequest}/changes', 'proposeChange')->name('requests.changes.store');
+                    Route::post('my/requests/{serviceRequest}/changes/{change}/{action}', 'changeAction')
+                        ->whereIn('action', ['cancel', 'pay', 'pay-balance'])->name('requests.changes.action');
+                    Route::post('my/requests/{serviceRequest}/messages', 'sendTeamMessage')->name('requests.messages.store');
+                    Route::get('my/requests/{serviceRequest}/files/{file}', 'file')->name('requests.file');
+                });
+
+                // Service requests (freelancer side)
+                Route::controller(FreelancerRequestController::class)->group(function () {
+                    Route::get('client-requests', 'index')->name('freelancer.requests.index');
+                    Route::get('client-requests/{serviceRequest}', 'show')->name('freelancer.requests.show');
+                    Route::get('client-requests/{serviceRequest}/files/{file}', 'file')->name('freelancer.requests.file');
+                    Route::post('client-requests/{serviceRequest}/offer', 'saveOffer')->name('freelancer.offers.save');
+                    Route::post('client-requests/{serviceRequest}/changes/{change}', 'respondChange')->name('freelancer.changes.respond');
+                    Route::get('my/offers', 'myOffers')->name('freelancer.offers.index');
+                    Route::post('my/offers/{offer}/withdraw', 'withdraw')->name('freelancer.offers.withdraw');
+                });
+
+                // Offers: conversation and files for both parties, shortlist for the client
+                Route::controller(OfferController::class)->group(function () {
+                    Route::get('offers/{offer}/chat', 'chat')->name('offers.chat');
+                    Route::post('offers/{offer}/messages', 'sendMessage')->name('offers.messages.store');
+                    Route::post('offers/{offer}/save', 'toggleSave')->name('offers.save');
+                    Route::get('offers/{offer}/files/{file}', 'file')->name('offers.file');
+                });
+
+                // Service 3 «مشروعك ما بيوقف»: contract page and agreement
+                Route::controller(\App\Http\Controllers\front\ContractController::class)->group(function () {
+                    Route::get('my/projects', 'index')->name('contracts.index');
+                    Route::get('contracts/{contract}', 'show')->name('contracts.show');
+                    Route::post('contracts/{contract}/agreement', 'propose')->name('contracts.agreement.propose');
+                    Route::post('contracts/{contract}/agreement/{agreement}', 'respond')->name('contracts.agreement.respond');
+                    Route::post('contracts/{contract}/fund', 'fund')->name('contracts.fund');
+                    Route::post('contracts/{contract}/stages/{stage}/cancel-funding', 'cancelFunding')->name('contracts.fund.cancel');
+                    Route::post('contracts/{contract}/stages/{stage}/deliver', 'deliver')->name('contracts.deliver');
+                    Route::post('contracts/{contract}/deliveries/{delivery}', 'review')->name('contracts.review');
+                    Route::get('contracts/{contract}/files/{file}', 'file')->name('contracts.file');
+                    Route::post('contracts/{contract}/stages/{stage}/pause', 'pause')->name('contracts.pause');
+                    Route::post('contracts/{contract}/pauses/{pause}/{action}', 'pauseAction')->whereIn('action', ['answer', 'object', 'resume'])->name('contracts.pause.action');
+                    Route::post('contracts/{contract}/disputes', 'openDispute')->name('contracts.disputes.store');
+                    Route::post('contracts/{contract}/disputes/{dispute}/{action}', 'disputeAction')->whereIn('action', ['respond', 'withdraw', 'decide', 'approve-proposal', 'reject-proposal'])->name('contracts.disputes.action');
+                    Route::post('contracts/{contract}/change', 'requestChange')->name('contracts.change.request');
+                    Route::post('contracts/{contract}/change/decide', 'decideChange')->name('contracts.change.decide');
+                    Route::post('contracts/{contract}/change/{change}/proposal', 'settleChangeProposal')->name('contracts.change.proposal');
+                    Route::post('contracts/{contract}/rating', 'rate')->name('contracts.rate');
+                    Route::post('contracts/{contract}/addenda', 'proposeAddendum')->name('contracts.addenda.store');
+                    Route::post('contracts/{contract}/addenda/{addendum}/{action}', 'addendumAction')->whereIn('action', ['approve', 'reject', 'cancel'])->name('contracts.addenda.action');
+                    // Team tools without a dispute (admins only, checked in the controller + StaffPermissions)
+                    Route::post('contracts/{contract}/stages/{stage}/extend', 'adminExtend')->name('contracts.admin.extend');
+                    Route::post('contracts/{contract}/deliveries/{delivery}/admin-approve', 'adminApprove')->name('contracts.admin.approve');
+                    Route::post('contracts/{contract}/pauses/{pause}/admin-end', 'adminEndPause')->name('contracts.admin.end-pause');
+                    Route::post('contracts/{contract}/reply-requests', 'adminRequestReply')->name('contracts.admin.reply-request');
+                    Route::post('contracts/{contract}/reply-requests/{reply}/answer', 'answerReply')->name('contracts.replies.answer');
+                    Route::post('contracts/{contract}/reply-requests/{reply}/close', 'closeReply')->name('contracts.replies.close');
+                });
+
+                // Payment (escrow) and completion
+                Route::controller(RequestPaymentController::class)->group(function () {
+                    Route::post('offers/{offer}/accept', 'accept')->name('offers.accept');
+                    Route::post('client-requests/{serviceRequest}/deliver', 'deliver')->name('freelancer.requests.deliver');
+                    Route::post('my/requests/{serviceRequest}/complete', 'complete')->name('requests.complete');
+                });
             });
         });
         // Start User Service
@@ -105,7 +246,6 @@ Route::group(
         Route::controller(CartController::class)->group(function () {
             Route::get('cart', 'cart');
             Route::post('cart/add', 'AddToCart');
-            Route::post('cart/update', 'update');
             Route::post('cart/delete', 'deleteCart');
         });
         Route::group(['middleware' => ['auth']], function () {
@@ -113,8 +253,6 @@ Route::group(
                 Route::get('checkout', 'index');
                 Route::post('checkout/order', 'order');
                 Route::post('create_order', 'create_order');
-                Route::get('service/payment/success', 'paymentSuccess')->name('service.payment.success');
-                Route::get('service/payment/cancel', 'paymentCancel')->name('service.payment.cancel');
             });
         });
 
@@ -122,7 +260,6 @@ Route::group(
         Route::controller(ConversationController::class)->group(function () {
             Route::get('chats', 'chats');
             Route::post('conversation/start', 'start_conversation');
-            Route::post('conversation/start/project', 'project_start_conversation');
             Route::post('consult_conversation/start', 'consult_start_conversation');
         });
         //////////////////////// Start Chats /////////////////
@@ -140,40 +277,17 @@ Route::group(
         ////////////// Start Product ORder /////////////
         ///
         Route::controller(ProductOrderController::class)->group(function () {
-            Route::post('product_order', 'store');
-            Route::get('/product/payment/success', 'paymentSuccess')->name('product.order.success');
-            Route::get('/product/payment/cancel', 'PaymentCancel')->name('product.order.cancel');
+            Route::post('product_order', 'store')->middleware('auth');
             Route::get('/download/product/{order}', 'downloadProduct')->name('download.product');
         });
 
 
 
-        ////////////////// Start Projects Controller
-        ///
-        ///
-        Route::group(['middleware' => ['auth']], function () {
-            Route::controller(ProjectController::class)->group(function () {
-                Route::get('my/project/index', 'index');
-                Route::match(['post', 'get'], 'my/project/add', 'store');
-                Route::match(['post', 'get'], 'my/project/update/{id}', 'update');
-                Route::match(['post', 'get'], 'my/project/delete/{id}', 'delete');
-            });
-        });
-
-        ///////////////////////////////// Start Projects IN Front
-        Route::controller(ProjectController::class)->group(function () {
-            Route::get('projects', 'website_project');
-            Route::get('project/{id}-{slug}', 'ProjectDetails');
-        });
-
-        Route::group(['middleware' => ['auth']], function () {
-            Route::controller(ProjectOfferController::class)->group(function () {
-                Route::post('project/add-offer', 'store');
-                Route::post('project/update-offer', 'update');
-                Route::post('accept_offer/{offer_id}', 'accept_offer');
-                Route::post('accept_project/{id}', 'accept_project');
-            });
-        });
+        // The old projects/offers system was replaced by service requests.
+        // Old links (pages, emails, notifications) redirect permanently.
+        Route::permanentRedirect('projects', '/client-requests');
+        Route::permanentRedirect('project/{project}', '/client-requests');
+        Route::get('my/project/{path?}', fn () => redirect('/my/requests', 301))->where('path', '.*');
 
         #################### Start Tickets Controller ###########################
         ##################### Start User Courses ###################
@@ -306,20 +420,19 @@ Route::group(
 
         Route::controller(BlogController::class)->group(function () {
 
-            Route::get('categories', 'categories')->name('blogCategories');
+            // Was 'categories', which clashed with the service categories page above.
+            Route::get('blog', 'categories')->name('blogCategories');
             Route::get('category/{slug}', 'categoryDetails')->name('blogCategoryDetails');
             Route::get('blog/{slug}', 'blogDetails')->name('blogDetails');
         });
         #################### End Blog Routes ##########################
 
-        Route::group(['middleware' => ['auth']], function () {
-            Route::get('/course/payment/success', [CourseRegisterController::class, 'payment_success'])->name('course.payment.success');
-            Route::get('/course/payment/cancel', [CourseRegisterController::class, 'payment_cancel'])->name('course.payment.cancel');
-        });
+        // Back from EasyKash (every payment on the site); the token in the path stands in for the session.
+        Route::get('payments/return/{onlinePayment}/{token}', [OnlinePaymentController::class, 'return'])->name('payments.return');
 
 
-        Route::get('auth/{provider}/redirect', [SocialMediaController::class, 'redirect'])->name('auth.google.redirect');
-        Route::get('auth/{provider}/callback', [SocialMediaController::class, 'callback'])->name('auth.google.callback');
+        Route::get('auth/{provider}/redirect', [SocialMediaController::class, 'redirect'])->whereIn('provider', ['google'])->name('auth.google.redirect');
+        Route::get('auth/{provider}/callback', [SocialMediaController::class, 'callback'])->whereIn('provider', ['google'])->name('auth.google.callback');
 
         ############## Public Course Route
         Route::match(['post', 'get'], 'course/public/{url}', [PublicCourseRegisterController::class, 'RegisterCourse'])->name('registercourse');
@@ -329,8 +442,6 @@ Route::group(
         Route::controller(PackageController::class)->group(function () {
             Route::get('packages', 'index')->name('packages.index');
             Route::post('package/subscribe/{id}', 'subscribePlan')->name('subscribe.plan');
-            Route::get('/package/payment/success', 'paymentSuccess')->name('package.order.success');
-            Route::get('/package/payment/cancel', 'PaymentCancel')->name('package.order.cancel');
         });
         ######################### End Package Controller ################################
 
@@ -383,5 +494,11 @@ Route::group(
 Route::get('track/open/{token}', [App\Http\Controllers\api\EmailTrackingController::class, 'open'])->name('track.open');
 Route::get('track/click/{token}', [App\Http\Controllers\api\EmailTrackingController::class, 'click'])->name('track.click');
 Route::get('track/unsubscribe/{token}', [App\Http\Controllers\api\EmailTrackingController::class, 'unsubscribe'])->name('track.unsubscribe');
+
+// EasyKash webhook for every payment on the site (no session, no CSRF, no locale prefix; HMAC signed).
+// Signed email-confirmation link: outside the locale group so no redirect changes the signed URL.
+Route::get('user/verify/{user}/{hash}', [\App\Http\Controllers\front\EmailVerificationController::class, 'verify'])
+    ->middleware(['web', 'signed'])->name('email.verify');
+Route::post('easykash/webhook', [OnlinePaymentController::class, 'webhook'])->name('easykash.webhook');
 
 include 'admin.php';

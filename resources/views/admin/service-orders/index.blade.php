@@ -69,9 +69,9 @@
                                     <td> {{$order['OrderDetail']['service_name']?? ' غير متاح '}} </td>
                                     <td> {{$order['Seller']['user_name'] ?? ' غير متاح '}} </td>
                                     <td> {{$order['Buyer']['user_name'] ?? ' غير متاح '}} </td>
-                                    <td> {{ number_format($order['order_price'],2) }} $</td>
-                                    <td> {{ number_format($order['website_commission'],2) }} $ </td>
-                                    <td> {{ number_format($order['seller_commission'],2)}} $ </td>
+                                    <td> {{ number_format($order['order_price'],2) }} ج.م</td>
+                                    <td> {{ number_format($order['website_commission'],2) }} ج.م </td>
+                                    <td> {{ number_format($order['seller_commission'],2)}} ج.م </td>
                                     <td> {{$order['status']}} </td>
                                     <td> {{$order['created_at']->format('Y-m-d H:i')}} </td>
                                     <td>

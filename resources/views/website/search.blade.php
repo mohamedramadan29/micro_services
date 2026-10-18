@@ -151,7 +151,7 @@
                                                         class="img-fluid circle" alt="">
                                                 @else
                                                     <img
-                                                        src="{{asset('assets/uploads/users_image/'.$serv['user']['image'])}}"
+                                                        src="{{optional($serv['user'])->avatarUrl(128)}}"
                                                         class="img-fluid circle" alt="">
 
                                                 @endif
@@ -183,7 +183,7 @@
                                             </h4>
                                         </div>
                                         <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong
-                                                class="theme-cl"> {{ number_format($serv['price'],2)}} $ </strong>
+                                                class="theme-cl"> {{ \App\Support\Money::show($serv['price']) }} </strong>
                                         </div>
                                     </div>
 

@@ -117,7 +117,7 @@
                                                     <img src="{{ asset('assets/website/img/avatar.png') }}"
                                                         class="img-fluid circle" alt="">
                                                 @else
-                                                    <img src="{{ asset('assets/uploads/users_image/' . $serv['user']['image']) }}"
+                                                    <img src="{{ optional($serv['user'])->avatarUrl(128) }}"
                                                         class="img-fluid circle" alt="">
                                                 @endif
 
@@ -152,7 +152,7 @@
                                         </div>
                                         <div class="_oi0po price_section"><i class="fa fa-bolt"></i>
                                             {{ __('services.serive_price') }} <strong class="theme-cl">
-                                                {{ number_format($serv['price'], 2) }} $ </strong>
+                                                {{ \App\Support\Money::show($serv['price']) }} </strong>
                                         </div>
                                     </div>
 

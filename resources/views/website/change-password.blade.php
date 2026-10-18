@@ -43,6 +43,7 @@
                             @endif
                             <div class="login-form">
                                 <form action="{{url('user/update_forget_password')}}" method="post">
+                                    <input type="hidden" name="code" value="{{ $code }}">
                                     @csrf
                                     <div class="form-group">
                                         <label> البريد الالكتروني </label>

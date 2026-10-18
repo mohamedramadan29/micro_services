@@ -150,7 +150,7 @@
                                                         <div class="user_info">
                                                             <div>
                                                                 <img
-                                                                    src="{{ asset('assets/uploads/users_image/' . $course['User']['image']) }}">
+                                                                    src="{{ optional($course['User'])->avatarUrl(128) }}">
                                                             </div>
                                                             <div>
                                                                 <p> {{ $course['User']['name'] }} </p>
@@ -166,8 +166,7 @@
                                                 <div class="project_info_person">
                                                     <ul class="list-unstyled">
                                                         <li> <i class="bi bi-currency-dollar"></i>
-                                                            {{ $course['price'] }}
-                                                            دولار </li>
+                                                            {{ \App\Support\Money::show($course['price']) }} </li>
                                                         <li> <i class="bi bi-pc-display-horizontal"></i>
                                                             {{ $course['leason_numbers'] }}
                                                             محاضرة

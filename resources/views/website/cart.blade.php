@@ -89,7 +89,7 @@
                                     {{--                                        </select>--}}
                                     {{--                                    </td>--}}
                                     <td>
-                                        {{ number_format($item['serviceData']['price'],2)}} $
+                                        {{ \App\Support\Money::show($item['serviceData']['price']) }}
                                     </td>
                                     <td>
                                         <form method="post" action="{{url('cart/delete')}}">
@@ -109,32 +109,9 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th> الاجمالي</th>
-                                <th> {{$sub_total}} $
-
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    الرسوم
-                                </th>
-                                @php
-                                    $website_setting  = \App\Models\admin\Setting::first();
-                                       $website_commsion = $website_setting['website_commission'];
-                                        $tax_price = $sub_total * ($website_commsion / 100);
-                                @endphp
-                                <th> {{$tax_price}} $</th>
-                            </tr>
-                            <tr>
                                 <th> المجموع الكلي</th>
-                                <th>
-                                    @php $last_total = $sub_total + $tax_price; @endphp
-                                    {{$last_total}}
-                                    $
-                                    @php \Illuminate\Support\Facades\Session::put('sub_total',$sub_total);
-                                    Session::put('tax_price',$tax_price);
-                                    \Illuminate\Support\Facades\Session::put('last_total',$last_total);
-                                    @endphp
+                                <th> {{ \App\Support\Money::show($sub_total) }}
+
                                 </th>
                             </tr>
                             <tr>

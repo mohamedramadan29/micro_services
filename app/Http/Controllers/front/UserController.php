@@ -76,7 +76,8 @@ class UserController extends Controller
                             'user_id' => $user_id
                         ]);
                     }
-                    return \redirect('dashboard');
+                    $request->session()->regenerate();
+                    return redirect()->intended('dashboard');
                 } else {
                     return Redirect::back()->withInput()->withErrors('لا يوجد حساب بهذه البيانات  ');
                 }
@@ -94,15 +95,15 @@ class UserController extends Controller
     {
         try {
             if ($request->isMethod('post')) {
-                DB::beginTransaction();
                 $data = $request->all();
-                // dd($data);
                 $rules = [
                     'name' => 'required',
                     'email' => 'required|email|unique:users,email',
                     'username' => 'required|unique:users,user_name',
                     'password' => 'required',
                     'confirm-password' => 'required|same:password',
+                    'account_type' => 'required|in:' . User::TYPE_CLIENT . ',' . User::TYPE_FREELANCER,
+                    'whatsapp' => ['required_if:account_type,' . User::TYPE_FREELANCER, 'nullable', 'string', 'max:30', User::WHATSAPP_RULE],
                     'g-recaptcha-response' => ['required', 'captcha']
                 ];
                 $messages = [
@@ -115,6 +116,10 @@ class UserController extends Controller
                     'password.required' => ' من فضلك ادخل كلمة المرور  ',
                     'confirm-password.required' => ' من فضلك يجب تاكيد كلمة المرور بشكل صحيح  ',
                     'confirm-password.same' => ' من فضلك يجب تاكيد كلمة المرور بشكل صحيح ',
+                    'account_type.required' => ' من فضلك اختر نوع الحساب: عميل او مستقل  ',
+                    'account_type.in' => ' نوع الحساب غير صحيح  ',
+                    'whatsapp.required_if' => 'رقم واتساب مطلوب لحسابات المستقلين',
+                    'whatsapp.regex' => 'رقم واتساب غير صحيح، اكتبه مع رمز الدولة',
                     'g-recaptcha-response.required' => 'من فضلك قم بتأكيد أنك لست روبوتًا',
                     'g-recaptcha-response.captcha' => 'فشل التحقق من reCAPTCHA، يرجى المحاولة مرة أخرى'
                 ];
@@ -122,27 +127,29 @@ class UserController extends Controller
                 if ($validator->fails()) {
                     return Redirect::back()->withInput()->withErrors($validator);
                 }
+                DB::beginTransaction();
                 $user = new User();
                 $user->name = $data['name'];
                 $user->user_name = $data['username'];
                 $user->email = $data['email'];
                 $user->password = Hash::make($data['password']);
+                $user->account_type = $data['account_type'];
+                if ($user->isFreelancer()) {
+                    // Not listed and cannot send offers until the admin checks the WhatsApp number and approves.
+                    $user->whatsapp = trim($data['whatsapp']);
+                    $user->freelancer_status = User::FREELANCER_PENDING;
+                }
                 $user->save();
-                // Send Activation Email To User
-                $email = $data['email'];
-                $MessageDate = [
-                    'name' => $data['name'],
-                    "email" => $data['email'],
-                    'code' => base64_encode($email)
-                ];
-                Mail::send('website.emails.UserActivation', $MessageDate, function ($message) use ($email) {
-                    $message->to($email)->subject(' تفعيل الحساب الخاص بك  ');
-                });
+                // Email confirmation (signed link); for freelancers it is also their verification.
+                \App\Support\EmailVerification::send($user);
                 DB::commit();
                 return $this->success_message('تم التسجيل بنجاح  :: من فضلك فعل الحساب تبعك من خلال البريد الالكتروني ');
                 //return $this->success_message('تم انشاء حسابك بنجاح من فضلك سجل دخولك الان ');
             }
         } catch (\Exception $e) {
+            if (DB::transactionLevel() > 0) {
+                DB::rollBack();
+            }
             return $this->exception_message($e);
         }
         if (Auth::user()) {
@@ -151,26 +158,10 @@ class UserController extends Controller
         return view('website.register');
     }
 
-    public function UserConfirm($email)
+    /** Old activation links (base64 of the email, forgeable) are refused; a signed one is sent on request. */
+    public function UserConfirm($code)
     {
-        $email = base64_decode($email);
-        // check if this email exist in users or not
-        $user_details = User::where('email', $email)->first();
-        $userCount = User::where('email', $email)->count();
-        if ($userCount > 0) {
-            if ($user_details->status == 1) {
-                $message = 'تم تفعيل البريد الالكتروني بالفعل ! سجل دخولك الان ';
-                return redirect('login')->with('Error_Message', $message);
-            } else {
-                // Update User Status
-                User::where('email', $email)->update(['status' => 1]);
-                // Redirect User To Login/ Regitser Page With Message
-                $message = 'تم تفعيل البريد الالكتروني الخاص بك يمكنك تسجيل الدخول الان ';
-                return redirect('login')->with('Success_message', $message);
-            }
-        } else {
-            abort(404);
-        }
+        return redirect('login')->withErrors('رابط التفعيل هذا قديم. اطلب رابط تأكيد جديدًا من صفحة الدخول.');
     }
 
     public function logout()
@@ -188,7 +179,7 @@ class UserController extends Controller
                 $data = $request->all();
                 $rules = [
                     'name' => 'required',
-                    'account_type' => 'required',
+                    'account_type' => 'required|in:' . implode(',', User::SELF_SELECTABLE_TYPES),
                     'email' => 'required|email|unique:users,email,' . $user->id,
                     'info' => 'required',
                     'phone' => 'required|unique:users,phone,' . $user->id,
@@ -209,6 +200,7 @@ class UserController extends Controller
                 $messages = [
                     'name.required' => 'من فضلك ادخل الاسم',
                     'account_type.required' => 'من فضلك حدد نوع الحساب',
+                    'account_type.in' => 'نوع الحساب غير صحيح',
                     'email.required' => 'من فضلك ادخل البريد الالكتروني',
                     'email.email' => 'من فضلك ادخل البريد الالكتروني بشكل صحيح',
                     'email.unique' => 'البريد الالكتروني متواجد من قبل من فضلك ادخل بريد الكتروني جديد',
@@ -245,15 +237,38 @@ class UserController extends Controller
                     $user->password = Hash::make($data['new_password']);
                 }
 
+                // An admin keeps the admin type (the form only offers public types); a client who
+                // becomes a freelancer starts «pending» like a new one; the other way round keeps nothing.
+                $type = $user->account_type === User::TYPE_ADMIN ? User::TYPE_ADMIN : $data['account_type'];
+                $extra = [];
+                if ($type === User::TYPE_FREELANCER && $user->account_type !== User::TYPE_FREELANCER) {
+                    $extra['freelancer_status'] = User::FREELANCER_PENDING;
+                }
+                // A new email must be confirmed again (it verifies the freelancer).
+                $emailChanged = mb_strtolower(trim($data['email'])) !== mb_strtolower((string) $user->email);
+                if ($emailChanged) {
+                    $extra['email_verified_at'] = null;
+                }
+
                 // تحديث باقي البيانات
                 $user->update([
                     'name' => $data['name'],
                     'email' => $data['email'],
                     'phone' => $data['phone'],
                     'info' => $data['info'],
-                    'account_type' => $data['account_type'],
+                    'account_type' => $type,
                     'job_title' => $data['job_title'] ?? $user->job_title,
                 ]);
+                if ($extra) {
+                    $user->forceFill($extra)->save(); // verification/approval columns are not mass-assignable
+                }
+                if ($emailChanged) {
+                    try {
+                        \App\Support\EmailVerification::send($user->fresh());
+                    } catch (\Throwable $e) {
+                        report($e);
+                    }
+                }
 
                 return $this->success_message('تم تحديث بياناتك بنجاح');
             } catch (\Exception $e) {
@@ -267,17 +282,33 @@ class UserController extends Controller
 
     public function show_profile($username)
     {
-        $user = User::where('user_name', $username)->first();
+        $user = $this->publicProfile($username);
+        $services = Service::with('category')->where('user_id', $user->id)->get();
 
-        $services = Service::with('category')->where('user_id', Auth::id())->get();
         return view('website.user_profiles.index', compact('user', 'services'));
     }
 
     public function user_services($username)
     {
-        $user = User::where('user_name', $username)->first();
+        $user = $this->publicProfile($username);
         $services = Service::with('category')->where('user_id', $user->id)->get();
+
         return view('website.user_profiles.services', compact('user', 'services'));
+    }
+
+    /**
+     * Public profiles are those of listed freelancers (approved, verified, active — same rule as the
+     * directory); the owner and admins always see theirs. Anything else is a 404.
+     */
+    private function publicProfile(string $username): User
+    {
+        $user = User::where('user_name', $username)->firstOrFail();
+        $viewer = Auth::user();
+        $allowed = ($viewer && ((int) $viewer->id === (int) $user->id || ($viewer->account_type === User::TYPE_ADMIN && (int) $viewer->status === 1)))
+            || ($user->isApprovedFreelancer() && (int) $user->status === 1 && (int) $user->block_status !== 0);
+        abort_unless($allowed, 404);
+
+        return $user;
     }
 
     public function chat()
@@ -318,7 +349,7 @@ class UserController extends Controller
 
     public function balance()
     {
-        $ChargeTransactions = PaymentTransaction::where('user_id', Auth::id())->where('payment_status', 'succeeded')->get();
+        $ChargeTransactions = PaymentTransaction::where('user_id', Auth::id())->whereIn('payment_status', ['succeeded', 'paid'])->get();
         $WithDrawTransactions = WithDraw::where('user_id', Auth::id())->get();
         $WithDrawLastOrder = WithDraw::where('user_id', Auth::id())->where('status', 0)->first();
         return view('website.user.balance', compact('ChargeTransactions', 'WithDrawTransactions', 'WithDrawLastOrder'));

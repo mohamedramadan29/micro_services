@@ -12,7 +12,6 @@ use App\Models\admin\SubCategory;
 use App\Http\Traits\Message_Trait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\front\Course;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -25,34 +24,16 @@ class FrontController extends Controller
 
     public function index()
     {
+        // Homepage cards need stored blocks (stable ids) for click counting from the first visit.
+        app(\App\Services\Content\ContentManager::class)->ensureSeeded('home.cards');
         $main_categories = Category::where('status', 1)->where('home_page', 1)->limit(6)->get();
         $categories = Category::where('status', 1)->get();
         $sub_categories = SubCategory::where('status', 1)->where('home_page', 1)->limit(8)->get();
         $services = Service::where('status',1)->latest()->limit(4)->get();
-        $courses = Course::with('user')->where('status',1)->latest()->limit(8)->get();
         //dd($services);
         //dd($main_categories);
         $setting = Setting::first();
-        return view('website.index', compact('main_categories', 'sub_categories','categories','services','courses','setting'));
-    }
-
-    public function services(Request $request)
-    {
-
-        $query = Service::with('category', 'user', 'subcategory');
-        if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->input('search') . '%');
-        }
-        if ($request->has('cat_ids')) {
-            $cat_ids = $request->get('cat_ids');
-            $query->whereIn('sub_cat_id', $cat_ids);
-        }
-        $services = $query->where('status', '1')->orderBy('id', 'desc')->paginate(12);
-        $categories = Category::with('subCategories')->where('status', 1)->get();
-        $categories2 = Category::with('subCategories')->where('status', 1)
-        ->whereIn('name',['قرآن','تطوير الذات','برمجة','التسويق'])
-        ->limit(4)->get();
-        return view('website.services2', compact('services', 'categories','categories2'));
+        return view('website.index', compact('main_categories', 'sub_categories','categories','services','setting'));
     }
 
     public function service_details($id, $slug)
@@ -97,7 +78,7 @@ class FrontController extends Controller
     {
        // $category = Category::where('slug', $slug)->first();
        $category = SubCategory::where('slug', $slug)->first();
-       //dd($category);
+        abort_unless($category, 404);
 
         $category_id = $category['id'];
 
@@ -119,72 +100,84 @@ class FrontController extends Controller
     ///
     ///
 
+    /**
+     * Password reset (rewritten 2026-10-17: the old link was just base64(email) and the
+     * update step trusted the posted email — anyone could set any account's password).
+     * Now: a random token, stored hashed in password_reset_tokens, valid 60 minutes, one use.
+     */
     public function forget_password(Request $request)
     {
         if ($request->isMethod('post')) {
-            $data = $request->all();
-            // dd($data);
+            $data = $request->validate(['email' => 'required|email|max:255'], ['email.required' => 'من فضلك ادخل البريد الالكتروني', 'email.email' => 'البريد الإلكتروني غير صحيح']);
             $email = $data['email'];
-            $user = User::where('email', $email)->count();
-            if ($user > 0) {
-                ////////////////////// Send Forget Mail To User  ///////////////////////////////
-                ///
-                DB::beginTransaction();
-                $email = $data['email'];
-                $MessageDate = [
-                    'code' => base64_encode($email)
-                ];
-                Mail::send('website.emails.UserChangePasswordMail', $MessageDate, function ($message) use ($email) {
-                    $message->to($email)->subject(' رابط تغير كلمة المرور ');
-                });
-                DB::commit();
-                return $this->success_message(' تم ارسال رابط تغير كلمة المرور علي البريد الالكتروني  ');
-            } else {
+            $user = User::where('email', $email)->first();
+            if (! $user) {
                 return Redirect::back()->withErrors(['للاسف لا يوجد حساب بهذة البيانات ']);
-                // return $this->Error_message(' للاسف لا يوجد حساب بهذة البيانات  ');
             }
+            $token = \Illuminate\Support\Str::random(64);
+            DB::table('password_reset_tokens')->updateOrInsert(['email' => $email], ['token' => Hash::make($token), 'created_at' => now()]);
+            $MessageDate = ['code' => $token . '|' . base64_encode($email)];
+            Mail::send('website.emails.UserChangePasswordMail', $MessageDate, function ($message) use ($email) {
+                $message->to($email)->subject(' رابط تغير كلمة المرور ');
+            });
+
+            return $this->success_message(' تم ارسال رابط تغير كلمة المرور علي البريد الالكتروني  ');
         }
+
         return view('website.forget-password');
     }
 
-    public function change_forget_password(Request $request, $email)
+    public function change_forget_password(Request $request, $code)
     {
-        $email = base64_decode($email);
-        return view('website.change-password', compact('email'));
+        $parsed = $this->parseResetCode($code);
+        if (! $parsed) {
+            return redirect()->to('forget-password')->withErrors(['رابط تغيير كلمة المرور غير صالح أو انتهت صلاحيته (60 دقيقة). اطلب رابطًا جديدًا.']);
+        }
+
+        return view('website.change-password', ['email' => $parsed['email'], 'code' => $code]);
     }
 
     public function update_forget_password(Request $request)
     {
-        if ($request->isMethod('post')) {
-            $data = $request->all();
-            // dd($data);
-            $email = $data['email'];
-            //dd($data);
-            $usercount = User::where('email', $email)->count();
-            if ($usercount > 0) {
-                ////////// Start Change Password
-                $user = User::where('email', $email)->first();
-                $rules = [
-                    'password' => 'required',
-                    'confirm_password' => 'required|same:password'
-                ];
-                $messages = [
-                    'password.required' => ' من فضلك ادخل كلمة المرور  ',
-                    'confirm_password.required' => ' من فضلك اكد كلمة المرور ',
-                    'confirm_password.same' => ' من فضلك يجب تاكيد كلمة المرور بنجاح '
-                ];
-                $validator = Validator::make($data, $rules, $messages);
-                if ($validator->fails()) {
-                    return Redirect::back()->withInput()->withErrors($validator);
-                }
-                $user->update([
-                    'password' => Hash::make($data['password']),
-                ]);
-                return redirect()->to('login')->with('Success_message', '   تم تعديل كلمة المرور بنجاح سجل ذخولك الان ');
-            } else {
-                return Redirect::back()->withErrors(['للاسف لا يوجد حساب بهذة البيانات ']);
-            }
+        $parsed = $this->parseResetCode((string) $request->input('code'));
+        if (! $parsed) {
+            return redirect()->to('forget-password')->withErrors(['رابط تغيير كلمة المرور غير صالح أو انتهت صلاحيته (60 دقيقة). اطلب رابطًا جديدًا.']);
         }
+        $rules = [
+            'password' => 'required|string|min:8|max:100',
+            'confirm_password' => 'required|same:password',
+        ];
+        $messages = [
+            'password.required' => ' من فضلك ادخل كلمة المرور  ',
+            'password.min' => 'كلمة المرور 8 أحرف على الأقل',
+            'confirm_password.required' => ' من فضلك اكد كلمة المرور ',
+            'confirm_password.same' => ' من فضلك يجب تاكيد كلمة المرور بنجاح ',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return Redirect::back()->withInput()->withErrors($validator);
+        }
+        $parsed['user']->update(['password' => Hash::make($request->input('password'))]);
+        DB::table('password_reset_tokens')->where('email', $parsed['email'])->delete(); // one use
+
+        return redirect()->to('login')->with('Success_message', '   تم تعديل كلمة المرور بنجاح سجل ذخولك الان ');
+    }
+
+    /** The user behind a reset link, or null when the token is unknown, wrong or older than 60 minutes. */
+    private function parseResetCode(string $code): ?array
+    {
+        [$token, $encoded] = array_pad(explode('|', $code, 2), 2, '');
+        $email = base64_decode($encoded, true);
+        if ($token === '' || ! $email) {
+            return null;
+        }
+        $row = DB::table('password_reset_tokens')->where('email', $email)->first();
+        if (! $row || ! Hash::check($token, $row->token) || ! $row->created_at || now()->diffInMinutes($row->created_at, true) > 60) {
+            return null;
+        }
+        $user = User::where('email', $email)->first();
+
+        return $user ? ['email' => $email, 'user' => $user] : null;
     }
 
     ///////////////////////////////////////////////////

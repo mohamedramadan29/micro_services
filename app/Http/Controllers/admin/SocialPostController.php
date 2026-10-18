@@ -116,10 +116,13 @@ class SocialPostController extends Controller
     /** حذف بوست */
     public function destroy(SocialPost $post)
     {
-        // حذف الميديا من الـ storage
+        // حذف الميديا من public/assets/uploads/social
         if ($post->media_paths) {
             foreach ($post->media_paths as $path) {
-                Storage::disk('public')->delete($path);
+                $file = public_path($path);
+                if (str_starts_with((string) $path, 'assets/uploads/social/') && is_file($file)) {
+                    @unlink($file);
+                }
             }
         }
         $post->delete();

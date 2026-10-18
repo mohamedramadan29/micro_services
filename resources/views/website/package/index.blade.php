@@ -42,8 +42,7 @@
 
                                     <div class="pricing">
                                         <div class="price">
-                                            <span id="basicPrice"> {{ number_format($package->price, 2) }} </span>
-                                            <span class="currency"> دولار </span>
+                                            <span id="basicPrice"> {{ \App\Support\Money::show($package->price) }} </span>
                                         </div>
                                     </div>
 

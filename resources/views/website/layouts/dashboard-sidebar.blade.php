@@ -6,6 +6,27 @@
         <li class="{{ request()->is('update-account') ? 'active' : '' }}">
             <a href="{{ url('update-account') }}"> <i class="bi bi-gear-fill"></i> تعديل الملف الشخصي </a>
         </li>
+        @if (Auth::user()->isClient())
+            <li class="{{ request()->routeIs('requests.index', 'requests.show') ? 'active' : '' }}">
+                <a href="{{ route('requests.index') }}"> <i class="bi bi-clipboard-check"></i> طلباتي </a>
+            </li>
+        @endif
+        @if (Auth::user()->isFreelancer())
+            <li class="{{ request()->routeIs('freelancer.requests.*') ? 'active' : '' }}">
+                <a href="{{ route('freelancer.requests.index') }}"> <i class="bi bi-inboxes-fill"></i> طلبات العملاء </a>
+            </li>
+            <li class="{{ request()->routeIs('freelancer.offers.*') ? 'active' : '' }}">
+                <a href="{{ route('freelancer.offers.index') }}"> <i class="bi bi-send-check-fill"></i> عروضي </a>
+            </li>
+            <li class="{{ request()->routeIs('specializations.*') ? 'active' : '' }}">
+                <a href="{{ route('specializations.edit') }}"> <i class="bi bi-tags-fill"></i> تخصصاتي </a>
+            </li>
+        @endif
+        @if (\App\Models\Contract::involving(Auth::user())->exists())
+            <li class="{{ request()->routeIs('contracts.*') ? 'active' : '' }}">
+                <a href="{{ route('contracts.index') }}"> <i class="bi bi-kanban-fill"></i> مشاريعي </a>
+            </li>
+        @endif
         <li class="{{ request()->is('portfolio/user/index') ? 'active' : '' }}">
             <a href="{{ url('portfolio/user/index') }}"> <i class="bi bi-sliders"></i> الاعمال </a>
         </li>
@@ -14,12 +35,6 @@
         </li>
         <li class="{{ request()->is('my/products/purches') ? 'active' : '' }}">
             <a href="{{ url('my/products/purches') }}"><i class="bi bi-cart-check-fill"></i> مشتريات المنتجات </a>
-        </li>
-        <li class="{{ request()->is('my/project/index') ? 'active' : '' }}">
-            <a href="{{ url('my/project/index') }}"><i class="bi bi-cast"></i> المشاريع </a>
-        </li>
-        <li class="{{ request()->is('my/courses') ? 'active' : '' }}">
-            <a href="{{ url('my/courses') }}"> <i class="bi bi-mortarboard-fill"></i> الكورسات </a>
         </li>
         <li class="{{ request()->is('service/index') ? 'active' : '' }}">
             <a href="{{ url('service/index') }}"><i class="bi bi-database-fill-check"></i> الخدمات </a>
@@ -40,7 +55,7 @@
             <a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a>
         </li>
         <li class="{{ request()->is('logout') ? 'active' : '' }}">
-            <a href="{{ url('logout') }}"><i class="ti-power-off"></i> تسجيل خروج </a>
+            <a href="{{ url('logout') }}" onclick="event.preventDefault(); document.getElementById('site-logout-form').submit();"><i class="ti-power-off"></i> تسجيل خروج </a>
         </li>
     </ul>
 </div>

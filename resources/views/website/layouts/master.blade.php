@@ -2,7 +2,17 @@
 <body class="blue-skin">
 
 <div id="main-wrapper">
-@include('website.layouts.navbar')
+@if (\App\Support\SiteContent::previewing())
+    <div class="rf-preview-bar" dir="rtl">
+        وضع المعاينة: تشاهد تعديلات «إدارة محتوى الواجهة» غير المنشورة، والزوار لا يرونها بعد.
+        <a href="{{ route('admin.content.preview.stop') }}">الخروج من المعاينة</a>
+    </div>
+@endif
+@hasSection('site_nav')
+    @yield('site_nav')
+@else
+    @include('website.layouts.navbar')
+@endif
 
 @yield('content')
 @if (Session::has('Success_message'))
@@ -18,6 +28,7 @@
 @endforeach
 @endif
 @include('website.layouts.footer')
+@include('website.layouts.partials.analytics')
 @include('notify::components.notify')
 @yield('js')
 

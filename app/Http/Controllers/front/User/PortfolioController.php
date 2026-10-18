@@ -87,6 +87,7 @@ class PortfolioController extends Controller
             : $data['skills'];
         $user_portfolio->category_id = $data['category'];
         $user_portfolio->save();
+        Auth::user()->markFreelancerProfileCompleted();
 
         return $this->success_message(' تم اضافة العمل بنجاح من فضلك انتظر التفعيل من الادارة  ');
     }

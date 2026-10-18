@@ -55,24 +55,29 @@
                     <li><a class="slide-item" href="{{ url('admin/withdraws') }}"> طلبات السحب </a></li>
                 </ul>
             </li>
-            <li class="side-item side-item-category"> اقسام الخدمات </li>
+            <li class="side-item side-item-category"> محتوى الواجهة </li>
+            <li class="slide">
+                <a class="side-menu__item" data-toggle="slide" href="">
+                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-paint-brush"></i>
+                    <span class="side-menu__label"> محتوى الواجهة </span><i class="angle fe fe-chevron-down"></i></a>
+                <ul class="slide-menu">
+                    <li><a class="slide-item" href="{{ route('admin.home-cards.index') }}"> الصفحة الرئيسية ← إدارة المربعات </a></li>
+                    <li><a class="slide-item" href="{{ route('admin.content.index') }}"> إدارة محتوى الواجهة </a></li>
+                    <li><a class="slide-item" href="{{ route('admin.landing.index') }}"> صفحات الهبوط </a></li>
+                    <li><a class="slide-item" href="{{ route('admin.media.index') }}"> مكتبة الصور والخلفيات </a></li>
+                    <li><a class="slide-item" href="{{ route('admin.seo.index') }}"> SEO والكلمات المفتاحية </a></li>
+                    <li><a class="slide-item" href="{{ route('admin.analytics.index') }}"> إحصائيات رحلة الزوار </a></li>
+                </ul>
+            </li>
+            <li class="side-item side-item-category"> صفحة الخدمات </li>
             <li class="slide">
                 <a class="side-menu__item" data-toggle="slide" href="">
                     <i style="font-size: 22px;margin-left: 10px" class="fa fa-folder-open"></i>
-                    <span class="side-menu__label"> اقسام الخدمات </span><i class="angle fe fe-chevron-down"></i></a>
+                    <span class="side-menu__label"> الخدمات والمجموعات </span><i class="angle fe fe-chevron-down"></i></a>
                 <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/categories') }}"> الاقسام الرئيسية </a></li>
-                    <li><a class="slide-item" href="{{ url('admin/sub-categories') }}"> الاقسام الفرعية </a></li>
-                </ul>
-            </li>
-
-            <li class="side-item side-item-category"> المشاريع </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-file-signature"></i>
-                    <span class="side-menu__label"> المشاريع </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/projects') }}"> ادارة المشاريع </a></li>
+                    <li><a class="slide-item" href="{{ route('admin.catalog.services') }}"> الخدمات </a></li>
+                    <li><a class="slide-item" href="{{ route('admin.catalog.groups') }}"> المجموعات </a></li>
+                    <li><a class="slide-item" href="{{ route('admin.content.index', ['page' => 'services']) }}"> نصوص صفحة الخدمات </a></li>
                 </ul>
             </li>
 
@@ -292,6 +297,97 @@
                         class="angle fe fe-chevron-down"></i></a>
                 <ul class="slide-menu">
                     <li><a class="slide-item" href="{{ url('admin/public_settings') }}"> الاعدادات العامه للموقع
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            {{-- ======================== طلبات الخدمات ======================== --}}
+            <li class="side-item side-item-category"> طلبات الخدمات </li>
+            <li class="slide">
+                <a class="side-menu__item" data-toggle="slide" href="">
+                    <i style="font-size: 22px;margin-left: 10px" class="fas fa-clipboard-list"></i>
+                    <span class="side-menu__label"> نظام الطلبات </span>
+                    <i class="angle fe fe-chevron-down"></i>
+                </a>
+                <ul class="slide-menu">
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.contracts.index') }}">
+                            <i class="fas fa-file-contract ml-1"></i> مشروعك ما بيوقف: العقود والخلافات
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.notification-texts.index') }}">
+                            <i class="fas fa-comment-dots ml-1"></i> نصوص الإشعارات
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.notification-log.index') }}">
+                            <i class="fas fa-bell ml-1"></i> سجل الإشعارات (وصل / فشل)
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.contract-policy.index') }}">
+                            <i class="fas fa-sliders-h ml-1"></i> سياسة المشاريع (المهل والقوالب)
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.staff.index') }}">
+                            <i class="fas fa-user-shield ml-1"></i> أدوار الموظفين
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.requests.index', ['tab' => 'active']) }}">
+                            <i class="fas fa-bolt ml-1"></i> الطلبات النشطة
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.requests.index', ['tab' => 'inquiries']) }}">
+                            <i class="fas fa-question-circle ml-1"></i> استفسارات الأسعار
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.requests.index', ['tab' => 'followup']) }}">
+                            <i class="fas fa-bell ml-1"></i> تنبيهات المتابعة
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.requests.index', ['tab' => 'completed']) }}">
+                            <i class="fas fa-check-circle ml-1"></i> تم تنفيذ الطلبات
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.requests.index', ['tab' => 'not_completed']) }}">
+                            <i class="fas fa-times-circle ml-1"></i> لم يتم تنفيذ الطلبات
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.freelancers.index') }}">
+                            <i class="fas fa-user-check ml-1"></i> المستقلون والاعتماد
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.site-tests.index') }}">
+                            <i class="fas fa-tachometer-alt ml-1"></i> اختبارات المواقع
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.help-requests.index') }}">
+                            <i class="fas fa-life-ring ml-1"></i> طلبات المساعدة
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.requests.guide') }}">
+                            <i class="fas fa-book-open ml-1"></i> دليل الاستخدام
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.clients.index') }}">
+                            <i class="fas fa-users ml-1"></i> العملاء وتصنيفاتهم
+                        </a>
+                    </li>
+                    <li>
+                        <a class="slide-item" href="{{ route('admin.request-forms.index') }}">
+                            <i class="fas fa-tools ml-1"></i> نماذج الخدمات
                         </a>
                     </li>
                 </ul>

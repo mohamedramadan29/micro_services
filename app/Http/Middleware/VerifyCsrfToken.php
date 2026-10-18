@@ -12,6 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        'easykash/webhook', // verified by the EasyKash HMAC signature instead
     ];
 }

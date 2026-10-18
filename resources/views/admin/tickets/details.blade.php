@@ -50,7 +50,7 @@
                                             class="message-plunch {{ $message['sender_type'] == 'user' ? 'me' : '' }}">
                                             <div class="dash-msg-avatar">
                                                 @if ($message['sender_type'] == 'user' && Auth::user()->image != '')
-                                                    <img src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
+                                                    <img src="{{ Auth::user()->avatarUrl(128) }}"
                                                          class="img-fluid rounded" alt="">
                                                 @else
                                                     <img src="{{ asset('assets/website/img/favicon.png') }}"

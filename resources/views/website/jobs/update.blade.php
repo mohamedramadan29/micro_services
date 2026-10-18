@@ -11,7 +11,7 @@
                     <div class="dashboard-navbar">
                         <div class="d-user-avater">
                             @if (Auth::user()->image != '')
-                                <img src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
+                                <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
                                     class="img-fluid rounded" alt="">
                             @else
                                 <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
@@ -127,7 +127,7 @@
                                             </div>
                                             <div class="col-xl-12 col-lg-12">
                                                 <div class="form-group">
-                                                    <label>  الراتب <span class="badge badge-danger"> $ </span> </label>
+                                                    <label>  الراتب <span class="badge badge-danger"> ج.م </span> </label>
                                                     <input type="number" step="0.01" class="form-control with-light" name="salary"
                                                         required value="{{ old('salary',$job['salary']) }}">
                                                 </div>

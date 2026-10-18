@@ -13,7 +13,7 @@
 
                         <div class="d-user-avater">
                             @if (Auth::user()->image != '')
-                                <img src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
+                                <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
                                     class="img-fluid rounded" alt="">
                             @else
                                 <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
@@ -66,7 +66,7 @@
                                             <a href="{{ url('chat-main/' . $conversation['id']) }}">
                                                 <div class="ticket">
                                                     <div class="ticket_logo">
-                                                        <img style="width: 50px; height:50px; border-radius:50%;" src="{{ asset('assets/uploads/users_image/' . $otherUser->image) ?? asset('assets/uploads/user.png') }}"
+                                                        <img style="width: 50px; height:50px; border-radius:50%;" src="{{ optional($otherUser)->avatarUrl(128) ?? asset('assets/uploads/user.png') }}"
                                                             alt="User Image">
                                                     </div>
                                                     <div>

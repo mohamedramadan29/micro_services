@@ -13,7 +13,7 @@
 
                         <div class="d-user-avater">
                             @if (Auth::user()->image != '')
-                                <img src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
+                                <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
                                     class="img-fluid rounded" alt="">
                             @else
                                 <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
@@ -77,7 +77,7 @@
                                                             @foreach ($purches as $purch)
                                                                 <tr>
                                                                     <td>{{ $purch->product_name }}</td>
-                                                                    <td>{{ $purch->price }} $</td>
+                                                                    <td>{{ \App\Support\Money::show($purch->price) }}</td>
                                                                     <td>{{ $purch->country }}</td>
                                                                     <td>{{ $purch->city }}</td>
                                                                     <td>{{ $purch->address }}</td>

@@ -3,6 +3,9 @@
 
 <!-- Favicon -->
 <link rel="icon" href="{{ URL::asset('assets/admin/img/logo_tabrat.png') }}" type="image/x-icon"/>
+<!-- laravel-notify css: loaded before the theme so its Tailwind reset
+     (button/[type=submit] { background: transparent }) does not override theme buttons -->
+@notifyCss
 <!-- Icons css -->
 <link href="{{ URL::asset('assets/admin/css/icons.css') }}" rel="stylesheet">
 <!--  Custom Scroll bar-->
@@ -28,5 +31,4 @@
 <link href="{{ URL::asset('assets/admin/css-rtl/skin-modes.css') }}" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
-    @notifyCss
     @toastifyCss

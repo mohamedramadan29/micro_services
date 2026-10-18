@@ -168,37 +168,45 @@
 @section('content')
     <!-- ============================ Hero Banner  Start================================== -->
     @php
-        $heroBg = $setting && $setting->hero_image
+        $hero = \App\Support\SiteContent::first('home.hero');
+        $heroMedia = \App\Support\SiteContent::media($hero['background']);
+        $heroBg = $heroMedia ? $heroMedia->url() : ($setting && $setting->hero_image
             ? asset('assets/uploads/public_setting/' . $setting->hero_image)
-            : asset('assets/website/img/hero.jpeg');
+            : asset('assets/website/img/hero.jpeg'));
         $overlay = $setting->hero_overlay_color ?? '#00000057';
     @endphp
     <div class="hero-banner full bg-cover center"
         style="background:{{ $overlay }} url({{ $heroBg }}) no-repeat;" data-overlay="7">
         <div class="container">
             <h1 style="line-height: 2">
-                <span>{{ $setting->hero_title_1 ?? 'نفّذها منصّة تجمع خبراء التسويق والإعلام مع أصحاب المشاريع، لتسهيل الوصول إلى الكفاءات المناسبة وتنفيذ الأعمال باحترافية وسرعة' }}</span>
-                @if($setting->hero_title_2 ?? false)
-                <br>
-                <span>{{ $setting->hero_title_2 }}</span>
-                @endif
-                @if($setting->hero_title_3 ?? false)
-                <br>
-                <span>{{ $setting->hero_title_3 }}</span>
+                @if (trim($hero['title']) !== '')
+                    <span style="white-space: pre-line">{{ $hero['title'] }}</span>
+                @else
+                    <span>{{ $setting->hero_title_1 ?? 'نفّذها منصّة تجمع خبراء التسويق والإعلام مع أصحاب المشاريع، لتسهيل الوصول إلى الكفاءات المناسبة وتنفيذ الأعمال باحترافية وسرعة' }}</span>
+                    @if($setting->hero_title_2 ?? false)
+                    <br>
+                    <span>{{ $setting->hero_title_2 }}</span>
+                    @endif
+                    @if($setting->hero_title_3 ?? false)
+                    <br>
+                    <span>{{ $setting->hero_title_3 }}</span>
+                    @endif
                 @endif
             </h1>
-            @if($setting->hero_subtitle ?? false)
-            <p class="lead" style="margin-top: 15px;">{{ $setting->hero_subtitle }}</p>
+            @php $heroSubtitle = trim($hero['subtitle']) !== '' ? $hero['subtitle'] : ($setting->hero_subtitle ?? null); @endphp
+            @if ($heroSubtitle)
+            <p class="lead" style="margin-top: 15px; white-space: pre-line">{{ $heroSubtitle }}</p>
             @endif
+            @if ($hero['show_search'] !== '0')
             <form class="mt-4" dir="rtl" method="get" action="{{ url('search') }}">
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-md-10 col-sm-12">
                         <div class="banner-search style-2">
                             <div class="input-group">
                                 <input type="text" name="search" class="form-control lio-rad"
-                                    placeholder="  {{ __('index.search_text') }} ">
+                                    placeholder="  {{ $hero['search_placeholder'] ?: __('index.search_text') }} ">
                                 <div class="input-group-append">
-                                    <button type="submit" class="btn bt-round btn--2"> {{ __('index.search') }} <i
+                                    <button type="submit" class="btn bt-round btn--2"> {{ $hero['search_button'] ?: __('index.search') }} <i
                                             class="ti-search"></i></button>
                                 </div>
                             </div>
@@ -206,51 +214,88 @@
                     </div>
                 </div>
             </form>
+            @endif
+            @if ($hero['button_text'] !== '' && $hero['button_link'] !== '')
             <br>
-            <a href="{{ url('service/add') }}" style="padding:12px 25px" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  أضف خدمتك  من فضلك </a>
+            <a href="{{ \App\Support\SiteContent::url($hero['button_link']) }}" style="padding:12px 25px" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                  {{ $hero['button_text'] }} </a>
+            @endif
         </div>
     </div>
     <!-- ============================ Hero Banner End ================================== -->
 
-    <!-- =========================== Start Payment Slider  ============================ -->
-    <div class="container">
-        <div class="payment-slider">
-
-            <div class="swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/visa.png') }}"
-                            alt="Visa"></div>
-                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/master.png') }}"
-                            alt="MasterCard">
-                    </div>
-                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/paypal.png') }}"
-                            alt="PayPal"></div>
-                    <div class="swiper-slide"><img loading="lazy" src="{{ asset('assets/website/img/apple-pay.png') }}"
-                            alt="ApplePay">
-                    </div>
-                </div>
+    <!-- ============================ Start Paths (homepage cards in two groups, managed in admin «إدارة محتوى الواجهة» ← الرئيسية - المربعات) ============== -->
+    @php
+        $paths = \App\Support\SiteContent::first('home.paths');
+        $pathCards = \App\Support\SiteContent::items('home.cards')->filter(fn ($card) => \App\Support\SiteContent::shownTo($card['audience'] ?: 'all'))->values();
+        $cardGroups = ['primary' => $pathCards->where('group', '!=', 'secondary')->values(), 'secondary' => $pathCards->where('group', 'secondary')->values()];
+        app(\App\Services\Analytics\Tracker::class)->record('home_card_view', ['meta' => ['cards' => $pathCards->map(fn ($card) => $card['_id'] ?? null)->filter()->values()->all()]]);
+    @endphp
+    <section class="rf-home-paths" dir="rtl">
+        <div class="container">
+            <div class="rf-home-paths-head">
+                @if ($paths['pill'])<span class="rf-home-pill">{{ $paths['pill'] }}</span>@endif
+                <h2>{{ $paths['title'] }}</h2>
+                @if ($paths['subtitle'])<p>{{ $paths['subtitle'] }}</p>@endif
             </div>
+            @foreach ($cardGroups as $groupKey => $groupCards)
+                @continue($groupCards->isEmpty())
+                @if ($groupKey === 'secondary' && ($paths['secondary_title'] || $paths['secondary_subtitle']))
+                    <div class="rf-home-paths-head rf-home-paths-head-2">
+                        @if ($paths['secondary_title'])<h3>{{ $paths['secondary_title'] }}</h3>@endif
+                        @if ($paths['secondary_subtitle'])<p>{{ $paths['secondary_subtitle'] }}</p>@endif
+                    </div>
+                @endif
+                <div class="rf-home-cards rf-home-cards-{{ $groupKey }} rf-home-cards-n{{ $groupCards->count() }}">
+                    @foreach ($groupCards as $card)
+                        @php
+                            $target = \App\Services\Content\HomeActions::url($card['action']);
+                            // Old saved cards may still have a typed link.
+                            $target ??= ($card['action'] ?? '') === '' && ! empty($card['link']) ? \App\Support\SiteContent::url($card['link']) : null;
+                            $href = $target && ! empty($card['_id']) ? route('home.card', $card['_id']) : $target;
+                            $image = \App\Support\SiteContent::media($card['image']);
+                            $background = \App\Support\SiteContent::media($card['background']);
+                            $style = trim(($card['background_color'] ? 'background-color: ' . $card['background_color'] . ';' : '')
+                                . ($background ? ' background-image: url(' . $background->url() . '); background-size: cover; background-position: center;' : ''));
+                        @endphp
+                        <{{ $href ? 'a' : 'div' }} class="rf-home-card {{ $href ? 'rf-home-card-main' : 'rf-home-card-soon' }}"
+                            @if ($href) href="{{ $href }}" @else aria-disabled="true" @endif
+                            @if ($style) style="{{ $style }}" @endif>
+                            <span class="rf-home-num">{{ $groupKey === 'secondary' ? $cardGroups['primary']->count() + $loop->iteration : $loop->iteration }}</span>
+                            @if ($image)
+                                <img class="rf-home-img" src="{{ $image->url() }}" alt="{{ $image->alt }}" loading="lazy">
+                            @elseif ($card['icon'])
+                                <span class="rf-home-icon" aria-hidden="true"><i class="bi {{ $card['icon'] }}"></i></span>
+                            @endif
+                            <strong>{{ $card['title'] }}</strong>
+                            @if ($card['description'])<span>{{ $card['description'] }}</span>@endif
+                            @if ($href)
+                                <span class="rf-home-cta">{{ \App\Services\Content\HomeActions::cta($card) }} <i class="bi bi-arrow-left"></i></span>
+                            @else
+                                <span class="rf-home-soon">قريبًا</span>
+                            @endif
+                        </{{ $href ? 'a' : 'div' }}>
+                    @endforeach
+                </div>
+            @endforeach
+            @if ($paths['footnote'])<p class="rf-home-paths-note">{{ $paths['footnote'] }}</p>@endif
+        </div>
+    </section>
+    <!-- ============================ End Paths ==================================== -->
+
+    <!-- =========================== Payment methods (EasyKash) ============================ -->
+    <div class="container">
+        <div class="rf-pay-methods" dir="rtl">
+            <span class="rf-pay-methods-title"> طرق الدفع المتاحة </span>
+            <img loading="lazy" src="{{ asset('assets/website/img/visa.png') }}" alt="Visa">
+            <img loading="lazy" src="{{ asset('assets/website/img/master.png') }}" alt="MasterCard">
+            <span class="rf-pay-chip"><i class="bi bi-shop"></i> فوري</span>
+            <span class="rf-pay-chip"><i class="bi bi-phone"></i> المحافظ الإلكترونية</span>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-    <script>
-        const swiper = new Swiper('.swiper', {
-            slidesPerView: '3', // عرض عدد غير محدد بناءً على حجم الشاشة
-            spaceBetween: 20,
-            loop: true, // تشغيل اللوب لانهائي
-            speed: 3000, // سرعة الحركة (كلما زاد الرقم، زادت السرعة)
-            autoplay: {
-                delay: 0, // بدون توقف
-                disableOnInteraction: false
-            }
-        });
-    </script>
 
 
-    <!-- =========================== End Payment Slider ============================== -->
 
     <!-- ============================ How It Work Start ==================================== -->
     <section class="how-it-works" dir="rtl">
@@ -258,38 +303,29 @@
             @include('website.free_consult_model')
             <div class="row justify-content-center">
                 <div class="col-lg-7 col-md-9">
+                    @php
+                        $how = \App\Support\SiteContent::first('home.how');
+                        $steps = \App\Support\SiteContent::items('home.steps');
+                        $stepImages = ['new-project.png', 'select_user.png', 'completed-task.png'];
+                    @endphp
                     <div class="sec-heading">
-                        <h2> {{ __('index.how_work') }} <span class="theme-cl-2"> {{ __('index.how_work2') }} ؟ </span>
+                        <h2> {{ $how['title'] }} <span class="theme-cl-2"> {{ $how['highlight'] }} </span>
                         </h2>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4 col-sm-4">
-                    <div class="working-process"><span class="process-img"><img loading="lazy"
-                                src="{{ asset('assets/website/img/new-project.png') }}" class="img-responsive"
-                                alt=""><span class="process-num">01</span></span>
-                        <h4> نشر مشروع </h4>
-                        <p> قم بنشر تفاصيل مشروعك على المنصة، واطلب من الخبراء تقديم عروضهم. </p>
+            <div class="row justify-content-center">
+                @foreach ($steps as $i => $step)
+                    @php $stepImage = \App\Support\SiteContent::media($step['image']); @endphp
+                    <div class="col-md-{{ $steps->count() >= 4 ? 3 : 4 }} col-sm-6">
+                        <div class="working-process"><span class="process-img"><img loading="lazy"
+                                    src="{{ $stepImage ? $stepImage->url() : asset('assets/website/img/' . ($stepImages[$i] ?? 'new-project.png')) }}" class="img-responsive"
+                                    alt=""><span class="process-num">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span></span>
+                            <h4> {{ $step['title'] }} </h4>
+                            <p> {{ $step['text'] }} </p>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-4 col-sm-4">
-                    <div class="working-process"><span class="process-img"><img loading="lazy"
-                                src="{{ asset('assets/website/img/select_user.png') }}" class="img-responsive"
-                                alt=""><span class="process-num">02</span></span>
-                        <h4> استقر على العرض الأفضل </h4>
-                        <p> بعد مقارنة العروض، حدد العرض الذي يلبي متطلبات مشروعك بالكامل. </p>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-4">
-                    <div class="working-process"><span class="process-img"><img loading="lazy"
-                                src="{{ asset('assets/website/img/completed-task.png') }}" class="img-responsive"
-                                alt=""><span class="process-num">03</span></span>
-                        <h4> إتمام مشروعك </h4>
-                        <p> إتمام المشروع بنجاح هو الهدف الأساسي للمنصة، حيث يرافق المستقل صاحب المشروع خطوة بخطوة حتى
-                            التسليم النهائي. </p>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -328,7 +364,7 @@
                                                         <img src="{{ asset('assets/website/img/avatar.png') }}"
                                                             class="img-fluid circle" alt="">
                                                     @else
-                                                        <img src="{{ asset('assets/uploads/users_image/' . $serv['user']['image']) }}"
+                                                        <img src="{{ optional($serv['user'])->avatarUrl(128) }}"
                                                             class="img-fluid circle" alt="">
                                                     @endif
 
@@ -363,7 +399,7 @@
                                             </div>
                                             <div class="_oi0po price_section"><i class="fa fa-bolt"></i>
                                                 {{ __('services.serive_price') }} <strong class="theme-cl">
-                                                    {{ number_format($serv['price'], 2) }} $ </strong>
+                                                    {{ \App\Support\Money::show($serv['price']) }} </strong>
                                             </div>
                                         </div>
 
@@ -436,37 +472,7 @@
 
     <!-- ############################# End Last Services ################# -->
 
-    <!--############################# Start Latest Courses ############### -->
-    <section class="latest-courses">
-        <div class="header-courses">
-            <h2>أحدث الكورسات</h2>
-            <a href="{{ url('courses') }}" class="enroll-btn"> جميع الكورسات </a>
-        </div>
-
-        <div class="courses-container">
-            @foreach ($courses as $course)
-                <div class="course-card">
-                    <img src="" alt="">
-                    @if ($course['User']['image'] == '')
-                        <img class="instructor-img" src="{{ asset('assets/uploads/user.png') }}" alt="صورة المحاضر">
-                    @else
-                        <img class="instructor-img"
-                            src="{{ asset('assets/uploads/users_image/' . $course['User']['image']) }}"
-                            alt="صورة المحاضر">
-                    @endif
-                    <h3 class="course-title"> {{ Str::limit($course['title'], 30, '...') }} </h3>
-                    <p class="course-summary"> {{ Str::limit($course['desc'], 100, '...') }} </p>
-                    <div class="rating">★★★★★</div>
-                    <p class="course-price">السعر: {{ number_format($course['price'], 2) }} دولار </p>
-                    <a class="enroll-btn" href="{{ url('course/' . $course['id'] . '-' . $course['slug']) }}"> تفاصيل
-                        الكورس </a>
-                </div>
-            @endforeach
-
-        </div>
-    </section>
-
-    <!-- ########################### End Latest Courses ###########################-->
+    {{-- «أحدث الكورسات» removed: course links are no longer shown anywhere (client file «تعديلات», item 02). --}}
 
     <!-- =========================== Start Categories ========================================== -->
     <section class="min-sec categories" dir="rtl">
@@ -569,8 +575,8 @@
                         <p class="text-light">
 
 
-                            بمجرد أن تصل قيمة مشترياتك إلى <strong>1000 دولار</strong>، ستحصل على رصيد مجاني بقيمة
-                            <strong>50 دولار</strong> يمكن إضافته إلى حسابك بعد طلبك القادم! استمتع بتسوقك معنا واستفد من
+                            بمجرد أن تصل قيمة مشترياتك إلى <strong>1000 جنيه</strong>، ستحصل على رصيد مجاني بقيمة
+                            <strong>50 جنيه</strong> يمكن إضافته إلى حسابك بعد طلبك القادم! استمتع بتسوقك معنا واستفد من
                             المزيد من المزايا.
 
                         </p>

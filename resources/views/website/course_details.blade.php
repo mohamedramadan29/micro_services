@@ -124,7 +124,7 @@
                                                                 <div class="form-group">
                                                                     <label> السعر </label>
                                                                     <input disabled readonly style="height: 45px"
-                                                                        value="{{ $course['price'] }} $"
+                                                                        value="{{ \App\Support\Money::show($course['price']) }}"
                                                                         class="form-control" name="country" required>
                                                                 </div>
                                                                 @csrf
@@ -159,7 +159,7 @@
                             <ul>
                                 <li><span> عدد الساعات :</span> {{ $course['course_hourse'] }} ساعة </li>
                                 <li><span> عدد المحاضرات :</span> {{ $course['leason_numbers'] }} محاضرة </li>
-                                <li><span> سعر الاشتراك :</span> {{ $course['price'] }} $ </li>
+                                <li><span> سعر الاشتراك :</span> {{ \App\Support\Money::show($course['price']) }} </li>
                                 <li><span> عدد الافراد :</span> {{ $course['student_num'] }} فرد</li>
                                 <li><span> عدد المشتركين :</span> {{ $course['current_student_num'] }} </li>
                                 <li><span>تاريخ النشر:</span> {{ $course->created_at->diffForHumans() }} </li>
@@ -172,7 +172,7 @@
                                     <div>
                                         @if ($course['User']['image'] != '')
                                             <img
-                                                src="{{ asset('assets/uploads/users_image/' . $course['User']['image']) }}">
+                                                src="{{ optional($course['User'])->avatarUrl(128) }}">
                                         @else
                                             <img src="{{ asset('assets/website/img/favicon.png') }}"
                                                 class="img-fluid rounded" alt="">

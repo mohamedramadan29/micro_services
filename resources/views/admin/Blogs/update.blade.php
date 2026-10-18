@@ -72,8 +72,8 @@
                                             <select required class="form-control" id="status" data-choices
                                                 data-choices-groups data-placeholder="Select Categories" name="status">
                                                 <option value=""> -- حدد القسم --</option>
-                                                <option value="0" @selected($blog['status'] == 0)> ارشيف </option>
-                                                <option value="1" @selected($blog['status'] == 1)> نشط </option>
+                                                <option value="0" @selected($blog['status'] == 0)> مسودة / أرشيف (لا يظهر للزوار) </option>
+                                                <option value="1" @selected($blog['status'] == 1)> منشور </option>
                                             </select>
                                         </div>
                                     </div>

@@ -23,6 +23,6 @@ class Employee extends Model
 
     public function getProfileImageAttribute()
     {
-        return $this->image ? asset('assets/uploads/users/' . $this->image) : asset('assets/website/img/default-avatar.png');
+        return $this->image ? asset('assets/uploads/users_image/' . $this->image) : asset('assets/uploads/User.png');
     }
 }

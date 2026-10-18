@@ -121,7 +121,7 @@
                                     <div>
                                         @if ($properity_maintain['User']['image'] != '')
                                             <img
-                                                src="{{ asset('assets/uploads/users_image/' . $properity_maintain['User']['image']) }}">
+                                                src="{{ optional($properity_maintain['User'])->avatarUrl(128) }}">
                                         @else
                                             <img src="{{ asset('assets/website/img/favicon.png') }}"
                                                 class="img-fluid rounded" alt="">

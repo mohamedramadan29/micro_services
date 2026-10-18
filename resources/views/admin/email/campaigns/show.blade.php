@@ -14,9 +14,9 @@
     </div>
     <div class="my-auto">
         @if(in_array($emailCampaign->status, ['draft', 'scheduled']))
-            <a href="{{ route('admin.email.campaigns.send', $emailCampaign) }}" class="btn btn-success" onclick="return confirm('تأكيد إرسال الحملة؟')">
+            <form method="POST" action="{{ route('admin.email.campaigns.send', $emailCampaign) }}" class="d-inline" onsubmit="return confirm('تأكيد إرسال الحملة؟')">@csrf<button type="submit" class="btn btn-success">
                 <i class="fas fa-paper-plane"></i> إرسال الآن
-            </a>
+            </button></form>
             <a href="{{ route('admin.email.campaigns.edit', $emailCampaign) }}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> تعديل
             </a>

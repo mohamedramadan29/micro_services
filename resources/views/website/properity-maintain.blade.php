@@ -115,7 +115,7 @@
                                                         <div class="user_info">
                                                             <div>
                                                                 <img
-                                                                    src="{{ asset('assets/uploads/users_image/' . $properity_maintain['User']['image']) }}">
+                                                                    src="{{ optional($properity_maintain['User'])->avatarUrl(128) }}">
                                                             </div>
                                                             <div>
                                                                 <p> {{ $properity_maintain['User']['name'] }} </p>

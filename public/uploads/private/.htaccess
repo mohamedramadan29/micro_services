@@ -1,0 +1,9 @@
+# Private uploads (service request files, offer files, upload chunks): never served directly.
+# Files are downloaded only through the site, which checks who may see them.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>

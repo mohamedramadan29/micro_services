@@ -6,7 +6,7 @@
                     <a href="javascript:;"
                         wire:click="ChatUserSelected({{ $conversation }},'{{ $this->getuserinstance($conversation, $name = 'id') }}')">
                         <div class="dash-msg-avatar"><img
-                                src="{{ asset('assets/uploads/users_image/' . $this->getuserinstance($conversation, $name = 'image')) }}"
+                                src="{{ $this->getuserinstance($conversation, null) ?? $this->reciever_user?->avatarUrl(128) }}"
                                 alt=""><span class="_user_status online"></span></div>
 
                         <div class="message-by">

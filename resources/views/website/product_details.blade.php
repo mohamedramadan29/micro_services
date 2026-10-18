@@ -73,14 +73,12 @@
                                 @if ($product['price'] > 0)
                                     @if ($product['discount'] > 0)
                                         <li> السعر <span style="color: #3fb699">
-                                                {{ number_format($product['discount'], 2) }}
-                                                $</span>
+                                                {{ \App\Support\Money::show($product['discount']) }}</span>
                                             <span style="text-decoration: line-through;margin-left:10px">
-                                                {{ number_format($product['price'], 2) }} $</span>
+                                                {{ \App\Support\Money::show($product['price']) }}</span>
                                         </li>
                                     @else
-                                        <li> السعر <span style="color: #3fb699"> {{ number_format($product['price'], 2) }}
-                                                $</span>
+                                        <li> السعر <span style="color: #3fb699"> {{ \App\Support\Money::show($product['price']) }}</span>
                                         </li>
                                     @endif
                                 @else
@@ -122,7 +120,7 @@
                                         <div class="modal-footer">
                                             @if (Auth::check())
                                                 <form style="width: 100%" method="post"
-                                                    action="{{ url('product_order') }}">
+                                                    action="{{ url('product_order') }}" data-track-start="product_order">
                                                     <div class="form-group">
                                                         <label> الاسم </label>
                                                         <input style="height: 45px" class="form-control" name="name"

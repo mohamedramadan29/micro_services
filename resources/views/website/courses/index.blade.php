@@ -13,7 +13,7 @@
 
                         <div class="d-user-avater">
                             @if (Auth::user()->image != '')
-                                <img src="{{ asset('assets/uploads/users_image/' . Auth::user()->image) }}"
+                                <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
                                     class="img-fluid rounded" alt="">
                             @else
                                 <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
@@ -112,8 +112,7 @@
                                                                         <div class="project_info_person">
                                                                             <ul class="list-unstyled">
                                                                                 <li> <i class="bi bi-currency-dollar"></i>
-                                                                                    {{ $course['price'] }}
-                                                                                    دولار </li>
+                                                                                    {{ \App\Support\Money::show($course['price']) }} </li>
                                                                                 <li> <i
                                                                                         class="bi bi-pc-display-horizontal"></i>
                                                                                     {{ $course['leason_numbers'] }}

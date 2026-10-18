@@ -76,7 +76,6 @@ class BlogController extends Controller
                 ]);
                 return $this->success_message(' تم اضافة المقال  بنجاح  ');
             } catch (\Exception $e) {
-                dd($e);
                 return $this->exception_message($e);
             }
         }
@@ -93,7 +92,7 @@ class BlogController extends Controller
                 $rules = [
                     'name' => 'required',
                     'desc' => 'required',
-                    'publish_date'=>'required|date|after_or_equal:today',
+                    'publish_date'=>'required|date',
                     'status'=>'required',
                 ];
                 $messages = [
@@ -162,7 +161,7 @@ class BlogController extends Controller
     }
     public function archived()
     {
-        $blogs = Blog::with('category')->where('status','==','0')->orderBy('id', 'desc')->get();
+        $blogs = Blog::with('category')->where('status', 0)->orderBy('id', 'desc')->get();
         return view('admin.Blogs.archived', compact('blogs'));
     }
 }

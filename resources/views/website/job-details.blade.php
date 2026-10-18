@@ -99,7 +99,7 @@
                                 @if ($job['salary'] != null)
                                     <li class="mb-2"> <i class="bi bi-cash" style="color:var(--main-color)"></i>
                                         <span style="color:var(--main-color)">الراتب</span> :
-                                        {{ $job['salary'] }} $
+                                        {{ \App\Support\Money::show($job['salary']) }}
                                     </li>
                                 @endif
                                 <li class="mb-2"> <i class="bi bi-geo-alt-fill" style="color:var(--main-color)"></i>

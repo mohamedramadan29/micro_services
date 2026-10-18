@@ -65,7 +65,7 @@
                                     <td> {{ $user->user->name }} </td>
                                     <td> {{ $user->user->email }}  </td>
                                     <td> {{ $user->created_at->format('Y-m-d') }}  </td>
-                                    <td> {{ $user->price }} $ </td>
+                                    <td> {{ $user->price }} ج.م </td>
                                 </tr>
                                 @include('admin.courses.delete')
                                 @endforeach

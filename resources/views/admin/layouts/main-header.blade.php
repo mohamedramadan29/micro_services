@@ -235,6 +235,7 @@
 {{--                        </div>--}}
 {{--                    </div>--}}
 {{--                </div>--}}
+                @include('admin.layouts.partials.notifications')
                 <div class="nav-item full-screen fullscreen-button">
                     <a class="new nav-link full-screen-link" href="#"><svg xmlns="http://www.w3.org/2000/svg"
                             class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor"

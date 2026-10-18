@@ -3,20 +3,19 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\JobController;
 use App\Http\Controllers\admin\BlogController;
-use \App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\CourseController;
-use \App\Http\Controllers\admin\TicketController;
+use App\Http\Controllers\admin\TicketController;
 use App\Http\Controllers\admin\ConsultController;
 use App\Http\Controllers\admin\ProductController;
-use App\Http\Controllers\admin\ProjectController;
-use \App\Http\Controllers\admin\ServiceController;
-use \App\Http\Controllers\admin\SettingController;
+use App\Http\Controllers\admin\ServiceController;
+use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\MessagesController;
-use \App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ProperityController;
-use \App\Http\Controllers\admin\SubCategoryController;
+use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\BlogCategoryController;
 use App\Http\Controllers\admin\NafizhaPortfolioController;
 use App\Http\Controllers\admin\PackageController;
@@ -38,13 +37,15 @@ use App\Http\Controllers\admin\EmailCampaignController;
 use App\Http\Controllers\admin\EmailAnalyticsController;
 use App\Http\Controllers\admin\EmailFollowUpController;
 use App\Http\Controllers\admin\EmailAIController;
+use App\Http\Controllers\admin\ServiceFormController;
+use App\Http\Controllers\admin\ServiceFormSectionController;
+use App\Http\Controllers\admin\ServiceFormQuestionController;
+use App\Http\Controllers\admin\ServiceRequestAdminController;
 
 Route::get('/admin', [AdminController::class, 'index'])->name('login');
 Route::group(['prefix' => 'admin'], function () {
     Route::post('admin_login', [AdminController::class, 'admin_login']);
-    // Start Register Page
-    Route::match(['post', 'get'], 'register', [AdminController::class, 'register']);
-    Route::group(['middleware' => ['auth']], function () {
+    Route::group(['middleware' => ['auth', 'admin']], function () {
         Route::controller(AdminController::class)->group(function () {
             Route::get('dashboard', 'dashboard')->name('admin.dashboard');
             Route::post('logout', 'logout')->name('logout');
@@ -70,13 +71,13 @@ Route::group(['prefix' => 'admin'], function () {
         });
 
         Route::controller(CategoryController::class)->group(function () {
-            Route::get('categories', 'index');
+            Route::get('categories', fn () => redirect()->route('admin.catalog.groups'));
             Route::post('category/store', 'store');
             Route::post('category/update/{id}', 'update');
             Route::post('category/destroy/{id}', 'destroy');
         });
         Route::controller(SubCategoryController::class)->group(function () {
-            Route::get('sub-categories', 'index');
+            Route::get('sub-categories', fn () => redirect()->route('admin.catalog.services'));
             Route::post('sub-category/store', 'store');
             Route::post('sub-category/update/{id}', 'update');
             Route::post('sub-category/destroy/{id}', 'destroy');
@@ -116,16 +117,8 @@ Route::group(['prefix' => 'admin'], function () {
         });
         ###################### End Consultants ##############################
 
-        #################### Project Controller ############################
-
-        Route::controller(ProjectController::class)->group(function () {
-            Route::get('projects', 'index');
-            Route::match(['post', 'get'], 'project/update/{id}', 'update');
-            Route::post('project/delete/{id}', 'delete');
-            Route::post('project/update_status/{id}', 'update_status');
-        });
-
-        ################### End Project Controller ########################
+        // Old projects admin page → the new service requests pages.
+        Route::permanentRedirect('projects', '/admin/requests');
 
         ################ Start Courses ###################
         Route::controller(CourseController::class)->group(function () {
@@ -147,7 +140,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('properities', 'index');
             Route::match(['post', 'get'], 'properity/update/{id}', 'update');
             Route::post('properity/delete/{id}', 'delete');
-            Route::match(['post', 'get'], 'properit/active/{id}', 'ActiveStatus');
+            Route::post('properit/active/{id}', 'ActiveStatus');
         });
         ############## End Properiteis ###################
         ############## Start Properity Maintain ############
@@ -155,7 +148,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('properity-maintain', 'index');
             Route::match(['post', 'get'], 'properity-maintain/update/{id}', 'update');
             Route::post('properity-maintain/delete/{id}', 'delete');
-            Route::match(['post', 'get'], 'properity-maintain/active/{id}', 'ActiveStatus');
+            Route::post('properity-maintain/active/{id}', 'ActiveStatus');
         });
         ############## End Properity Maintain #############
 
@@ -164,7 +157,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('jobs', 'index');
             Route::match(['post', 'get'], 'job/update/{id}', 'update');
             Route::post('job/delete/{id}', 'delete');
-            Route::match(['post', 'get'], 'job/active/{id}', 'ActiveStatus');
+            Route::post('job/active/{id}', 'ActiveStatus');
         });
         ############## End Jobs Controller  ###################
 
@@ -262,7 +255,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('nafizha-portfolio/store', 'store')->name('nafizha-portfolio.store');
             Route::get('nafizha-portfolio/edit/{id}', 'edit');
             Route::post('nafizha-portfolio/update/{id}', 'update');
-            Route::get('nafizha-portfolio/delete/{id}', 'delete');
+            Route::post('nafizha-portfolio/delete/{id}', 'delete');
         });
         #################### End Nafizha Portfolio ###################
 
@@ -397,7 +390,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('email/campaigns/{emailCampaign}/update', 'update')->name('admin.email.campaigns.update');
             Route::post('email/campaigns/{emailCampaign}/delete', 'destroy')->name('admin.email.campaigns.destroy');
             Route::post('email/campaigns/{emailCampaign}/toggle-status', 'toggleStatus')->name('admin.email.campaigns.toggle-status');
-            Route::get('email/campaigns/{emailCampaign}/send', 'send')->name('admin.email.campaigns.send');
+            Route::post('email/campaigns/{emailCampaign}/send', 'send')->name('admin.email.campaigns.send');
             Route::post('email/campaigns/{emailCampaign}/duplicate', 'duplicate')->name('admin.email.campaigns.duplicate');
         });
 
@@ -432,6 +425,172 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('email/lists/{emailList}/import-sheets', 'importSheets')->name('admin.email.lists.import.sheets');
         });
         #################### End Email Campaigns ####################
+
+        #################### Service Request Forms ####################
+        Route::controller(ServiceFormController::class)->group(function () {
+            Route::get('request-forms', 'index')->name('admin.request-forms.index');
+            Route::get('request-forms/service/{subCategory}', 'show')->name('admin.request-forms.show');
+            Route::post('request-forms/service/{subCategory}', 'store')->name('admin.request-forms.store');
+            Route::post('request-forms/{form}/status', 'updateStatus')->name('admin.request-forms.status');
+            Route::post('request-forms/{form}/reorder', 'reorder')->name('admin.request-forms.reorder');
+            Route::get('request-forms/{form}/preview', 'preview')->name('admin.request-forms.preview');
+            Route::get('request-forms/{form}/builder', 'builder')->name('admin.request-forms.builder');
+            Route::post('request-forms/{form}/revision', 'createRevision')->name('admin.request-forms.revision');
+            Route::post('request-forms/{form}/revision/publish', 'publishRevision')->name('admin.request-forms.revision.publish');
+            Route::post('request-forms/{form}/revision/discard', 'discardRevision')->name('admin.request-forms.revision.discard');
+        });
+        Route::controller(ServiceFormSectionController::class)->group(function () {
+            Route::post('request-forms/{form}/sections', 'store')->name('admin.request-forms.sections.store');
+            Route::post('request-forms/sections/{section}/update', 'update')->name('admin.request-forms.sections.update');
+            Route::post('request-forms/sections/{section}/duplicate', 'duplicate')->name('admin.request-forms.sections.duplicate');
+            Route::post('request-forms/sections/{section}/delete', 'destroy')->name('admin.request-forms.sections.destroy');
+        });
+        Route::controller(ServiceFormQuestionController::class)->group(function () {
+            Route::get('request-forms/{form}/questions/create', 'create')->name('admin.request-forms.questions.create');
+            Route::post('request-forms/{form}/questions', 'store')->name('admin.request-forms.questions.store');
+            Route::get('request-forms/questions/{question}/edit', 'edit')->name('admin.request-forms.questions.edit');
+            Route::post('request-forms/questions/{question}/update', 'update')->name('admin.request-forms.questions.update');
+            Route::post('request-forms/questions/{question}/duplicate', 'duplicate')->name('admin.request-forms.questions.duplicate');
+            Route::post('request-forms/questions/{question}/delete', 'destroy')->name('admin.request-forms.questions.destroy');
+        });
+        #################### End Service Request Forms ####################
+
+        #################### Service Requests (lists, follow-up, results) ####################
+        Route::controller(ServiceRequestAdminController::class)->group(function () {
+            Route::view('requests-guide', 'admin.service-requests.guide')->name('admin.requests.guide');
+            Route::get('requests', 'index')->name('admin.requests.index');
+            Route::get('requests/{serviceRequest}', 'show')->name('admin.requests.show');
+            Route::post('requests/{serviceRequest}/followup', 'followup')->name('admin.requests.followup');
+            Route::post('requests/{serviceRequest}/messages', 'sendMessage')->name('admin.requests.messages.store');
+            Route::post('requests/{serviceRequest}/close', 'close')->name('admin.requests.close');
+            Route::post('requests/{serviceRequest}/publish', 'publish')->name('admin.requests.publish');
+            Route::post('requests/{serviceRequest}/complete', 'complete')->name('admin.requests.complete');
+            Route::post('requests/{serviceRequest}/invite/{freelancer}', 'invite')->name('admin.requests.invite');
+            Route::post('request-payments/{payment}/refund', 'refund')->name('admin.requests.refund');
+            Route::get('request-offers/{offer}/files/{file}', 'offerFile')->name('admin.requests.offer-file');
+            Route::post('notifications/read-all', 'readAllNotifications')->name('admin.notifications.read-all');
+        });
+        Route::controller(\App\Http\Controllers\admin\ClientController::class)->group(function () {
+            Route::get('clients', 'index')->name('admin.clients.index');
+            Route::get('clients/{user}', 'show')->name('admin.clients.show');
+        });
+
+        #################### Services page: groups, services, help requests ####################
+        Route::controller(\App\Http\Controllers\admin\CatalogController::class)->group(function () {
+            Route::get('catalog/groups', 'groups')->name('admin.catalog.groups');
+            Route::get('catalog/groups/create', 'editGroup')->name('admin.catalog.groups.create');
+            Route::post('catalog/groups', 'saveGroup')->name('admin.catalog.groups.store');
+            Route::get('catalog/groups/{group}/edit', 'editGroup')->name('admin.catalog.groups.edit');
+            Route::post('catalog/groups/{group}', 'saveGroup')->name('admin.catalog.groups.update');
+            Route::post('catalog/groups/{group}/delete', 'deleteGroup')->name('admin.catalog.groups.destroy');
+            Route::get('catalog/services', 'services')->name('admin.catalog.services');
+            Route::get('catalog/services/create', 'editService')->name('admin.catalog.services.create');
+            Route::post('catalog/services', 'saveService')->name('admin.catalog.services.store');
+            Route::get('catalog/services/{service}/edit', 'editService')->name('admin.catalog.services.edit');
+            Route::post('catalog/services/{service}', 'saveService')->name('admin.catalog.services.update');
+            Route::post('catalog/services/{service}/delete', 'deleteService')->name('admin.catalog.services.destroy');
+        });
+        Route::controller(\App\Http\Controllers\admin\HelpRequestAdminController::class)->group(function () {
+            Route::get('help-requests', 'index')->name('admin.help-requests.index');
+            Route::get('help-requests/{helpRequest}', 'show')->name('admin.help-requests.show');
+            Route::post('help-requests/{helpRequest}', 'update')->name('admin.help-requests.update');
+            Route::post('help-requests/{helpRequest}/notes', 'addNote')->name('admin.help-requests.notes');
+        });
+
+        #################### Freelancer applications and directory ####################
+        Route::controller(\App\Http\Controllers\admin\FreelancerAdminController::class)->group(function () {
+            Route::get('freelancers', 'index')->name('admin.freelancers.index');
+            Route::get('freelancers/{freelancer}', 'show')->name('admin.freelancers.show');
+            Route::post('freelancers/{freelancer}/verify', 'verify')->name('admin.freelancers.verify');
+            Route::post('freelancers/{freelancer}/verify-email', 'resendVerification')->name('admin.freelancers.verify-email');
+            Route::post('freelancers/{freelancer}/photo', 'photo')->name('admin.freelancers.photo');
+            Route::post('freelancers/{freelancer}/decide', 'decide')->name('admin.freelancers.decide');
+            Route::post('freelancers/{freelancer}/feature', 'feature')->name('admin.freelancers.feature');
+        });
+
+        #################### SEO keywords ####################
+        Route::controller(\App\Http\Controllers\admin\SeoKeywordController::class)->group(function () {
+            Route::get('seo', 'index')->name('admin.seo.index');
+            Route::get('seo/queries', 'queries')->name('admin.seo.queries');
+            Route::post('seo/keywords', 'store')->name('admin.seo.store');
+            Route::post('seo/keywords/delete', 'destroy')->name('admin.seo.destroy');
+            Route::post('seo/keywords/{keyword}', 'update')->name('admin.seo.update');
+            Route::post('seo/track', 'track')->name('admin.seo.track');
+            Route::get('seo/export', 'export')->name('admin.seo.export');
+            Route::post('seo/import', 'import')->name('admin.seo.import');
+            Route::post('seo/sync', 'sync')->name('admin.seo.sync');
+        });
+
+        #################### Service 3: contracts, disputes, freelancer changes ####################
+        Route::get('contracts', [\App\Http\Controllers\admin\ContractAdminController::class, 'index'])->name('admin.contracts.index');
+        Route::get('contract-policy', [\App\Http\Controllers\admin\ContractPolicyController::class, 'index'])->name('admin.contract-policy.index');
+        Route::post('contract-policy', [\App\Http\Controllers\admin\ContractPolicyController::class, 'save'])->name('admin.contract-policy.save');
+        Route::get('staff-roles', [\App\Http\Controllers\admin\StaffRoleController::class, 'index'])->name('admin.staff.index');
+        Route::post('staff-roles', [\App\Http\Controllers\admin\StaffRoleController::class, 'update'])->name('admin.staff.update');
+
+        #################### Landing pages ####################
+        Route::controller(\App\Http\Controllers\admin\LandingPageController::class)->group(function () {
+            Route::get('landing-pages', 'index')->name('admin.landing.index');
+            Route::post('landing-pages', 'store')->name('admin.landing.store');
+            Route::get('landing-pages/{page}', 'edit')->name('admin.landing.edit');
+            Route::post('landing-pages/{page}/settings', 'settings')->name('admin.landing.settings');
+            Route::post('landing-pages/{page}/sections', 'addSection')->name('admin.landing.sections.store');
+            Route::post('landing-pages/{page}/sections/{section}', 'updateSection')->name('admin.landing.sections.update');
+            Route::post('landing-pages/{page}/sections/{section}/{action}', 'sectionAction')
+                ->whereIn('action', ['up', 'down', 'toggle', 'duplicate', 'delete'])->name('admin.landing.sections.action');
+            Route::post('landing-pages/{page}/publish', 'publish')->name('admin.landing.publish');
+            Route::post('landing-pages/{page}/discard', 'discard')->name('admin.landing.discard');
+            Route::post('landing-pages/{page}/unpublish', 'unpublish')->name('admin.landing.unpublish');
+            Route::post('landing-pages/{page}/delete', 'destroy')->name('admin.landing.destroy');
+        });
+
+        #################### Journey analytics ####################
+        Route::controller(\App\Http\Controllers\admin\AnalyticsAdminController::class)->group(function () {
+            Route::get('analytics', 'index')->name('admin.analytics.index');
+            Route::get('analytics/visits/{visit}', 'show')->name('admin.analytics.show');
+        });
+
+        #################### Free site check ####################
+        Route::controller(\App\Http\Controllers\admin\SiteTestAdminController::class)->group(function () {
+            Route::get('site-tests', 'index')->name('admin.site-tests.index');
+            Route::get('site-tests/settings', 'settings')->name('admin.site-tests.settings');
+            Route::post('site-tests/settings', 'saveSettings')->name('admin.site-tests.settings.save');
+            Route::post('site-tests/questions', 'saveQuestions')->name('admin.site-tests.questions.save');
+            Route::post('site-tests/rules', 'saveRule')->name('admin.site-tests.rules.save');
+            Route::post('site-tests/rules/{rule}/delete', 'deleteRule')->name('admin.site-tests.rules.destroy');
+            Route::get('site-tests/{siteTest}', 'show')->name('admin.site-tests.show');
+            Route::post('site-tests/{siteTest}/review', 'review')->name('admin.site-tests.review');
+            Route::post('site-tests/{siteTest}/send', 'send')->name('admin.site-tests.send');
+            Route::post('site-tests/{siteTest}/issues', 'addIssue')->name('admin.site-tests.issues.store');
+            Route::post('site-tests/{siteTest}/issues/{issue}/toggle', 'toggleIssue')->name('admin.site-tests.issues.toggle');
+            Route::get('site-tests/{siteTest}/raw/{result}', 'raw')->name('admin.site-tests.raw');
+        });
+
+        Route::get('notification-texts', [\App\Http\Controllers\admin\NotificationTextController::class, 'index'])->name('admin.notification-texts.index');
+        Route::post('notification-texts', [\App\Http\Controllers\admin\NotificationTextController::class, 'save'])->name('admin.notification-texts.save');
+        Route::get('notification-log', [\App\Http\Controllers\admin\NotificationLogController::class, 'index'])->name('admin.notification-log.index');
+        Route::get('home-cards', [\App\Http\Controllers\admin\HomeCardAdminController::class, 'index'])->name('admin.home-cards.index');
+
+        #################### Site content (texts, links, images) ####################
+        Route::controller(\App\Http\Controllers\admin\ContentController::class)->group(function () {
+            Route::get('content', 'index')->name('admin.content.index');
+            Route::post('content/blocks/{block}', 'update')->name('admin.content.update');
+            Route::post('content/areas/{area}/add', 'store')->name('admin.content.store');
+            Route::post('content/blocks/{block}/delete', 'destroy')->name('admin.content.destroy');
+            Route::post('content/blocks/{block}/toggle', 'toggle')->name('admin.content.toggle');
+            Route::post('content/blocks/{block}/move/{direction}', 'move')->whereIn('direction', ['up', 'down'])->name('admin.content.move');
+            Route::post('content/{page}/publish', 'publish')->name('admin.content.publish');
+            Route::post('content/{page}/discard', 'discard')->name('admin.content.discard');
+            Route::get('content/{page}/preview', 'preview')->name('admin.content.preview');
+            Route::get('content/preview/stop', 'stopPreview')->name('admin.content.preview.stop');
+            Route::post('content/revisions/{revision}/rollback', 'rollback')->name('admin.content.rollback');
+        });
+        Route::controller(\App\Http\Controllers\admin\ContentMediaController::class)->group(function () {
+            Route::get('media', 'index')->name('admin.media.index');
+            Route::post('media', 'store')->name('admin.media.store');
+            Route::post('media/{medium}', 'update')->name('admin.media.update');
+            Route::post('media/{medium}/delete', 'destroy')->name('admin.media.destroy');
+        });
 
     });
 });

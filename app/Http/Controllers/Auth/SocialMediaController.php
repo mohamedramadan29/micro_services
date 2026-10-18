@@ -26,8 +26,18 @@ class SocialMediaController extends Controller
             $user_from_db = User::where('email', $user_provider->getEmail())->first();
             //dd($user);
             if ($user_from_db) {
+                // Same rules as the password login: deactivated or blocked accounts stay out.
+                if ((int) $user_from_db->status !== 1) {
+                    return redirect()->route('user_login')->withErrors('من فضلك يجب تفعيل الحساب الخاص بك اولا');
+                }
+                if ((int) $user_from_db->block_status === 0) {
+                    return redirect()->route('user_login')->withErrors('تم حظر الحساب الخاص بك من فضلك تواصل مع الادارة');
+                }
                 Auth::login($user_from_db);
-                return redirect()->route('dashboard');
+                if (blank($user_from_db->account_type)) {
+                    return redirect()->route('account.type');
+                }
+                return redirect()->intended(route('dashboard'));
             }
             // $user_db = User::updateOrCreate([
             //     'email' => $user->email,
@@ -49,8 +59,9 @@ class SocialMediaController extends Controller
                 'google_token' => $user_provider->token,
                 'password' => Hash::make(Str::random(8)),
             ]);
+            $user->forceFill(['email_verified_at' => now()])->save(); // Google has confirmed this email
             Auth::login($user);
-            return redirect()->route('dashboard');
+            return redirect()->route('account.type');
         } catch (\Exception $e) {
             //return $e;
             return redirect()->route('user_login');

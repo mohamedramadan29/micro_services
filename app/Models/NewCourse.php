@@ -76,6 +76,6 @@ class NewCourse extends Model
 
     public function getImageUrlAttribute(): string
     {
-        return asset('storage/' . $this->image);
+        return asset($this->image); // stored as assets/uploads/free-courses/…
     }
 }

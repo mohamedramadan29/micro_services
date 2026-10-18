@@ -46,5 +46,9 @@ class Category extends Model
 //        return $countSubCategories;
 //    }
 
-
+    /** Published groups in the admin's order (services page). */
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order')->orderBy('id');
+    }
 }

@@ -137,7 +137,7 @@
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label"> المرتب <span class="badge badge-danger"> $ </span>
+                                            <label class="form-label"> المرتب <span class="badge badge-danger"> ج.م </span>
                                             </label>
                                         </div>
                                         <div class="col-md-9">

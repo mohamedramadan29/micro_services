@@ -19,6 +19,20 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        // Service requests: alert admins about published requests with no offers after an hour.
+        $schedule->command('requests:alert-no-offers')->everyMinute()->withoutOverlapping();
+        // EasyKash cash/wallet payers often never come back through the redirect.
+        $schedule->command('payments:sync')->everyFiveMinutes()->withoutOverlapping();
+        // SEO keywords: Google Search Console figures, once a day (does nothing until connected).
+        $schedule->command('seo:sync')->dailyAt('04:30')->withoutOverlapping();
+        // Approximate USD prices (display only): today's EGP rate.
+        $schedule->command('fx:refresh')->everySixHours()->withoutOverlapping();
+        // Service 3: stage deadlines, reviews and «waiting for the client» pauses.
+        $schedule->command('contracts:deadlines')->everyFifteenMinutes()->withoutOverlapping();
+        // Journey analytics: keep 13 months of anonymous visits.
+        $schedule->command('analytics:prune')->dailyAt('03:30')->withoutOverlapping();
+        $schedule->command('site-tests:prune')->dailyAt('03:45')->withoutOverlapping();
+
         // كل دقيقة: ابحث عن البوستات المجدولة وانشرها
         $schedule->call(function () {
             $posts = SocialPost::where('status', 'scheduled')

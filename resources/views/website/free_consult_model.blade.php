@@ -91,7 +91,7 @@
            </div>
        </div>
        <script>
-           document.getElementById('nextButton').addEventListener('click', function() {
+           document.getElementById('nextButton')?.addEventListener('click', function() {
                const categoryId = document.getElementById('categorySelect').value;
                if (!categoryId) {
                    alert('من فضلك اختر مجالاً');
@@ -148,11 +148,11 @@
            });
 
            // زر الرجوع
-           document.getElementById('backToCategory').addEventListener('click', function() {
+           document.getElementById('backToCategory')?.addEventListener('click', function() {
                document.getElementById('consultantForm').style.display = 'none';
                document.getElementById('categoryForm').style.display = 'block';
            });
-           document.getElementById('backToConsultant').addEventListener('click', function() {
+           document.getElementById('backToConsultant')?.addEventListener('click', function() {
                document.getElementById('questionsForm').style.display = 'none';
                document.getElementById('consultantForm').style.display = 'block';
            });

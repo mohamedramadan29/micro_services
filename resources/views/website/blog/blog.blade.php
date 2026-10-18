@@ -1,59 +1,59 @@
 @extends('website.layouts.master')
+@php
+    $page = \App\Support\SiteContent::first('blog.page');
+    $date = \Illuminate\Support\Carbon::parse($blog->publish_date);
+@endphp
 @section('title')
-    {{ $blog['name'] }}  - المدونة
+    {{ $blog->meta_title ?: $blog->name }}
 @endsection
+@section('meta_description'){{ $blog->meta_desc ?: $blog->excerpt(160) }}@endsection
+@section('meta_keywords'){{ $blog->meta_keywords }}@endsection
+@section('og_title'){{ $blog->meta_title ?: $blog->name }}@endsection
+@if ($blog->image)
+    @section('og_image'){{ $blog->Image() }}@endsection
+@endif
 @section('content')
-    <section class="gray-bg text-right" dir="rtl">
-        <div class="container">
-            <div class="main_hero_section">
-                <div>
-                    <h4> {{ $blog['name'] }} </h4>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                            <li class="breadcrumb-item"><a href="{{ url('/categories') }}"> المدونة  </a></li>
-                            <li class="breadcrumb-item"><a href="{{ url('/category/'.$blog['category']['slug']) }}"> {{ $blog['category']['name'] }}  </a></li>
-                            <li class="breadcrumb-item active" aria-current="page"> {{ $blog['name'] }} </li>
-                        </ol>
-                    </nav>
-                </div>
-
-            </div>
-            <div class="project_details">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="project-details">
-                            <img style="width:100%;height:400px;object-fit: cover;" src="{{ $blog->Image() }}" alt="">
-                            <p> {!! $blog['desc'] !!} </p>
-                            <span style="font-size: 14px;color: #545353;"> <i  style="font-size: 12px;margin-left: 5px;" class="bi bi-calendar-check"></i>  {{ $blog['created_at']->format('Y-m-d') }} </span>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="project-status">
-                    <h3> شارك </h3>
-                    <!-- AddToAny BEGIN -->
-                    <div class="sharing">
-                        <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
-                            <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
-                            <a class="a2a_button_facebook"></a>
-                            <a class="a2a_button_whatsapp"></a>
-                            <a class="a2a_button_telegram"></a>
-                            <a class="a2a_button_linkedin"></a>
-                            <a class="a2a_button_threads"></a>
-                            <a class="a2a_button_x"></a>
-                            <a class="a2a_button_twitter"></a>
-                            <a class="a2a_button_snapchat"></a>
-                        </div>
-                        <script defer src="https://static.addtoany.com/menu/page.js"></script>
-                        <!-- AddToAny END -->
-                    </div>
-
+    <article dir="rtl">
+        <header class="rf-bl-hero">
+            <div class="container">
+                @unless ($blog->isPublished())
+                    <div class="rf-notice rf-notice-error mb-3">معاينة للأدمن: هذا المقال غير منشور للزوار (مسودة أو مجدول).</div>
+                @endunless
+                <nav class="rf-bl-crumbs" aria-label="مسار التصفح">
+                    <a href="{{ route('blogCategories') }}">{{ $page['title'] }}</a>
+                    @if ($blog->Category)
+                        <span>/</span><a href="{{ route('blogCategories', ['category' => $blog->Category->slug]) }}">{{ $blog->Category->name }}</a>
+                    @endif
+                </nav>
+                <h1>{{ $blog->name }}</h1>
+                <div class="rf-bl-meta">
+                    @if ($blog->Author)<span><i class="bi bi-person"></i> {{ $blog->Author->name }}</span>@endif
+                    <span><i class="bi bi-calendar3"></i> {{ $date->format('Y-m-d') }}</span>
+                    <span><i class="bi bi-clock"></i> {{ $blog->readMinutes() }} د قراءة</span>
                 </div>
             </div>
+        </header>
 
-
+        <div class="container rf-bl-article">
+            @if ($blog->image)
+                <img src="{{ $blog->Image() }}" alt="{{ $blog->name }}" class="rf-bl-cover">
+            @endif
+            @if ($blog->short_desc)<p class="rf-bl-lead">{{ $blog->short_desc }}</p>@endif
+            {{-- Written by admins in the editor (headings, images, links). --}}
+            <div class="rf-bl-content">{!! $blog->desc !!}</div>
         </div>
-    </section>
-    <!-- ============================ Main Section End ================================== -->
+    </article>
+
+    @if ($related->isNotEmpty())
+        <section class="rf-sv" dir="rtl">
+            <div class="container">
+                <div class="rf-fl-section-head"><h2>{{ $page['related_title'] }}</h2></div>
+                <div class="rf-bl-grid">
+                    @foreach ($related as $item)
+                        @include('website.blog.partials.card', ['blog' => $item, 'readButton' => $page['read_button']])
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
 @endsection
