@@ -93,6 +93,7 @@ Route::group(
         Route::get('lp/{slug}', [\App\Http\Controllers\front\LandingPageController::class, 'show'])->where('slug', '[a-z0-9-]+')->name('landing.show');
         // Services page (client brief «متطلبات تطوير قسم الخدمات»).
         Route::get('services', [ServicesPageController::class, 'index'])->name('services.index');
+        Route::get('ready-services', [\App\Http\Controllers\front\ReadyServicesController::class, 'index'])->name('services.ready');
         // Homepage entry points (client file «المربعات الخمسة»): open to visitors; publishing needs a client account.
         Route::get('projects/diagnose', [\App\Http\Controllers\front\DiagnoseController::class, 'show'])->name('diagnose');
         Route::post('projects/diagnose', [\App\Http\Controllers\front\DiagnoseController::class, 'store'])->middleware('throttle:30,60')->name('diagnose.store');
@@ -132,9 +133,7 @@ Route::group(
                 Route::get('dashboard', 'index')->name('dashboard');
                 Route::get('purches', 'purches');
                 Route::get('orders', 'orders');
-                Route::get('reviews', 'reviews');
                 Route::match(['post', 'get'], 'update-account', 'update');
-                Route::get('chat', 'chat');
                 Route::get('balance', 'balance')->name('user_balance');
 
                 Route::get('chat-main/{conversation_id}', Main::class)->name('chat.main');
@@ -148,8 +147,8 @@ Route::group(
             Route::group(['middleware' => ['account.type']], function () {
                 Route::get('my/specializations', [SpecializationController::class, 'edit'])->name('specializations.edit');
                 Route::post('my/specializations', [SpecializationController::class, 'update'])->name('specializations.update');
-                Route::get('my/freelancer-profile', [\App\Http\Controllers\front\FreelancerProfileController::class, 'edit'])->name('freelancer.profile.edit');
-                Route::post('my/freelancer-profile', [\App\Http\Controllers\front\FreelancerProfileController::class, 'update'])->name('freelancer.profile.update');
+                // «ملفي كمستقل» was merged into «تعديل الحساب» (2026-10-20); old links and notifications land there.
+                Route::get('my/freelancer-profile', fn () => redirect(url('update-account') . '#rf-freelancer', 301))->name('freelancer.profile.edit');
 
                 // Service requests (client side)
                 Route::controller(ServiceRequestController::class)->group(function () {
@@ -235,10 +234,8 @@ Route::group(
                 Route::get('service/index', 'index');
                 Route::match(['post', 'get'], 'service/add', 'add');
                 Route::match(['post', 'get'], 'service/update/{id}', 'update');
-                Route::match(['post', 'get'], 'service/delete/{id}', 'delete');
+                Route::post('service/delete/{id}', 'delete');
                 Route::get('service/get-subcategories/{categoryId}', 'getSubCategories');
-                Route::post('/tmp-upload', 'tmpUpload');
-                Route::delete('/tmp-delete', 'tmpDelete');
             });
         });
 
@@ -257,7 +254,7 @@ Route::group(
         });
 
         ///////////////////////////// Start Conversation ////////////////////
-        Route::controller(ConversationController::class)->group(function () {
+        Route::controller(ConversationController::class)->middleware('auth')->group(function () {
             Route::get('chats', 'chats');
             Route::post('conversation/start', 'start_conversation');
             Route::post('consult_conversation/start', 'consult_start_conversation');
@@ -347,9 +344,7 @@ Route::group(
                 Route::get('my/properties/index', 'index');
                 Route::match(['post', 'get'], 'my/property/add', 'store');
                 Route::match(['post', 'get'], 'my/property/update/{id}', 'update');
-                Route::match(['post', 'get'], 'my/property/delete/{id}', 'delete');
-                Route::post('my/property/upload-temp', 'uploadTemp');
-                Route::post('my/property/remove-temp', 'removeTemp');
+                Route::post('my/property/delete/{id}', 'delete');
                 Route::post('delete-property-image/{id}', 'deletePropertyImage');
             });
 
@@ -360,7 +355,7 @@ Route::group(
                 Route::get('my/property/maintain/index', 'index');
                 Route::match(['post', 'get'], 'my/property/maintain/add', 'store');
                 Route::match(['post', 'get'], 'my/property/maintain/update/{id}', 'update');
-                Route::match(['post', 'get'], 'my/property/maintain/delete/{id}', 'delete');
+                Route::post('my/property/maintain/delete/{id}', 'delete');
             });
             ################# End Properity Maintain #################
 
@@ -370,7 +365,6 @@ Route::group(
                 Route::match(['post', 'get'], 'my/job/add', 'store');
                 Route::match(['post', 'get'], 'my/job/update/{id}', 'update');
                 Route::post('my/job/delete/{id}', 'delete');
-                Route::match(['get', 'post'], 'my/job/delete/{id}', 'delete');
                 Route::get('my/job/subscriptions/{id}', 'subscriptions');
             });
             ############# End Jobs Controller ####################
@@ -461,7 +455,7 @@ Route::group(
                 Route::post('store', 'store')->name('user.portfolio.store');
                 Route::get('edit/{id}-{slug}', 'edit')->name('user.portfolio.edit');
                 Route::post('update/{id}-{slug}', 'update')->name('user.portfolio.update');
-                Route::get('delete/{id}', 'delete')->name('user.portfolio.delete');
+                Route::post('delete/{id}', 'delete')->name('user.portfolio.delete');
             });
         });
         ######################### End User Portfolio Controller ##########################
@@ -469,7 +463,7 @@ Route::group(
         ####################### Start Public Portfolio ###################
 
         Route::controller(\App\Http\Controllers\front\PortfolioController::class)->group(function () {
-            Route::get('portfolios', 'index');
+            Route::get('portfolios', 'index')->name('portfolios.index');
             Route::get('portfolio/{id}-{slug}', 'details');
         });
         ####################### End Public Portfolio ###################

@@ -27,7 +27,7 @@
                     <div class="col-lg-8">
                         <div class="review-form-card" data-aos="zoom-in">
                             <div class="text-center mb-4">
-                                <i class="bi bi-pencil-square" style="font-size: 3rem; color: #3fb697;"></i>
+                                <i class="bi bi-pencil-square" style="font-size: 3rem; color: #3fb699;"></i>
                                 <h2 class="h3 mt-3 mb-2">أضف تقييمك الآن</h2>
                                 <p class="text-muted">رأيك يساعدنا على تقديم خدمة أفضل</p>
                             </div>
@@ -43,7 +43,7 @@
                                     </label>
                                     <input type="text" id="reviewerName" class="form-control" name="name"
                                         placeholder="أدخل اسمك الكامل" required
-                                        style="border-radius: 15px; border: 2px solid #e5e7eb; padding: 1rem 1.5rem; font-size: 1.05rem;">
+                                        style="border-radius: 15px; border: 2px solid #e7e7e8; padding: 1rem 1.5rem; font-size: 1.05rem;">
                                 </div>
 
                                 <!-- Star Rating -->
@@ -87,7 +87,7 @@
                                         ملاحظاتك (اختياري)
                                     </label>
                                     <textarea id="reviewComments" class="form-control" rows="5" placeholder="شاركنا تجربتك وملاحظاتك حول خدماتنا..."
-                                        style="border-radius: 15px; border: 2px solid #e5e7eb; padding: 1rem 1.5rem; font-size: 1.05rem;" name="notes"></textarea>
+                                        style="border-radius: 15px; border: 2px solid #e7e7e8; padding: 1rem 1.5rem; font-size: 1.05rem;" name="notes"></textarea>
                                     <small class="text-muted">
                                         <i class="bi bi-info-circle ms-1"></i>
                                         ملاحظاتك ستساعدنا على تحسين خدماتنا
@@ -97,7 +97,7 @@
                                 <!-- Submit Button -->
                                 <div class="d-grid gap-2">
                                     <button type="submit" class="btn btn-lg"
-                                        style="background: linear-gradient(135deg, #3fb697, #20a280); color: white; border-radius: 15px; padding: 1.2rem; font-weight: 700; font-size: 1.1rem;">
+                                        style="background: linear-gradient(135deg, #3fb699, #37a087); color: white; border-radius: 15px; padding: 1.2rem; font-weight: 700; font-size: 1.1rem;">
                                         <i class="bi bi-send ms-2"></i>
                                         <span>إرسال التقييم</span>
                                     </button>

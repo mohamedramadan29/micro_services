@@ -71,7 +71,7 @@
                                             <td> {{ $i++ }} </td>
                                             <td> {{ $withdraw->user->name }} </td>
                                             <td> {{ $withdraw['amount'] }} </td>
-                                            <td> {{ $withdraw['method'] }} </td>
+                                            <td> {{ $withdraw->methodLabel() }} </td>
                                             <td> {{ $withdraw['account_name'] }} </td>
                                             <td> {{ $withdraw['account_number'] }} </td>
                                             <td> {{ $withdraw['bank_name'] }} </td>

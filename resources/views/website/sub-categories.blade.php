@@ -60,7 +60,7 @@
     <!-- ============================ Main Section End ================================== -->
 
     <!-- ============================ Call To Action Start ================================== -->
-    <section class="call-to-act" style="background:#0b85ec url({{ asset('assets/website/img/landing-bg.png') }}) no-repeat">
+    <section class="call-to-act" style="background:#818489 url({{ asset('assets/website/img/landing-bg.png') }}) no-repeat">
         <div class="container">
             <div class="row justify-content-center">
 

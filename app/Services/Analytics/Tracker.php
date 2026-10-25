@@ -99,7 +99,7 @@ class Tracker
             $useEntry = is_array($entry) && ! $this->request()->filled('utm_source');
             $visit = AnalyticsVisit::create(($useEntry ? array_intersect_key($entry, $source) : $source) + [
                 'visitor_id' => $this->visitorId(),
-                'user_id' => Auth::id(),
+                'user_id' => Auth::user()?->getKey(),
                 'landing_path' => mb_substr($useEntry && isset($entry['landing_path']) ? $entry['landing_path'] : '/' . ltrim($this->request()->path(), '/'), 0, 500),
                 'started_at' => now(),
                 'last_seen_at' => now(),
@@ -145,7 +145,7 @@ class Tracker
         $visit->forceFill([
             'last_seen_at' => now(),
             'events_count' => $visit->events_count + 1,
-            'user_id' => $visit->user_id ?? Auth::id(),
+            'user_id' => $visit->user_id ?? Auth::user()?->getKey(),
             'last_step' => $now !== false && ($reached === false || $now > $reached) ? $type : $visit->last_step,
         ])->save();
 

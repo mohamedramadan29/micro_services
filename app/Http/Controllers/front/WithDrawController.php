@@ -19,33 +19,29 @@ class WithDrawController extends Controller
     {
         $data = $request->all();
         $user = User::where('id', Auth::id())->first();
+        $method = (string) $request->input('method');
         $rules = [
             'amount' => 'required|numeric|min:1|max:' . $user->balance,
-            'method' => 'required',
-            'country'=>'required',
-            'account_name'=>'required',
-            'account_number'=>'required',
-            'bank_name'=>'required',
-            'swift_code'=>'required',
-            'iban_code'=>'required',
+            'method' => 'required|in:' . implode(',', array_keys(WithDraw::METHODS)),
+            'country' => 'nullable|string|max:100',
+            'account_name' => 'required|string|max:255',
+            'account_number' => 'required|string|max:255',
+            // A bank transfer needs the bank; IBAN/SWIFT only for transfers outside Egypt (optional).
+            'bank_name' => ($method === 'bank' ? 'required' : 'nullable') . '|string|max:255',
+            'swift_code' => 'nullable|string|max:50',
+            'iban_code' => 'nullable|string|max:50',
         ];
         $messages = [
-            'amount.required' => ' من فضلك حدد الميلغ  ',
+            'amount.required' => ' من فضلك حدد المبلغ  ',
             'amount.numeric' => ' من فضلك ادخل مبلغ صحيح للسحب  ',
             'amount.min' => ' اقل مبلغ للسحب هو 1 جنيه  ',
             'amount.max' => ' الرصيد المتاح للسحب اقل من المبلغ المطلوب  ',
             'method.required' => ' من فضلك حدد طريقة السحب  ',
-            'country.required' => ' من فضلك حدد الدولة  ',
-            'account_name.required' => ' من فضلك حدد اسم الحساب  ',
-            'account_number.required' => ' من فضلك حدد رقم الحساب  ',
-            'bank_name.required' => ' من فضلك حدد اسم البنك  ',
-            'swift_code.required' => ' من فضلك حدد كود السويفت  ',
-            'iban_code.required' => ' من فضلك حدد كود الايبان  ',
+            'method.in' => ' طريقة السحب غير صحيحة  ',
+            'account_name.required' => ' من فضلك اكتب اسم صاحب الحساب  ',
+            'account_number.required' => $method === 'bank' ? ' من فضلك اكتب رقم الحساب البنكي  ' : ' من فضلك اكتب رقم المحفظة أو عنوان إنستاباي  ',
+            'bank_name.required' => ' من فضلك اكتب اسم البنك  ',
         ];
-        $rules['method'] .= '|string|max:50';
-        foreach (['country', 'account_name', 'account_number', 'bank_name', 'swift_code', 'iban_code'] as $field) {
-            $rules[$field] .= '|string|max:255';
-        }
         $validator = Validator::make($data, $rules, $messages);
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
@@ -65,8 +61,9 @@ class WithDrawController extends Controller
                 }
                 WithDraw::create([
                     'user_id' => $user->id, 'amount' => $amount, 'method' => $data['method'], 'account_name' => $data['account_name'],
-                    'account_number' => $data['account_number'], 'bank_name' => $data['bank_name'], 'swift_code' => $data['swift_code'],
-                    'iban_code' => $data['iban_code'], 'country' => $data['country'], 'status' => 0,
+                    // Optional fields are saved as '' (older servers may have them NOT NULL).
+                    'account_number' => $data['account_number'], 'bank_name' => (string) ($data['bank_name'] ?? ''), 'swift_code' => (string) ($data['swift_code'] ?? ''),
+                    'iban_code' => (string) ($data['iban_code'] ?? ''), 'country' => (string) ($data['country'] ?? 'مصر'), 'status' => 0,
                 ]);
                 $user->update(['balance' => round((float) $user->balance - $amount, 2)]);
                 \App\Models\WalletTransaction::create(['user_id' => $user->id, 'type' => 'withdraw', 'amount' => $amount, 'description' => 'طلب سحب ' . \App\Support\Money::format($amount) . ' (بانتظار التحويل)']);

@@ -61,7 +61,7 @@ class EmailVerificationTest extends TestCase
         $this->post(route('email.verify.resend'), ['email' => $user->email])->assertSessionHas('Success_message');
         $this->post(route('email.verify.resend'), ['email' => 'nobody@example.com'])->assertSessionHas('Success_message');
         $this->actingAs($user)->post(route('email.verify.resend'))->assertSessionHas('Success_message');
-        $this->actingAs($user)->get(route('freelancer.profile.edit'))->assertOk()->assertSee('إرسال الرابط مرة أخرى');
+        $this->actingAs($user)->get('update-account')->assertOk()->assertSee('أعد إرسال رابط التأكيد');
 
         $user->forceFill(['email_verified_at' => now()])->save();
         $this->actingAs($user)->post(route('email.verify.resend'));

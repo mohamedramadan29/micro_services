@@ -135,8 +135,7 @@
 	
 	
 	// ______________ PerfectScrollbar	
-	const ps1 = new PerfectScrollbar('.sidebar-left', {
-		useBothWheelAxes:false,
-		suppressScrollX:false,
-	});
+	if (document.querySelector('.sidebar-left') && typeof PerfectScrollbar !== 'undefined') {
+		new PerfectScrollbar('.sidebar-left', { useBothWheelAxes: false, suppressScrollX: false });
+	}
 }(jQuery);

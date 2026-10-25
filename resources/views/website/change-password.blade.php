@@ -46,23 +46,23 @@
                                     <input type="hidden" name="code" value="{{ $code }}">
                                     @csrf
                                     <div class="form-group">
-                                        <label> البريد الالكتروني </label>
-                                        <input readonly name="email" type="email" required=""
+                                        <label for="auth-email"> البريد الالكتروني </label>
+                                        <input id="auth-email" readonly name="email" autocomplete="email" dir="ltr" type="email" required=""
                                                value="{{$email}}"
                                                class="form-control"
                                                placeholder=" البريد الالكتروني  *">
 
                                     </div>
                                     <div class="form-group">
-                                        <label> كلمة المرور </label>
-                                        <input type="password" class="form-control" placeholder="*******"
-                                               name="password">
+                                        <label for="auth-password"> كلمة المرور </label>
+                                        <input id="auth-password" type="password" class="form-control" placeholder="*******"
+                                               name="password" autocomplete="new-password">
                                     </div>
 
                                     <div class="form-group">
-                                        <label> تأكيد كلمة المرور </label>
-                                        <input type="password" class="form-control" placeholder="*******"
-                                               name="confirm_password">
+                                        <label for="auth-confirm_password"> تأكيد كلمة المرور </label>
+                                        <input id="auth-confirm_password" type="password" class="form-control" placeholder="*******"
+                                               name="confirm_password" autocomplete="new-password">
                                     </div>
 
 

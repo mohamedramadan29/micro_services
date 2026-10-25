@@ -41,10 +41,7 @@ class DigitalFileUpload extends Component
 
         // حذف الملف القديم لو موجود (اختياري - لو عايز تحذفه من السيرفر)
         if ($this->currentFile) {
-            $oldPath = public_path('assets/uploads/digital_products/' . $this->currentFile);
-            if (file_exists($oldPath)) {
-                unlink($oldPath);
-            }
+            \App\Support\DigitalFiles::delete($this->currentFile);
         }
 
         $this->uploadedPath = $filename;
@@ -56,10 +53,7 @@ class DigitalFileUpload extends Component
     {
         // حذف الملف من السيرفر لو عايز
         if ($this->uploadedPath) {
-            $path = public_path('assets/uploads/digital_products/' . $this->uploadedPath);
-            if (file_exists($path)) {
-                unlink($path);
-            }
+            \App\Support\DigitalFiles::delete($this->uploadedPath);
         }
 
         $this->uploadedPath = '';

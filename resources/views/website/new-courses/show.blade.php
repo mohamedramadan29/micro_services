@@ -7,7 +7,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         .course-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #83868b 0%, #5c6066 100%);
             color: white;
             padding: 60px 0;
             margin-bottom: 40px;
@@ -38,7 +38,7 @@
         .topic-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #3fb697 0%, #57bea3 100%);
+            background: linear-gradient(135deg, #3fb699 0%, #55bea5 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -61,11 +61,11 @@
         .stat-number {
             font-size: 2rem;
             font-weight: bold;
-            color: #007bff;
+            color: #7d8085;
         }
 
         .stat-label {
-            color: #6c757d;
+            color: #71747a;
             font-size: 0.9rem;
         }
 
@@ -86,12 +86,12 @@
         }
 
         .free-badge {
-            background: #3fb697;
+            background: #3fb699;
             color: white;
         }
 
         .paid-badge {
-            background: #007bff;
+            background: #7d8085;
             color: white;
         }
 
@@ -271,7 +271,7 @@
 
                     @if ($course->is_free)
                         <a href="{{ route('courses.topic', [$course->slug, $course->topics->first()->id]) }}"
-                            class="btn me-3" style="background-color: #3fb697; color:#fff !important">
+                            class="btn me-3" style="background-color: #3fb699; color:#ffffff !important">
                             <i class="fas fa-play me-2"></i>ابدأ الكورس المجانى
                         </a>
                     @else

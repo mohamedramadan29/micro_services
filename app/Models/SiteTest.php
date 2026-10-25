@@ -138,7 +138,7 @@ class SiteTest extends Model
             str_contains($e, 'no_fcp') || str_contains($e, 'no_lcp') || str_contains($e, 'paint') => 'الصفحة لم تعرض أي محتوى أثناء الفحص.',
             str_contains($e, 'document_request') || str_contains($e, 'failed_document') || str_contains($e, 'errored_document') => 'تعذّر تحميل الصفحة نفسها أثناء الفحص.',
             str_contains($e, 'quota') || str_contains($e, '429') || str_contains($e, 'rate limit') => 'خدمة الفحص مشغولة الآن، حاول بعد دقائق.',
-            str_contains($e, 'api key') || str_contains($e, 'api_key') || str_contains($e, 'permission') || str_contains($e, 'forbidden') => 'خدمة الفحص غير متاحة مؤقتًا من جهتنا.',
+            str_contains($e, 'api key') || str_contains($e, 'api_key') || str_contains($e, 'pagespeed') || str_contains($e, 'permission') || str_contains($e, 'forbidden') => 'خدمة الفحص غير متاحة مؤقتًا من جهتنا.',
             str_contains($e, 'redirect') => 'الرابط يعيد التوجيه كثيرًا ولم نصل إلى الصفحة.',
             // Already Arabic (ours) — keep it.
             (bool) preg_match('/\p{Arabic}/u', (string) $error) => mb_substr((string) $error, 0, 250),

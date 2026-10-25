@@ -49,7 +49,8 @@
 	
 	
 	// ______________Active Class
-	$(".app-sidebar a").each(function() {
+	// Nafizha: the server marks the current page (AdminMenu); the URL match below would open the wrong group.
+	if (!$('.side-menu[data-server-active]').length) $(".app-sidebar a").each(function() {
 	  var pageUrl = window.location.href.split(/[?#]/)[0];
 		if (this.href == pageUrl) { 
 			$(this).addClass("active");

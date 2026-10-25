@@ -63,7 +63,7 @@
                                                     href="{{ url('property/' . $properity['id'] . '-' . $properity['slug']) }}">
                                                     {{ $properity['title'] }} </a>
                                             </h4>
-                                            <p style="color: #595656;font-size: 14px;padding-bottom: 10px;">
+                                            <p style="color: #53575e;font-size: 14px;padding-bottom: 10px;">
                                                 {!! \Illuminate\Support\Str::words($properity['description'], 12) !!}
                                             </p>
                                         </div>

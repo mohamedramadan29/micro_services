@@ -7,7 +7,7 @@
     <style>
         /* Testimonials Page Styles */
         .testimonials-hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #83868b 0%, #5c6066 100%);
             color: white;
             padding: 80px 0;
             position: relative;
@@ -37,7 +37,7 @@
         
         .testimonials-section {
             padding: 80px 0;
-            background: #f8f9fa;
+            background: #f9f9f9;
         }
         
         .testimonial-card {
@@ -49,7 +49,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            border: 1px solid #e9ecef;
+            border: 1px solid #ececed;
         }
         
         .testimonial-card::before {
@@ -58,7 +58,7 @@
             top: -20px;
             left: 20px;
             font-size: 100px;
-            color: #667eea;
+            color: #83868b;
             font-family: Georgia, serif;
             opacity: 0.1;
         }
@@ -75,7 +75,7 @@
         }
         
         .stars {
-            color: #ffd700;
+            color: #d9dadb;
             font-size: 1.2rem;
             margin-bottom: 1rem;
         }
@@ -84,7 +84,7 @@
             font-size: 1.1rem;
             line-height: 1.8;
             margin: 0;
-            color: #495057;
+            color: #4b4f56;
             font-style: italic;
         }
         
@@ -93,7 +93,7 @@
             align-items: center;
             gap: 1rem;
             padding-top: 1.5rem;
-            border-top: 1px solid #e9ecef;
+            border-top: 1px solid #ececed;
         }
         
         .author-image img {
@@ -101,24 +101,24 @@
             height: 60px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #667eea;
+            border: 3px solid #83868b;
         }
         
         .author-name {
             margin: 0;
             font-size: 1.1rem;
             font-weight: bold;
-            color: #2c3e50;
+            color: #383c44;
         }
         
         .author-position {
             margin: 0;
-            color: #6c757d;
+            color: #71747a;
             font-size: 0.95rem;
         }
         
         .author-company {
-            color: #667eea;
+            color: #83868b;
             font-weight: 500;
         }
         
@@ -126,13 +126,13 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: linear-gradient(135deg, #ffd700, #ffed4e);
-            color: #333;
+            background: linear-gradient(135deg, #d9dadb, #eaeaeb);
+            color: #2b3038;
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 4px 10px rgba(217, 218, 219, 0.3);
         }
         
         .filter-buttons {
@@ -142,8 +142,8 @@
         
         .filter-btn {
             background: white;
-            border: 2px solid #667eea;
-            color: #667eea;
+            border: 2px solid #83868b;
+            color: #83868b;
             padding: 10px 25px;
             margin: 0 5px;
             border-radius: 25px;
@@ -154,10 +154,10 @@
         
         .filter-btn:hover,
         .filter-btn.active {
-            background: #667eea;
+            background: #83868b;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(131, 134, 139, 0.3);
         }
         
         @media (max-width: 768px) {

@@ -32,4 +32,18 @@ class Conversation extends Model
     {
         return $this->belongsTo(User::class, 'receiver_id');
     }
+
+    public function scopeInvolving($query, $userId)
+    {
+        return $query->where(fn ($q) => $q->where('sender_id', $userId)->orWhere('receiver_id', $userId));
+    }
+
+    /** The conversation of this id, only when the user takes part in it (else 403). */
+    public static function forParticipant($id, $userId): self
+    {
+        $conversation = static::findOrFail($id);
+        abort_unless((int) $conversation->sender_id === (int) $userId || (int) $conversation->receiver_id === (int) $userId, 403);
+
+        return $conversation;
+    }
 }

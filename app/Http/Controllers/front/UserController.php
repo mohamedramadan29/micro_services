@@ -27,15 +27,44 @@ class UserController extends Controller
     use Upload_Images;
     use Slug_Trait;
 
+    /** «لوحتي»: what this account should do next, built for clients and for freelancers. */
     public function index()
     {
-        $services = Service::with('category')->where('user_id', Auth::id())->get();
-        return view('website.user.dashboard', compact('services'));
-    }
+        $user = Auth::user();
+        $contracts = \App\Models\Contract::involving($user)
+            ->whereIn('status', [\App\Models\Contract::STATUS_AGREEMENT, \App\Models\Contract::STATUS_ACTIVE])
+            ->with(['client', 'freelancer', 'stages.deliveries', 'agreements', 'disputes'])->latest('id')->limit(5)->get();
+        $data = ['user' => $user, 'contracts' => $contracts, 'commission' => \App\Services\Payments\RequestPaymentService::commissionRate()];
 
-    public function reviews()
-    {
-        return view('website.user.reviews');
+        if ($user->isFreelancer()) {
+            $offers = \App\Models\RequestOffer::where('freelancer_id', $user->id);
+            $data += [
+                'checklist' => $user->freelancerChecklist(),
+                'stats' => [
+                    'matching' => \App\Models\ServiceRequest::forFreelancer($user)->whereDoesntHave('offers', fn ($q) => $q->where('freelancer_id', $user->id))->count(),
+                    'active_offers' => (clone $offers)->whereIn('status', \App\Models\RequestOffer::ACTIVE_STATUSES)->count(),
+                    'won' => (clone $offers)->where('status', \App\Models\RequestOffer::STATUS_ACCEPTED)->count(),
+                    'contracts' => $contracts->count(),
+                ],
+                'latestOffers' => (clone $offers)->with('request')->latest('id')->limit(5)->get(),
+                'services' => Service::with('category')->where('user_id', $user->id)->latest('id')->limit(6)->get(),
+            ];
+        } else {
+            $requests = \App\Models\ServiceRequest::where('user_id', $user->id);
+            $data += [
+                'stats' => [
+                    'open' => (clone $requests)->whereIn('status', [\App\Models\ServiceRequest::STATUS_OPEN, \App\Models\ServiceRequest::STATUS_INQUIRY])->count(),
+                    'in_progress' => (clone $requests)->where('status', \App\Models\ServiceRequest::STATUS_IN_PROGRESS)->count(),
+                    'completed' => (clone $requests)->where('status', \App\Models\ServiceRequest::STATUS_COMPLETED)->count(),
+                    'new_offers' => \App\Models\RequestOffer::where('status', \App\Models\RequestOffer::STATUS_NEW)->whereHas('request', fn ($q) => $q->where('user_id', $user->id))->count(),
+                ],
+                'latestRequests' => (clone $requests)->withCount(['offers as offers_count' => fn ($q) => $q->where('status', '!=', \App\Models\RequestOffer::STATUS_WITHDRAWN)])
+                    ->latest('id')->limit(5)->get(),
+                'services' => Service::with('category')->where('user_id', $user->id)->latest('id')->limit(6)->get(),
+            ];
+        }
+
+        return view('website.user.dashboard', $data);
     }
 
     public function login(Request $request)
@@ -181,20 +210,34 @@ class UserController extends Controller
                     'name' => 'required',
                     'account_type' => 'required|in:' . implode(',', User::SELF_SELECTABLE_TYPES),
                     'email' => 'required|email|unique:users,email,' . $user->id,
-                    'info' => 'required',
+                    'info' => 'nullable|string|max:1000',
+                    'job_title' => 'nullable|string|max:100',
                     'phone' => 'required|unique:users,phone,' . $user->id,
+                    // A freelancer must keep a WhatsApp number (client file «تعديلات», item 11).
+                    'whatsapp' => [empty($user->whatsapp) ? 'required_if:account_type,' . User::TYPE_FREELANCER : 'nullable', 'nullable', 'string', 'max:30', User::WHATSAPP_RULE],
+                
+                    // «ملفك كمستقل» (merged from the old my/freelancer-profile page).
+                    'availability' => 'nullable|in:' . implode(',', array_keys(User::AVAILABILITY)),
+                    'languages' => 'nullable|string|max:255',
+                    'starting_price' => 'nullable|numeric|min:0|max:1000000',
                 ];
 
-                if ($request->has('old_password') && !empty($request->old_password)) {
-                    if (!Hash::check($data['old_password'], $user->password)) {
-                        return Redirect::back()->withInput()->withErrors(['كلمة المرور القديمة غير صحيحة']);
+                // The password changes only when a new one is typed. Browsers often autofill the current
+                // password field, so a filled «current password» alone must not ask for a new one.
+                $changingPassword = filled($request->input('new_password'));
+                if ($changingPassword) {
+                    if (! filled($request->input('old_password')) || ! Hash::check((string) $request->input('old_password'), $user->password)) {
+                        return Redirect::back()->withInput($request->except(['old_password', 'new_password', 'confirm_password']))
+                            ->withErrors(['old_password' => 'لتغيير كلمة المرور اكتب كلمة المرور الحالية الصحيحة']);
                     }
                     $rules['new_password'] = 'required|min:8';
                     $rules['confirm_password'] = 'required|same:new_password';
                 }
 
+                // A freelancer's photo is his professional photo (shown to clients), so it must be sharp.
+                $asFreelancer = $user->account_type !== User::TYPE_ADMIN && ($request->input('account_type') === User::TYPE_FREELANCER);
                 if ($request->hasFile('image')) {
-                    $rules['image'] = 'image|mimes:jpeg,png,jpg,webp,gif|max:2048';
+                    $rules['image'] = $asFreelancer ? \App\Support\FreelancerPhoto::RULE : 'image|mimes:jpeg,png,jpg,webp,gif|max:2048';
                 }
 
                 $messages = [
@@ -204,7 +247,9 @@ class UserController extends Controller
                     'email.required' => 'من فضلك ادخل البريد الالكتروني',
                     'email.email' => 'من فضلك ادخل البريد الالكتروني بشكل صحيح',
                     'email.unique' => 'البريد الالكتروني متواجد من قبل من فضلك ادخل بريد الكتروني جديد',
-                    'info.required' => 'من فضلك ادخل نبذة مختصرة عنك',
+                    'info.max' => 'النبذة طويلة جدًا (1000 حرف كحد أقصى)',
+                    'whatsapp.required_if' => 'رقم واتساب مطلوب لحسابات المستقلين',
+                    'whatsapp.regex' => 'رقم واتساب غير صحيح، اكتبه مع رمز الدولة',
                     'phone.required' => 'من فضلك ادخل رقم الهاتف',
                     'phone.unique' => 'رقم الهاتف مستخدم بالفعل من فضلك ادخل رقم هاتف جديد',
                     'new_password.required' => 'من فضلك ادخل كلمة المرور الجديدة',
@@ -212,7 +257,12 @@ class UserController extends Controller
                     'confirm_password.same' => 'من فضلك يجب تاكيد كلمة المرور بشكل صحيح',
                     'image.image' => 'من فضلك اختر ملف صورة صالح',
                     'image.mimes' => 'نوع الصورة يجب أن يكون jpeg, png, jpg, webp, gif',
-                    'image.max' => 'حجم الصورة يجب ان لا يتجاوز ال2 ميجابايت',
+                    'image.max' => 'حجم الصورة كبير جدًا',
+                    'image.dimensions' => 'الصورة صغيرة: أقل مقاس 400×400 بكسل حتى تظهر واضحة',
+                
+                    'availability.in' => 'حالة التوفر غير صحيحة',
+                    'starting_price.numeric' => 'السعر يجب أن يكون رقمًا',
+                    'starting_price.min' => 'السعر لا يكون أقل من صفر',
                 ];
 
                 $validator = Validator::make($data, $rules, $messages);
@@ -220,9 +270,22 @@ class UserController extends Controller
                 if ($validator->fails()) {
                     return Redirect::back()->withInput()->withErrors($validator);
                 }
+                if ($user->account_type !== User::TYPE_ADMIN && $data['account_type'] !== $user->account_type && ($busy = $this->workInProgress($user))) {
+                    return Redirect::back()->withInput()->withErrors(['account_type' => 'لا يمكن تغيير نوع الحساب الآن: ' . $busy . '. أنهِها أولًا أو تواصل مع الدعم.']);
+                }
 
                 // تحديث الصورة إذا تم رفعها
                 if ($request->hasFile('image')) {
+                    // The professional photo is cut from the upload first: saving the account image moves
+                    // the uploaded file away, so the other order could no longer read it.
+                    if ($asFreelancer) {
+                        try {
+                            \App\Support\FreelancerPhoto::replace($user, $request->file('image'));
+                        } catch (\RuntimeException $e) {
+                            return Redirect::back()->withInput()->withErrors(['image' => $e->getMessage()]);
+                        }
+                    }
+
                     $oldImage = public_path('assets/uploads/users_image/' . $user->image);
                     if ($user->image && file_exists($oldImage)) {
                         @unlink($oldImage);
@@ -233,16 +296,20 @@ class UserController extends Controller
                 }
 
                 // تحديث كلمة المرور إذا تم إدخال كلمة مرور جديدة
-                if ($request->has('new_password') && !empty($data['new_password'])) {
+                if ($changingPassword) {
                     $user->password = Hash::make($data['new_password']);
                 }
 
                 // An admin keeps the admin type (the form only offers public types); a client who
                 // becomes a freelancer starts «pending» like a new one; the other way round keeps nothing.
                 $type = $user->account_type === User::TYPE_ADMIN ? User::TYPE_ADMIN : $data['account_type'];
+                $wasFreelancer = $user->account_type === User::TYPE_FREELANCER;
                 $extra = [];
                 if ($type === User::TYPE_FREELANCER && $user->account_type !== User::TYPE_FREELANCER) {
                     $extra['freelancer_status'] = User::FREELANCER_PENDING;
+                }
+                if (filled($data['whatsapp'] ?? null)) {
+                    $extra['whatsapp'] = \App\Support\Phone::normalize((string) $data['whatsapp']);
                 }
                 // A new email must be confirmed again (it verifies the freelancer).
                 $emailChanged = mb_strtolower(trim($data['email'])) !== mb_strtolower((string) $user->email);
@@ -255,12 +322,40 @@ class UserController extends Controller
                     'name' => $data['name'],
                     'email' => $data['email'],
                     'phone' => $data['phone'],
-                    'info' => $data['info'],
+                    'info' => $data['info'] ?? null,
                     'account_type' => $type,
-                    'job_title' => $data['job_title'] ?? $user->job_title,
+                    'job_title' => $data['job_title'] ?? null,
                 ]);
+                // One bio for a freelancer: «النبذة التعريفية» here is the bio clients see.
+                if ($type === User::TYPE_FREELANCER && filled($data['info'] ?? null)) {
+                    $extra['bio'] = $data['info'];
+                }
+                // A freelancer who stays a freelancer edits his public profile here too; a rejected one
+                // (or one never reviewed) is sent back to the team's review by saving.
+                $resubmitted = false;
+                if ($type === User::TYPE_FREELANCER && $wasFreelancer) {
+                    if ($request->has('availability')) {
+                        $extra['availability'] = $data['availability'] ?: 'available';
+                        $extra['languages'] = filled($data['languages'] ?? null) ? $data['languages'] : null;
+                        $extra['starting_price'] = filled($data['starting_price'] ?? null) ? $data['starting_price'] : null;
+                    }
+                    if ($user->freelancer_status === User::FREELANCER_REJECTED || ! $user->freelancer_status) {
+                        $extra['freelancer_status'] = User::FREELANCER_PENDING;
+                        $resubmitted = true;
+                    }
+                }
                 if ($extra) {
                     $user->forceFill($extra)->save(); // verification/approval columns are not mass-assignable
+                }
+                if ($resubmitted) {
+                    \Illuminate\Support\Facades\Notification::send(User::activeAdmins()->get(), new \App\Notifications\RequestUpdateNotification(
+                        \App\Support\Msg::t('admin.freelancer_pending_review', ['name' => $user->name]),
+                        '/admin/freelancers/' . $user->id,
+                        'admin_alerts'
+                    ));
+                }
+                if ($type === User::TYPE_FREELANCER) {
+                    $user->fresh()->markFreelancerProfileCompleted();
                 }
                 if ($emailChanged) {
                     try {
@@ -276,24 +371,56 @@ class UserController extends Controller
             }
         }
 
-        return view('website.user.update');
+        return view('website.user.update', ['user' => $user]);
+    }
+
+    /** Why the account type cannot change now (open work on the current side), or null. */
+    private function workInProgress(User $user): ?string
+    {
+        $contracts = \App\Models\Contract::whereIn('status', [\App\Models\Contract::STATUS_AGREEMENT, \App\Models\Contract::STATUS_ACTIVE]);
+        if ($user->isFreelancer()) {
+            if ((clone $contracts)->where('freelancer_id', $user->id)->exists()
+                || \App\Models\RequestOffer::where('freelancer_id', $user->id)->where('status', \App\Models\RequestOffer::STATUS_ACCEPTED)
+                    ->whereHas('request', fn ($q) => $q->where('status', \App\Models\ServiceRequest::STATUS_IN_PROGRESS))->exists()) {
+                return 'عندك أعمال قيد التنفيذ كمستقل';
+            }
+        } elseif ($user->isClient()) {
+            if ((clone $contracts)->where('client_id', $user->id)->exists()
+                || \App\Models\ServiceRequest::where('user_id', $user->id)->whereIn('status', [\App\Models\ServiceRequest::STATUS_OPEN, \App\Models\ServiceRequest::STATUS_INQUIRY, \App\Models\ServiceRequest::STATUS_IN_PROGRESS])->exists()) {
+                return 'عندك طلبات مفتوحة أو قيد التنفيذ كعميل';
+            }
+        }
+
+        return null;
     }
 
 
+    /** A freelancer's public page: who he is, his specializations, published works, clients' ratings and services. */
     public function show_profile($username)
     {
         $user = $this->publicProfile($username);
-        $services = Service::with('category')->where('user_id', $user->id)->get();
+        $user = User::whereKey($user->id)->withFreelancerStats()->with(['specializations' => fn ($q) => $q->with('category:id,name')->orderBy('name')])->first();
+        $viewer = Auth::user();
+        $isOwner = $viewer && (int) $viewer->id === (int) $user->id;
 
-        return view('website.user_profiles.index', compact('user', 'services'));
+        $works = $user->portfolios()->published()->with('Category:id,name')->latest()->limit(24)->get();
+        $ratings = $user->receivedRatings()->with('rater:id,name')->latest()->limit(30)->get();
+        $distribution = $user->receivedRatings()->selectRaw('stars, COUNT(*) as total')->groupBy('stars')->pluck('total', 'stars');
+        $services = Service::with('category')->where('user_id', $user->id)
+            ->when(! $isOwner, fn ($q) => $q->where('status', 1))->latest('id')->get();
+        // The owner and admins may open a profile visitors cannot see yet: say so on the page.
+        $listed = User::listedFreelancers()->whereKey($user->id)->exists();
+        $firstService = $user->specializations->first();
+
+        return view('website.user_profiles.index', compact('user', 'works', 'ratings', 'distribution', 'services', 'listed', 'isOwner', 'firstService'));
     }
 
+    /** The old services tab is a section of the profile now. */
     public function user_services($username)
     {
         $user = $this->publicProfile($username);
-        $services = Service::with('category')->where('user_id', $user->id)->get();
 
-        return view('website.user_profiles.services', compact('user', 'services'));
+        return redirect(url('user/' . $user->user_name) . '#services', 301);
     }
 
     /**
@@ -309,11 +436,6 @@ class UserController extends Controller
         abort_unless($allowed, 404);
 
         return $user;
-    }
-
-    public function chat()
-    {
-        return view('website.user.chat');
     }
 
     public function purches()
@@ -349,9 +471,17 @@ class UserController extends Controller
 
     public function balance()
     {
-        $ChargeTransactions = PaymentTransaction::where('user_id', Auth::id())->whereIn('payment_status', ['succeeded', 'paid'])->get();
-        $WithDrawTransactions = WithDraw::where('user_id', Auth::id())->get();
-        $WithDrawLastOrder = WithDraw::where('user_id', Auth::id())->where('status', 0)->first();
-        return view('website.user.balance', compact('ChargeTransactions', 'WithDrawTransactions', 'WithDrawLastOrder'));
+        $userId = Auth::id();
+        // One history: money movements (work payouts, refunds, payments held for work, withdrawals)
+        // from wallet_transactions, plus EasyKash top-ups (kept in payment_transactions).
+        $movements = \App\Models\WalletTransaction::where('user_id', $userId)->latest('id')->limit(200)->get()
+            ->map(fn ($t) => ['type' => $t->type, 'amount' => (float) $t->amount, 'description' => $t->description, 'at' => $t->created_at]);
+        $topUps = PaymentTransaction::where('user_id', $userId)->whereIn('payment_status', ['succeeded', 'paid'])->latest('id')->limit(200)->get()
+            ->map(fn ($c) => ['type' => 'topup', 'amount' => (float) $c->payment_amount - (float) $c->payment_fee, 'description' => 'شحن رصيد عبر EasyKash', 'at' => $c->created_at]);
+        $history = $movements->concat($topUps)->sortByDesc('at')->values();
+        $withdrawals = WithDraw::where('user_id', $userId)->latest('id')->get();
+        $pendingWithdraw = (float) $withdrawals->where('status', 0)->sum('amount');
+
+        return view('website.user.balance', compact('history', 'withdrawals', 'pendingWithdraw'));
     }
 }

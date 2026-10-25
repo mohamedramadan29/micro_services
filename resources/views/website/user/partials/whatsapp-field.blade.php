@@ -4,7 +4,7 @@
     <label for="rf-whatsapp"> رقم واتساب <span class="text-danger">*</span></label>
     <input type="tel" class="form-control" id="rf-whatsapp" name="whatsapp" data-country-picker dir="ltr" maxlength="30" @if ($freelancerChosen) required @endif
         placeholder="10X XXX XXXX" value="{{ old('whatsapp') }}">
-    <small class="text-muted d-block mt-1">رقم عليه واتساب مع رمز الدولة، ليتواصل معك فريق نفّذها. يُوثَّق حسابك بتأكيد بريدك الإلكتروني.</small>
+    <small class="text-muted d-block mt-1">رقم عليه واتساب (اختر رمز الدولة من القائمة)، ليتواصل معك فريق نفّذها. يُوثَّق حسابك بتأكيد بريدك الإلكتروني.</small>
 </div>
 <script>
     (function () {

@@ -40,7 +40,7 @@
                             <thead>
                                 <tr>
                                     <th> الخدمة </th>
-                                    <th> البائع </th>
+                                    <th> المستقل </th>
                                     <th> السعر </th>
                                 </tr>
                             </thead>
@@ -64,7 +64,7 @@
                             <li><strong> عدد الخدمات </strong> {{ $items->count() }}</li>
                             <li><strong> المجموع الكلي </strong> {{ \App\Support\Money::show($total) }}</li>
                         </ul>
-                        <p class="text-muted"> الدفع عبر EasyKash (بطاقة، فوري، محفظة) بالجنيه المصري، ويُرسل الطلب للبائعين فور تأكيد الدفع. </p>
+                        <p class="text-muted"> الدفع عبر EasyKash (بطاقة، فوري، محفظة) بالجنيه المصري، ويُرسل الطلب للمستقلين فور تأكيد الدفع. </p>
                         <form method="post" action="{{ url('checkout/order') }}">
                             @csrf
                             <button type="submit" class="btn btn-primary full-width"> ادفع واتمم الطلب </button>

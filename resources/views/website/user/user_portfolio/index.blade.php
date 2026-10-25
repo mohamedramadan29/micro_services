@@ -1,6 +1,6 @@
 @extends('website.layouts.master')
 @section('title')
-معرض اعمالي
+معرض أعمالي
 @endsection
 @section('content')
 
@@ -12,17 +12,7 @@
             <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
                 <div class="dashboard-navbar">
 
-                    <div class="d-user-avater">
-                        @if (Auth::user()->image != '')
-                        <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
-                            class="img-fluid rounded" alt="">
-                        @else
-                        <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded" alt="">
-                        @endif
-
-                        <h4> {{ Auth::user()->user_name }} </h4>
-                        <span> {{ Auth::user()->email }} </span>
-                    </div>
+                    @include('website.user.partials.account-head')
 
                     @include('website.layouts.dashboard-sidebar')
 
@@ -38,8 +28,8 @@
                         <div class="bredcrumb_wrap">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                                    <li class="breadcrumb-item active" aria-current="page"> معرض اعمالي </li>
+                                    <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">لوحتي</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page"> معرض أعمالي </li>
                                 </ol>
                             </nav>
                         </div>
@@ -56,67 +46,53 @@
                                 <div class="_dashboard_content_header">
                                     <div class="_dashboard__header_flex d-flex justify-content-between"
                                         style="width: 100%">
-                                        <h4><i class="ti-lock mr-1"></i> معرض اعمالي </h4>
-                                        <a href="{{ url('portfolio/user/create') }}" class="btn btn-primary btn-sm">
-                                            اضافة عمل <i class="bi bi-plus"></i> </a>
+                                        <h4><i class="bi bi-images"></i> أعمالي </h4>
+                                        <a href="{{ route('user.portfolio.create') }}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> إضافة عمل</a>
                                     </div>
                                 </div>
 
                                 <div class="_dashboard_content_body">
-                                    <div class="row">
-                                        <!-- Single Item -->
-                                        @if ($portfolios->count() > 0)
-                                        @foreach ($portfolios as $portfolio)
-                                        <div class="col-lg-4 col-md-6 col-sm-12">
-                                            <div class="ser_110">
-                                                <div class="ser_110_thumb">
-                                                    <a href="{{ url('portfolio/user/edit/' . $portfolio['id'] . '-' . $portfolio['slug']) }}"
-                                                        class="ser_100_link"><img
-                                                            src=" {{ asset('assets/uploads/portfolios/' . $portfolio['image']) }}"
-                                                            class="img-fluid" alt=""></a>
-                                                </div>
-                                                <div class="ser_110_footer bott">
-                                                    <div class="_110_foot_left">
-                                                        <div>
-                                                            <h5>
-                                                                <a
-                                                                    href="{{ url('portfolio/user/edit/' . $portfolio['id'] . '-' . $portfolio['slug']) }}">
-                                                                    {{ $portfolio['title'] }}
-                                                                </a>
-                                                            </h5>
-                                                            <span> {{ $portfolio['category']['name'] }} <span>
-                                                                    {{-- <div class="_dash_usr_rates mb-1">
-                                                                        <span class="good">
-                                                                            {{ $serv['rate'] }} </span>
-                                                                        @for ($i = 0; $i < 5; $i++) @if ($i <
-                                                                            $serv['rate']) <i class="fa fa-star"></i>
-                                                                            @else
-                                                                            <i class="fa fa-star-o"></i>
-                                                                            @endif
-                                                                            @endfor
-                                                                    </div> --}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="buttons" style="text-align: center;padding:10px">
-                                                    <a href="{{ url('portfolio/user/edit/' . $portfolio['id'] . '-' . $portfolio['slug']) }}"
-                                                        class="btn btn-primary btn-sm"> تعديل <i class="fa fa-edit"></i>
+                                    @if (Session::has('Success_message'))
+                                        <div class="alert alert-success">{{ Session::get('Success_message') }}</div>
+                                    @endif
+                                    @if ($portfolios->count() > 0)
+                                        <div class="rf-pf-list">
+                                            @foreach ($portfolios as $portfolio)
+                                                @php $editUrl = route('user.portfolio.edit', [$portfolio->id, $portfolio->slug]); @endphp
+                                                <article class="rf-pf-card">
+                                                    <a href="{{ $editUrl }}" class="rf-pf-card-img">
+                                                        <img src="{{ asset('assets/uploads/portfolios/' . $portfolio->image) }}" alt="{{ $portfolio->title }}" loading="lazy">
+                                                        @if ($portfolio->isPublished())
+                                                            <span class="rf-acc-pill stamp">منشور</span>
+                                                        @elseif ((int) $portfolio->status === \App\Models\front\UserPortfolio::STATUS_REJECTED)
+                                                            <span class="rf-acc-pill bad">غير مقبول</span>
+                                                        @else
+                                                            <span class="rf-acc-pill warn">بانتظار المراجعة</span>
+                                                        @endif
                                                     </a>
-                                                    <a style="height: 30px"
-                                                        href="{{ url('portfolio/user/delete/' . $portfolio['id']) }}"
-                                                        class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')">
-                                                        حذف <i class="fa fa-trash"></i> </a>
-                                                </div>
-                                            </div>
+                                                    <div class="rf-pf-card-body">
+                                                        <h3><a href="{{ $editUrl }}">{{ $portfolio->title }}</a></h3>
+                                                        @if ((int) $portfolio->status === \App\Models\front\UserPortfolio::STATUS_REJECTED && $portfolio->review_note)
+                                                            <p class="rf-pf-note"><strong>ملاحظة الفريق:</strong> {{ $portfolio->review_note }} — عدّل العمل واحفظه ليُراجع من جديد.</p>
+                                                        @endif
+                                                        <small>{{ $portfolio->category?->name }}@if (is_array($portfolio->more_images) && count($portfolio->more_images)) · {{ count($portfolio->more_images) + 1 }} صور @endif</small>
+                                                    </div>
+                                                    <div class="rf-pf-card-actions">
+                                                        <a href="{{ $editUrl }}" class="btn btn-light btn-sm"><i class="bi bi-pencil"></i> تعديل</a>
+                                                        <a data-method="post" href="{{ route('user.portfolio.delete', $portfolio->id) }}" class="btn btn-outline-danger btn-sm"
+                                                           onclick="return confirm('حذف هذا العمل من معرضك؟')"><i class="bi bi-trash"></i> حذف</a>
+                                                    </div>
+                                                </article>
+                                            @endforeach
                                         </div>
-                                        @endforeach
-                                        @else
-                                        <div class="alert main_alert"> لا يوجد لديك اي اعمال :: ادخل عملك
-                                            الاولي
+                                    @else
+                                        <div class="rf-pf-empty">
+                                            <i class="bi bi-images"></i>
+                                            <strong>لم تضف أي عمل بعد</strong>
+                                            <p>أضف أعمالك السابقة بصورها؛ تساعد العملاء على اختيارك وتساعد الفريق على اعتماد حسابك.</p>
+                                            <a href="{{ route('user.portfolio.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> أضف أول عمل</a>
                                         </div>
-                                        @endif
-                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

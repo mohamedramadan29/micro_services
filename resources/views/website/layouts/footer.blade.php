@@ -41,7 +41,7 @@
                         <h4 class="widget-title"> {{ $footer['social_title'] ?: __('public.follow_us') }} </h4>
                         <ul class="footer-bottom-social">
                             @foreach ($footerSocial as $account)
-                                <li><a style="background-color: {{ $account['color'] ?: '#3FB699' }}" href="{{ \App\Support\SiteContent::url($account['link']) }}" target="_blank" rel="noopener" aria-label="{{ $account['label'] }}" title="{{ $account['label'] }}"><i
+                                <li><a href="{{ \App\Support\SiteContent::url($account['link']) }}" target="_blank" rel="noopener" aria-label="{{ $account['label'] }}" title="{{ $account['label'] }}"><i
                                         class="bi {{ $account['icon'] ?: 'bi-link-45deg' }}"></i></a></li>
                             @endforeach
                         </ul>
@@ -62,9 +62,23 @@
 </footer>
 @auth
 <form id="site-logout-form" method="POST" action="{{ url('logout') }}" hidden>@csrf</form>
+{{-- Links marked data-method="post" (deletes) are sent as POST with the CSRF token, never as a plain GET. --}}
+<script>
+    document.addEventListener('click', function (e) {
+        var link = e.target.closest && e.target.closest('a[data-method="post"]');
+        if (!link || e.defaultPrevented) return;
+        e.preventDefault();
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = link.href;
+        form.hidden = true;
+        form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
+        document.body.appendChild(form);
+        form.submit();
+    });
+</script>
 @endauth
 <!-- =========================== Footer End ========================================= -->
-</div>
 
 <script src="{{ asset('assets/website/js/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/website/js/popper.min.js') }}"></script>
@@ -79,6 +93,7 @@
 <script src="{{ asset('assets/website/js/metisMenu.min.js') }}"></script>
 <script src="{{ asset('assets/website/js/custom.js') }}"></script>
 <script src="{{ \App\Support\AssetVersion::url('assets/website/js/phone-picker.js') }}"></script>
+<script src="{{ \App\Support\AssetVersion::url('assets/website/js/interface.js') }}" defer></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
 
@@ -175,7 +190,3 @@
 
     });
 </script>
-
-</body>
-
-</html>

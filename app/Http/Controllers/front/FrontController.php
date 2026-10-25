@@ -29,17 +29,27 @@ class FrontController extends Controller
         $main_categories = Category::where('status', 1)->where('home_page', 1)->limit(6)->get();
         $categories = Category::where('status', 1)->get();
         $sub_categories = SubCategory::where('status', 1)->where('home_page', 1)->limit(8)->get();
-        $services = Service::where('status',1)->latest()->limit(4)->get();
+        $services = Service::active()->with('user:id,name,user_name,image,professional_photo,rate,rating_count,freelancer_status,email_verified_at,admin_verified_at,account_type')
+            ->whereHas('user', fn ($u) => $u->where('status', 1))->latest()->limit(8)->get();
+        $readyServicesCount = $services->isNotEmpty() ? Service::active()->count() : 0;
         //dd($services);
         //dd($main_categories);
         $setting = Setting::first();
-        return view('website.index', compact('main_categories', 'sub_categories','categories','services','setting'));
+        return view('website.index', compact('main_categories', 'sub_categories','categories','services','setting', 'readyServicesCount'));
     }
 
     public function service_details($id, $slug)
     {
-        $service = Service::with('user')->where('id', $id)->first();
-        $more_servicess = Service::where('cat_id', $service['cat_id'])->where('id', '!=', $service['id'])->OrderBy('id')->limit('6')->get();
+        $service = Service::with(['user', 'category:id,name', 'subcategory:id,name'])->findOrFail($id);
+        // Only published services are public; the seller and the team can still open theirs.
+        $viewer = Auth::user();
+        $isOwner = $viewer && (int) $viewer->id === (int) $service->user_id;
+        abort_unless($service->isActive() || $isOwner || ($viewer && $viewer->account_type === \App\Models\User::TYPE_ADMIN), 404);
+        // Same sub-service first, then the same group; published only.
+        $more_servicess = Service::active()->with('user:id,name,user_name,image,professional_photo')
+            ->where('cat_id', $service->cat_id)->where('id', '!=', $service->id)
+            ->orderByRaw('CASE WHEN sub_cat_id = ? THEN 0 ELSE 1 END', [(int) $service->sub_cat_id])->latest('id')->limit(6)->get();
+        $seller = $service->user ? \App\Models\User::whereKey($service->user_id)->withFreelancerStats()->first() : null;
 
         /////// Make Notification Is Read
         ///
@@ -52,7 +62,7 @@ class FrontController extends Controller
         }
 
 
-        return view('website.service-details', compact('service', 'more_servicess'));
+        return view('website.service-details', compact('service', 'more_servicess', 'seller', 'isOwner'));
     }
 
     public function categories()
@@ -83,12 +93,19 @@ class FrontController extends Controller
         $category_id = $category['id'];
 
        // $query = Service::where('cat_id', $category_id)->where('status', 1);
-        $query = Service::where('sub_cat_id', $category_id)->where('status', 1);
-        if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        $query = Service::active()->with('user:id,name,user_name,image,professional_photo,rate,rating_count')->where('sub_cat_id', $category_id);
+        if ($request->filled('search')) {
+            $term = '%' . str_replace(['%', '_'], ['\%', '\_'], (string) $request->string('search')) . '%';
+            $query->where(fn ($q) => $q->where('name', 'like', $term)->orWhere('tags', 'like', $term)->orWhere('description', 'like', $term));
         }
+        $sort = (string) $request->string('sort');
+        match ($sort) {
+            'price' => $query->orderByRaw('CAST(price AS DECIMAL(12,2)) ASC'),
+            'popular' => $query->orderByDesc('users_num_buy')->latest('id'),
+            default => $query->latest('id'),
+        };
         if ($category) {
-            $services = $query->paginate(12);
+            $services = $query->paginate(12)->withQueryString();
             return view('website.category-services', compact('services', 'category'));
         } else {
             abort(404);

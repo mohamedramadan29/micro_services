@@ -17,32 +17,32 @@ class ConversationController extends Controller
     {
         $userId = Auth::id();
 
-        $conversations = Conversation::where('sender_id', $userId)
-            ->orWhere('receiver_id', $userId)
+        $conversations = Conversation::involving($userId)
             ->with([
-                'messages' => function ($query) {
-                    $query->latest()->take(1); // جلب آخر رسالة فقط
-                },
+                'lastMessage', // آخر رسالة لكل محادثة
                 'sender',  // لجلب بيانات المرسل
                 'receiver' // لجلب بيانات المستقبل
             ])
+            ->orderByDesc('last_time_message')
             ->get();
 
         return view('website.chat.index', compact('conversations'));
     }
     public function start_conversation(Request $request)
     {
-        $data = $request->all();
-        $receiverId = $data['receiver_id'];
+        $data = $request->validate(['service_id' => 'required|integer']);
 
-        /////////////  Get The Services Data
-        ///
-
+        // The conversation is always with the owner of the service (never a user id sent by the browser).
         $service = Service::findOrFail($data['service_id']);
+        $receiverId = (int) $service->user_id;
+        if ($receiverId === (int) Auth::id()) {
+            return Redirect::back()->withErrors(['error' => 'هذه خدمتك']);
+        }
         $service_data = $service['name'];
-        $checkConversation = Conversation::where('sender_id', Auth::id())->where('receiver_id', $receiverId)
-            ->Orwhere('sender_id', $receiverId)->where('receiver_id', Auth::id())
-            ->where('service_id', $data['service_id'])->first();
+        $checkConversation = Conversation::where('service_id', $service->id)
+            ->where(fn ($q) => $q->where(fn ($a) => $a->where('sender_id', Auth::id())->where('receiver_id', $receiverId))
+                ->orWhere(fn ($b) => $b->where('sender_id', $receiverId)->where('receiver_id', Auth::id())))
+            ->first();
         if (!$checkConversation) {
             // //// Create Chat
             $createConversation = Conversation::create([
@@ -67,11 +67,17 @@ class ConversationController extends Controller
 
     public function consult_start_conversation(Request $request)
     {
-        $data = $request->all();
-        $receiverId = $data['consultant'];
-        // dd($data);
-        $checkConversation = Conversation::where('sender_id', Auth::id())->where('receiver_id', $receiverId)
-            ->Orwhere('sender_id', $receiverId)->where('receiver_id', Auth::id())
+        $data = $request->validate([
+            'consultant' => 'required|integer|exists:users,id',
+            'category' => 'required',
+            'question' => 'required|string|max:2000',
+        ], ['question.required' => 'اكتب سؤالك']);
+        $receiverId = (int) $data['consultant'];
+        if ($receiverId === (int) Auth::id()) {
+            return Redirect::back()->withErrors(['error' => 'لا يمكنك مراسلة نفسك']);
+        }
+        $checkConversation = Conversation::where(fn ($q) => $q->where(fn ($a) => $a->where('sender_id', Auth::id())->where('receiver_id', $receiverId))
+                ->orWhere(fn ($b) => $b->where('sender_id', $receiverId)->where('receiver_id', Auth::id())))
             ->where('consultant_id', $receiverId)
             ->where('specialist_id', $data['category'])
             ->where('chat_type', 'استشارة')

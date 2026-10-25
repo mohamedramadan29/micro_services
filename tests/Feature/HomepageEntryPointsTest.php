@@ -142,7 +142,8 @@ class HomepageEntryPointsTest extends TestCase
         $freelancer = User::factory()->pendingFreelancer()->create(['whatsapp' => null, 'bio' => null]);
         $this->actingAs($freelancer)->get(route('freelancers.join'))->assertOk()->assertSee('أكمل الآن')->assertSee('بانتظار المراجعة');
 
-        $freelancer->forceFill(['email_verified_at' => now(), 'whatsapp' => '+201000000000', 'bio' => 'مصمم', 'availability' => array_key_first(User::AVAILABILITY)])->save();
+        // Every step the freelancer controls, including his own professional photo (2026-10-20).
+        $freelancer->forceFill(['email_verified_at' => now(), 'whatsapp' => '+201000000000', 'bio' => 'مصمم', 'availability' => array_key_first(User::AVAILABILITY), 'professional_photo' => 'test-photo'])->save();
         $freelancer->specializations()->attach($this->service()->id);
         \App\Models\front\UserPortfolio::forceCreate(['user_id' => $freelancer->id, 'title' => 'شعار', 'slug' => 'logo', 'description' => 'شعار', 'image' => 'logo.png', 'category_id' => $this->service()->parent_id]);
         $this->actingAs($freelancer)->withCookie(Tracker::CONSENT_COOKIE, '1')->get(route('freelancers.join'))->assertOk();

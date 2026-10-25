@@ -2,7 +2,7 @@
 <title> @yield('title') </title>
 
 <!-- Favicon -->
-<link rel="icon" href="{{ URL::asset('assets/admin/img/logo_tabrat.png') }}" type="image/x-icon"/>
+<link rel="icon" href="{{ URL::asset('assets/website/img/logo.png') }}" type="image/x-icon"/>
 <!-- laravel-notify css: loaded before the theme so its Tailwind reset
      (button/[type=submit] { background: transparent }) does not override theme buttons -->
 @notifyCss
@@ -29,6 +29,8 @@
 <link href="{{ URL::asset('assets/admin/css-rtl/style-dark.css') }}" rel="stylesheet">
 <!---Skinmodes css-->
 <link href="{{ URL::asset('assets/admin/css-rtl/skin-modes.css') }}" rel="stylesheet">
+<!-- Nafizha admin: sidebar, dashboard -->
+<link href="{{ \App\Support\AssetVersion::url('assets/admin/css/nafizha-admin.css') }}" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
     @toastifyCss

@@ -9,13 +9,15 @@ use App\Http\Traits\Upload_Images;
 use App\Models\admin\Category;
 use App\Models\admin\Service;
 use App\Models\admin\SubCategory;
-use App\Models\front\TemporaryFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
+/**
+ * «خدماتي المعروضة»: ready-made services a freelancer sells. Every new or edited service goes to the
+ * team's review (status pending) before it shows on the site or can be bought.
+ */
 class serviceController extends Controller
 {
     use Message_Trait;
@@ -24,173 +26,132 @@ class serviceController extends Controller
 
     public function index()
     {
-        $services = Service::with('category')->where('user_id', Auth::id())->get();
-        // dd($services);
-        return view('website.service.index', compact('services'));
+        $services = Service::with('category:id,name', 'subcategory:id,name')->where('user_id', Auth::id())->latest('id')->get();
+        $commission = \App\Services\Payments\RequestPaymentService::commissionRate();
+
+        return view('website.service.index', compact('services', 'commission'));
     }
 
     public function getSubCategories($category_id)
     {
-        $subCategories = SubCategory::where('parent_id', $category_id)->get();
+        $subCategories = SubCategory::where('parent_id', $category_id)->where('status', 1)->get();
         return response()->json($subCategories);
     }
 
     public function add(Request $request)
     {
-        try {
-            if ($request->isMethod('post')) {
-                $data = $request->all();
-                $rules = [
-                    'name' => 'required',
-                    'cat_id' => 'required',
-                    'sub_cat_id' => 'required',
-                    'description' => 'required|min:20',
-                    'image' => 'required|image',
-                    'price' => 'required|numeric',
-                ];
-                $messages = [
-                    'name.required' => 'من فضلك ادخل اسم الخدمة ',
-                    'cat_id.required' => 'من فضلك حدد القسم للخدمة  ',
-                    'description.required' => 'من فضلك ادخل وصف الخدمة',
-                    'image.required' => ' من فضلك ادخل الصورة  ',
-                    'image.image' => ' من فضلك ادخل الصورة بشكل صحيح  ',
-                    'description.min' => 'يجب ان يكون وصف الخدمة اكبر من 20 حرف ',
-                    'price.required' => ' من فضلك ادخل سعر الخدمة  ',
-                    'price.numeric' => ' يجب ان يكون سعر الخدمة رقم صحيح  ',
-                    'sub_cat_id.required' => ' من فضلك حدد القسم الفرعي للخدمة '
-                ];
-                $validator = Validator::make($data, $rules, $messages);
-                if ($validator->fails()) {
-                    return Redirect::back()->withInput()->withErrors($validator);
-                }
-
-                if ($request->hasFile('image')) {
-                    $filename = $this->saveImage($request->image, public_path('assets/uploads/services'));
-                }
-
-                $service = new Service();
-                $service->create([
-                    'name' => $data['name'],
-                    'slug' => $this->CustomeSlug($data['name']),
-                    'cat_id' => $data['cat_id'],
-                    'sub_cat_id' => $data['sub_cat_id'],
-                    'user_id' => Auth::id(),
-                    'image' => $filename,
-                    'description' => $data['description'],
-                    'price' => $data['price'],
-                    'status' => 0,
-                    'tags' => $data['tags'],
-                ]);
-
-                return $this->success_message('تم اضافة الخدمة بنجاح من فضلك انتظر التفعيل من الادارة');
-            }
-        } catch (\Exception $e) {
-            return $this->exception_message($e);
+        // Selling a service is a freelancer's job (clients request services instead).
+        if (! Auth::user()->isFreelancer()) {
+            return Redirect::to('dashboard')->withErrors(['error' => 'إضافة الخدمات متاحة لحسابات المستقلين فقط. لو عايز تشتغل كمستقل غيّر نوع حسابك من «تعديل الحساب».']);
         }
-        $categories = Category::where('status', 1)->get();
-        $subCategories = SubCategory::where('status', 1)->get();
-        return view('website.service.add', compact('categories', 'subCategories'));
+        if (! $request->isMethod('post')) {
+            return view('website.service.add', $this->formData());
+        }
+
+        $data = $this->validated($request, true);
+        $service = Service::create($this->attributes($data) + [
+            'user_id' => Auth::id(),
+            'image' => $this->saveImage($request->file('image'), public_path('assets/uploads/services')),
+            'status' => Service::STATUS_PENDING,
+        ]);
+        $service->sendToReview();
+
+        return redirect('service/index')->with('Success_message', 'تمت إضافة الخدمة، وتظهر للعملاء بعد مراجعة فريق نفّذها.');
     }
-    //    public function tmpUpload(Request $request)
-//    {
-//        if ($request->hasFile('image')) {
-//            $image = $request->file('image');
-//            $file_name = $image->getClientOriginalName();
-//            $folder = uniqid('serviceImage', true);
-//
-//            // التأكد من استخدام طريقة التخزين بشكل صحيح
-//            $image->storeAs('public/assets/uploads/services/tmp/' . $folder, $file_name);
-//
-//            // إنشاء سجل في جدول TemporaryFile
-//            $temp_file = new TemporaryFile();
-//            $temp_file->create([
-//                'folder' => $folder,
-//                'file' => $file_name
-//            ]);
-//
-//            return response()->json(['folder' => $folder, 'file' => $file_name], 200);
-//        } else {
-//            return response()->json(['error' => 'No file uploaded'], 400);
-//        }
-//    }
 
     public function update(Request $request, $id)
     {
-        $service = Service::findOrFail($id);
-        $user_serve = $service['user_id'];
-        if ($user_serve != Auth::user()->id) {
-            return Redirect::to('user/dashboard');
+        $service = Service::where('user_id', Auth::id())->findOrFail($id);
+        if (! $request->isMethod('post')) {
+            return view('website.service.update', $this->formData() + ['service' => $service]);
         }
-        try {
-            if ($request->isMethod('post')) {
-                $data = $request->all();
-                // dd($data);
-                $rules = [
-                    'name' => 'required',
-                    'cat_id' => 'required',
-                    'description' => 'required|min:20',
-                    'price' => 'required|numeric'
-                ];
 
-                if ($request->hasFile('image')) {
-                    $rules['image'] = 'required|image';
-                }
-                $messages = [
-                    'name.required' => 'من فضلك ادخل اسم الخدمة ',
-                    'cat_id.required' => 'من فضلك حدد القسم للخدمة  ',
-                    'image.required' => 'من فضلك ادخل صورة الخدمة',
-                    'description.required' => 'من فضلك ادخل وصف الخدمة',
-                    'description.min' => 'يجب ان يكون وصف الخدمة اكبر من 20 حرف ',
-                    'price.required' => ' من فضلك ادخل سعر الخدمة  ',
-                    'price.numeric' => ' يجب ان يكون سعر الخدمة رقم صحيح  '
-
-                ];
-                $validator = Validator::make($data, $rules, $messages);
-                if ($validator->fails()) {
-                    return Redirect::back()->withInput()->withErrors($validator);
-                }
-                if ($request->hasFile('image')) {
-                    $filename = $this->saveImage($request->image, public_path('assets/uploads/services'));
-                    if ($service['image'] != '') {
-                        @unlink(public_path('assets/uploads/services/' . $service['image']));
-                    }
-                    $service->update([
-                        'image' => $filename
-                    ]);
-                }
-                $service->update([
-                    'name' => $data['name'],
-                    'slug' => $this->CustomeSlug($data['name']),
-                    'cat_id' => $data['cat_id'],
-                    'sub_cat_id' => $data['sub_cat_id'],
-                    'user_id' => Auth::id(),
-                    'description' => $data['description'],
-                    'price' => $data['price'],
-                    'status' => 0,
-                    'tags' => $data['tags'],
-                ]);
-                return $this->success_message('تم  تعديل الخدمة بنجاح من فضلك انتظر التفعيل من الادارة');
+        $data = $this->validated($request, false);
+        $attributes = $this->attributes($data);
+        if ($request->hasFile('image')) {
+            $old = $service->image;
+            $attributes['image'] = $this->saveImage($request->file('image'), public_path('assets/uploads/services'));
+            if ($old) {
+                @unlink(public_path('assets/uploads/services/' . basename($old)));
             }
-
-        } catch (\Exception $e) {
-            return $this->exception_message($e);
         }
-        $categories = Category::where('status', 1)->get();
-        $subCategories = SubCategory::where('status', 1)->get();
-        return view('website.service.update', compact('categories', 'subCategories', 'service'));
+        $service->update($attributes);
+        // An edited service is checked again before it shows (nobody changes it after its approval).
+        $service->sendToReview();
+
+        return redirect('service/index')->with('Success_message', 'تم حفظ التعديل، وتظهر الخدمة بعد مراجعة فريق نفّذها.');
     }
 
     public function delete($id)
     {
         try {
-            $serivces = Service::findOrFail($id);
+            $serivces = Service::where('user_id', Auth::id())->findOrFail($id);
             if ($serivces['image'] != '') {
-                @unlink(public_path('assets/uploads/services/' . $serivces['image']));
+                @unlink(public_path('assets/uploads/services/' . basename($serivces['image'])));
             }
             $serivces->delete();
-            return $this->success_message('تم حذف الخدمة بنجاح');
+            \Illuminate\Support\Facades\Cache::forget('admin-menu-badges');
+            return redirect('service/index')->with('Success_message', 'تم حذف الخدمة.');
         } catch (\Exception $e) {
             return $this->exception_message($e);
         }
+    }
+
+    private function formData(): array
+    {
+        return [
+            'categories' => Category::where('status', 1)->orderBy('id')->get(['id', 'name']),
+            'subCategories' => SubCategory::where('status', 1)->orderBy('name')->get(['id', 'name', 'parent_id']),
+            'commission' => \App\Services\Payments\RequestPaymentService::commissionRate(),
+        ];
+    }
+
+    private function validated(Request $request, bool $adding): array
+    {
+        return $request->validate([
+            'name' => 'required|string|min:8|max:150',
+            'cat_id' => ['required', 'integer', Rule::exists('categories', 'id')->where('status', 1)],
+            // The sub-category must belong to the chosen category.
+            'sub_cat_id' => ['required', 'integer', Rule::exists('sub_categories', 'id')->where('status', 1)->where('parent_id', (int) $request->input('cat_id'))],
+            'description' => 'required|string|min:20|max:5000',
+            'image' => [$adding ? 'required' : 'nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'],
+            'price' => 'required|numeric|min:5|max:1000000',
+            'tags' => 'nullable|string|max:500',
+        ], [
+            'name.required' => 'اكتب اسم الخدمة',
+            'name.min' => 'اسم الخدمة قصير؛ اكتب ما ستنفّذه بالضبط (8 أحرف على الأقل)',
+            'name.max' => 'اسم الخدمة طويل (150 حرفًا كحد أقصى)',
+            'cat_id.required' => 'اختر القسم',
+            'cat_id.exists' => 'القسم غير متاح',
+            'sub_cat_id.required' => 'اختر الخدمة الفرعية',
+            'sub_cat_id.exists' => 'اختر خدمة فرعية من نفس القسم',
+            'description.required' => 'اكتب وصف الخدمة',
+            'description.min' => 'الوصف قصير (20 حرفًا على الأقل)',
+            'description.max' => 'الوصف طويل (5000 حرف كحد أقصى)',
+            'image.required' => 'ارفع صورة للخدمة',
+            'image.image' => 'اختر ملف صورة',
+            'image.mimes' => 'الصورة يجب أن تكون jpg أو png أو webp',
+            'image.max' => 'حجم الصورة يجب ألا يتجاوز 4 ميجابايت',
+            'price.required' => 'اكتب سعر الخدمة',
+            'price.numeric' => 'السعر يجب أن يكون رقمًا',
+            'price.min' => 'أقل سعر 5 ج.م',
+            'price.max' => 'السعر كبير جدًا',
+        ]);
+    }
+
+    private function attributes(array $data): array
+    {
+        // Tags: «تصميم، شعار , هوية» → «تصميم,شعار,هوية» (unique, trimmed).
+        $tags = collect(preg_split('/[,،]+/u', (string) ($data['tags'] ?? '')))->map(fn ($t) => trim($t))->filter()->unique()->take(10)->implode(',');
+
+        return [
+            'name' => trim($data['name']),
+            'slug' => $this->CustomeSlug($data['name']),
+            'cat_id' => $data['cat_id'],
+            'sub_cat_id' => $data['sub_cat_id'],
+            'description' => $data['description'],
+            'price' => $data['price'],
+            'tags' => $tags, // the column is NOT NULL: no tags = ''
+        ];
     }
 }

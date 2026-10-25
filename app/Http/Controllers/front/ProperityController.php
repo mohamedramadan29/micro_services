@@ -109,7 +109,7 @@ class ProperityController extends Controller
     ############ Start Update Properity ############
     public function update(Request $request, $id)
     {
-        $property = Properity::find($id);
+        $property = Properity::where('user_id', Auth::id())->findOrFail($id);
         if ($request->isMethod('post')) {
             $data = $request->all();
             // dd($data);
@@ -179,7 +179,7 @@ class ProperityController extends Controller
     public function delete(Request $request, $id)
     {
 
-        $property = Properity::find($id);
+        $property = Properity::where('user_id', Auth::id())->findOrFail($id);
         ######### Delete Properity Images
         ####### Delete Images From Images
         $images = $property->ProperityImages()->get();
@@ -196,33 +196,11 @@ class ProperityController extends Controller
     ########### End Delete Properity ############
 
 
-    ############# DropZone ############
-
-    public function uploadTemp(Request $request)
-    {
-        if ($request->hasFile('images')) {
-            $file = $request->file('images');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/temp'), $filename);
-            return response()->json(['fileName' => $filename]);
-        }
-    }
-
-    public function removeTemp(Request $request)
-    {
-        $fileName = $request->fileName;
-        $filePath = public_path('uploads/temp/') . $fileName;
-        if (file_exists($filePath)) {
-            unlink($filePath);
-        }
-        return response()->json(['message' => 'تم حذف الصورة']);
-    }
-
     ########### Delete Properity Image
 
     public function deletePropertyImage(Request $request, $id)
     {
-        $image = ProperityImage::find($id);
+        $image = ProperityImage::whereIn('properity_id', Properity::where('user_id', Auth::id())->select('id'))->findOrFail($id);
         $path = public_path('assets/uploads/properities/' . $image->image);
         if (file_exists($path)) {
             @unlink($path);

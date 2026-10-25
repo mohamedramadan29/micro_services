@@ -11,18 +11,7 @@
                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
                     <div class="dashboard-navbar">
 
-                        <div class="d-user-avater">
-                            @if (Auth::user()->image != '')
-                                <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
-                                    class="img-fluid rounded" alt="">
-                            @else
-                                <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
-                                    alt="">
-                            @endif
-
-                            <h4> {{ Auth::user()->user_name }} </h4>
-                            <span> {{ Auth::user()->email }} </span>
-                        </div>
+                        @include('website.user.partials.account-head')
                         @include('website.layouts.dashboard-sidebar')
 
                     </div>
@@ -53,7 +42,7 @@
                                 <div class="_dashboard_content">
                                     <div class="_dashboard_content_header">
                                         <div class="_dashboard__header_flex">
-                                            <h4><i class="ti-lock mr-1"></i> مشتريات المنتجات </h4>
+                                            <h4><i class="bi bi-cart-check"></i> مشتريات المنتجات </h4>
                                         </div>
                                     </div>
 
@@ -64,13 +53,13 @@
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered">
                                                         <thead>
-                                                            <tr style="border-color: #eaeff5">
-                                                                <th style="border-color: #eaeff5">المنتج</th>
-                                                                <th style="border-color: #eaeff5">السعر</th>
-                                                                <th style="border-color: #eaeff5"> الدولة </th>
-                                                                <th style="border-color: #eaeff5"> المدينة </th>
-                                                                <th style="border-color: #eaeff5"> العنوان </th>
-                                                                <th style="border-color: #eaeff5"> الحالة</th>
+                                                            <tr style="border-color: #eeeeef">
+                                                                <th style="border-color: #eeeeef">المنتج</th>
+                                                                <th style="border-color: #eeeeef">السعر</th>
+                                                                <th style="border-color: #eeeeef"> الدولة </th>
+                                                                <th style="border-color: #eeeeef"> المدينة </th>
+                                                                <th style="border-color: #eeeeef"> العنوان </th>
+                                                                <th style="border-color: #eeeeef"> الحالة</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -83,7 +72,7 @@
                                                                     <td>{{ $purch->address }}</td>
                                                                     <td>
 
-                                                                        @if ($purch->product->type == 'digital' && $purch->product->digital_file)
+                                                                        @if ($purch->order_status === 'تم الدفع' && $purch->product?->type == 'digital' && $purch->product?->digital_file)
                                                                             <a href="{{ route('download.product', $purch->id) }}"
                                                                                 class="btn btn-success">
                                                                                 <i class="bi bi-download"></i> تنزيل الملف

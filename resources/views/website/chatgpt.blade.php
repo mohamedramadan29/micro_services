@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+            background: linear-gradient(to bottom, #a5a7aa, #b8e4d9);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -26,7 +26,7 @@
             overflow: hidden;
         }
         .chat-header {
-            background: #0078d7;
+            background: #74777d;
             color: white;
             padding: 15px;
             text-align: center;
@@ -37,7 +37,7 @@
             flex: 1;
             padding: 10px;
             overflow-y: auto;
-            background: #f4f4f4;
+            background: #f3f4f4;
         }
         .message {
             margin: 10px 0;
@@ -47,32 +47,32 @@
             animation: fadeIn 0.5s;
         }
         .message.user {
-            background: #0078d7;
+            background: #74777d;
             color: white;
             margin-left: auto;
         }
         .message.bot {
-            background: #e1e1e1;
+            background: #e0e1e2;
             color: black;
             margin-right: auto;
         }
         .chat-footer {
             display: flex;
             padding: 10px;
-            background: #fff;
-            border-top: 1px solid #ddd;
+            background: #ffffff;
+            border-top: 1px solid #dcddde;
         }
         .chat-footer input {
             flex: 1;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid #dcddde;
             border-radius: 5px;
             outline: none;
         }
         .chat-footer button {
             margin-left: 10px;
             padding: 10px 15px;
-            background: #0078d7;
+            background: #74777d;
             color: white;
             border: none;
             border-radius: 5px;
@@ -80,7 +80,7 @@
             transition: background 0.3s;
         }
         .chat-footer button:hover {
-            background: #005bb5;
+            background: #595d63;
         }
 
         @keyframes fadeIn {

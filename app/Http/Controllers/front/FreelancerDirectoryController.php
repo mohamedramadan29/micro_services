@@ -23,6 +23,7 @@ class FreelancerDirectoryController extends Controller
         $sort = array_key_exists($filters['sort'] ?? null, self::SORTS) ? $filters['sort'] : 'featured';
 
         $query = User::listedFreelancers()
+            ->withFreelancerStats()
             ->with(['specializations' => fn ($q) => $q->orderBy('name')])
             ->when($request->filled('q'), function ($query) use ($request) {
                 $term = '%' . str_replace(['%', '_'], ['\%', '\_'], $request->query('q')) . '%';

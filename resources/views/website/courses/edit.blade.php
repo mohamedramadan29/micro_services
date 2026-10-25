@@ -10,18 +10,7 @@
             <div class="row m-0">
                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
                     <div class="dashboard-navbar">
-                        <div class="d-user-avater">
-                            @if (Auth::user()->image != '')
-                                <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
-                                    class="img-fluid rounded" alt="">
-                            @else
-                                <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
-                                    alt="">
-                            @endif
-
-                            <h4> {{ Auth::user()->user_name }} </h4>
-                            <span> {{ Auth::user()->email }} </span>
-                        </div>
+                        @include('website.user.partials.account-head')
                         @include('website.layouts.dashboard-sidebar')
 
                     </div>
@@ -169,7 +158,7 @@
                                 border-radius: 5px;
                                 cursor: pointer;
                                 background: transparent;
-                                color: #fff;
+                                color: #ffffff;
                                 border-color: var(--main-color);
                                 outline: none;
                             }
@@ -183,7 +172,7 @@
                             #fileNames {
                                 display: block;
                                 margin-top: 10px;
-                                color: #333;
+                                color: #2b3038;
                                 font-size: 14px
                             }
 

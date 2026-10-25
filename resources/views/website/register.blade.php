@@ -12,48 +12,35 @@
                 <div class="col-lg-8 col-12">
                     <div class="modal-content" id="registermodal">
                         <div class="modal-header">
-                            <h4>  {{ __('login.new_register') }} </h4>
+                            <h1 class="nf-auth-title">  {{ __('login.new_register') }} </h1>
                         </div>
                         <div class="modal-body">
-                            @if (Session::has('Success_message'))
-                                @php
-                                    toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-                                @endphp
-                            @endif
-                            @if ($errors->any())
-                                @foreach ($errors->all() as $error)
-                                    @php
-                                        toastify()->error($error);
-                                    @endphp
-                                @endforeach
-                            @endif
                             <div class="social_login">
-                                <h4>  {{ __('login.login_socialmedia') }} </h4>
-                                <a class="google_login" href="{{route('auth.google.redirect','google')}}"> <i class="bi bi-google"></i> </a>
+                                <p>{{ __('login.login_socialmedia') }}</p>
+                                <a aria-label="إنشاء حساب باستخدام Google" class="google_login" href="{{route('auth.google.redirect','google')}}"> @include('website.partials.google-mark')<span>Google</span></a>
                             </div>
-                            <hr>
-                            <br>
+                            <div class="nf-auth-divider"><span>أو بالبريد الإلكتروني</span></div>
                             <div class="login-form">
                                 <form method="post" action="{{ url('/register') }}">
                                     @csrf
                                     <div class="form-group">
-                                        <label> {{ __('login.name') }} </label>
-                                        <input required type="text" class="form-control" name="name"
+                                        <label for="auth-name"> {{ __('login.name') }} </label>
+                                        <input id="auth-name" required type="text" class="form-control" name="name" autocomplete="name"
                                             value="{{ old('name') }}">
                                     </div>
                                     <div class="form-group">
-                                        <label>  {{ __('login.user_name') }}</label>
-                                        <input required type="text" class="form-control" name="username"
+                                        <label for="auth-username">  {{ __('login.user_name') }}</label>
+                                        <input id="auth-username" required type="text" class="form-control" name="username" autocomplete="username" dir="ltr"
                                             value="{{ old('username') }}">
                                     </div>
                                     <div class="form-group">
-                                        <label>  {{ __('login.email') }}</label>
-                                        <input required type="email" class="form-control" name="email"
+                                        <label for="auth-email">  {{ __('login.email') }}</label>
+                                        <input id="auth-email" required type="email" class="form-control" name="email" autocomplete="email" dir="ltr"
                                             value="{{ old('email') }}">
                                     </div>
 
                                     <div class="form-group">
-                                        <label> نوع الحساب </label>
+                                        <span class="form-label d-block">نوع الحساب</span>
                                         <div class="account-type-options">
                                             <input type="radio" class="btn-check" name="account_type" id="type_client"
                                                 value="{{ \App\Models\User::TYPE_CLIENT }}" required
@@ -63,7 +50,6 @@
                                                 <strong> عميل </strong>
                                                 <span> أطلب تنفيذ مشاريعي وأستقبل العروض </span>
                                             </label>
-
                                             <input type="radio" class="btn-check" name="account_type" id="type_freelancer"
                                                 value="{{ \App\Models\User::TYPE_FREELANCER }}"
                                                 @checked(old('account_type', request('type') === 'freelancer' ? \App\Models\User::TYPE_FREELANCER : null) == \App\Models\User::TYPE_FREELANCER)>
@@ -77,18 +63,18 @@
                                     @include('website.user.partials.whatsapp-field')
 
                                     <div class="form-group">
-                                        <label> {{ __('login.password') }} </label>
-                                        <input required type="password" class="form-control" placeholder="*******"
-                                            name="password">
+                                        <label for="auth-password"> {{ __('login.password') }} </label>
+                                        <input id="auth-password" required type="password" class="form-control" placeholder="*******"
+                                            name="password" autocomplete="new-password">
                                     </div>
 
                                     <div class="form-group">
-                                        <label> {{ __('login.confirm_password') }} </label>
-                                        <input required type="password" class="form-control" placeholder="*******"
-                                            name="confirm-password">
+                                        <label for="auth-confirm-password"> {{ __('login.confirm_password') }} </label>
+                                        <input id="auth-confirm-password" required type="password" class="form-control" placeholder="*******"
+                                            name="confirm-password" autocomplete="new-password">
                                     </div>
                                     <div class="form-group">
-                                        {!! NoCaptcha::display() !!}
+                                        {!! NoCaptcha::display(['data-size' => 'compact']) !!}
                                         @if ($errors->has('g-recaptcha-response'))
                                             <span class="help-block">
                                                 <strong class="text-danger">{{ $errors->first('g-recaptcha-response') }}</strong>

@@ -33,8 +33,10 @@ class ServicesPageController extends Controller
             ->values();
 
         $withForm = \App\Models\ServiceForm::published()->pluck('sub_category_id')->flip();
+        // Freelancers' published ready-made services per sub-service (a third choice in the dialog).
+        $readyCounts = \App\Models\admin\Service::active()->selectRaw('sub_cat_id, COUNT(*) as total')->groupBy('sub_cat_id')->pluck('total', 'sub_cat_id');
 
-        return view('website.services-catalog.index', compact('groups', 'preview', 'withForm'));
+        return view('website.services-catalog.index', compact('groups', 'preview', 'withForm', 'readyCounts'));
     }
 
     /** Guests choosing «ساعدوني أختار» log in first, then come back with the form open. */

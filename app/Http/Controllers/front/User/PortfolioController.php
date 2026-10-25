@@ -48,9 +48,13 @@ class PortfolioController extends Controller
         $rules = [
             'title' => 'required',
             'description' => 'required',
-            'image' => 'required|string', // دلوقتي string (اسم الملف)
+            'image' => ['required', 'string', 'max:255', 'regex:/^[\w.\-]+$/'], // اسم الملف فقط (بدون مسارات)
+            'files' => 'nullable|array',
+            'files.*' => ['string', 'max:255', 'regex:/^[\w.\-]+$/'],
             'category' => 'required|exists:categories,id',
             'skills' => 'required|array',
+            'skills.*' => 'exists:sub_categories,id',
+            'link' => ['nullable', 'url', 'regex:/^https?:\/\//i', 'max:500'],
         ];
 
         $messages = [
@@ -58,6 +62,9 @@ class PortfolioController extends Controller
             'description.required' => 'من فضلك ادخل وصف العمل',
             'image.required' => 'من فضلك ارفع الصورة الرئيسية',
             'category.required' => 'من فضلك حدد القسم الرئيسي',
+            'skills.required' => 'اختر مهارة واحدة على الأقل',
+            'link.url' => 'الرابط غير صحيح',
+            'link.regex' => 'الرابط يجب أن يبدأ بـ http أو https',
         ];
 
         $validator = Validator::make($data, $rules, $messages);
@@ -86,16 +93,16 @@ class PortfolioController extends Controller
             ? implode(',', $data['skills'])
             : $data['skills'];
         $user_portfolio->category_id = $data['category'];
-        $user_portfolio->save();
+        $user_portfolio->sendToReview();
         Auth::user()->markFreelancerProfileCompleted();
 
-        return $this->success_message(' تم اضافة العمل بنجاح من فضلك انتظر التفعيل من الادارة  ');
+        return to_route('user.portfolio.index')->with('Success_message', 'تمت إضافة العمل، ويظهر في ملفك بعد مراجعة فريق نفّذها.');
     }
     ######## Edit Page
 
     public function edit($id, $slug)
     {
-        $portfolio = UserPortfolio::where('id', $id)->where('slug', $slug)->first();
+        $portfolio = UserPortfolio::where('id', $id)->where('slug', $slug)->firstOrFail();
 
         if ($portfolio->user_id != Auth::id()) {
             abort(404);
@@ -118,11 +125,21 @@ class PortfolioController extends Controller
         $request->validate([
             'title'       => 'required|string|max:255',
             'description' => 'required|string',
-            'image'       => 'required|string', // اسم الملف من الـ hidden
+            'image'       => ['required', 'string', 'max:255', 'regex:/^[\w.\-]+$/'], // اسم الملف من الـ hidden (بدون مسارات)
+            'files'       => 'nullable|array',
+            'files.*'     => ['string', 'max:255', 'regex:/^[\w.\-]+$/'],
             'category'    => 'required|exists:categories,id',
             'skills'      => 'required|array',
             'skills.*'    => 'exists:sub_categories,id',
-            // 'link'        => 'nullable|url',
+            'link'        => ['nullable', 'url', 'regex:/^https?:\/\//i', 'max:500'],
+        ], [
+            'title.required' => 'من فضلك ادخل عنوان العمل',
+            'description.required' => 'من فضلك ادخل وصف العمل',
+            'image.required' => 'من فضلك ارفع الصورة الرئيسية',
+            'category.required' => 'من فضلك حدد القسم الرئيسي',
+            'skills.required' => 'اختر مهارة واحدة على الأقل',
+            'link.url' => 'الرابط غير صحيح',
+            'link.regex' => 'الرابط يجب أن يبدأ بـ http أو https',
         ]);
 
         // الصورة الرئيسية (جاية كـ string من hidden input)
@@ -143,14 +160,16 @@ class PortfolioController extends Controller
                 : $request['skills'],
             'category_id'   => $request->category,
         ]);
+        // An edited work is checked again before it shows (nobody changes a work after its approval).
+        $portfolio->sendToReview();
 
-        return to_route('user.portfolio.edit', [$portfolio->id, $portfolio->slug])->with('Success_message', 'تم تعديل العمل بنجاح');
+        return to_route('user.portfolio.index')->with('Success_message', 'تم حفظ التعديل، ويظهر العمل بعد مراجعة فريق نفّذها.');
     }
 
     ######## Delete Page
     public function delete($id)
     {
-        $portfolio = UserPortfolio::find($id);
+        $portfolio = UserPortfolio::findOrFail($id);
         if ($portfolio->user_id != Auth::id()) {
             abort(403);
         }

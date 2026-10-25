@@ -1,120 +1,58 @@
 @extends('website.layouts.master')
-@section('title')
-    الخدمات - {{$category['name']}}
-@endsection
+@php
+    $sort = (string) request('sort');
+    // «خدمة واحدة»، «خدمتان»، «4 خدمات»، «11 خدمة»
+    $countLabel = fn (int $n) => match (true) { $n === 1 => 'خدمة واحدة', $n === 2 => 'خدمتان', $n >= 3 && $n <= 10 => $n . ' خدمات', default => $n . ' خدمة' };
+@endphp
+@section('title'){{ $category->name }} — خدمات جاهزة | نفّذها@endsection
+@section('meta_description')خدمات {{ $category->name }} جاهزة بسعر ثابت من مستقلين معتمدين في نفّذها، الدفع بالجنيه المصري.@endsection
 @section('content')
-
-    <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg text-right" dir="rtl">
-        <div class="container">
-            <div class="main_hero_section" style="margin-bottom:20px">
-                <div>
-                    <h4> الخدمات - {{$category['name']}}  </h4>
-                </div>
-
+<section class="rf-pp rf-sl" dir="rtl">
+    <div class="container">
+        <nav class="rf-pp-trail" aria-label="مسار الصفحة">
+            <a href="{{ route('services.index') }}">الخدمات</a> <span aria-hidden="true">‹</span> <span>{{ $category->name }}</span>
+        </nav>
+        <header class="rf-sl-head">
+            <div>
+                <h1>{{ $category->name }}</h1>
+                <p>خدمات جاهزة بسعر ثابت من مستقلين معتمدين. تفضّل أن يصلك أكثر من عرض؟ <a href="{{ ($category->requestUrl()) ?: route('requests.create') }}">اطلب عرض سعر</a>.</p>
             </div>
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="simple-sidebar sm-sidebar" style="margin-top: 0">
-                        <div class="search-sidebar_header">
-                            <h4 class="ssh_heading"> البحث </h4>
-                        </div>
-                        <!-- Find New Property -->
-                        <div class="sidebar-widgets" id="search_open" data-parent="#search_open">
-                            <form action="{{url('services/'.$category['slug'])}}" method="get">
-                                @csrf
-                                <div class="search-inner p-0 d-flex align-items-center">
-                                    <div class="filter-search-box pb-0" style="width: 80%">
-                                        <div class="form-group">
-                                            <input type="text" name="search" class="form-control" value="{{request()->input('search')}}"
-                                                   placeholder=" ابحث عن الخدمة ... ">
-                                        </div>
-                                    </div>
-                                    <div class="form-group filter_button" style="padding:10px;margin:0;">
-                                        <button type="submit" class="btn btn btn-theme-2 rounded full-width"> بحث
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+            @include('website.partials.list-search', ['name' => 'search', 'placeholder' => 'ابحث في خدمات ' . $category->name . '…',
+                'sorts' => ['' => 'الأحدث', 'popular' => 'الأكثر طلبًا', 'price' => 'الأقل سعرًا'], 'sort' => $sort])
+        </header>
 
-                    </div>
-                    <!-- Sidebar End -->
-
-                </div>
-
-                <!-- Item Wrap Start -->
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="row">
-                        @foreach($services as $serv)
-                            <!-- Single Item -->
-                            <div class="col-lg-3 col-md-6 col-sm-12">
-                                <div class="ser_110 shadow_0" style="min-height: 470px">
-                                    <div class="ser_110_thumb">
-                                        <a href="{{url('service/'.$serv['id'].'-'.$serv['slug'])}}"
-                                           class="ser_100_link"><img
-                                                src="{{asset('assets/uploads/services/'.$serv['image'])}}"
-                                                class="img-fluid" alt=""></a>
-                                    </div>
-                                    <div class="ser_110_footer bott">
-                                        <div class="_110_foot_left">
-                                            <div class="_autho098">
-                                                @if (empty($serv['user']['image']))
-                                                    <img
-                                                        src="{{asset('assets/website/img/avatar.png')}}"
-                                                        class="img-fluid circle" alt="">
-                                                @else
-                                                    <img
-                                                        src="{{optional($serv['user'])->avatarUrl(128)}}"
-                                                        class="img-fluid circle" alt="">
-
-                                                @endif
-                                                <img
-                                                    src="{{asset('assets/website/img/verify.svg')}}"
-                                                    class="verified"
-                                                    width="12" alt=""></div>
-                                            <div class="_autho097"><h5><a
-                                                        href="{{url('user/'.$serv['user']['user_name'])}}">{{$serv['user']['user_name']}}</a>
-                                                </h5>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="ser_110_caption">
-                                        <div class="ser_rev098">
-                                            @for($i = 0; $i < 5 ;  $i++)
-                                                @if($i < $serv['rate'])
-                                                    <i class="fa fa-star filled"></i>
-                                                @else
-                                                    <i class="fa fa-star"></i>
-                                                @endif
-                                            @endfor
-                                        </div>
-                                        <div class="ser_title098">
-                                            <h4 class="_ser_title"><a
-                                                    href="{{url('service/'.$serv['id'].'-'.$serv['slug'])}}"> {{$serv['name']}} </a>
-                                            </h4>
-                                        </div>
-                                        <div class="_oi0po"><i class="fa fa-bolt"></i> تبدا من <strong
-                                                class="theme-cl"> {{ \App\Support\Money::show($serv['price']) }} </strong>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            {{$services->links()}}
-                        </div>
-                    </div>
-
-                </div>
-
+        @if ($services->isEmpty())
+            <div class="rf-pp-card rf-sl-empty">
+                <i class="bi bi-grid" aria-hidden="true"></i>
+                <strong>{{ request('search') ? 'لا توجد خدمات تطابق بحثك.' : 'لا توجد خدمات جاهزة في هذا القسم بعد.' }}</strong>
+                <p>اكتب ما تحتاجه، ويرسل لك المستقلون المعتمدون عروضهم.</p>
+                <a href="{{ ($category->requestUrl()) ?: route('requests.create') }}" class="btn btn-primary">اطلب عرض سعر</a>
             </div>
-        </div>
-    </section>
-    <!-- ============================ Main Section End ================================== -->
+        @else
+            <p class="rf-sl-count">{{ $countLabel($services->total()) }}</p>
+            <div class="rf-sl-grid">
+                @foreach ($services as $serv)
+                    <article class="rf-sl-card">
+                        <span class="rf-pp-work-img"><img src="{{ asset('assets/uploads/services/' . $serv->image) }}" alt="" loading="lazy"></span>
+                        <div class="rf-sl-body">
+                            <h2><a href="{{ $serv->url() }}" class="rf-fl-link">{{ $serv->name }}</a></h2>
+                            @if ($serv->user)
+                                <span class="rf-sl-seller">
+                                    <img src="{{ $serv->user->avatarUrl(128) }}" alt="" width="26" height="26" loading="lazy">
+                                    {{ $serv->user->name }}
+                                    @if ($serv->user->ratingLabel())<span class="rf-fl-stars"><i class="bi bi-star-fill" aria-hidden="true"></i> {{ $serv->user->ratingLabel() }}</span>@endif
+                                </span>
+                            @endif
+                        </div>
+                        <div class="rf-sl-foot">
+                            <span>@if ((int) $serv->users_num_buy > 0)<i class="bi bi-bag-check" aria-hidden="true"></i> {{ (int) $serv->users_num_buy }} طلب@endif</span>
+                            <strong>{{ \App\Support\Money::show($serv->price) }}</strong>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+            <div class="mt-4">{{ $services->links() }}</div>
+        @endif
+    </div>
+</section>
 @endsection

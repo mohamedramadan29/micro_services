@@ -146,8 +146,8 @@
                                     @if ($product->digital_file)
                                     <div class="alert alert-info mb-4">
                                         <strong>الملف الحالي:</strong>
-                                        <a href="{{ asset('assets/uploads/digital_products/' . $product->digital_file) }}"
-                                            target="_blank" class="btn btn-primary btn-sm ms-2">
+                                        <a href="{{ route('admin.products.digital-file', $product->id) }}"
+                                            class="btn btn-primary btn-sm ms-2">
                                             <i class="bx bx-download"></i> عرض / تنزيل الملف
                                         </a>
                                         <br><small class="text-muted">سيتم استبدال هذا الملف إذا قمت برفع ملف

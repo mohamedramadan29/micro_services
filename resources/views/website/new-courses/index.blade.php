@@ -39,7 +39,7 @@
         .course-price {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #007bff;
+            color: #7d8085;
         }
 
         .course-meta {
@@ -48,11 +48,11 @@
             align-items: center;
             margin-top: 1rem;
             padding-top: 1rem;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #eeeeef;
         }
 
         .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #83868b 0%, #5c6066 100%);
             color: white;
             padding: 80px 0;
             margin-bottom: 50px;
@@ -64,7 +64,7 @@
         }
 
         .filter-section {
-            background: #f8f9fa;
+            background: #f9f9f9;
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 30px;
@@ -81,7 +81,7 @@
         .stats-number {
             font-size: 2rem;
             font-weight: bold;
-            color: #007bff;
+            color: #7d8085;
         }
     </style>
 @endsection

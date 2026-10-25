@@ -41,7 +41,9 @@ class AdminMiddlewareTest extends TestCase
 
     public function test_inactive_admin_is_forbidden(): void
     {
-        $this->actingAs($this->user('admin', 0))->get('/_test/admin-only')->assertForbidden();
+        // A deactivated account is signed out before it reaches the admin check.
+        $this->actingAs($this->user('admin', 0))->get('/_test/admin-only')->assertRedirect();
+        $this->assertGuest();
     }
 
     public function test_active_admin_is_allowed(): void

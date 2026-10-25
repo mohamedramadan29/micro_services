@@ -14,7 +14,7 @@
             <br>
             <button type="submit" class="btn dark-2"> ارسال <i class="fa fa-plane"></i> </button>
         </form>
-        <div style="background-color: #FFEED4;padding: 10px;margin-top: 11px;border-radius: 10px;">
+        <div style="background-color: #f0f1f1;padding: 10px;margin-top: 11px;border-radius: 10px;">
             <ul>
                 <li class="pb-2"> <i class="fa fa-exclamation-triangle"></i> لا تستخدم وسائل تواصل خارجية وأحرص على
                     ابقاء تواصلك داخل

@@ -21,6 +21,8 @@ class HomeActions
         'site_test' => ['label' => 'اختبر موقعك مجانًا', 'route' => 'site-tests.index'],
         'help' => ['label' => 'ساعدوني أختار (صفحة الخدمات)', 'route' => 'services.index', 'query' => ['help' => 1]],
         'services' => ['label' => 'صفحة الخدمات', 'route' => 'services.index'],
+        'ready_services' => ['label' => 'خدمات جاهزة بسعر ثابت', 'route' => 'services.ready'],
+        'works' => ['label' => 'أعمال المستقلين', 'route' => 'portfolios.index'],
         'freelancers' => ['label' => 'دليل المستقلين', 'route' => 'freelancers.index'],
         'none' => ['label' => 'بدون رابط («قريبًا»)', 'route' => null],
     ];

@@ -10,6 +10,6 @@
             <strong>حسابك كمستقل قيد المراجعة.</strong>
             تستطيع تصفح الطلبات، وتُفتح لك العروض بعد تأكيد بريدك الإلكتروني واعتماد فريق نفّذها لملفك.
         @endif
-        <a href="{{ route('freelancer.profile.edit') }}">ملفي كمستقل</a>
+        <a href="{{ url('update-account') . '#rf-freelancer' }}">تعديل ملفي</a>
     </div>
 @endif

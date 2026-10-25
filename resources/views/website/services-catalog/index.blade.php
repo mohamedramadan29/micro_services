@@ -17,7 +17,11 @@
         'name' => $service->name,
         'url' => $service->requestUrl(isset($withForm[$service->id])),
         'button' => $service->button_text ?: $choice['request_button'],
+        // Freelancers' published ready-made services in this sub-service (third choice in the dialog).
+        'ready' => (int) ($readyCounts[$service->id] ?? 0),
+        'ready_url' => url('services/' . $service->slug),
     ]))->keyBy('id');
+    $readyPage = SiteContent::first('ready.page');
     $openHelp = auth()->check() && (request()->boolean('help') || ($errors->any() && old('_help')));
 @endphp
 @section('title')
@@ -52,9 +56,14 @@
                     @if ($page['section_title'])<h2>{{ $page['section_title'] }}</h2>@endif
                     @if ($page['section_text'])<p>{{ $page['section_text'] }}</p>@endif
                 </div>
-                <div class="rf-sv-search">
-                    <i class="bi bi-search" aria-hidden="true"></i>
-                    <input type="search" id="rf-sv-search" placeholder="{{ $page['search_placeholder'] }}" aria-label="{{ $page['search_placeholder'] }}" autocomplete="off">
+                <div>
+                    <div class="rf-sv-search">
+                        <i class="bi bi-search" aria-hidden="true"></i>
+                        <input type="search" id="rf-sv-search" placeholder="{{ $page['search_placeholder'] }}" aria-label="{{ $page['search_placeholder'] }}" autocomplete="off">
+                    </div>
+                    @if ($readyCounts->sum() > 0)
+                        <a href="{{ route('services.ready') }}" class="rf-sv-ready-link"><i class="bi bi-bag-check" aria-hidden="true"></i> {{ $readyPage['catalog_link'] }} ({{ $readyCounts->sum() }})</a>
+                    @endif
                 </div>
             </div>
 
@@ -87,6 +96,7 @@
                                         <strong>{{ $service->name }}</strong>
                                         @if ($service->description)<small>{{ $service->description }}</small>@endif
                                     </span>
+                                    @if (($readyCounts[$service->id] ?? 0) > 0)<span class="rf-sv-ready-count">{{ $readyCounts[$service->id] }} جاهزة</span>@endif
                                     @if ($preview && ! $service->status)<span class="rf-sv-hidden">مخفي</span>@endif
                                 </button>
                             @endforeach
@@ -123,6 +133,7 @@
                         <p class="rf-sv-selected">{{ $choice['selected_label'] }} <strong data-selected-name></strong></p>
                         <a class="rf-sv-btn rf-sv-btn-primary rf-sv-btn-block" data-request-link href="#"><span data-request-text>{{ $choice['request_button'] }}</span> <i class="bi bi-check2"></i></a>
                         <p class="rf-sv-no-request" data-no-request hidden>{{ $choice['no_request_text'] }}</p>
+                        <a class="rf-sv-btn rf-sv-btn-outline rf-sv-btn-block mt-2" data-ready-link href="#" hidden><i class="bi bi-bag-check" aria-hidden="true"></i> <span>{{ $choice['ready_button'] }}</span> (<span data-ready-count></span>)</a>
                         <div class="rf-sv-paths">
                             <div class="rf-sv-path">
                                 <small>{{ $choice['path_one_label'] }}</small>
@@ -233,6 +244,12 @@
                     if (service.url) {
                         link.href = service.url;
                         modalEl.querySelector('[data-request-text]').textContent = service.button;
+                    }
+                    var ready = modalEl.querySelector('[data-ready-link]');
+                    ready.hidden = !service.ready;
+                    if (service.ready) {
+                        ready.href = service.ready_url;
+                        ready.querySelector('[data-ready-count]').textContent = service.ready;
                     }
                 }
             };

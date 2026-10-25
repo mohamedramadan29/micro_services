@@ -11,17 +11,7 @@
                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
                     <div class="dashboard-navbar">
 
-                        <div class="d-user-avater">
-                            @if (Auth::user()->image != '')
-                                <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
-                                    class="img-fluid rounded" alt="">
-                            @else
-                                <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
-                                    alt="">
-                            @endif
-                            <h4> {{ Auth::user()->user_name }} </h4>
-                            <span> {{ Auth::user()->email }} </span>
-                        </div>
+                        @include('website.user.partials.account-head')
 
                         @include('website.layouts.dashboard-sidebar')
 
@@ -70,15 +60,13 @@
                                                             alt="User Image">
                                                     </div>
                                                     <div>
-                                                        <h4>{{ $conversation->messages->first()->body ?? 'لا توجد رسائل بعد' }}
-                                                        </h4>
-                                                        <div class="ticket_details">
-                                                            <p>
-                                                                <i class="bi bi-clock-fill"></i>
-                                                                {{ $conversation->messages->first()->created_at->diffForHumans() }}
-                                                            </p>
-                                                            {{-- <p>{{ $otherUser->name }}</p> --}}
-                                                        </div>
+                                                        <h4>{{ $otherUser?->name ?? 'مستخدم محذوف' }}</h4>
+                                                        <p class="mb-1 text-muted">{{ \Illuminate\Support\Str::limit($conversation->lastMessage?->body ?? 'لا توجد رسائل بعد', 90) }}</p>
+                                                        @if ($conversation->lastMessage)
+                                                            <div class="ticket_details">
+                                                                <p><i class="bi bi-clock-fill"></i> {{ $conversation->lastMessage->created_at?->diffForHumans() }}</p>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 <hr>

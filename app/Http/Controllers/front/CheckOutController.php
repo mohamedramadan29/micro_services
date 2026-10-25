@@ -49,7 +49,7 @@ class CheckOutController extends Controller
     /** "اطلب الخدمة": pay one service at EasyKash; the order is created once EasyKash confirms it. */
     public function create_order(Request $request, OnlinePaymentService $payments)
     {
-        $service = Service::findOrFail($request->input('service_id'));
+        $service = Service::active()->findOrFail($request->input('service_id'));
         if ((int) $service->user_id === (int) Auth::id()) {
             return Redirect::back()->withErrors(['error' => 'لا يمكنك طلب خدمتك الخاصة']);
         }
@@ -70,7 +70,7 @@ class CheckOutController extends Controller
     private function payableCart(): array
     {
         $items = Cart::with('serviceData', 'userData')->where('user_id', Auth::id())->get()
-            ->filter(fn (Cart $item) => $item->serviceData && (int) $item->serviceData->user_id !== (int) Auth::id() && (float) $item->serviceData->price > 0)
+            ->filter(fn (Cart $item) => $item->serviceData && $item->serviceData->isActive() && (int) $item->serviceData->user_id !== (int) Auth::id() && (float) $item->serviceData->price > 0)
             ->values();
 
         return [$items, round((float) $items->sum(fn (Cart $item) => (float) $item->serviceData->price), 2)];

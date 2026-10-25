@@ -24,19 +24,23 @@ class FreelancerAdminController extends Controller
 
     public function index(Request $request)
     {
-        $status = array_key_exists((string) $request->string('status'), User::FREELANCER_STATUSES) ? (string) $request->string('status') : null;
+        $status = (string) $request->string('status');
+        $status = $status === 'ready' || array_key_exists($status, User::FREELANCER_STATUSES) ? $status : null;
         $freelancers = User::where('account_type', User::TYPE_FREELANCER)
             ->with('specializations:id,name')
-            ->when($status, fn ($q) => $q->where('freelancer_status', $status))
+            ->when($status === 'ready', fn ($q) => $q->readyForReview())
+            ->when($status && $status !== 'ready', fn ($q) => $q->where('freelancer_status', $status))
             ->when($request->filled('q'), function ($query) use ($request) {
                 $term = '%' . str_replace(['%', '_'], ['\%', '\_'], $request->query('q')) . '%';
                 $query->where(fn ($q) => $q->where('name', 'like', $term)->orWhere('email', 'like', $term)->orWhere('whatsapp', 'like', $term)->orWhere('user_name', 'like', $term));
             })
             ->orderByRaw("CASE WHEN freelancer_status = 'pending' THEN 0 ELSE 1 END")
+            ->orderByRaw('CASE WHEN freelancer_ready_at IS NULL THEN 1 ELSE 0 END')
             ->latest('id')
             ->paginate(25)
             ->withQueryString();
         $counts = User::where('account_type', User::TYPE_FREELANCER)->selectRaw('freelancer_status, COUNT(*) as total')->groupBy('freelancer_status')->pluck('total', 'freelancer_status');
+        $counts['ready'] = User::readyForReview()->count();
 
         return view('admin.freelancers.index', compact('freelancers', 'status', 'counts'));
     }
@@ -56,8 +60,22 @@ class FreelancerAdminController extends Controller
     {
         abort_unless($freelancer->isFreelancer(), 404);
         $freelancer->forceFill(['admin_verified_at' => $freelancer->admin_verified_at ? null : now()])->save();
+        \Illuminate\Support\Facades\Cache::forget('admin-menu-badges');
+        if (! $freelancer->admin_verified_at) {
+            return back()->with('success', 'أُلغي التوثيق اليدوي.');
+        }
 
-        return back()->with('success', $freelancer->admin_verified_at ? 'تم توثيق الحساب يدويًا.' : 'أُلغي التوثيق اليدوي.');
+        // Verifying is step 1 only: the freelancer is told, and the admin is reminded that approval is a separate step.
+        $freelancer->notify(new RequestUpdateNotification(
+            \App\Support\Msg::t('requests.freelancer_verified'),
+            '/update-account#rf-freelancer',
+            'request_updates'
+        ));
+        $freelancer->noteReadyForReview();
+
+        return back()->with('success', $freelancer->isApprovedFreelancer()
+            ? 'تم توثيق الحساب يدويًا وإبلاغ المستقل.'
+            : 'تم توثيق الحساب وإبلاغ المستقل. حالته تبقى «قيد المراجعة» حتى تضغط «اعتماد» في خانة «3. القرار».');
     }
 
     public function resendVerification(User $freelancer)
@@ -118,7 +136,7 @@ class FreelancerAdminController extends Controller
             $data['decision'] === User::FREELANCER_APPROVED
                 ? \App\Support\Msg::t('requests.freelancer_approved')
                 : \App\Support\Msg::t('requests.freelancer_rejected', ['reason' => $data['note']]),
-            '/my/freelancer-profile',
+            '/update-account#rf-freelancer',
             'request_updates'
         ));
 

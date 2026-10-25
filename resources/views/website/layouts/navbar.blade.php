@@ -11,10 +11,10 @@
                                 <!-- fallback لو المتصفح ما يدعم الفيديو -->
 
                             </video> --}}
-                            <img src="{{ asset('assets/website/img/logo.png') }}" class="logo" alt="" />
+                            <img src="{{ asset('assets/website/img/logo.png') }}" class="logo" alt="نفّذها — الرئيسية" />
                         </a>
                         <a class="nav-brand fixed-logo" href="{{ url('/') }}" style="padding: 0 15px">
-                            <img src="{{ asset('assets/website/img/logo.png') }}" class="logo" alt="" />
+                            <img src="{{ asset('assets/website/img/logo.png') }}" class="logo" alt="نفّذها — الرئيسية" />
 
                             {{-- <video style="width: 120px; height: auto;" src="{{ asset('assets/uploads/logo.mp4') }}"
                                 autoplay loop muted playsinline preload="auto">
@@ -22,7 +22,7 @@
 
                             </video> --}}
                         </a>
-                        <div class="nav-toggle"></div>
+                        <button type="button" class="nav-toggle" aria-label="فتح قائمة الموقع" aria-expanded="false" aria-controls="site-navigation"></button>
                     </div>
                     @if (!Auth::check())
                         <div class="mobile_account">
@@ -42,7 +42,7 @@
                                     <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         @if (Auth::user()->unreadNotifications->where('type', 'App\Notifications\NewMessage')->count() > 0)
-                                            <span class="counter"> {{ Auth::user()->unreadNotifications->count() }}
+                                            <span class="counter"> {{ Auth::user()->unreadNotifications->where('type', 'App\Notifications\NewMessage')->count() }}
                                             </span>
                                         @endif
                                         <li><a href=""> <i style="font-size: 20px"
@@ -153,51 +153,18 @@
                                                 class="img-fluid rounded" alt="">
                                         @endif
                                     </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ url('dashboard') }}"> الملف الشخصي <i
-                                                    class="ti-dashboard"></i> </a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="{{ url('balance') }}"> الرصيد <i
-                                                    class="bi bi-credit-card"></i> </a></li>
-                                        <li><a class="dropdown-item" href="{{ url('my/products/purches') }}"> مشتريات
-                                                المنتجات <i class="bi bi-cart-check-fill"></i> </a></li>
-                                        @if (\App\Models\Contract::involving(Auth::user())->exists())
-                                            <li><a class="dropdown-item" href="{{ route('contracts.index') }}"> مشاريعي <i
-                                                        class="bi bi-kanban-fill"></i></a></li>
-                                        @endif
-                                        @if (Auth::user()->isFreelancer())
-                                            <li><a class="dropdown-item" href="{{ route('freelancer.offers.index') }}"> عروضي <i
-                                                        class="bi bi-send-check-fill"></i></a></li>
-                                            <li><a class="dropdown-item" href="{{ route('freelancer.profile.edit') }}"> ملفي كمستقل <i
-                                                        class="bi bi-person-badge"></i></a></li>
-                                        @else
-                                            <li><a class="dropdown-item" href="{{ route('requests.index') }}"> طلباتي <i
-                                                        class="bi bi-clipboard-check"></i></a></li>
-                                        @endif
-
-                                        <li><a class="dropdown-item" href="{{ url('service/index') }}">الخدمات
-                                                <i class="bi bi-database-fill-check"></i> </a></li>
-
-                                        {{-- <li><a class="dropdown-item" href="{{ url('my/properties/index') }}">
-                                            العقارات
-                                            <i class="bi bi-building"></i> </a></li>
-
-                                    <li><a class="dropdown-item" href="{{ url('my/property/maintain/index') }}">
-                                            خدمات صيانة العقارات <i class="bi bi-database-fill"></i> </a></li> --}}
-
-                                        <li><a class="dropdown-item" href="{{ url('my/jobs') }}">
-                                                وظائفي <i class="bi bi-database-fill"></i> </a></li>
-
-                                        <li><a class="dropdown-item" href="{{ url('chats') }}"> المحادثات <i
-                                                    class="bi bi-chat-dots-fill"></i></a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="{{ url('tickets') }}"> تذاكري <i
-                                                    class="bi bi-ticket"></i> </a></li>
-                                        {{-- <li><a class="dropdown-item" href="{{ url('reviews') }}"><i
-                                                class="ti-email"></i> التقيمات </a></li> --}}
-                                        <li><a class="dropdown-item" href="{{ url('update-account') }}"> تعديل الملف
-                                                الشخصي
-                                                <i class="bi bi-gear-fill"></i> </a></li>
+                                    <ul class="dropdown-menu rf-acc-dropdown">
+                                        <li class="rf-acc-dd-head">{{ Auth::user()->name }} <small>{{ Auth::user()->typeLabel() }}</small></li>
+                                        @foreach (\App\Support\AccountMenu::sections(Auth::user(), request()) as $section)
+                                            @if (! $loop->first)<li><hr class="dropdown-divider"></li>@endif
+                                            @foreach ($section['items'] as $item)
+                                                <li><a class="dropdown-item {{ $item['active'] ? 'active' : '' }}" href="{{ $item['href'] }}">
+                                                    {{ $item['label'] }} <i class="{{ $item['icon'] }}"></i>
+                                                    @if ($item['badge'] > 0)<span class="rf-acc-badge">{{ $item['badge'] }}</span>@endif
+                                                </a></li>
+                                            @endforeach
+                                        @endforeach
+                                        <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item" href="{{ url('logout') }}" onclick="event.preventDefault(); document.getElementById('site-logout-form').submit();"> تسجيل خروج <i
                                                     class="ti-power-off"></i> </a></li>
                                     </ul>
@@ -208,7 +175,7 @@
                             </ul>
                         </div>
                     @endif
-                    <div class="nav-menus-wrapper d-flex">
+                    <div id="site-navigation" class="nav-menus-wrapper d-flex">
                         @if (\Illuminate\Support\Facades\Auth::user())
                             <ul class="nav-menu nav-menu-social large_desktop_notification">
                                 <!----------------- Message Alerts --------------->
@@ -216,7 +183,7 @@
                                     <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         @if (Auth::user()->unreadNotifications->where('type', 'App\Notifications\NewMessage')->count() > 0)
-                                            <span class="counter"> {{ Auth::user()->unreadNotifications->count() }}
+                                            <span class="counter"> {{ Auth::user()->unreadNotifications->where('type', 'App\Notifications\NewMessage')->count() }}
                                             </span>
                                         @endif
                                         <li><a href=""> <i style="font-size: 20px"
@@ -372,12 +339,12 @@
                             @endforeach
                             @if (\App\Support\Money::usdAvailable())
                                 {{-- Approximate dollar prices; payment always in EGP. --}}
+                                @php $fxUsd = \App\Support\Money::wantsUsd(); @endphp
                                 <li class="rf-fx-switch">
-                                    @if (\App\Support\Money::wantsUsd())
-                                        <a href="{{ route('currency.switch', 'EGP') }}" class="active" title="تعرض الأسعار مع ما يعادلها بالدولار تقريبيًا (الدفع بالجنيه). اضغط للعرض بالجنيه فقط">$</a>
-                                    @else
-                                        <a href="{{ route('currency.switch', 'USD') }}" title="اعرض ما يعادل الأسعار بالدولار تقريبيًا (الدفع يبقى بالجنيه)">$</a>
-                                    @endif
+                                    <span class="rf-fx-seg" role="group" aria-label="عملة عرض الأسعار" title="الدفع دائمًا بالجنيه المصري؛ الدولار للعرض التقريبي فقط">
+                                        <a href="{{ route('currency.switch', 'EGP') }}" class="{{ $fxUsd ? '' : 'active' }}" @unless ($fxUsd) aria-current="true" @endunless>ج.م</a>
+                                        <a href="{{ route('currency.switch', 'USD') }}" class="{{ $fxUsd ? 'active' : '' }}" @if ($fxUsd) aria-current="true" @endif>$</a>
+                                    </span>
                                 </li>
                             @endif
                             @php

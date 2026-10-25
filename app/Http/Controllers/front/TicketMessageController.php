@@ -16,21 +16,28 @@ class TicketMessageController extends Controller
 
     use Message_Trait;
     use Upload_Images;
+    /** A ticket is read and answered only by its owner. */
+    private function ownTicket($ticket_id): \App\Models\admin\Ticket
+    {
+        return \App\Models\admin\Ticket::where('user_id', Auth::id())->findOrFail($ticket_id);
+    }
+
     public function index($ticket_id)
     {
-
+        $this->ownTicket($ticket_id);
         $messages = TicketMessage::with('user')->where('ticket_id', $ticket_id)->get();
         return view('website.user.tickets.ticket-details', compact('messages', 'ticket_id'));
     }
     public function store(Request $request, $ticket_id)
     {
+        $this->ownTicket($ticket_id);
         if ($request->isMethod('POST')) {
             $data = $request->all();
             //dd($data);
 
             $rules = [
                 'message' => 'required|string',
-                'file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             ];
             $messages = [
                 'message.required' => 'من فضلك ادخل رسالتك ',

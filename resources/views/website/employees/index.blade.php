@@ -92,7 +92,7 @@
 @section('styles')
     <style>
         .employee-card {
-            background: #fff;
+            background: #ffffff;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
@@ -117,11 +117,11 @@
 
         .employee-info h4 {
             margin-bottom: 10px;
-            color: #333;
+            color: #2b3038;
         }
 
         .job-title {
-            color: #666;
+            color: #62666c;
             margin-bottom: 15px;
         }
 

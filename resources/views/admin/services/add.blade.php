@@ -77,7 +77,7 @@
                                             var categoryId = $(this).val();
                                             if (categoryId) {
                                                 $.ajax({
-                                                    url: 'http://127.0.0.1:8000/admin/service/get-subcategories/' + categoryId,
+                                                    url: '{{ url('admin/service/get-subcategories') }}/' + categoryId,
                                                     type: 'GET',
                                                     dataType: 'json',
                                                     success: function (data) {

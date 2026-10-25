@@ -11,7 +11,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 col-md-12">
-                    <h2 class="ipt-title"> {{ $faq['title'] }} </h2>
+                    <h1 class="ipt-title"> {{ $faq['title'] }} </h1>
                     @if ($faq['text'])<p class="text-white" style="white-space: pre-line">{{ $faq['text'] }}</p>@endif
                 </div>
             </div>

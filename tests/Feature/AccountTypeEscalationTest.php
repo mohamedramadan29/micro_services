@@ -37,8 +37,10 @@ class AccountTypeEscalationTest extends TestCase
     {
         $user = User::factory()->create(['account_type' => 'مشتري']);
 
+        // Becoming a freelancer needs a WhatsApp number, like at registration.
+        $this->actingAs($user)->post('update-account', $this->payload('بائع'))->assertSessionHasErrors('whatsapp');
         $this->actingAs($user)
-            ->post('update-account', $this->payload('بائع'))
+            ->post('update-account', $this->payload('بائع') + ['whatsapp' => '+201012345678'])
             ->assertSessionHasNoErrors();
 
         $this->assertSame('بائع', $user->fresh()->account_type);

@@ -224,10 +224,7 @@ class ProductController extends Controller
 
                     // لو الملف الجديد مختلف عن القديم → نحذف القديم
                     if ($product->digital_file && $product->digital_file !== $new_digital_file) {
-                        $old_digital_path = public_path('assets/uploads/digital_products/' . $product->digital_file);
-                        if (file_exists($old_digital_path)) {
-                            unlink($old_digital_path);
-                        }
+                        \App\Support\DigitalFiles::delete($product->digital_file);
                     }
 
                     $digital_file_name = $new_digital_file;
@@ -286,6 +283,16 @@ class ProductController extends Controller
         $product->delete();
 
         return $this->success_message(' تم حذف المنتج بنجاح  ');
+    }
+
+    /** The admin downloads a product's private digital file. */
+    public function digitalFile($id)
+    {
+        $product = Product::findOrFail($id);
+        $path = \App\Support\DigitalFiles::path($product->digital_file);
+        abort_unless($path, 404, 'الملف غير موجود.');
+
+        return response()->download($path, \App\Support\DigitalFiles::downloadName($product->name, $product->digital_file));
     }
 
     public function delete_image_gallary($id)

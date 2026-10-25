@@ -11,18 +11,7 @@
                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
                     <div class="dashboard-navbar">
 
-                        <div class="d-user-avater">
-                            @if (Auth::user()->image != '')
-                                <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
-                                    class="img-fluid rounded" alt="">
-                            @else
-                                <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
-                                    alt="">
-                            @endif
-
-                            <h4> {{ Auth::user()->user_name }} </h4>
-                            <span> {{ Auth::user()->email }} </span>
-                        </div>
+                        @include('website.user.partials.account-head')
                         @include('website.layouts.dashboard-sidebar')
 
                     </div>
@@ -53,7 +42,7 @@
                                 <div class="_dashboard_content">
                                     <div class="_dashboard_content_header">
                                         <div class="" style="display: flex;justify-content:space-between;width: 100%;">
-                                            <h4><i class="ti-lock mr-1"></i>  خدمات صيانة العقارات  </h4>
+                                            <h4><i class="bi bi-tools"></i>  خدمات صيانة العقارات  </h4>
                                             <a href="{{ url('my/property/maintain/add') }}" class="btn btn-primary btn-sm">
                                                 اضافة خدمة جديدة   <i class="bi bi-plus"></i> </a>
                                         </div>
@@ -85,7 +74,7 @@
                                                                                         class="btn btn-primary btn-sm">
                                                                                         تعديل <i class="fa fa-edit"></i>
                                                                                     </a>
-                                                                                    <a href="{{ url('my/property/maintain/delete/' . $properity_maintaine['id']) }}"
+                                                                                    <a data-method="post" href="{{ url('my/property/maintain/delete/' . $properity_maintaine['id']) }}"
                                                                                         class="btn btn-warning btn-sm"
                                                                                         onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')">
                                                                                         حذف <i class="fa fa-trash"></i>

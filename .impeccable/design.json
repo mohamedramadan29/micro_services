@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-18T00:00:00Z",
+  "title": "Design System: نفّذها (Nafizha)",
+  "extensions": {
+    "colorMeta": {
+      "ink": { "role": "primary", "displayName": "Drafting Ink", "canonical": "#2B3038", "tonalRamp": ["#1D2127", "#2B3038", "#3D424A", "#50545B", "#60646C", "#8A8E95", "#C5C8CC", "#F4F7F6"] },
+      "green": { "role": "secondary", "displayName": "Approval Green", "canonical": "var(--main-color, #3FB699)", "tonalRamp": ["#123D33", "#1C5A4B", "#287A66", "#36A589", "#3FB699", "#8FD5C3", "#E3F4EE", "#F1FAF7"] },
+      "green-ink": { "role": "secondary", "displayName": "Green Text", "canonical": "#287A66" },
+      "green-deep": { "role": "secondary", "displayName": "Green Deep", "canonical": "#1C5A4B" },
+      "green-wash": { "role": "secondary", "displayName": "Green Wash", "canonical": "#E3F4EE" },
+      "green-mist": { "role": "secondary", "displayName": "Green Mist", "canonical": "#F1FAF7" },
+      "paper": { "role": "neutral", "displayName": "Drafting Paper", "canonical": "#F4F7F6" },
+      "sheet": { "role": "neutral", "displayName": "Sheet White", "canonical": "#FFFFFF" },
+      "ink-2": { "role": "neutral", "displayName": "Ink 2 (secondary text, 7.06:1)", "canonical": "#50545B" },
+      "ink-3": { "role": "neutral", "displayName": "Ink 3 (meta text, 5.51:1)", "canonical": "#60646C" },
+      "line": { "role": "neutral", "displayName": "Hairline", "canonical": "rgba(43, 48, 56, .14)" },
+      "line-2": { "role": "neutral", "displayName": "Rule", "canonical": "rgba(43, 48, 56, .26)" },
+      "line-3": { "role": "neutral", "displayName": "Dimension Line", "canonical": "rgba(43, 48, 56, .55)" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display (Alexandria 800)", "purpose": "Homepage hero h1 only; keeps admin line breaks (pre-line), max 24ch." },
+      "headline": { "displayName": "Headline (Alexandria 700)", "purpose": "Section headings with their dimension line." },
+      "title": { "displayName": "Title (Alexandria 700)", "purpose": "Card, station, legend and account-card headings." },
+      "body": { "displayName": "Body (Readex Pro 400)", "purpose": "Reading text; paragraphs in ink-2." },
+      "label": { "displayName": "Label (Readex Pro 500)", "purpose": "Nav, breadcrumbs, title-block cells, pills." },
+      "dimension": { "displayName": "Dimension (Readex Pro, tabular)", "purpose": "Dimension-line labels and drawing notes." }
+    },
+    "shadows": [
+      { "name": "nf-shadow", "value": "0 1px 2px rgba(29,33,39,.06), 0 8px 24px -12px rgba(29,33,39,.18)", "purpose": "Dropdowns and hovered service cards only; sheets are flat at rest." },
+      { "name": "inner-ring", "value": "inset 0 0 0 1px rgba(43,48,56,.55)", "purpose": "Hover/selected state that lights a sheet from inside (ink ring for entry cards and selected types)." },
+      { "name": "ink-button-underline", "value": "inset 0 -3px 0 var(--nf-green)", "purpose": "Hover cue on every ink-filled action." },
+      { "name": "focus-halo", "value": "0 0 0 3px rgba(63,182,153,.18)", "purpose": "Focused inputs and search frame (with a green-ink border)." }
+    ],
+    "motion": [
+      { "name": "nf-ease", "value": "cubic-bezier(.16, 1, .3, 1)", "purpose": "The only easing; all transitions and keyframes." },
+      { "name": "nf-draw", "value": "stroke-dashoffset var(--nf-len) → 0, 1.6s, per-path --d delay", "purpose": "Plotter draws plan lines once under html.nf-drawing." },
+      { "name": "nf-stamp", "value": "scale 1.6 → .94 → 1 at −12°, .55s, delay 1.75s", "purpose": "The approval stamp lands after the lines." },
+      { "name": "nf-rise", "value": "translateY(10px) + fade, .7s", "purpose": "Legend rows and stations appear once on scroll (.nf-reveal.in)." },
+      { "name": "nf-line-in", "value": "scaleX/scaleY 0 → 1, 1.2s", "purpose": "How-it-works rail draws in once." }
+    ],
+    "breakpoints": [
+      { "name": "phone", "value": "767px" },
+      { "name": "tablet", "value": "991px" },
+      { "name": "container", "value": "1200px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button (ink)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Every action: ink fill, white text, green inset underline on hover.",
+      "html": "<button class=\"ds-btn-ink\">اطلب خدمة</button>",
+      "css": ".ds-btn-ink { background: #2B3038; color: #fff; border: 1px solid #2B3038; height: 46px; padding: 0 20px; border-radius: 6px; font-family: 'Readex Pro', Tahoma, sans-serif; font-weight: 600; cursor: pointer; transition: background-color .2s cubic-bezier(.16,1,.3,1), box-shadow .2s cubic-bezier(.16,1,.3,1); } .ds-btn-ink:hover { background: #1D2127; border-color: #1D2127; box-shadow: inset 0 -3px 0 #3FB699; } .ds-btn-ink:focus-visible { outline: 2px solid #287A66; outline-offset: 2px; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary actions: white with a rule border; dashed variant for danger.",
+      "html": "<button class=\"ds-btn-outline\">تصفّح الخدمات</button> <button class=\"ds-btn-outline ds-danger\">إلغاء الطلب</button>",
+      "css": ".ds-btn-outline { background: #fff; color: #2B3038; border: 1px solid rgba(43,48,56,.26); height: 46px; padding: 0 20px; border-radius: 6px; font-family: 'Readex Pro', Tahoma, sans-serif; font-weight: 600; cursor: pointer; transition: border-color .2s, background-color .2s; } .ds-btn-outline:hover { border-color: #2B3038; background: #F4F7F6; } .ds-btn-outline:focus-visible { outline: 2px solid #287A66; outline-offset: 2px; } .ds-danger { border-style: dashed; }"
+    },
+    {
+      "name": "Approve Button (green)",
+      "kind": "button",
+      "refersTo": "button-approve",
+      "description": "Only for an act of approval; green fill carries ink text.",
+      "html": "<button class=\"ds-btn-approve\">اعتماد المرحلة</button>",
+      "css": ".ds-btn-approve { background: #3FB699; color: #2B3038; border: 1px solid #3FB699; height: 46px; padding: 0 20px; border-radius: 6px; font-family: 'Readex Pro', Tahoma, sans-serif; font-weight: 600; cursor: pointer; } .ds-btn-approve:hover { background: #36a589; } .ds-btn-approve:focus-visible { outline: 2px solid #287A66; outline-offset: 2px; }"
+    },
+    {
+      "name": "Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "White field, rule border, green-ink focus with a soft halo.",
+      "html": "<input class=\"ds-input\" dir=\"rtl\" placeholder=\"اكتب ما تحتاجه\">",
+      "css": ".ds-input { min-height: 44px; padding: 0 12px; background: #fff; color: #2B3038; border: 1px solid rgba(43,48,56,.26); border-radius: 6px; font-family: 'Readex Pro', Tahoma, sans-serif; font-size: 15px; caret-color: #287A66; } .ds-input::placeholder { color: #60646C; } .ds-input:focus { outline: none; border-color: #287A66; box-shadow: 0 0 0 3px rgba(63,182,153,.18); }"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "White bar with a ruler along its lower edge; active link underlined in ink.",
+      "html": "<nav class=\"ds-nav\" dir=\"rtl\"><a class=\"on\" href=\"#\">الرئيسية</a><a href=\"#\">الخدمات</a><a href=\"#\">المستقلين</a><a class=\"ds-nav-cta\" href=\"#\">اطلب خدمة</a></nav>",
+      "css": ".ds-nav { position: relative; display: flex; align-items: center; gap: 4px; padding: 10px 16px 14px; background: #fff; border-bottom: 1px solid rgba(43,48,56,.14); font-family: 'Readex Pro', Tahoma, sans-serif; } .ds-nav::after { content: ''; position: absolute; inset: auto 0 -1px 0; height: 6px; background: repeating-linear-gradient(90deg, rgba(43,48,56,.26) 0 1px, transparent 1px 48px) bottom / 100% 6px no-repeat, repeating-linear-gradient(90deg, rgba(43,48,56,.14) 0 1px, transparent 1px 8px) bottom / 100% 3px no-repeat; } .ds-nav a { position: relative; padding: 8px 14px; color: #50545B; font-weight: 500; font-size: 14.5px; text-decoration: none; } .ds-nav a:hover, .ds-nav a.on { color: #2B3038; } .ds-nav a.on::after { content: ''; position: absolute; right: 14px; left: 14px; bottom: 2px; height: 2px; background: #2B3038; border-radius: 2px; } .ds-nav a.ds-nav-cta { margin-inline-start: auto; background: #2B3038; color: #fff; border-radius: 6px; padding: 10px 18px; } .ds-nav a.ds-nav-cta:hover { box-shadow: inset 0 -3px 0 #3FB699; } .ds-nav a:focus-visible { outline: 2px solid #287A66; outline-offset: 2px; }"
+    },
+    {
+      "name": "Status Pills",
+      "kind": "chip",
+      "refersTo": "pill-ok",
+      "description": "Five tones by meaning: ok, warn, bad (dashed), info, stamp (final approval).",
+      "html": "<div dir=\"rtl\" style=\"display:flex;gap:10px;align-items:center;flex-wrap:wrap\"><span class=\"ds-pill ok\">منشور</span><span class=\"ds-pill warn\">دورك: الرد</span><span class=\"ds-pill bad\">لم يكتمل</span><span class=\"ds-pill info\">قيد التنفيذ</span><span class=\"ds-pill stamp\">مكتمل</span></div>",
+      "css": ".ds-pill { display: inline-block; padding: 3px 10px; border-radius: 4px; font-family: 'Readex Pro', Tahoma, sans-serif; font-weight: 600; font-size: 13px; } .ds-pill.ok { background: #E3F4EE; color: #1C5A4B; box-shadow: inset 0 0 0 1px rgba(63,182,153,.55); } .ds-pill.warn { background: #fff; color: #2B3038; box-shadow: inset 0 0 0 1px rgba(43,48,56,.55); } .ds-pill.bad { background: #fff; color: #2B3038; outline: 1px dashed #2B3038; outline-offset: -1px; } .ds-pill.info { background: #F4F7F6; color: #2B3038; } .ds-pill.stamp { background: rgba(63,182,153,.08); color: #1C5A4B; border-radius: 999px; padding: 5px 12px; box-shadow: inset 0 0 0 1.5px #3FB699, inset 0 0 0 3px #fff, inset 0 0 0 4px #3FB699; transform: rotate(-4deg); font-family: 'Alexandria', 'Readex Pro', sans-serif; }"
+    },
+    {
+      "name": "Sheet Card with crop marks",
+      "kind": "card",
+      "refersTo": "sheet-card",
+      "description": "White sheet with two crop marks; hover lights it from inside, never lifts.",
+      "html": "<div class=\"ds-sheet\" dir=\"rtl\"><h3>تصميم موقع</h3><p>مستقل معتمد يرسل لك عرضًا بمراحل واضحة.</p><strong>٤٬٥٠٠ ج.م</strong></div>",
+      "css": ".ds-sheet { position: relative; max-width: 320px; padding: 24px; background: #fff; color: #2B3038; border: 1px solid rgba(43,48,56,.14); border-radius: 6px; font-family: 'Readex Pro', Tahoma, sans-serif; transition: border-color .25s cubic-bezier(.16,1,.3,1), box-shadow .25s cubic-bezier(.16,1,.3,1); } .ds-sheet::before, .ds-sheet::after { content: ''; position: absolute; width: 14px; height: 14px; border: solid rgba(43,48,56,.55); pointer-events: none; } .ds-sheet::before { top: -7px; right: -7px; border-width: 1px 1px 0 0; } .ds-sheet::after { bottom: -7px; left: -7px; border-width: 0 0 1px 1px; } .ds-sheet:hover { border-color: rgba(43,48,56,.55); box-shadow: inset 0 0 0 1px rgba(43,48,56,.55), 0 1px 2px rgba(29,33,39,.06), 0 8px 24px -12px rgba(29,33,39,.18); } .ds-sheet h3 { margin: 0 0 6px; font-family: 'Alexandria', 'Readex Pro', sans-serif; font-weight: 700; font-size: 1.05rem; } .ds-sheet p { margin: 0 0 12px; color: #50545B; font-size: 14.5px; line-height: 1.75; } .ds-sheet strong { font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Title Block with Stamp",
+      "kind": "custom",
+      "refersTo": "stamp",
+      "description": "Ruled key-facts block (1.4px ink frame) with the green approval stamp — the signature.",
+      "html": "<div class=\"ds-tb\" dir=\"rtl\"><dl><dt>المشروع</dt><dd>مشروعك</dd><dt>المنفّذ</dt><dd>مستقل يراجعه فريق نفّذها</dd><dt>الدفع</dt><dd class=\"held\">يبقى المبلغ لدى نفّذها حتى تعتمد العمل</dd></dl><div class=\"ds-tb-stamp\"><span class=\"ds-stamp\">معتمد<small>نفّذها</small></span></div></div>",
+      "css": ".ds-tb { display: grid; grid-template-columns: 1fr auto; max-width: 520px; border: 1.4px solid #2B3038; background: #fff; font-family: 'Readex Pro', Tahoma, sans-serif; font-size: 13px; color: #2B3038; } .ds-tb dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; } .ds-tb dt, .ds-tb dd { margin: 0; padding: 7px 12px; border-bottom: 1px solid rgba(43,48,56,.26); } .ds-tb dt { color: #60646C; font-weight: 500; border-left: 1px solid rgba(43,48,56,.26); white-space: nowrap; } .ds-tb dd { font-weight: 600; } .ds-tb dl > :nth-last-child(-n+2) { border-bottom: 0; } .ds-tb dd.held { color: #1C5A4B; } .ds-tb-stamp { display: grid; place-items: center; padding: 10px 16px; border-right: 1px solid rgba(43,48,56,.26); } .ds-stamp { display: inline-grid; place-items: center; width: 84px; height: 84px; border-radius: 50%; border: 2px solid #3FB699; color: #1C5A4B; background: rgba(63,182,153,.08); box-shadow: inset 0 0 0 4px #fff, inset 0 0 0 5px #3FB699; transform: rotate(-12deg); font-family: 'Alexandria', 'Readex Pro', sans-serif; font-weight: 800; font-size: 15px; line-height: 1; } .ds-stamp small { display: block; margin-top: 4px; font-family: 'Readex Pro', sans-serif; font-weight: 600; font-size: 9.5px; }"
+    },
+    {
+      "name": "Status Line",
+      "kind": "custom",
+      "refersTo": "status-line",
+      "description": "Account counts read as a dimension line: value + label, ticks between (partials/status-line).",
+      "html": "<div class=\"ds-line\" dir=\"rtl\"><a href=\"#\"><strong>٣</strong><span>طلبات مفتوحة</span></a><a href=\"#\"><strong>١٢</strong><span>عرضًا</span></a><div class=\"zero\"><strong>0</strong><span>مشاريع</span></div></div>",
+      "css": ".ds-line { display: flex; flex-wrap: wrap; max-width: 560px; background: #fff; border: 1px solid rgba(43,48,56,.14); border-radius: 6px; font-family: 'Readex Pro', Tahoma, sans-serif; } .ds-line > * { position: relative; flex: 1 1 150px; display: flex; align-items: baseline; gap: 8px; padding: 12px 18px; color: #2B3038; text-decoration: none; } .ds-line > * + *::before { content: ''; position: absolute; right: 0; top: 30%; bottom: 30%; width: 1px; background: rgba(43,48,56,.26); } .ds-line a:hover { background: #F4F7F6; } .ds-line a:focus-visible { outline: 2px solid #287A66; outline-offset: -2px; } .ds-line strong { font-family: 'Alexandria', 'Readex Pro', sans-serif; font-size: 1.05rem; font-weight: 700; font-variant-numeric: tabular-nums; } .ds-line span { font-size: 13px; color: #50545B; } .ds-line .zero strong, .ds-line .zero span { color: #60646C; font-weight: 500; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "الرسومات التنفيذية (The Execution Drawing Set)",
+    "overview": "The name «نفّذها» reads as \"execute the drawing\", so the site looks like an engineer's set of execution drawings. Pages sit on drafting-grid paper (24px minor grid, 120px major). Content sits on white sheets with crop marks at two corners. Headings carry a dimension line under them. Key facts sit in a ruled title block, and the one loud mark is a round green approval stamp. A project appears as a dimensioned plan whose stages are drawn in ink, and the last stage is closed in green.\n\nThe world is quiet and exact. Ink does all the work: text, links, actions, borders and drawn lines. Green is a signature, not a decoration. It appears only where something has been approved, where money is held until approval, or where a stage is complete. Density is moderate. Rows are separated by hairlines, not boxes inside boxes. Numbers are tabular, as on a drawing.\n\nMotion is a plotter at work. Lines draw themselves once, the stamp lands once, and stations rise once as they scroll into view. Nothing lifts on hover. When motion does not run (page hidden at load, reduced motion, no IntersectionObserver), everything is simply drawn.",
+    "keyCharacteristics": [
+      "Two logo hues only: ink #2B3038 and green #3FB699, plus their tints and shades.",
+      "Green = approval / held money / done; ink = everything you can press.",
+      "Grid paper, sheets with crop marks, dimension lines, title blocks and a stamp make up the whole ornament vocabulary.",
+      "Arabic-native RTL: Alexandria for display, Readex Pro for reading.",
+      "Drawn once, never bouncing; hover lights a sheet from inside."
+    ],
+    "rules": [
+      { "name": "The Green Primary Rule", "body": "Logo green is the primary colour (user decision 2026-10-18): actions, links (green-ink as text), highlights and active states; green fills always carry ink text. Approvals also get the stamp.", "section": "colors" },
+      { "name": "The No White On Green Rule", "body": "White on #3FB699 is 2.51:1 and fails. Green surfaces always carry ink text (5.28:1) or green-deep text. Green as text on paper is green-ink only; raw green text is 2.33:1 and is limited to stars and icons on the ink footer and testimonials.", "section": "colors" },
+      { "name": "The Logo-Only Rule", "body": "No hue outside the ink and green scales: no red, amber or blue, not even for errors. Danger and invalid states use ink + dashed line (.btn-danger, .is-invalid, .alert-danger, .rf-acc-pill.bad). Warning is a solid ink outline. Info is paper.", "section": "colors" },
+      { "name": "The Tabular Numbers Rule", "body": "Every count, price and number cell uses font-variant-numeric: tabular-nums (tables, .price_section strong, .nf-acc-tb dd.num, .nf-acc-line-item strong, .rf-acc-num, station nodes). Counts set in the display face read as figures on a drawing.", "section": "typography" },
+      { "name": "The Arabic Measure Rule", "body": "Never track, uppercase-style or italicise Arabic. .testimonial-text resets the theme's italic for this reason.", "section": "typography" },
+      { "name": "The Lit-From-Inside Rule", "body": "Hover never moves an element (transform: none !important on .rf-home-card, .testimonial-card). It darkens the border and adds an inner ring. A soft outer shadow may come with it. Only an image inside a card may scale (1.03, .6s).", "section": "elevation" }
+    ],
+    "dos": [
+      "Do read colours from --nf-* tokens; use var(--nf-green) (which follows the admin's --main-color) rather than a literal green.",
+      "Do draw actions and links in ink (--nf-ink), with the 3px green inset underline as the hover cue.",
+      "Do put text on green in ink or --nf-green-deep; use --nf-green-ink (#287A66) for any green text on paper or white.",
+      "Do say held money as «يبقى المبلغ لدى نفّذها حتى تعتمد العمل» and call the parties «عميل» and «مستقل».",
+      "Do show counts as a status line (partials/status-line) or a title block (.nf-acc-tb), with tabular numbers.",
+      "Do use dashed ink for danger, invalid and failed states.",
+      "Do start a new section with .sec-heading and its dimension line, and place content on .nf-sheet over grid paper.",
+      "Do design every animated element to be complete with no motion, and gate the animation behind html.nf-drawing.",
+      "Do keep RTL first: logical properties for new rules, crop marks top-right / bottom-left."
+    ],
+    "donts": [
+      "Don't use the word «ضمان» for held money, or «مشتري/بائع» for people.",
+      "Don't introduce a hue outside the ink and green scales, including red/amber/blue for errors or warnings.",
+      "Don't put white text on green (2.51:1), or make a link, CTA or heading green.",
+      "Don't use emoji, gradient text, glassmorphism/backdrop-filter decoration, or coloured decorative gradients. Gradients exist only to draw grid paper, ruler ticks and dimension lines.",
+      "Don't build page structure from grids of same-size icon cards, or a hero row of big metrics; never invent client counts, ratings or quotes (testimonials render only from approved reviews).",
+      "Don't lift, bounce or translate elements on hover; light the sheet from inside instead.",
+      "Don't loop animations or animate something that has no drawn rest state.",
+      "Don't add a kicker or eyebrow line above headings.",
+      "Don't fix card heights with max-height + overflow: hidden.",
+      "Don't apply this system to the admin panel."
+    ]
+  }
+}

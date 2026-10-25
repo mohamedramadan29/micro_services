@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class UserProductPurchesController extends Controller
 {
     public function index(){
-        $purches = ProductOrder::where('user_id', Auth::user()->id)->get();
+        $purches = ProductOrder::with('product')->where('user_id', Auth::user()->id)->latest('id')->get();
         return view('website.user.product_purches', compact('purches'));
     }
 }

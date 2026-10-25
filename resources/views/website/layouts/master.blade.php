@@ -1,6 +1,7 @@
 @include('website.layouts.header')
 <body class="blue-skin">
 
+<a class="nf-skip-link" href="#site-content">تجاوز القائمة إلى المحتوى</a>
 <div id="main-wrapper">
 @if (\App\Support\SiteContent::previewing())
     <div class="rf-preview-bar" dir="rtl">
@@ -14,7 +15,9 @@
     @include('website.layouts.navbar')
 @endif
 
+<main id="site-content" tabindex="-1">
 @yield('content')
+</main>
 @if (Session::has('Success_message'))
 @php
     toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
@@ -28,6 +31,7 @@
 @endforeach
 @endif
 @include('website.layouts.footer')
+</div>
 @include('website.layouts.partials.analytics')
 @include('notify::components.notify')
 @yield('js')

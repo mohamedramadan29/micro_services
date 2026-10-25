@@ -60,7 +60,7 @@
                                             طريقة السحب
                                         </th>
                                         <td>
-                                            {{ $withdraw['method'] }}
+                                            {{ $withdraw->methodLabel() }}
                                         </td>
                                     </tr>
                                     <tr>

@@ -28,7 +28,7 @@ class Imagemanager
 
     public function GenerateImageName($image)
     {
-        $file_name = Str::uuid() . time() . $image->getClientOriginalExtension();
+        $file_name = Str::uuid() . time() . '.' . strtolower($image->getClientOriginalExtension());
         return $file_name;
     }
 

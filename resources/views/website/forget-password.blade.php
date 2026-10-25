@@ -12,28 +12,16 @@
                 <div class="col-lg-8 col-12">
                     <div class="modal-content" id="registermodal">
                         <div class="modal-header">
-                            <h4> نسيت كلمة المرور </h4>
+                            <h1 class="nf-auth-title"> نسيت كلمة المرور </h1>
 
                         </div>
                         <div class="modal-body">
-                            @if (Session::has('Success_message'))
-                                @php
-                                    toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-                                @endphp
-                            @endif
-                            @if ($errors->any())
-                                @foreach ($errors->all() as $error)
-                                    @php
-                                        toastify()->error($error);
-                                    @endphp
-                                @endforeach
-                            @endif
                             <div class="login-form">
                                 <form action="{{ url('forget-password') }}" method="post">
                                     @csrf
                                     <div class="form-group">
-                                        <label> ادخل البريد الالكتروني المسجل لدينا </label>
-                                        <input type="email" class="form-control" name="email"
+                                        <label for="auth-email"> ادخل البريد الالكتروني المسجل لدينا </label>
+                                        <input id="auth-email" type="email" class="form-control" name="email" autocomplete="email" dir="ltr"
                                             value="{{ old('email') }}">
                                     </div>
 

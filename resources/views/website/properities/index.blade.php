@@ -12,18 +12,7 @@
                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
                     <div class="dashboard-navbar">
 
-                        <div class="d-user-avater">
-                            @if (Auth::user()->image != '')
-                                <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
-                                    class="img-fluid rounded" alt="">
-                            @else
-                                <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
-                                    alt="">
-                            @endif
-
-                            <h4> {{ Auth::user()->user_name }} </h4>
-                            <span> {{ Auth::user()->email }} </span>
-                        </div>
+                        @include('website.user.partials.account-head')
 
                         @include('website.layouts.dashboard-sidebar')
 
@@ -57,7 +46,7 @@
                                     <div class="_dashboard_content_header">
                                         <div class="_dashboard__header_flex d-flex justify-content-between"
                                             style="width: 100%">
-                                            <h4><i class="ti-lock mr-1"></i> عقاراتي  </h4>
+                                            <h4><i class="bi bi-building"></i> عقاراتي  </h4>
                                             <a href="{{ url('my/property/add') }}" class="btn btn-primary btn-sm"> اضافة عقار  <i class="bi bi-plus"></i> </a>
                                         </div>
                                     </div>
@@ -91,7 +80,7 @@
                                                                 <a href="{{ url('my/property/update/' . $properity['id']) }}"
                                                                     class="btn btn-primary btn-sm"> تعديل <i
                                                                         class="fa fa-edit"></i> </a>
-                                                                <a style="height: 30px" href="{{ url('my/property/delete/' . $properity['id']) }}"
+                                                                <a data-method="post" style="height: 30px" href="{{ url('my/property/delete/' . $properity['id']) }}"
                                                                     class="btn btn-danger btn-sm"
                                                                     onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟')">
                                                                     حذف <i class="fa fa-trash"></i> </a>

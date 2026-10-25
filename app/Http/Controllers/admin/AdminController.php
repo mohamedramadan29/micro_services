@@ -19,9 +19,11 @@ class AdminController extends Controller
     }
 
 
-    public function dashboard()
+    public function dashboard(Request $request, \App\Services\Admin\DashboardStats $stats)
     {
-        return view('admin.dashboard');
+        $period = $stats::period((string) $request->string('period'));
+
+        return view('admin.dashboard', ['period' => $period] + $stats->build($period));
     }
 
 

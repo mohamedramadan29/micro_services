@@ -20,7 +20,7 @@
 
             @foreach ($packagesGrouped as $category => $packages)
                 <!-- عنوان الفئة (مثلاً: تصميم المواقع - برمجة - تطبيقات موبايل ...) -->
-                <h2 style="text-align:center; margin:50px 0 30px; font-size:2rem; color:#333;">
+                <h2 style="text-align:center; margin:50px 0 30px; font-size:2rem; color:#2b3038;">
                     {{ $category }}
                 </h2>
 
@@ -120,16 +120,16 @@
 
 <style>
     :root {
-        --primary-color: #3FB699;
-        --primary-dark: #3FB699;
-        --success-color: #10B981;
-        --danger-color: #EF4444;
-        --warning-color: #F59E0B;
-        --purple-color: #8B5CF6;
-        --dark-color: #1E293B;
-        --light-bg: #F8FAFC;
-        --border-color: #E2E8F0;
-        --text-muted: #64748B;
+        --primary-color: #3fb699;
+        --primary-dark: #3fb699;
+        --success-color: #3fb598;
+        --danger-color: #818489;
+        --warning-color: #b0b1b4;
+        --purple-color: #777b80;
+        --dark-color: #242930;
+        --light-bg: #fafafa;
+        --border-color: #e7e7e8;
+        --text-muted: #707379;
     }
 
 
@@ -255,13 +255,13 @@
         position: absolute;
         top: 20px;
         left: -35px;
-        background: linear-gradient(135deg, var(--warning-color), #F59E0B);
+        background: linear-gradient(135deg, var(--warning-color), #b0b1b4);
         color: white;
         padding: 0.5rem 3rem;
         transform: rotate(-45deg);
         font-weight: 600;
         font-size: 0.85rem;
-        box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+        box-shadow: 0 4px 10px rgba(176, 177, 180, 0.3);
     }
 
     /* Card Header */
@@ -277,17 +277,17 @@
     }
 
     .packages .pricing-card.basic .card-icon {
-        background: rgba(14, 165, 233, 0.1);
+        background: rgba(153, 156, 159, 0.1);
         color: var(--primary-color);
     }
 
     .packages .pricing-card.pro .card-icon {
-        background: rgba(139, 92, 246, 0.1);
+        background: rgba(119, 123, 128, 0.1);
         color: var(--purple-color);
     }
 
     .packages .pricing-card.premium .card-icon {
-        background: rgba(245, 158, 11, 0.1);
+        background: rgba(176, 177, 180, 0.1);
         color: var(--warning-color);
     }
 
@@ -383,17 +383,17 @@
     }
 
     .packages .pricing-card.basic .feature-icon {
-        background: rgba(14, 165, 233, 0.1);
+        background: rgba(153, 156, 159, 0.1);
         color: var(--primary-color);
     }
 
     .packages .pricing-card.pro .feature-icon {
-        background: rgba(139, 92, 246, 0.1);
+        background: rgba(119, 123, 128, 0.1);
         color: var(--purple-color);
     }
 
     .packages .pricing-card.premium .feature-icon {
-        background: rgba(245, 158, 11, 0.1);
+        background: rgba(176, 177, 180, 0.1);
         color: var(--warning-color);
     }
 
@@ -439,12 +439,12 @@
     }
 
     .packages .pricing-card.pro .cta-button {
-        background: linear-gradient(135deg, var(--purple-color), #7C3AED);
+        background: linear-gradient(135deg, var(--purple-color), #63676d);
         color: white;
     }
 
     .packages .pricing-card.premium .cta-button {
-        background: linear-gradient(135deg, var(--warning-color), #F59E0B);
+        background: linear-gradient(135deg, var(--warning-color), #b0b1b4);
         color: white;
     }
 
@@ -461,7 +461,7 @@
         max-width: 600px;
         margin: 3rem auto 0;
         padding: 2rem;
-        background: #CCEBE6;
+        background: #cbebe3;
         border-radius: 1.5rem;
         animation: fadeInUp 0.6s ease-out 0.5s both;
         margin-bottom: 20px;
@@ -506,7 +506,7 @@
     .packages .contact-btn.primary:hover {
         background: var(--primary-dark);
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        box-shadow: 0 4px 15px rgba(153, 156, 159, 0.3);
     }
 
     .packages .contact-btn.secondary {
@@ -564,8 +564,8 @@
 
     footer.skin-dark-footer ul.footer-bottom-social li a {
         font-size: 17px;
-        background: #3fb697;
-        color: #fff !important;
+        background: #3fb699;
+        color: #ffffff !important;
         text-align: center;
         width: 40px;
         height: 40px;

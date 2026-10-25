@@ -1,18 +1,7 @@
-(function($) {
-	"use strict";
-	
-	//P-scrolling
-	
-	
-	const ps2 = new PerfectScrollbar('.chat-scroll', {
-	  useBothWheelAxes:true,
-	  suppressScrollX:true,
-	});
-	const ps3 = new PerfectScrollbar('.Notification-scroll', {
-	  useBothWheelAxes:true,
-	  suppressScrollX:true,
-	});
-	
-	
-	
+(function ($) {
+    "use strict";
+    if (typeof PerfectScrollbar === 'undefined') return;
+    document.querySelectorAll('.chat-scroll, .Notification-scroll').forEach(function (element) {
+        new PerfectScrollbar(element, { useBothWheelAxes: true, suppressScrollX: true });
+    });
 })(jQuery);

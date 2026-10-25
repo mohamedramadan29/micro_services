@@ -80,11 +80,11 @@ return [
             'throw' => false,
         ],
 
+        // Digital product files: private (closed by public/uploads/private/.htaccess), see App\Support\DigitalFiles.
         'digital_files' => [
             'driver' => 'local',
-            'root' => public_path('assets/uploads/digital_products'),
-            'url' => env('APP_URL'),
-            'visibility' => 'public',
+            'root' => public_path('uploads/private/digital-products'),
+            'visibility' => 'private',
             'throw' => false,
             'report' => false,
         ],

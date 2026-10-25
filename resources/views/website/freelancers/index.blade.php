@@ -39,15 +39,17 @@
                             <img src="{{ $freelancer->avatarUrl(128) }}" alt="{{ $freelancer->name }}" loading="lazy" width="64" height="64">
                             <strong>{{ $freelancer->name }}</strong>
                             <span>{{ $freelancer->specializations->first()?->name }}</span>
-                            @if ($freelancer->rate)<span class="rf-fl-stars">★ {{ $freelancer->rate }}</span>@endif
+                            @if ($freelancer->ratingLabel())<span class="rf-fl-stars"><i class="bi bi-star-fill" aria-hidden="true"></i> {{ $freelancer->ratingLabel() }}</span>@endif
                         </a>
                     @endforeach
                 </div>
             @endif
 
             <div class="rf-fl-layout">
+                <details class="nf-filter-panel" open data-responsive-filters>
+                    <summary><i class="bi bi-sliders" aria-hidden="true"></i> تصفية النتائج{{ $anyFilter ? ' — فلاتر مفعّلة' : '' }} <i class="bi bi-chevron-down" aria-hidden="true"></i></summary>
                 <form method="GET" class="rf-fl-filters">
-                    <h3>تصفية النتائج</h3>
+                    @if ($f('group'))<input type="hidden" name="group" value="{{ $f('group') }}">@endif
                     @if ($f('q'))<input type="hidden" name="q" value="{{ $f('q') }}">@endif
                     <label>التخصص
                         <select name="service" class="form-control">
@@ -67,7 +69,7 @@
                             @foreach ([4, 3, 2] as $stars)<option value="{{ $stars }}" @selected((int) $f('rating') === $stars)>{{ $stars }} نجوم فأكثر</option>@endforeach
                         </select>
                     </label>
-                    <label>الميزانية بالجنيه المصري (يبدأ من حتى)
+                    <label>أقصى سعر مبدئي (ج.م)
                         <input type="number" name="max_price" min="0" step="50" class="form-control" value="{{ $f('max_price') }}" placeholder="مثال: 2000">
                     </label>
                     <label>حالة التوفر
@@ -87,25 +89,51 @@
                     <button class="rf-sv-btn rf-sv-btn-primary rf-sv-btn-block">تطبيق</button>
                     @if ($anyFilter)<a href="{{ route('freelancers.index') }}" class="rf-fl-clear">مسح الفلاتر</a>@endif
                 </form>
+                </details>
 
-                <div>
+                <div class="nf-directory-results">
                     <div class="rf-fl-section-head"><h2>{{ $page['all_title'] }}</h2><span>{{ $freelancers->total() }} مستقل</span></div>
                     @if ($freelancers->isEmpty())
                         <p class="rf-sv-empty">{{ $page['empty'] }} <a href="{{ route('requests.create') }}">اطلب عرضًا</a></p>
                     @else
                         <div class="rf-fl-grid">
                             @foreach ($freelancers as $freelancer)
+                                @php
+                                    $profileUrl = url('user/' . $freelancer->user_name);
+                                    $rating = $freelancer->ratingLabel();
+                                    $skills = $freelancer->specializations;
+                                @endphp
                                 <article class="rf-fl-card">
-                                    <img src="{{ $freelancer->avatarUrl(256) }}" alt="{{ $freelancer->name }}" loading="lazy" width="96" height="96">
-                                    <h3>{{ $freelancer->name }}</h3>
-                                    <p class="rf-fl-spec">{{ $freelancer->specializations->pluck('name')->take(2)->implode(' · ') ?: $freelancer->job_title }}</p>
-                                    <div class="rf-fl-meta">
-                                        <span class="rf-fl-stars">{{ $freelancer->rate ? '★ ' . rtrim(rtrim(number_format((float) $freelancer->rate, 1), '0'), '.') . ($freelancer->rating_count ? ' (' . $freelancer->rating_count . ')' : '') : 'جديد' }}</span>
-                                        @if ($freelancer->availability)<span class="rf-fl-avail {{ $freelancer->availability }}">{{ User::AVAILABILITY[$freelancer->availability] ?? '' }}</span>@endif
+                                    @if ($freelancer->is_featured)<span class="rf-fl-badge"><i class="bi bi-award-fill" aria-hidden="true"></i> موثوق</span>@endif
+                                    <div class="rf-fl-photo">
+                                        <img src="{{ $freelancer->avatarUrl(256) }}" alt="" loading="lazy" width="96" height="96">
+                                        @if ($freelancer->availability === 'available')<span class="rf-fl-dot" title="{{ User::AVAILABILITY['available'] }}"></span>@endif
                                     </div>
+                                    <h3><a href="{{ $profileUrl }}" class="rf-fl-link">{{ $freelancer->name }}</a></h3>
+                                    <p class="rf-fl-spec">{{ $freelancer->job_title ?: $skills->pluck('name')->take(2)->implode(' · ') }}</p>
+                                    <div class="rf-fl-rating">
+                                        @if ($rating)
+                                            @include('website.freelancers.partials.stars', ['value' => $freelancer->rate])
+                                            <strong>{{ $rating }}</strong>@if ($freelancer->rating_count)<span>({{ $freelancer->rating_count }})</span>@endif
+                                        @else
+                                            <span class="rf-fl-new">مستقل جديد</span>
+                                        @endif
+                                    </div>
+                                    <ul class="rf-fl-figures">
+                                        <li><strong>{{ $freelancer->completedProjects() }}</strong> مشروع منجز</li>
+                                        <li><strong>{{ (int) $freelancer->works_count }}</strong> {{ (int) $freelancer->works_count === 1 ? 'عمل' : 'أعمال' }}</li>
+                                    </ul>
                                     @if ($freelancer->bio)<p class="rf-fl-bio">{{ \Illuminate\Support\Str::limit($freelancer->bio, 110) }}</p>@endif
-                                    @if ($freelancer->starting_price !== null)<p class="rf-fl-price">يبدأ من {{ \App\Support\Money::show($freelancer->starting_price) }}</p>@endif
-                                    <a href="{{ url('user/' . $freelancer->user_name) }}" class="rf-sv-btn rf-sv-btn-outline rf-sv-btn-block">{{ $page['card_button'] }}</a>
+                                    @if ($skills->isNotEmpty())
+                                        <ul class="rf-fl-skills">
+                                            @foreach ($skills->take(3) as $skill)<li>{{ $skill->name }}</li>@endforeach
+                                            @if ($skills->count() > 3)<li dir="ltr">+{{ $skills->count() - 3 }}</li>@endif
+                                        </ul>
+                                    @endif
+                                    <div class="rf-fl-foot">
+                                        <span class="rf-fl-price">@if ($freelancer->starting_price !== null)يبدأ من <strong>{{ \App\Support\Money::show($freelancer->starting_price) }}</strong>@else السعر حسب المشروع @endif</span>
+                                        <span class="rf-fl-go" aria-hidden="true">{{ $page['card_button'] }} <i class="bi bi-arrow-left"></i></span>
+                                    </div>
                                 </article>
                             @endforeach
                         </div>

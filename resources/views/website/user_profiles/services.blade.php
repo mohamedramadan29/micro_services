@@ -62,7 +62,7 @@
                                 <div class="_dashboard_content">
                                     <div class="_dashboard_content_header">
                                         <div class="_dashboard__header_flex">
-                                            <h4><i class="ti-lock mr-1"></i> الخدمات  </h4>
+                                            <h4><i class="bi bi-grid"></i> الخدمات  </h4>
                                         </div>
                                     </div>
 

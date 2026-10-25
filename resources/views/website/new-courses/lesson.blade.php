@@ -7,7 +7,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         .lesson-header {
-            background: linear-gradient(135deg, #3fb697 0% 0%, #3fb697 100%);
+            background: linear-gradient(135deg, #3fb699 0% 0%, #3fb699 100%);
             color: white;
             padding: 40px 0;
         }
@@ -19,7 +19,7 @@
             overflow: hidden;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            background: #000;
+            background: #0c0e12;
         }
 
         .video-container iframe {
@@ -65,7 +65,7 @@
         }
 
         .play-button i {
-            color: #667eea;
+            color: #83868b;
             font-size: 2rem;
             margin-left: 5px;
         }
@@ -96,13 +96,13 @@
         }
 
         .lesson-list-item:hover {
-            background: #f8f9fa;
-            border-left-color: #667eea;
+            background: #f9f9f9;
+            border-left-color: #83868b;
         }
 
         .lesson-list-item.active {
-            background: #e3f2fd;
-            border-left-color: #2196f3;
+            background: #efeff0;
+            border-left-color: #909297;
         }
 
         .lesson-list-item.completed {
@@ -112,7 +112,7 @@
         .lesson-list-item.completed::after {
             content: '✓';
             float: left;
-            color: #28a745;
+            color: #37a288;
             font-weight: bold;
         }
 
@@ -161,12 +161,12 @@
         }
 
         .nav-prev {
-            background: #6c757d;
+            background: #71747a;
             color: white;
         }
 
         .nav-next {
-            background: #007bff;
+            background: #7d8085;
             color: white;
         }
 

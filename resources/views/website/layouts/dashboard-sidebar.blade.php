@@ -1,61 +1,28 @@
-<div class="d-navigation">
+{{-- Account menu: built per account type by App\Support\AccountMenu (same list as the navbar dropdown). --}}
+<button type="button" class="rf-acc-menu-btn" aria-expanded="false" aria-controls="rf-acc-nav"
+        onclick="var n=document.getElementById('rf-acc-nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)">
+    <i class="bi bi-list"></i> قائمة حسابي <i class="bi bi-chevron-down rf-acc-chev"></i>
+</button>
+<div class="d-navigation rf-acc-nav" id="rf-acc-nav">
     <ul id="metismenu">
-        <li class="{{ request()->is('dashboard') ? 'active' : '' }}">
-            <a href="{{ url('dashboard') }}"><i class="ti-dashboard"></i> الملف الشخصي </a>
-        </li>
-        <li class="{{ request()->is('update-account') ? 'active' : '' }}">
-            <a href="{{ url('update-account') }}"> <i class="bi bi-gear-fill"></i> تعديل الملف الشخصي </a>
-        </li>
-        @if (Auth::user()->isClient())
-            <li class="{{ request()->routeIs('requests.index', 'requests.show') ? 'active' : '' }}">
-                <a href="{{ route('requests.index') }}"> <i class="bi bi-clipboard-check"></i> طلباتي </a>
-            </li>
-        @endif
-        @if (Auth::user()->isFreelancer())
-            <li class="{{ request()->routeIs('freelancer.requests.*') ? 'active' : '' }}">
-                <a href="{{ route('freelancer.requests.index') }}"> <i class="bi bi-inboxes-fill"></i> طلبات العملاء </a>
-            </li>
-            <li class="{{ request()->routeIs('freelancer.offers.*') ? 'active' : '' }}">
-                <a href="{{ route('freelancer.offers.index') }}"> <i class="bi bi-send-check-fill"></i> عروضي </a>
-            </li>
-            <li class="{{ request()->routeIs('specializations.*') ? 'active' : '' }}">
-                <a href="{{ route('specializations.edit') }}"> <i class="bi bi-tags-fill"></i> تخصصاتي </a>
-            </li>
-        @endif
-        @if (\App\Models\Contract::involving(Auth::user())->exists())
-            <li class="{{ request()->routeIs('contracts.*') ? 'active' : '' }}">
-                <a href="{{ route('contracts.index') }}"> <i class="bi bi-kanban-fill"></i> مشاريعي </a>
-            </li>
-        @endif
-        <li class="{{ request()->is('portfolio/user/index') ? 'active' : '' }}">
-            <a href="{{ url('portfolio/user/index') }}"> <i class="bi bi-sliders"></i> الاعمال </a>
-        </li>
-        <li class="{{ request()->is('balance') ? 'active' : '' }}">
-            <a href="{{ url('balance') }}"><i class="bi bi-credit-card"></i> الرصيد </a>
-        </li>
-        <li class="{{ request()->is('my/products/purches') ? 'active' : '' }}">
-            <a href="{{ url('my/products/purches') }}"><i class="bi bi-cart-check-fill"></i> مشتريات المنتجات </a>
-        </li>
-        <li class="{{ request()->is('service/index') ? 'active' : '' }}">
-            <a href="{{ url('service/index') }}"><i class="bi bi-database-fill-check"></i> الخدمات </a>
-        </li>
-        <li class="{{ request()->is('my/properties/index') ? 'active' : '' }}">
-            <a href="{{ url('my/properties/index') }}"><i class="bi bi-building"></i> العقارات </a>
-        </li>
-        <li class="{{ request()->is('my/property/maintain/index') ? 'active' : '' }}">
-            <a href="{{ url('my/property/maintain/index') }}"><i class="ti-support"></i> خدمات صيانة العقارات </a>
-        </li>
-        <li class="{{ request()->is('my/jobs') ? 'active' : '' }}">
-            <a href="{{ url('my/jobs') }}"><i class="ti-plus"></i> وظائفي </a>
-        </li>
-        <li class="{{ request()->is('chats') ? 'active' : '' }}">
-            <a href="{{ url('chats') }}"> <i class="bi bi-chat-dots-fill"></i> المحادثات </a>
-        </li>
-        <li class="{{ request()->is('tickets') ? 'active' : '' }}">
-            <a href="{{ url('tickets') }}"><i class="bi bi-ticket"></i> تذاكري </a>
-        </li>
-        <li class="{{ request()->is('logout') ? 'active' : '' }}">
-            <a href="{{ url('logout') }}" onclick="event.preventDefault(); document.getElementById('site-logout-form').submit();"><i class="ti-power-off"></i> تسجيل خروج </a>
+        @foreach (\App\Support\AccountMenu::sections(Auth::user(), request()) as $section)
+            @if ($section['title'])
+                <li class="rf-acc-section" aria-hidden="true">{{ $section['title'] }}</li>
+            @endif
+            @foreach ($section['items'] as $item)
+                <li class="{{ $item['active'] ? 'active' : '' }}">
+                    <a href="{{ $item['href'] }}" @if ($item['active']) aria-current="page" @endif>
+                        <i class="{{ $item['icon'] }}"></i> {{ $item['label'] }}
+                        @if ($item['badge'] > 0)
+                            <span class="rf-acc-badge">{{ $item['badge'] }}</span>
+                        @endif
+                    </a>
+                </li>
+            @endforeach
+        @endforeach
+        <li class="rf-acc-section" aria-hidden="true"></li>
+        <li>
+            <a href="{{ url('logout') }}" onclick="event.preventDefault(); document.getElementById('site-logout-form').submit();"><i class="ti-power-off"></i> تسجيل خروج</a>
         </li>
     </ul>
 </div>

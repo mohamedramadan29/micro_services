@@ -63,6 +63,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::match(['get', 'post'], 'service/update/{id}', 'update');
             Route::match(['post', 'get'], 'service/add', 'store');
             Route::post('service/destroy/{id}', 'destroy');
+            Route::post('service/{id}/publish', 'publish')->name('admin.services.publish');
+            Route::post('service/{id}/reject', 'reject')->name('admin.services.reject');
             Route::get('service/get-subcategories/{categoryId}', 'getSubCategories');
         });
         Route::controller(UserController::class)->group(function () {
@@ -93,6 +95,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::match(['post', 'get'], 'product/add', 'store');
             Route::match(['post', 'get'], 'product/update/{slug}', 'update')->name('product.update');
             Route::post('product/delete/{id}', 'delete');
+            Route::get('product/{id}/digital-file', 'digitalFile')->name('admin.products.digital-file');
             Route::get('/get-attribute-values/{attributeId}', 'getAttributeValues');
             Route::get('/get-subcategories', 'getSubCategories')->name('get.subcategories');
             Route::post('product/gallary/delete/{id}', 'delete_image_gallary');
@@ -506,6 +509,11 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('freelancers/{freelancer}/photo', 'photo')->name('admin.freelancers.photo');
             Route::post('freelancers/{freelancer}/decide', 'decide')->name('admin.freelancers.decide');
             Route::post('freelancers/{freelancer}/feature', 'feature')->name('admin.freelancers.feature');
+        });
+        Route::controller(\App\Http\Controllers\admin\FreelancerWorkController::class)->group(function () {
+            Route::get('freelancer-works', 'index')->name('admin.freelancer-works.index');
+            Route::post('freelancer-works/{work}/publish', 'publish')->name('admin.freelancer-works.publish');
+            Route::post('freelancer-works/{work}/reject', 'reject')->name('admin.freelancer-works.reject');
         });
 
         #################### SEO keywords ####################

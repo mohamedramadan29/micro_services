@@ -77,7 +77,7 @@ class ProperityMaintainController extends Controller
     ############ Start Update Properity ############
     public function update(Request $request, $id)
     {
-        $properity_maintaine = properityMaintain::find($id);
+        $properity_maintaine = properityMaintain::where('user_id', Auth::id())->findOrFail($id);
         if ($request->isMethod('post')) {
             $data = $request->all();
             // dd($data);
@@ -130,7 +130,7 @@ class ProperityMaintainController extends Controller
     ############ Start Delete Properity ############
     public function delete(Request $request, $id)
     {
-        $property = properityMaintain::find($id);
+        $property = properityMaintain::where('user_id', Auth::id())->findOrFail($id);
         $property->delete();
         return $this->success_message('تم حذف الخدمة بنجاح');
     }

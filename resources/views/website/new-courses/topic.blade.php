@@ -7,7 +7,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <style>
     .topic-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #83868b 0%, #5c6066 100%);
         color: white;
         padding: 60px 0;
         margin-bottom: 40px;
@@ -32,7 +32,7 @@
         width: 100%;
         height: 180px;
         object-fit: cover;
-        background: linear-gradient(45deg, #667eea, #764ba2);
+        background: linear-gradient(45deg, #83868b, #5c6066);
     }
 
     .play-overlay {
@@ -47,7 +47,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #667eea;
+        color: #83868b;
         font-size: 1.5rem;
         transition: all 0.3s ease;
     }
@@ -72,7 +72,7 @@
         position: absolute;
         top: 10px;
         left: 10px;
-        background: #3fb697;
+        background: #3fb699;
         color: white;
         padding: 5px 10px;
         border-radius: 20px;
@@ -80,8 +80,8 @@
     }
 
     .bg-success {
-        background-color: #3fb697 !important;
-        border-color: #3fb697 !important;
+        background-color: #3fb699 !important;
+        border-color: #3fb699 !important;
     }
 
     .lesson-number {
@@ -166,12 +166,12 @@
     }
 
     .lesson-list-item:hover {
-        background: #f8f9fa;
+        background: #f9f9f9;
     }
 
     .lesson-list-item.active {
-        background: #e3f2fd;
-        border-left: 4px solid #2196f3;
+        background: #efeff0;
+        border-left: 4px solid #909297;
     }
 </style>
 @endsection
@@ -220,7 +220,7 @@
             <div class="col-lg-4">
                 <div class="text-center">
                     <div class="topic-icon mx-auto mb-3" style="width: 100px; height: 100px; font-size: 3rem;">
-                        <i class="fas fa-book" style="color: #fff"></i>
+                        <i class="fas fa-book" style="color: #ffffff"></i>
                     </div>
                     <h4>{{ $course->title }}</h4>
                     <p class="text-white-50">الموضوع {{ $topic->sort_order + 1 }} من {{ $course->topics->count() }}

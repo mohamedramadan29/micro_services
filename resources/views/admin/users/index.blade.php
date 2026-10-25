@@ -1,142 +1,141 @@
 @extends('admin.layouts.master')
 @section('title')
-    مشاهده المستخدمين
-@endsection
-@section('css')
-    <link href="{{ URL::asset('assets/admin/plugins/datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
-    <link href="{{ URL::asset('assets/admin/plugins/datatable/css/buttons.bootstrap4.min.css') }}" rel="stylesheet">
-    <link href="{{ URL::asset('assets/admin/plugins/datatable/css/responsive.bootstrap4.min.css') }}" rel="stylesheet" />
-    <link href="{{ URL::asset('assets/admin/plugins/datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
-    <link href="{{ URL::asset('assets/admin/plugins/datatable/css/responsive.dataTables.min.css') }}" rel="stylesheet">
-    <link href="{{ URL::asset('assets/admin/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+    المستخدمون
 @endsection
 @section('content')
-    <!-- breadcrumb -->
-    <div class="breadcrumb-header justify-content-between">
-        <div class="my-auto">
-            <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">الرئيسية </h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                    المستخدمين </span>
+    @use('App\Http\Controllers\admin\UserController', 'Users')
+    @use('App\Models\User')
+    @php
+        $typeTone = [User::TYPE_CLIENT => 'rf-db-pill', User::TYPE_FREELANCER => 'rf-db-pill warn', User::TYPE_ADMIN => 'rf-db-pill bad', User::TYPE_EMPLOYEE => 'rf-db-pill'];
+        $freelancerTone = [User::FREELANCER_APPROVED => 'ok', User::FREELANCER_PENDING => 'warn', User::FREELANCER_REJECTED => 'bad'];
+    @endphp
+
+    <div class="rf-db rf-us">
+        <div class="rf-db-head">
+            <div>
+                <h2>المستخدمون</h2>
+                <p>كل الحسابات المسجلة. «العميل» يطلب الخدمات، و«المستقل» ينفّذها ويقدّم العروض.</p>
             </div>
+            <a class="btn btn-outline-secondary btn-sm" href="{{ url('admin/users') . '?' . http_build_query(array_filter($filters + ['tab' => $tab]) + ['export' => 'csv']) }}">
+                <i class="fa fa-download ml-1"></i> تصدير CSV للنتائج
+            </a>
+        </div>
+
+        @if (Session::has('Error_Message'))
+            <div class="alert alert-danger">{{ Session::get('Error_Message') }}</div>
+        @endif
+
+        <div class="rf-us-tabs">
+            @foreach (Users::TABS as $key => [$label])
+                <a href="{{ url('admin/users') . '?' . http_build_query(array_filter(['tab' => $key === 'all' ? null : $key] + $filters)) }}" class="{{ $tab === $key ? 'active' : '' }}">
+                    {{ $label }} <span>{{ number_format($counts[$key]) }}</span>
+                </a>
+            @endforeach
+        </div>
+
+        <form method="get" action="{{ url('admin/users') }}" class="rf-db-card rf-us-filters">
+            @if ($tab !== 'all')
+                <input type="hidden" name="tab" value="{{ $tab }}">
+            @endif
+            <input type="search" name="q" value="{{ $filters['q'] }}" class="form-control" placeholder="ابحث بالاسم أو البريد أو الهاتف أو اسم المستخدم">
+            <select name="state" class="form-control">
+                <option value="">كل الحالات</option>
+                @foreach (Users::STATES as $key => $label)
+                    <option value="{{ $key }}" @selected($filters['state'] === $key)>{{ $label }}</option>
+                @endforeach
+            </select>
+            <select name="sort" class="form-control">
+                @foreach (Users::SORTS as $key => $label)
+                    <option value="{{ $key }}" @selected($filters['sort'] === $key)>ترتيب: {{ $label }}</option>
+                @endforeach
+            </select>
+            <button class="btn btn-primary">تصفية</button>
+            @if ($filters['q'] !== '' || $filters['state'] !== '' || $filters['sort'] !== 'newest')
+                <a href="{{ url('admin/users') . ($tab !== 'all' ? '?tab=' . $tab : '') }}" class="btn btn-light">مسح</a>
+            @endif
+        </form>
+
+        <div class="rf-db-card">
+            <div class="table-responsive">
+                <table class="rf-db-table rf-us-table">
+                    <thead>
+                        <tr>
+                            <th>المستخدم</th>
+                            <th>التواصل</th>
+                            <th>نوع الحساب</th>
+                            <th>البريد</th>
+                            <th>الحالة</th>
+                            <th>الرصيد</th>
+                            <th>التسجيل</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($users as $user)
+                            @php
+                                $state = Users::stateOf($user);
+                            @endphp
+                            <tr>
+                                <td>
+                                    <div class="rf-us-who">
+                                        <img src="{{ $user->avatarUrl(128) }}" alt="" loading="lazy">
+                                        <div>
+                                            <strong>{{ $user->name }}</strong>
+                                            <small>#{{ $user->id }}@if ($user->user_name) · {{ $user->user_name }}@endif</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div dir="ltr" class="text-right">{{ $user->email }}</div>
+                                    @if ($user->phone)<small class="text-muted d-block" dir="ltr">{{ $user->phone }}</small>@endif
+                                    @if ($user->whatsapp)
+                                        <a href="https://wa.me/{{ preg_replace('/\D+/', '', $user->whatsapp) }}" target="_blank" rel="noopener" class="d-block small"><i class="fab fa-whatsapp"></i> <span dir="ltr">{{ $user->whatsapp }}</span></a>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="{{ $typeTone[$user->account_type] ?? 'rf-db-pill' }}">{{ $user->typeLabel() }}</span>
+                                    @if ($user->account_type === User::TYPE_FREELANCER)
+                                        <span class="rf-db-pill {{ $freelancerTone[$user->freelancer_status] ?? '' }}">{{ User::FREELANCER_STATUSES[$user->freelancer_status] ?? 'قيد المراجعة' }}</span>
+                                    @elseif ($user->account_type === User::TYPE_ADMIN && $user->admin_role)
+                                        <small class="d-block text-muted">{{ \Illuminate\Support\Str::before(\App\Support\StaffPermissions::ROLES[$user->admin_role] ?? '', ' (') }}</small>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($user->email_verified_at)
+                                        <span class="rf-db-pill ok">مؤكد</span>
+                                    @else
+                                        <span class="rf-db-pill warn">غير مؤكد</span>
+                                    @endif
+                                </td>
+                                <td><span class="rf-db-pill {{ $state === 'نشط' ? 'ok' : 'bad' }}">{{ $state }}</span></td>
+                                <td class="num">{{ \App\Support\Money::format($user->balance ?? 0) }}</td>
+                                <td class="text-muted" title="{{ $user->created_at }}">{{ $user->created_at?->format('Y-m-d') }}<small class="d-block">{{ $user->created_at?->diffForHumans() }}</small></td>
+                                <td class="rf-us-actions">
+                                    @if ($user->account_type === User::TYPE_FREELANCER)
+                                        <a class="btn btn-light btn-sm" href="{{ route('admin.freelancers.index', ['q' => $user->email]) }}">ملف المستقل</a>
+                                    @elseif ($user->account_type === User::TYPE_CLIENT)
+                                        <a class="btn btn-light btn-sm" href="{{ route('admin.clients.show', $user) }}">ملف العميل</a>
+                                    @endif
+                                    @if ($user->id !== auth()->id())
+                                        <form action="{{ url('admin/block_status/' . $user->id) }}" method="post"
+                                              onsubmit="return confirm('{{ (string) $user->block_status === '0' ? 'فك حظر هذا المستخدم؟' : 'حظر هذا المستخدم؟ لن يستطيع تسجيل الدخول.' }}')">
+                                            @csrf
+                                            @if ((string) $user->block_status === '0')
+                                                <button class="btn btn-outline-success btn-sm">فك الحظر</button>
+                                            @else
+                                                <button class="btn btn-outline-danger btn-sm">حظر</button>
+                                            @endif
+                                        </form>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="8" class="rf-db-empty text-center py-4">لا يوجد مستخدمون مطابقون.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-3">{{ $users->links() }}</div>
         </div>
     </div>
-    <!-- breadcrumb -->
-    <!-- row -->
-    <div class="row row-sm">
-
-        <!-- Col -->
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    @if (Session::has('Success_message'))
-                        <div class="alert alert-success"> {{ Session::get('Success_message') }} </div>
-                    @endif
-
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    <div class="mb-4 main-content-label"> المستخدمين</div>
-                    <div class="card-header">
-                        <button data-target="#add_model" data-toggle="modal" class="btn btn-primary"> اضف مستخدم جديد <i
-                                class="fa fa-plus"></i>
-                        </button>
-                    </div>
-                    <!-- Add New Section -->
-                    @include('admin.users.add')
-                    <div class="card-body">
-
-                        <div class="table-responsive">
-                            <table class="table text-md-nowrap" id="example2">
-                                <thead>
-                                    <tr>
-                                        <th class="wd-15p border-bottom-0"> #</th>
-                                        <th class="wd-15p border-bottom-0"> الأسم</th>
-                                        <th class="wd-15p border-bottom-0"> رقم الهاتف</th>
-                                        <th class="wd-20p border-bottom-0"> البريد الألكتروني</th>
-                                        <th class="wd-20p border-bottom-0"> نوع المستخدم </th>
-                                        <th class="wd-15p border-bottom-0"> حالة تفعيل الايميل </th>
-                                        <th class="wd-15p border-bottom-0"> العمليات</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $i = 1;
-                                    @endphp
-                                    @foreach ($users as $user)
-                                        <tr>
-                                            <td> {{ $i++ }} </td>
-                                            <td> {{ $user['name'] }} </td>
-                                            <td> {{ $user['phone'] }} </td>
-                                            <td> {{ $user['email'] }} </td>
-                                            <td> {{ $user['account_type'] }} </td>
-                                            <td>
-                                                @if ($user['status'] == 1)
-                                                    <span class="badge badge-success"> فعال </span>
-                                                @elseif($user['status'] == 0)
-                                                    <span class="badge badge-danger"> غير فعال </span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <form action="{{ url('admin/block_status/' . $user['id']) }}"
-                                                    method="post">
-                                                    @csrf
-                                                    @if ($user->block_status == 1)
-                                                        <button class="btn btn-danger btn-sm"> حظر المستخدم
-                                                        </button>
-                                                    @else
-                                                        <button class="btn btn-primary btn-sm"> فك الحظر
-                                                        </button>
-                                                    @endif
-
-                                                </form>
-                                            </td>
-                                        </tr>
-                                        <!-- Edit Sections -->
-                                        @include('admin.users.edit')
-
-                                        <!-- Delete Section Model  -->
-                                        @include('admin.users.delete')
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div><!-- bd -->
-                </div>
-
-            </div>
-        </div>
-        <!-- /Col -->
-    </div>
-    <!-- row closed -->
-    </div>
-    <!-- Container closed -->
-    </div>
-    <!-- main-content closed -->
-@endsection
-
-@section('js')
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/dataTables.dataTables.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/responsive.dataTables.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/jquery.dataTables.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/dataTables.bootstrap4.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/jszip.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/pdfmake.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/vfs_fonts.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/buttons.print.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/buttons.colVis.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/plugins/datatable/js/responsive.bootstrap4.min.js') }}"></script>
-    <!--Internal  Datatable js -->
-    <script src="{{ URL::asset('assets/admin/js/table-data.js') }}"></script>
 @endsection

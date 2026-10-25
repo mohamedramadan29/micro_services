@@ -6,6 +6,7 @@ use App\Models\front\Conversation;
 use App\Models\front\Message;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 use App\Events\MessageSend;
 
@@ -18,6 +19,7 @@ class Chatbox extends Component
 
     public $message_count;
     public $messages;
+    #[Locked]
     public $conversation_id;
     //public $listeners = ['loadconversation','pushMessage'];
 
@@ -40,7 +42,7 @@ class Chatbox extends Component
        // $this->selectedConversation = Conversation::find($id);
 
         // العثور على المحادثة بناءً على المعرف
-        $this->selectedConversation = Conversation::findOrFail($conversation_id);
+        $this->selectedConversation = Conversation::forParticipant($conversation_id, Auth::id());
 
         // العثور على المستخدم الآخر في المحادثة
         $this->reciever_user = User::find($this->selectedConversation->receiver_id === Auth::id()
@@ -69,7 +71,7 @@ class Chatbox extends Component
         // Refresh chat list
         $this->dispatch('refresh')->to('chat.chat-list');
 
-        $broadcastedMessage = Message::find($event['message']);
+        $broadcastedMessage = Message::where('receiver_id', Auth::id())->find($event['message'] ?? null);
 
         // dd($broadcastedMessage);
         // Check if message exists
@@ -97,8 +99,11 @@ class Chatbox extends Component
 
     public function pushMessage($messageId)
     {
-        $newMessage = Message::find($messageId);
-        $this->messages->push($newMessage);
+        // Only messages of this conversation (the id comes from the browser).
+        $newMessage = Message::where('conversation_id', $this->conversation_id)->find($messageId);
+        if ($newMessage) {
+            $this->messages->push($newMessage);
+        }
     }
 
     public function render()

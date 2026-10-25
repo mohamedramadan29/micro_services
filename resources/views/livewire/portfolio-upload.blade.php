@@ -1,75 +1,52 @@
-<div>
-    <!-- Hidden inputs لإرسال الأسماء مع الفورم الرئيسي -->
+<div class="rf-pf-upload">
+    {{-- File names travel with the main form. --}}
     @if ($uploadedMainImage)
-    <input type="hidden" name="image" value="{{ $uploadedMainImage }}">
+        <input type="hidden" name="image" value="{{ $uploadedMainImage }}">
     @endif
-
     @foreach ($uploadedAdditionalImages as $img)
-    <input type="hidden" name="files[]" value="{{ $img }}">
+        <input type="hidden" name="files[]" value="{{ $img }}">
     @endforeach
 
-    <!-- الصورة الرئيسية -->
-    <div class="form-group mb-4">
+    {{-- Main image --}}
+    <div class="form-group">
         <label>الصورة الرئيسية <span class="text-danger">*</span></label>
-
         @if ($uploadedMainImage)
-        <div class="mt-3 position-relative d-inline-block">
-            <img src="{{ asset('assets/uploads/portfolios/' . $uploadedMainImage) }}" class="img-thumbnail"
-                style="max-height: 200px;">
-            <button type="button" wire:click="removeMainImage"
-                class="btn btn-danger btn-sm position-absolute top-0 end-0">
-                ×
-            </button>
-        </div>
-        @else
-        <input type="file" wire:model="mainImage" accept="image/*" class="form-control">
-        @error('mainImage')
-        <span class="text-danger">{{ $message }}</span>
-        @enderror
-        @endif
-
-        <!-- Progress Bar -->
-        <div x-data="{ progress: 0 }" x-on:livewire-upload-progress="progress = $event.detail.progress"
-            x-on:livewire-upload-finish="$wire.reset('mainImage')">
-            <div x-show="progress > 0 && progress < 100" class="progress mt-3" style="height: 28px;">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
-                    :style="'width: ' + progress + '%'" x-text="progress + '%'">
-                </div>
+            <div class="rf-pf-cover">
+                <img src="{{ asset('assets/uploads/portfolios/' . $uploadedMainImage) }}" alt="الصورة الرئيسية">
+                <button type="button" wire:click="removeMainImage" class="rf-pf-remove" aria-label="حذف الصورة الرئيسية"><i class="bi bi-x-lg"></i></button>
             </div>
-        </div>
-
-        <small class="text-muted d-block mt-2">الامتدادات: jpg, png, jpeg, webp | الحجم الأقصى: 4MB</small>
+        @else
+            <label class="rf-pf-drop" x-data="{ progress: 0 }" x-on:livewire-upload-progress="progress = $event.detail.progress" x-on:livewire-upload-finish="progress = 0">
+                <input type="file" wire:model="mainImage" accept="image/jpeg,image/png,image/webp">
+                <i class="bi bi-cloud-arrow-up"></i>
+                <strong>اختر صورة الغلاف</strong>
+                <small>jpg أو png أو webp، حتى 4 ميجابايت</small>
+                <span class="rf-pf-progress" x-show="progress > 0 && progress < 100"><span :style="'width:' + progress + '%'"></span></span>
+            </label>
+        @endif
+        @error('mainImage')<div class="rf-field-error">{{ $message }}</div>@enderror
     </div>
 
-    <!-- الصور الإضافية -->
-    <div class="form-group mb-4">
-        <label>صور إضافية للعمل (اختياري)</label>
-
-        <input type="file" wire:model="additionalImages" multiple accept="image/*" class="form-control">
-
-        <!-- Progress Bar للمتعدد -->
-        <div x-data="{ progress: 0 }" x-on:livewire-upload-progress="progress = $event.detail.progress"
-            x-on:livewire-upload-finish="$wire.reset('additionalImages')">
-            <div x-show="progress > 0 && progress < 100" class="progress mt-3" style="height: 28px;">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                    :style="'width: ' + progress + '%'" x-text="progress + '%'">
-                </div>
-            </div>
-        </div>
-
-        <small class="text-muted d-block mt-2">الامتدادات: jpg, png, jpeg, webp | الحجم الأقصى لكل ملف: 4MB</small>
-
+    {{-- Additional images --}}
+    <div class="form-group mb-0">
+        <label>صور إضافية <small class="text-muted">(اختياري)</small></label>
         @if (count($uploadedAdditionalImages) > 0)
-        <div class="row mt-4">
-            @foreach ($uploadedAdditionalImages as $index => $img)
-            <div class="col-md-3 position-relative mb-3">
-                <img src="{{ asset('assets/uploads/portfolios/' . $img) }}" class="img-thumbnail"
-                    style="max-height: 150px;">
-                <button type="button" wire:click="removeAdditionalImage({{ $index }})"
-                    class="btn btn-danger btn-sm position-absolute top-0 end-0">×</button>
+            <div class="rf-pf-thumbs">
+                @foreach ($uploadedAdditionalImages as $index => $img)
+                    <div class="rf-pf-thumb">
+                        <img src="{{ asset('assets/uploads/portfolios/' . $img) }}" alt="">
+                        <button type="button" wire:click="removeAdditionalImage({{ $index }})" class="rf-pf-remove" aria-label="حذف الصورة"><i class="bi bi-x-lg"></i></button>
+                    </div>
+                @endforeach
             </div>
-            @endforeach
-        </div>
         @endif
+        <label class="rf-pf-drop rf-pf-drop-sm" x-data="{ progress: 0 }" x-on:livewire-upload-progress="progress = $event.detail.progress" x-on:livewire-upload-finish="progress = 0">
+            <input type="file" wire:model="additionalImages" multiple accept="image/jpeg,image/png,image/webp">
+            <i class="bi bi-images"></i>
+            <strong>أضف صورًا أخرى من العمل</strong>
+            <small>يمكنك اختيار أكثر من صورة</small>
+            <span class="rf-pf-progress" x-show="progress > 0 && progress < 100"><span :style="'width:' + progress + '%'"></span></span>
+        </label>
+        @error('additionalImages.*')<div class="rf-field-error">{{ $message }}</div>@enderror
     </div>
 </div>

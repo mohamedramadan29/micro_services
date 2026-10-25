@@ -15,13 +15,13 @@
 
 <!--Internal  Perfect-scrollbar js -->
 <script src="{{ URL::asset('assets/admin/plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-<script src="{{ URL::asset('assets/admin/plugins/perfect-scrollbar/p-scroll.js') }}"></script>
+<script src="{{ \App\Support\AssetVersion::url('assets/admin/plugins/perfect-scrollbar/p-scroll.js') }}"></script>
 <!--Internal Sparkline js -->
 <script src="{{ URL::asset('assets/admin/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
 <!-- Custom Scroll bar Js-->
 <script src="{{ URL::asset('assets/admin/plugins/mscrollbar/jquery.mCustomScrollbar.concat.min.js') }}"></script>
 <!-- right-sidebar js -->
-<script src="{{ URL::asset('assets/admin/plugins/sidebar/sidebar-rtl.js') }}"></script>
+<script src="{{ \App\Support\AssetVersion::url('assets/admin/plugins/sidebar/sidebar-rtl.js') }}"></script>
 <script src="{{ URL::asset('assets/admin/plugins/sidebar/sidebar-custom.js') }}"></script>
 <!-- Eva-icons js -->
 <script src="{{ URL::asset('assets/admin/js/eva-icons.min.js') }}"></script>
@@ -49,7 +49,8 @@
 <script src="{{ URL::asset('assets/admin/js/sticky.js') }}"></script>
 <!-- custom js -->
 <script src="{{ URL::asset('assets/admin/js/custom.js') }}"></script><!-- Left-menu js-->
-<script src="{{ URL::asset('assets/admin/plugins/side-menu/sidemenu.js') }}"></script>
+<script src="{{ \App\Support\AssetVersion::url('assets/admin/plugins/side-menu/sidemenu.js') }}"></script>
+<script src="{{ \App\Support\AssetVersion::url('assets/admin/js/nafizha-admin.js') }}"></script>
 <script src="https://cdn.tiny.cloud/1/c8u902w1qjlgsxdu73djug5kw4ckg9n6ggwi5lynenmwrw25/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/locales/LANG.js"></script>

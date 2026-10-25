@@ -12,17 +12,7 @@
                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
                     <div class="dashboard-navbar overlio-top">
 
-                        <div class="d-user-avater">
-                            @if(Auth::user()->image !='')
-                                <img src="{{optional(Auth::user())->avatarUrl(128)}}"
-                                     class="img-fluid rounded" alt="">
-                            @else
-                                <img src="{{asset('assets/website/img/avatar.png')}}" class="img-fluid rounded" alt="">
-                            @endif
-
-                            <h4> {{Auth::user()->user_name}} </h4>
-                            <span> {{Auth::user()->email}} </span>
-                        </div>
+                        @include('website.user.partials.account-head')
 
                         @include('website.layouts.dashboard-sidebar')
 
@@ -70,10 +60,7 @@
                                                                             href="{{url('service/'.$order['service_id'].'-'.$order->slug)}}"> {{$order['service_name']}} </a>
                                                                     </h4>
                                                                     <ul class="_grouping_list">
-                                                                        <li><span> <a
-                                                                                    href="{{'user/'.$order['seller']['user_name']}}"> <i
-                                                                                        class="ti-user"></i>  {{$order['seller']['name']}} </span> </a>
-                                                                        </li>
+                                                                        <li><span><i class="ti-user"></i> العميل: {{ $order->buyer?->name ?? '—' }}</span></li>
                                                                         <li><span>  {{ \App\Support\Money::show($order['service_price']) }}   <i
                                                                                     class="ti-credit-card"></i> </span>
                                                                         </li>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -30,7 +30,7 @@
     {{-- laravel-notify first, so its Tailwind reset (button backgrounds) cannot override the site styles --}}
     @notifyCss
     <link href="{{asset('assets/website/css/plugins.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/website/css/styles.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ \App\Support\AssetVersion::url('assets/website/css/styles.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.rtl.min.css"
         integrity="sha384-gXt9imSW0VcJVHezoNQsP+TNrjYXoGcrqBZJpry9zJt8PCQjobwmhMGaDHTASo9N" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -42,6 +42,20 @@
     @if ($brandColor && preg_match('/^#[0-9a-fA-F]{6}$/', $brandColor))
         <style>:root { --main-color: {{ $brandColor }}; }</style>
     @endif
+    {{-- «الرسومات التنفيذية»: the site's visual world (fonts + design layer), loaded after the theme. --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;600;700;800&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ \App\Support\AssetVersion::url('assets/website/css/nafizha-world.css') }}">
+    <script>
+        // Start the drawing motion only when the page is visible and motion is welcome; otherwise it stays drawn.
+        (function (d) {
+            if (d.hidden || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+            requestAnimationFrame(function () { d.documentElement.classList.add('nf-drawing'); });
+        })(document);
+        // Floating help buttons show after the first screen on phones (so they never cover the hero).
+        addEventListener('scroll', function () { document.body && document.body.classList.toggle('nf-scrolled', scrollY > innerHeight * .6); }, { passive: true });
+    </script>
     @yield('css')
     <!-- Notifications and Livewire -->
     @toastifyCss

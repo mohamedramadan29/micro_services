@@ -19,6 +19,8 @@
         <div class="card-body">
             <div class="d-flex flex-wrap mb-3" style="gap: 6px">
                 <a href="{{ route('admin.freelancers.index') }}" class="btn btn-sm {{ $status ? 'btn-light' : 'btn-primary' }}">الكل</a>
+                <a href="{{ route('admin.freelancers.index', ['status' => 'ready']) }}" class="btn btn-sm {{ $status === 'ready' ? 'btn-primary' : 'btn-outline-primary' }}"
+                   title="أكّد بريده وأضاف واتساب وصورة ونبذة وتخصصات">جاهز للمراجعة ({{ $counts['ready'] ?? 0 }})</a>
                 @foreach (User::FREELANCER_STATUSES as $key => $label)
                     <a href="{{ route('admin.freelancers.index', ['status' => $key]) }}" class="btn btn-sm {{ $status === $key ? 'btn-primary' : 'btn-light' }}">{{ $label }} ({{ $counts[$key] ?? 0 }})</a>
                 @endforeach
@@ -38,7 +40,11 @@
                                 <td class="small">{{ $freelancer->specializations->pluck('name')->take(3)->implode('، ') ?: '—' }}{{ $freelancer->specializations->count() > 3 ? '…' : '' }}</td>
                                 <td><span dir="ltr">{{ $freelancer->whatsapp ?: '—' }}</span> {!! $freelancer->isVerifiedFreelancer() ? '<span class="badge badge-success">موثّق</span>' : '<span class="badge badge-warning">غير موثّق</span>' !!}</td>
                                 <td>{!! $freelancer->professional_photo ? '<span class="badge badge-success">موجودة</span>' : '<span class="badge badge-light">لا</span>' !!}</td>
-                                <td>{{ User::FREELANCER_STATUSES[$freelancer->freelancer_status] ?? '—' }} @if ($freelancer->is_featured)<span class="badge badge-info">موثوق</span>@endif</td>
+                                <td>{{ User::FREELANCER_STATUSES[$freelancer->freelancer_status] ?? '—' }}
+                                    @if ($freelancer->freelancer_status === User::FREELANCER_PENDING)
+                                        {!! $freelancer->isReadyForReview() ? '<span class="badge badge-success">جاهز للمراجعة</span>' : '<span class="badge badge-light">لم يكمل بياناته</span>' !!}
+                                    @endif
+                                    @if ($freelancer->is_featured)<span class="badge badge-info">موثوق</span>@endif</td>
                                 <td><a href="{{ route('admin.freelancers.show', $freelancer) }}" class="btn btn-sm btn-light">مراجعة</a></td>
                             </tr>
                         @empty

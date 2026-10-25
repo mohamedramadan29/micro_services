@@ -12,17 +12,7 @@
                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
                     <div class="dashboard-navbar overlio-top">
 
-                        <div class="d-user-avater">
-                            @if(Auth::user()->image !='')
-                                <img src="{{optional(Auth::user())->avatarUrl(128)}}"
-                                     class="img-fluid rounded" alt="">
-                            @else
-                                <img src="{{asset('assets/website/img/avatar.png')}}" class="img-fluid rounded" alt="">
-                            @endif
-
-                            <h4> {{Auth::user()->user_name}} </h4>
-                            <span> {{Auth::user()->email}} </span>
-                        </div>
+                        @include('website.user.partials.account-head')
 
                         @include('website.layouts.dashboard-sidebar')
 
@@ -54,7 +44,7 @@
                             <div class="_dashboard_content">
                                 <div class="_dashboard_content_header">
                                     <div class="_dashboard__header_flex">
-                                        <h4><i class="fa fa-user mr-1"></i> مشترياتي sdsdsd</h4>
+                                        <h4><i class="fa fa-user mr-1"></i> مشترياتي</h4>
                                     </div>
                                 </div>
                                 <div class="_dashboard_content">
@@ -72,13 +62,13 @@
                                                                     </h4>
                                                                     <ul class="_grouping_list">
                                                                         <li><span> <a
-                                                                                    href="{{'user/'.$purche['seller']['user_name']}}"> <i
+                                                                                    href="{{ url('user/'.$purche['seller']['user_name']) }}"> <i
                                                                                         class="ti-user"></i>  {{$purche['seller']['name']}} </span> </a>
                                                                         </li>
                                                                         <li><span>  {{ \App\Support\Money::show($purche['service_price']) }}   <i
                                                                                     class="ti-credit-card"></i> </span>
                                                                         </li>
-                                                                        <li><span><i class="ti-location-pin"></i> {{$purche['status']}} wsdsdsd. sdsd </span>
+                                                                        <li><span><i class="ti-location-pin"></i> {{$purche['status']}} </span>
                                                                         </li>
                                                                         <li><span><i class="ti-timer"></i> {{$purche['created_at']->diffForHumans()}} </span>
                                                                         </li>

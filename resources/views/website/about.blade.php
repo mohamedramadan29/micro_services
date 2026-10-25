@@ -16,9 +16,9 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 text-center">
                     @if ($about['hero_small'])<h2 style='font-weight:bold'> {{ $about['hero_small'] }} </h2>@endif
-                    <h2 class="ipt-title mb-3" style="white-space: pre-line">{{ $about['hero_title'] }}</h2>
+                    <h1 class="ipt-title mb-3" style="white-space: pre-line">{{ $about['hero_title'] }}</h1>
                     @if ($about['hero_button'])
-                        <div class="_ebl_link"><a style="color:#fff" href="#about_us" class="btn _loonking_job"> {{ $about['hero_button'] }} </a></div>
+                        <div class="_ebl_link"><a style="color:#ffffff" href="#about_us" class="btn _loonking_job"> {{ $about['hero_button'] }} </a></div>
                     @endif
                 </div>
             </div>
@@ -51,7 +51,7 @@
     <!-- ########################################### Presit Section ######################## -->
 
     {{-- <section class="call-to-act gift_section"
-        style="background:#3fb697 url({{ asset('assets/website/img/landing-bg.png') }}) no-repeat">
+        style="background:#3fb699 url({{ asset('assets/website/img/landing-bg.png') }}) no-repeat">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12">

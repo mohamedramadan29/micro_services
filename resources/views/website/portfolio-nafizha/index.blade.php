@@ -54,7 +54,7 @@
                                     <h4 class="_ser_title"><a href="{{ url('portfolio/' . $work['id'] . '-' . $work['slug']) }}">
                                             {!! \Illuminate\Support\Str::words($work['title'], 10) !!} </a>
                                     </h4>
-                                    <p style="color: #595656;font-size: 14px;padding-bottom: 10px;">
+                                    <p style="color: #53575e;font-size: 14px;padding-bottom: 10px;">
                                         {{ $work->Category->name }}
                                     </p>
                                 </div>

@@ -198,9 +198,9 @@ class LandingSections
                 'button2_text' => 'كيف نعمل؟', 'button2_link' => '#steps',
             ]],
             ['type' => 'cards', 'fields' => ['anchor' => 'paths', 'title' => 'اختر نقطة البداية'], 'items' => [
-                ['title' => 'اطلب عرضاً لمشروعك', 'description' => 'اشرح احتياجك واستقبل عروض المستقلين.', 'button_text' => 'اطلب الآن', 'link' => '/request', 'icon' => 'bi-send', 'background_color' => '#EAF2FB'],
-                ['title' => 'شخّص مشروعك مجاناً', 'description' => 'اكتشف فرص التحسين والخطوات المناسبة.', 'button_text' => 'ابدأ الفحص', 'link' => '/site-test', 'icon' => 'bi-search', 'background_color' => '#E8F5EF'],
-                ['title' => 'مشروعك ما بيوقف', 'description' => 'دفعات ومراحل تحفظ حق العميل والمستقل.', 'button_text' => 'ابدأ مشروعك', 'link' => '/staged-project', 'icon' => 'bi-shield-check', 'background_color' => '#FFF4DD'],
+                ['title' => 'اطلب عرضاً لمشروعك', 'description' => 'اشرح احتياجك واستقبل عروض المستقلين.', 'button_text' => 'اطلب الآن', 'link' => '/request', 'icon' => 'bi-send', 'background_color' => '#F1FAF7'],
+                ['title' => 'شخّص مشروعك مجاناً', 'description' => 'اكتشف فرص التحسين والخطوات المناسبة.', 'button_text' => 'ابدأ الفحص', 'link' => '/site-test', 'icon' => 'bi-search', 'background_color' => '#E3F4EE'],
+                ['title' => 'مشروعك ما بيوقف', 'description' => 'دفعات ومراحل تحفظ حق العميل والمستقل.', 'button_text' => 'ابدأ مشروعك', 'link' => '/staged-project', 'icon' => 'bi-shield-check', 'background_color' => '#F4F7F6'],
             ]],
             ['type' => 'steps', 'fields' => ['anchor' => 'steps', 'title' => 'أربع خطوات تفصلك عن بداية التنفيذ'], 'items' => [
                 ['title' => 'اختر الخدمة'],

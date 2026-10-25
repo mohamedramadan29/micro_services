@@ -59,7 +59,7 @@ class SiteContentTest extends TestCase
     {
         // Client file «المربعات الخمسة»: the three paths, then a second group of two.
         $html = $this->get('/')->assertOk()
-            ->assertSeeInOrder(['ابدأ من هنا', 'اختَر كيف نساعد مشروعك', 'اطلب عرضًا لمشروعك', 'اطلب عرضًا', 'شخّص مشروعك مجانًا', 'ابدأ التشخيص', 'مشروعك ما بيوقف', 'ابدأ مشروعك بمراحل',
+            ->assertSeeInOrder(['اختَر كيف نساعد مشروعك', 'اطلب عرضًا لمشروعك', 'اطلب عرضًا', 'شخّص مشروعك مجانًا', 'ابدأ التشخيص', 'مشروعك ما بيوقف', 'ابدأ مشروعك بمراحل',
                 'أو ابدأ بالطريقة التي تناسبك', 'انشر مشروعك', 'انضم كمستقل', 'أنشئ ملفك كمستقل', 'كل بطاقة تفتح مسارًا واضحًا'])
             ->getContent();
 
@@ -210,5 +210,38 @@ class SiteContentTest extends TestCase
 
         Setting::first()->update(['website_color' => 'red;}</style><script>']);
         $this->get('/')->assertDontSee('<script>red', false)->assertDontSee('--main-color: red', false);
+    }
+
+    public function test_every_homepage_text_of_the_new_design_comes_from_the_admin(): void
+    {
+        $admin = \App\Models\User::factory()->admin()->create();
+        $this->get('/')->assertOk()
+            ->assertSee('ليه تنفّذها مع نفّذها؟')->assertSee('يبقى المبلغ لدى نفّذها حتى تعتمد العمل')->assertSee('اطلب خدمة')
+            ->assertSee('طرق الدفع المتاحة');
+
+        $this->actingAs($admin);
+        $manager = app(\App\Services\Content\ContentManager::class);
+        $set = function (string $area, array $values) use ($manager) {
+            $manager->ensureSeeded($area);
+            $block = \App\Models\ContentBlock::where('area', $area)->first();
+            $current = array_diff_key($block->working(), array_flip(['_visible', '_order', '_id']));
+            $manager->saveDraft($block, array_merge($current, $values));
+            $manager->publish([$area]);
+        };
+        $set('home.plan', ['stage_1' => 'فكرتك', 'status_1' => 'استلمنا فكرتك', 'row_3_value' => 'فلوسك في أمان معنا', 'stamp_text' => 'تمام']);
+        $set('home.hero', ['primary_text' => 'ابدأ الآن', 'primary_action' => 'staged']);
+        $set('home.trust', ['title' => 'لماذا نحن؟']);
+        $set('home.sections', ['payments_title' => 'ادفع بسهولة']);
+
+        $this->get('/')->assertOk()
+            ->assertSee('فكرتك')->assertSee('استلمنا فكرتك')->assertSee('فلوسك في أمان معنا')->assertSee('تمام')
+            ->assertSee('ابدأ الآن')->assertSee('href="' . route('requests.staged') . '"', false)
+            ->assertSee('لماذا نحن؟')->assertSee('ادفع بسهولة')
+            ->assertDontSee('ليه تنفّذها مع نفّذها؟');
+
+        // Sections can be hidden.
+        $set('home.trust', ['show' => '0']);
+        $set('home.plan', ['show' => '0']);
+        $this->get('/')->assertDontSee('لماذا نحن؟')->assertDontSee('class="nf-plan nf-sheet"', false);
     }
 }

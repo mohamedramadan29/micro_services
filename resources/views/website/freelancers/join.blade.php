@@ -4,12 +4,13 @@
     $page = \App\Support\SiteContent::first('join.page');
     $benefits = \App\Support\SiteContent::items('join.benefits');
     $steps = [
-        'email' => ['تأكيد بريدك الإلكتروني', route('freelancer.profile.edit')],
-        'whatsapp' => ['رقم واتساب للتواصل مع الفريق', route('freelancer.profile.edit')],
-        'profile' => ['النبذة والتوفر في ملفك', route('freelancer.profile.edit')],
+        'email' => ['تأكيد بريدك الإلكتروني', url('update-account') . '#rf-freelancer'],
+        'whatsapp' => ['رقم واتساب للتواصل مع الفريق', url('update-account') . '#rf-freelancer'],
+        'photo' => ['صورتك الاحترافية (واضحة لوجهك)', url('update-account') . '#rf-freelancer'],
+        'profile' => ['نبذة عنك', url('update-account') . '#rf-freelancer'],
         'specializations' => ['اختيار تخصصاتك (الخدمات التي تقدّمها)', route('specializations.edit')],
         'portfolio' => ['إضافة نموذج عمل واحد على الأقل', url('portfolio/user/index')],
-        'approved' => ['مراجعة فريق نفّذها والصورة الاحترافية', null],
+        'approved' => ['مراجعة فريق نفّذها واعتماد حسابك', null],
     ];
 @endphp
 @section('title')

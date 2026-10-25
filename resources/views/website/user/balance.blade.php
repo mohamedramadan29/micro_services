@@ -1,296 +1,196 @@
 @extends('website.layouts.master')
 @section('title')
-    رصيد الحساب
+    الرصيد والسحب
 @endsection
 @section('content')
-    <!-- ============================ Main Section Start ================================== -->
+    @use('App\Models\front\WithDraw')
+    @php
+        $me = Auth::user();
+        $kinds = [
+            'release' => ['مستحقات عمل', '+', 'in'],
+            'refund' => ['مبلغ أُعيد لرصيدك', '+', 'in'],
+            'topup' => ['شحن رصيد', '+', 'in'],
+            'withdraw' => ['طلب سحب', '−', 'out'],
+            'escrow_in' => ['دفعة لعمل (تبقى لدى نفّذها حتى تعتمد العمل)', '', 'held'],
+        ];
+        $statusTone = [0 => 'warn', 1 => 'ok', 2 => 'bad'];
+        $method = old('method', 'bank');
+        $hasPending = $withdrawals->contains('status', 0);
+    @endphp
+
     <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
         <div class="container-fluid">
             <div class="row m-0">
-
                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
-                    <div class="dashboard-navbar">
-
-                        <div class="d-user-avater">
-                            @if (Auth::user()->image != '')
-                                <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
-                                    class="img-fluid rounded" alt="">
-                            @else
-                                <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
-                                    alt="">
-                            @endif
-
-                            <h4> {{ Auth::user()->user_name }} </h4>
-                            <span> {{ Auth::user()->email }} </span>
-                        </div>
-                         @include('website.layouts.dashboard-sidebar')
-
-                    </div>
+                    @include('website.service-requests.partials.dashboard-nav')
                 </div>
 
-                <!-- Item Wrap Start -->
-                <div class="col-xl-9 col-lg-8 col-md-12 col-sm-12">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <!-- Breadcrumbs -->
-                            <div class="bredcrumb_wrap">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"> حسابي</li>
-                                        <li class="breadcrumb-item active" aria-current="page"> رصيد الحساب</li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
+                <div class="col-xl-9 col-lg-8 col-md-12 col-sm-12 rf-acc">
+                    <div class="bredcrumb_wrap">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{ url('dashboard') }}"> لوحتي </a></li>
+                                <li class="breadcrumb-item active" aria-current="page"> الرصيد والسحب</li>
+                            </ol>
+                        </nav>
                     </div>
 
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
+                    @if ($errors->any())
+                        <div class="alert alert-danger"><ul class="mb-0">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
+                    @endif
 
-                            <!-- Single Wrap -->
-                            <div class="_dashboard_content">
-                                <div class="_dashboard_content_header justify-content-between">
-                                    <div class="_dashboard__header_flex">
-                                        <h4><i class="fa fa-user mr-1"></i> رصيد الحساب </h4>
-                                    </div>
-                                    <div class="buttons">
-                                        <button style="height: 40px" type="button" class="btn btn-primary btn-sm"
-                                            data-bs-toggle="modal" data-bs-target="#charge_balance">
-                                            شحن رصيد <i class="bi bi-plus"></i>
-                                        </button>
-                                        @if (Auth::user()->balance > 0)
-                                            <button style="height: 40px;background-color:#ffca2c;" type="button"
-                                                class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#minus_balance"> سحب رصيد
-                                                <i class="bi bi-dash"></i>
-                                            </button>
-                                        @endif
-
-                                        <!-- Modal -->
-                                        <div class="modal fade buy_services_model" id="charge_balance" tabindex="-1"
-                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="exampleModalLabel"> شحن رصيد
-                                                        </h1>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"> X </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <ul>
-                                                            <li> منصة نفذها تضمن حقوقك بنسبة 100% .</li>
-                                                            <li> لا تتردد ابداً في التواصل معنا إذا احتجت أي مساعدة وسنسعد
-                                                                بخدمتك.
-                                                            </li>
-                                                            <li> الدفع عبر EasyKash (بطاقة، فوري، محفظة) بالجنيه المصري، ويُضاف المبلغ لرصيدك فور تأكيد الدفع. </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        @if (Auth::check())
-                                                            <form style="width: 100%" method="post"
-                                                                action="{{ url('charge_balance') }}">
-                                                                @csrf
-
-                                                                <div class="form-group">
-                                                                    <label> ادخل المبلغ ({{ config('services.easykash.currency_label', 'ج.م') }}) </label>
-                                                                    <input style="height: 45px"
-                                                                        type="number" class="form-control" name="price"
-                                                                        min="1" step="0.01" required>
-                                                                </div>
-                                                                <button type="submit" class="btn btn-primary mt-2"> متابعة للدفع </button>
-                                                            </form>
-                                                        @else
-                                                            <a href="{{ url('login') }}" type="button"
-                                                                class="btn btn-primary"> سجل دخولك الان لتكملة الشحن </a>
-                                                        @endif
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- ######### عملية سحب الرصيد   ########## -->
-                                        <div class="modal fade buy_services_model" id="minus_balance" tabindex="-1"
-                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="exampleModalLabel"> سحب رصيد
-                                                        </h1>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"> X </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <ul>
-                                                            <li> منصة نفذها تضمن حقوقك بنسبة 100% .</li>
-                                                            <li> لا تتردد ابداً في التواصل معنا إذا احتجت أي مساعدة وسنسعد
-                                                                بخدمتك.
-                                                            </li>
-
-                                                        </ul>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        @if (Auth::check())
-                                                            <form style="width: 100%" method="post"
-                                                                action="{{ url('withdraw_balance') }}">
-                                                                @csrf
-                                                                <div class="form-group">
-                                                                    <label> ادخل المبلغ </label>
-                                                                    <input required id="price-input" style="height: 45px"
-                                                                        type="number" class="form-control"
-                                                                        name="amount" required
-                                                                        max="{{ Auth::user()->balance }}">
-                                                                </div>
-                                                                <input type="hidden" name="method" value="bank">
-                                                                <div class="form-group">
-                                                                    <label> الدولة  </label>
-                                                                    <input required id="country" style="height: 45px"
-                                                                        type="text" class="form-control"
-                                                                        name="country" required>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label> اسم الحساب   </label>
-                                                                    <input required id="account_name" style="height: 45px"
-                                                                        type="text" class="form-control"
-                                                                        name="account_name" required>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label> رقم الحساب   </label>
-                                                                    <input required id="account_number" style="height: 45px"
-                                                                        type="text" class="form-control"
-                                                                        name="account_number" required>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>  اسم البنك   </label>
-                                                                    <input required id="bank_name" style="height: 45px"
-                                                                        type="text" class="form-control"
-                                                                        name="bank_name" required>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label> Iban Code   </label>
-                                                                    <input required id="iban_code" style="height: 45px"
-                                                                        type="text" class="form-control"
-                                                                        name="iban_code" required>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label> 	Swift Code   </label>
-                                                                    <input required id="swift_code" style="height: 45px"
-                                                                        type="text" class="form-control"
-                                                                        name="swift_code" required>
-                                                                </div>
-                                                                <button type="submit" class="btn btn-primary"> طلب سحب الرصيد
-                                                                    <i class="bi bi-dash"></i> </button>
-                                                            </form>
-                                                        @else
-                                                            <a href="{{ url('login') }}" type="button"
-                                                                class="btn btn-primary"> سجل دخولك الان لتكملة الشحن </a>
-                                                        @endif
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="_dashboard_content balance_page">
-                                    <div class="_dashboard_content_body">
-                                        <div class="_dashboard_list_group">
-                                            <div class="row">
-                                                <div class="col-lg-4 col-6">
-                                                    <div class="info">
-                                                        <h4> الرصيد القابل للسحب </h4>
-                                                        <span> {{ \App\Support\Money::show(Auth::user()->balance) }} </span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-6">
-                                                    <div class="info">
-                                                        <h4> طلبات السحب </h4>
-                                                        <span> {{ \App\Support\Money::show($WithDrawLastOrder['amount'] ?? '0') }} </span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-6">
-                                                    <div class="info">
-                                                        <h4> الرصيد الكلي </h4>
-                                                        <span> {{ \App\Support\Money::show(Auth::user()->balance) }} </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="orders_payments">
-                                                @foreach ($ChargeTransactions as $charge)
-                                                    <div class="_list_jobs_wraps mng_list shadow_0 border">
-                                                        <div class="_list_jobs_f1ex first">
-                                                            <div class="_list_110">
-                                                                @php
-                                                                    $lasttotal =
-                                                                        $charge['payment_amount'] -
-                                                                        $charge['payment_fee'];
-                                                                @endphp
-                                                                <div class="count_add_balance"> + {{ \App\Support\Money::show($lasttotal) }}
-                                                                </div>
-                                                                <div class="_list_110_caption">
-                                                                    <h4 class="_jb_title">
-                                                                        <a href="#">
-                                                                            شحن رصيد
-                                                                        </a>
-                                                                    </h4>
-                                                                    <ul class="_grouping_list">
-                                                                        <li><span> {{ \App\Support\Money::show($lasttotal) }} <i
-                                                                                    class="ti-credit-card"></i>
-                                                                            </span>
-                                                                        </li>
-                                                                        <li>
-                                                                            {{ $charge['created_at'] }}
-                                                                            <span>
-                                                                                <i class="ti-timer"></i>
-                                                                            </span>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-
-                                                @foreach ($WithDrawTransactions as $transaction)
-                                                    <div class="_list_jobs_wraps mng_list shadow_0 border">
-                                                        <div class="_list_jobs_f1ex first">
-                                                            <div class="_list_110">
-                                                                <div class="minues_balance"> -
-                                                                    {{ \App\Support\Money::show($transaction['amount']) }} </div>
-                                                                <div class="_list_110_caption">
-                                                                    <h4 class="_jb_title"><a href="#">
-                                                                            طلب سحب اموال
-                                                                        </a>
-                                                                    </h4>
-                                                                    <ul class="_grouping_list">
-                                                                        <li><span> {{ \App\Support\Money::show($transaction['amount']) }} <i
-                                                                                    class="ti-credit-card"></i>
-                                                                            </span>
-                                                                        </li>
-                                                                        <li><span><i class="ti-timer"></i>
-                                                                                {{ $transaction['created_at'] }}
-                                                                            </span>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                    <div class="rf-acc-stats">
+                        <div><strong>{{ \App\Support\Money::show($me->balance ?? 0) }}</strong><span>رصيدك المتاح (يمكن سحبه أو الدفع به)</span></div>
+                        <div><strong>{{ \App\Support\Money::show($pendingWithdraw) }}</strong><span>قيد السحب (بانتظار التحويل)</span></div>
                     </div>
 
+                    <div class="rf-acc-card">
+                        <h3>إدارة الرصيد</h3>
+                        <div class="d-flex flex-wrap" style="gap: 8px">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#charge_balance">شحن رصيد <i class="bi bi-plus"></i></button>
+                            @if ($me->balance > 0 && ! $hasPending)
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#minus_balance">طلب سحب <i class="bi bi-dash"></i></button>
+                            @elseif ($hasPending)
+                                <span class="rf-acc-pill warn align-self-center">عندك طلب سحب قيد التنفيذ؛ يمكنك طلب سحب جديد بعد تحويله.</span>
+                            @endif
+                        </div>
+                        <p class="rf-acc-empty mt-2 mb-0">الدفع والشحن عبر EasyKash بالجنيه المصري. يتم تحويل طلبات السحب يدويًا من فريق نفّذها، وإن رُفض الطلب يعود المبلغ لرصيدك.</p>
+                    </div>
+
+                    @if ($withdrawals->isNotEmpty())
+                        <div class="rf-acc-card">
+                            <h3>طلبات السحب</h3>
+                            @foreach ($withdrawals as $w)
+                                <div class="rf-acc-row">
+                                    <div>
+                                        <strong>{{ $w->methodLabel() }}</strong>
+                                        <small>{{ $w->account_name }} · <span dir="ltr">{{ $w->account_number }}</span>{{ $w->bank_name ? ' · ' . $w->bank_name : '' }} · {{ $w->created_at?->format('Y-m-d') }}</small>
+                                        @if ($w->notes)<small>ملاحظة الفريق: {{ $w->notes }}</small>@endif
+                                    </div>
+                                    <span class="rf-acc-num">{{ \App\Support\Money::show($w->amount) }}</span>
+                                    <span class="rf-acc-pill {{ $statusTone[(int) $w->status] ?? '' }}">{{ WithDraw::STATUSES[(int) $w->status] ?? '—' }}</span>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <div class="rf-acc-card">
+                        <h3>حركة الرصيد</h3>
+                        @forelse ($history as $row)
+                            @php
+                                [$label, $sign, $tone] = $kinds[$row['type']] ?? [$row['type'], '', ''];
+                            @endphp
+                            <div class="rf-acc-row">
+                                <div>
+                                    <strong>{{ $label }}</strong>
+                                    <small>{{ $row['description'] }} · {{ $row['at']?->format('Y-m-d H:i') }}</small>
+                                </div>
+                                <span class="rf-acc-num rf-acc-money {{ $tone }}" dir="ltr">{{ $sign }} {{ \App\Support\Money::format($row['amount']) }}</span>
+                            </div>
+                        @empty
+                            <p class="rf-acc-empty">لا توجد حركات على رصيدك بعد.</p>
+                        @endforelse
+                    </div>
                 </div>
             </div>
+        </div>
     </section>
-    <!-- ============================ Main Section End ================================== -->
+
+    {{-- Top up --}}
+    <div class="modal fade buy_services_model" id="charge_balance" tabindex="-1" aria-labelledby="rf-charge-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="rf-charge-title">شحن رصيد</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق">X</button>
+                </div>
+                <form method="post" action="{{ url('charge_balance') }}">
+                    @csrf
+                    <div class="modal-body">
+                        <p class="text-muted">الدفع عبر EasyKash (بطاقة، فوري، محفظة) بالجنيه المصري، ويُضاف المبلغ لرصيدك فور تأكيد الدفع.</p>
+                        <div class="form-group">
+                            <label>المبلغ (ج.م)</label>
+                            <input type="number" class="form-control" name="price" min="1" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">متابعة للدفع</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Withdraw --}}
+    <div class="modal fade buy_services_model" id="minus_balance" tabindex="-1" aria-labelledby="rf-withdraw-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="rf-withdraw-title">طلب سحب رصيد</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق">X</button>
+                </div>
+                <form method="post" action="{{ url('withdraw_balance') }}" id="rf-withdraw-form">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>المبلغ (ج.م) — المتاح {{ \App\Support\Money::format($me->balance ?? 0) }}</label>
+                            <input type="number" class="form-control" name="amount" min="1" step="0.01" max="{{ $me->balance }}" value="{{ old('amount') }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>طريقة الاستلام</label>
+                            <select name="method" class="form-control" id="rf-withdraw-method">
+                                @foreach (WithDraw::METHODS as $key => $label)
+                                    <option value="{{ $key }}" @selected($method === $key)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>اسم صاحب الحساب</label>
+                            <input type="text" class="form-control" name="account_name" value="{{ old('account_name', $me->name) }}" required maxlength="255">
+                        </div>
+                        <div class="form-group">
+                            <label id="rf-withdraw-number-label">{{ $method === 'bank' ? 'رقم الحساب البنكي' : 'رقم المحفظة أو عنوان إنستاباي' }}</label>
+                            <input type="text" dir="ltr" class="form-control" name="account_number" value="{{ old('account_number') }}" required maxlength="255">
+                        </div>
+                        <div data-bank-only @if ($method !== 'bank') hidden @endif>
+                            <div class="form-group">
+                                <label>اسم البنك</label>
+                                <input type="text" class="form-control" name="bank_name" value="{{ old('bank_name') }}" maxlength="255" @if ($method === 'bank') required @endif>
+                            </div>
+                            <div class="form-row row">
+                                <div class="form-group col-6">
+                                    <label>IBAN <small class="text-muted">(اختياري)</small></label>
+                                    <input type="text" dir="ltr" class="form-control" name="iban_code" value="{{ old('iban_code') }}" maxlength="50">
+                                </div>
+                                <div class="form-group col-6">
+                                    <label>SWIFT <small class="text-muted">(اختياري، للتحويل خارج مصر)</small></label>
+                                    <input type="text" dir="ltr" class="form-control" name="swift_code" value="{{ old('swift_code') }}" maxlength="50">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>الدولة</label>
+                                <input type="text" class="form-control" name="country" value="{{ old('country', 'مصر') }}" maxlength="100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-warning">إرسال طلب السحب</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            var select = document.getElementById('rf-withdraw-method');
+            if (!select) return;
+            select.addEventListener('change', function () {
+                var bank = select.value === 'bank';
+                document.querySelectorAll('#rf-withdraw-form [data-bank-only]').forEach(function (el) { el.hidden = !bank; });
+                document.querySelector('#rf-withdraw-form [name=bank_name]').required = bank;
+                document.getElementById('rf-withdraw-number-label').textContent = bank ? 'رقم الحساب البنكي' : 'رقم المحفظة أو عنوان إنستاباي';
+            });
+        })();
+    </script>
 @endsection

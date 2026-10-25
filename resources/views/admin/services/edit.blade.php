@@ -92,7 +92,7 @@
                                         function loadSubCategories(categoryId, selectedSubCatId) {
                                             $.ajax({
 
-                                                url: 'http://127.0.0.1:8000/admin/service/get-subcategories/' + categoryId,
+                                                url: '{{ url('admin/service/get-subcategories') }}/' + categoryId,
                                                 type: 'GET',
                                                 dataType: 'json',
                                                 success: function(data) {
@@ -174,7 +174,7 @@
                                             <select required class="form-control select" name="status">
                                                 <option> -- حدد --</option>
                                                 <option @if($service['status'] == 1) selected @endif value="1"> فعالة  </option>
-                                                <option @if($service['status'] == 0) selected @endif value="0">  غير فعالة </option>
+                                                <option @if($service['status'] != 1) selected @endif value="0"> {{ $service['status'] == 2 ? 'غير مقبولة (للنشر اختر «فعالة»)' : 'بانتظار المراجعة' }} </option>
                                             </select>
                                         </div>
                                     </div>

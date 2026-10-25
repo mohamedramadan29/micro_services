@@ -3,17 +3,17 @@
     <div class="container-fluid">
         <div class="main-header-left ">
             <div class="responsive-logo">
-                <a href="{{ url('/' . ($page = 'index')) }}"><img
-                        src="{{ URL::asset('assets/admin/img/logo_tabrat.png') }}" class="logo-1" alt="logo"></a>
-                <a href="{{ url('/' . ($page = 'index')) }}"><img
-                        src="{{ URL::asset('assets/admin/img/logo_tabrat.png') }}" class="dark-logo-1"
-                        alt="logo"></a>
-                <a href="{{ url('/' . ($page = 'index')) }}"><img
-                        src="{{ URL::asset('assets/admin/img/logo_tabrat.png') }}" class="logo-2"
-                        alt="logo"></a>
-                <a href="{{ url('/' . ($page = 'index')) }}"><img
-                        src="{{ URL::asset('assets/admin/img/logo_tabrat.png') }}" class="dark-logo-2"
-                        alt="logo"></a>
+                <a href="{{ route('admin.dashboard') }}"><img
+                        src="{{ URL::asset('assets/website/img/logo.png') }}" class="logo-1" alt="نفّذها"></a>
+                <a href="{{ route('admin.dashboard') }}"><img
+                        src="{{ URL::asset('assets/website/img/logo.png') }}" class="dark-logo-1"
+                        alt="نفّذها"></a>
+                <a href="{{ route('admin.dashboard') }}"><img
+                        src="{{ URL::asset('assets/website/img/logo.png') }}" class="logo-2"
+                        alt="نفّذها"></a>
+                <a href="{{ route('admin.dashboard') }}"><img
+                        src="{{ URL::asset('assets/website/img/logo.png') }}" class="dark-logo-2"
+                        alt="نفّذها"></a>
             </div>
             <div class="app-sidebar__toggle" data-toggle="sidebar">
                 <a class="open-toggle" href="#"><i class="header-icon fe fe-align-left"></i></a>
@@ -249,7 +249,7 @@
                 <div class="dropdown main-profile-menu nav nav-item nav-link">
 
                         <a class="profile-user d-flex" href=""><img alt=""
-                                                                    src="{{ URL::asset('assets/admin/img/logo_tabrat.png') }}"></a>
+                                                                    src="{{ URL::asset('assets/website/img/logo.png') }}"></a>
 
 
                     <div class="dropdown-menu">
@@ -257,7 +257,7 @@
                             <div class="d-flex wd-100p">
 
                                     <div class="main-img-user"><img alt=""
-                                                                    src="{{ URL::asset('assets/admin/img/logo_tabrat.png') }}" class="">
+                                                                    src="{{ URL::asset('assets/website/img/logo.png') }}" class="">
                                     </div>
 
 

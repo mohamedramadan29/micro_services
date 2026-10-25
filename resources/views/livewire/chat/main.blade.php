@@ -106,7 +106,7 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" style="background-color: #404040;" class="btn btn-secondary"
+                        <button type="button" style="background-color: #3b4047;" class="btn btn-secondary"
                             data-bs-dismiss="modal">رجوع</button>
                         @if (Auth::check())
                             <form method="post" action="{{ url('create_order') }}">

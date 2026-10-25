@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Notifications\NewMessage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class Sendmessage extends Component
@@ -20,6 +21,7 @@ class Sendmessage extends Component
 
     public $createMessage;
 
+    #[Locked]
     public $conversation_id;
 
     public $listeners = ['UpdateSendMessage', 'dispatchMessageSend'];
@@ -32,7 +34,7 @@ class Sendmessage extends Component
 
     private function loadConversationDetails()
     {
-        $conversation = Conversation::findOrFail($this->conversation_id);
+        $conversation = Conversation::forParticipant($this->conversation_id, Auth::id());
 
         // تحديد المستخدم المستلم
         $this->reciever_user = $conversation->sender_id === Auth::id()
@@ -43,6 +45,7 @@ class Sendmessage extends Component
 
     public function updateConversationDetails($conversation_id)
     {
+        Conversation::forParticipant($conversation_id, Auth::id());
         $this->conversation_id = $conversation_id;
 
         // إعادة تحميل بيانات المحادثة
@@ -55,6 +58,8 @@ class Sendmessage extends Component
         if (empty($this->body)) {
             return;
         }
+        // Re-check on every send: the sender must still be in this conversation.
+        $this->loadConversationDetails();
 
         // إنشاء الرسالة
         $message = Message::create([
@@ -67,7 +72,7 @@ class Sendmessage extends Component
         $this->dispatch('clearMessageInput');
         $this->dispatch('scrollMessages');
         // تحديث وقت آخر رسالة في المحادثة
-        $conversation = Conversation::findOrFail($this->conversation_id);
+        $conversation = Conversation::forParticipant($this->conversation_id, Auth::id());
         $conversation->last_time_message = $message->created_at;
         $conversation->save();
         // إرسال الإشعار للمستلم

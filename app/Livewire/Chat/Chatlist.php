@@ -24,8 +24,7 @@ class Chatlist extends Component
     {
         $this->sender_id = Auth::id();
 
-        $this->conversations = Conversation::where('sender_id', $this->sender_id)->
-        orWhere('receiver_id', $this->sender_id)->get();
+        $this->conversations = Conversation::involving($this->sender_id)->orderByDesc('last_time_message')->get();
         //dd($this->conversations);
 
     }
@@ -47,8 +46,8 @@ class Chatlist extends Component
     ///
     public function ChatUserSelected($conversationId, $receiverId)
     {
-        $this->selectedConversation = Conversation::find($conversationId);
-        $this->reciever_user = User::find($receiverId);
+        $this->selectedConversation = Conversation::forParticipant($conversationId, Auth::id());
+        $this->reciever_user = User::find((int) $this->selectedConversation->sender_id === (int) Auth::id() ? $this->selectedConversation->receiver_id : $this->selectedConversation->sender_id);
         $this->dispatch('loadconversation',$this->selectedConversation,$this->reciever_user)->to('chat.Chatbox');
         $this->dispatch('UpdateSendMessage',$this->selectedConversation,$this->reciever_user)->to('chat.Sendmessage');
 

@@ -93,7 +93,7 @@
 @section('styles')
 <style>
     .employee-profile-card {
-        background: #fff;
+        background: #ffffff;
         border-radius: 10px;
         box-shadow: 0 0 15px rgba(0,0,0,0.1);
         margin-bottom: 30px;
@@ -118,11 +118,11 @@
 
     .employee-profile-info h3 {
         margin-bottom: 10px;
-        color: #333;
+        color: #2b3038;
     }
 
     .job-title {
-        color: #666;
+        color: #62666c;
         margin-bottom: 15px;
     }
 
@@ -135,7 +135,7 @@
     }
 
     .rating-count {
-        color: #666;
+        color: #62666c;
         font-size: 14px;
     }
 
@@ -146,16 +146,16 @@
 
     .employee-contact p {
         margin-bottom: 10px;
-        color: #666;
+        color: #62666c;
     }
 
     .employee-contact i {
         margin-left: 10px;
-        color: #007bff;
+        color: #7d8085;
     }
 
     .employee-details-card {
-        background: #fff;
+        background: #ffffff;
         border-radius: 10px;
         box-shadow: 0 0 15px rgba(0,0,0,0.1);
         margin-bottom: 30px;
@@ -163,12 +163,12 @@
 
     .card-header {
         padding: 20px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #eeeeef;
     }
 
     .card-header h4 {
         margin: 0;
-        color: #333;
+        color: #2b3038;
     }
 
     .card-body {
@@ -182,16 +182,16 @@
     }
 
     .skill-tag {
-        background: #f8f9fa;
+        background: #f9f9f9;
         padding: 5px 15px;
         border-radius: 20px;
-        color: #666;
+        color: #62666c;
     }
 
     .experience-item {
         margin-bottom: 20px;
         padding-bottom: 20px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #eeeeef;
     }
 
     .experience-item:last-child {
@@ -201,23 +201,23 @@
     }
 
     .experience-item h5 {
-        color: #333;
+        color: #2b3038;
         margin-bottom: 5px;
     }
 
     .experience-item .company {
-        color: #007bff;
+        color: #7d8085;
         margin-bottom: 5px;
     }
 
     .experience-item .period {
-        color: #666;
+        color: #62666c;
         font-size: 14px;
         margin-bottom: 10px;
     }
 
     .experience-item .description {
-        color: #666;
+        color: #62666c;
     }
 </style>
 @endsection

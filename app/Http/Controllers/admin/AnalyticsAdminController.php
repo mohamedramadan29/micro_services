@@ -25,7 +25,7 @@ class AnalyticsAdminController extends Controller
     private const STARTED = ['form_start', 'cart_add', 'payment_start'];
 
     /** Events that make a visit «completed» besides a paid order: a request or a directly published project. */
-    private const GOALS = ['request_submitted', 'project_published'];
+    public const GOALS = ['request_submitted', 'project_published'];
 
     public function index(Request $request)
     {

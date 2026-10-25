@@ -1,7 +1,9 @@
 /*
  * Country-code picker for phone fields marked data-country-picker (client file «تعديلات», item 11).
- * The input stays the real field: a code chosen in the list is put in front of a local number
- * (its leading 0 removed) when the visitor leaves the field or sends the form.
+ * One field, two parts: a compact code segment («+20 ▾», the native list opens with country names)
+ * and the local number. The original input becomes hidden and always holds the full number that the
+ * server receives («+20 1012345678»); the visible input keeps the original id, label, required flag
+ * and placeholder, so labels, validation and other scripts keep working.
  */
 (function () {
     var CODES = [
@@ -12,39 +14,77 @@
         ['+1', 'أمريكا / كندا'], ['+49', 'ألمانيا'], ['+33', 'فرنسا']
     ];
     var longestFirst = CODES.slice().sort(function (a, b) { return b[0].length - a[0].length; });
+    var digits = function (v) { return String(v || '').replace(/[^\d+]/g, ''); };
+    var findCode = function (v) { return longestFirst.find(function (c) { return v.indexOf(c[0]) === 0; }); };
 
-    function enhance(input) {
-        if (input.dataset.pickerReady) return;
-        input.dataset.pickerReady = '1';
-        var select = document.createElement('select');
-        select.className = 'form-control rf-phone-code';
-        select.setAttribute('aria-label', 'رمز الدولة');
-        select.innerHTML = '<option value="">رمز الدولة</option>' + CODES.map(function (c) {
-            return '<option value="' + c[0] + '">' + c[1] + ' ' + c[0] + '</option>';
-        }).join('');
+    function enhance(original) {
+        if (original.dataset.pickerReady) return;
+        original.dataset.pickerReady = '1';
+
         var wrap = document.createElement('div');
         wrap.className = 'rf-phone-wrap';
-        input.parentNode.insertBefore(wrap, input);
-        wrap.appendChild(select);
-        wrap.appendChild(input);
+        wrap.setAttribute('dir', 'ltr');
 
-        var current = input.value.replace(/\s/g, '');
-        var match = longestFirst.find(function (c) { return current.indexOf(c[0]) === 0; });
-        select.value = match ? match[0] : (input.dataset.defaultCode || '+20');
+        // Code segment: the visible face shows only the code; the transparent native select on top
+        // keeps keyboard, screen readers and the phone's own picker.
+        var seg = document.createElement('label');
+        seg.className = 'rf-phone-seg';
+        var face = document.createElement('span');
+        face.className = 'rf-phone-face';
+        var select = document.createElement('select');
+        select.className = 'rf-phone-code';
+        select.setAttribute('aria-label', 'رمز الدولة');
+        select.innerHTML = CODES.map(function (c) {
+            return '<option value="' + c[0] + '">' + c[1] + ' (' + c[0] + ')</option>';
+        }).join('');
+        seg.appendChild(face);
+        seg.appendChild(select);
 
-        function compose() {
-            var v = input.value.trim();
-            if (!v || v.charAt(0) === '+' || v.indexOf('00') === 0 || !select.value) return;
-            input.value = select.value + ' ' + v.replace(/^0+/, '');
+        // Visible local-number input takes over the original's identity.
+        var local = document.createElement('input');
+        local.type = 'tel';
+        local.className = original.className + ' rf-phone-local';
+        local.id = original.id || '';
+        local.required = original.required;
+        local.placeholder = original.getAttribute('placeholder') && original.getAttribute('placeholder').indexOf('+') === -1
+            ? original.getAttribute('placeholder') : '10 1234 5678';
+        local.setAttribute('inputmode', 'tel');
+        local.setAttribute('autocomplete', 'tel-national');
+        local.setAttribute('dir', 'ltr');
+        if (original.maxLength > 0) local.maxLength = original.maxLength;
+        if (original.getAttribute('aria-describedby')) local.setAttribute('aria-describedby', original.getAttribute('aria-describedby'));
+
+        original.parentNode.insertBefore(wrap, original);
+        wrap.appendChild(seg);
+        wrap.appendChild(local);
+        wrap.appendChild(original);
+        original.removeAttribute('id');
+        original.type = 'hidden';
+        original.required = false;
+
+        // Split what the server sent (old input or saved value) into code + local number.
+        var start = digits(original.value).replace(/^00/, '+');
+        var match = findCode(start);
+        select.value = match ? match[0] : (original.dataset.defaultCode || '+20');
+        local.value = match ? start.slice(match[0].length) : String(original.value || '').trim();
+
+        function sync() {
+            var typed = local.value.trim();
+            var compact = digits(typed).replace(/^00/, '+');
+            if (compact.charAt(0) === '+') {          // a full international number was typed or pasted
+                var m = findCode(compact);
+                if (m) { select.value = m[0]; local.value = compact.slice(m[0].length); }
+                original.value = compact;
+            } else {
+                original.value = typed ? select.value + ' ' + compact.replace(/^0+/, '') : '';
+            }
+            face.textContent = select.value;
         }
-        select.addEventListener('change', function () {
-            if (!select.value) return;
-            var v = input.value.trim().replace(/\s/g, '');
-            var old = longestFirst.find(function (c) { return v.indexOf(c[0]) === 0; });
-            if (old) input.value = select.value + ' ' + v.slice(old[0].length);
-        });
-        input.addEventListener('blur', compose);
-        if (input.form) input.form.addEventListener('submit', compose);
+        select.addEventListener('change', function () { sync(); local.focus(); });
+        local.addEventListener('input', sync);
+        local.addEventListener('blur', sync);
+        if (local.form) local.form.addEventListener('submit', sync);
+        sync();
     }
 
     function init() { document.querySelectorAll('input[data-country-picker]').forEach(enhance); }

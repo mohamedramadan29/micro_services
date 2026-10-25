@@ -10,7 +10,6 @@ use App\Models\admin\Category;
 use App\Models\admin\Service;
 use App\Models\admin\SubCategory;
 use App\Models\User;
-use App\Notifications\AcceptJobFromAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -23,10 +22,53 @@ class ServiceController extends Controller
     use Slug_Trait;
     use Upload_Images;
 
-    public function index()
+    public const TABS = ['pending' => Service::STATUS_PENDING, 'active' => Service::STATUS_ACTIVE, 'rejected' => Service::STATUS_REJECTED];
+
+    /** Freelancers' services by review state (pending first): publish or reject with a reason from the list. */
+    public function index(Request $request)
     {
-        $services = Service::with('category', 'subcategory')->orderBy('id', 'desc')->get();
-        return view('admin.services.index', compact('services'));
+        $tab = array_key_exists((string) $request->string('tab'), self::TABS) ? (string) $request->string('tab') : 'pending';
+        $services = Service::with('category', 'subcategory', 'user:id,name,email,user_name')
+            ->where('status', self::TABS[$tab])
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $term = '%' . str_replace(['%', '_'], ['\%', '\_'], (string) $request->string('q')) . '%';
+                $query->where(fn ($q) => $q->where('name', 'like', $term)->orWhereHas('user', fn ($u) => $u->where('name', 'like', $term)->orWhere('email', 'like', $term)));
+            })
+            ->when($tab === 'pending', fn ($q) => $q->oldest('updated_at'), fn ($q) => $q->latest('id'))
+            ->paginate(30)->withQueryString();
+        $counts = Service::selectRaw('status, COUNT(*) as total')->groupBy('status')->pluck('total', 'status');
+
+        return view('admin.services.index', compact('services', 'tab', 'counts'));
+    }
+
+    public function publish($id)
+    {
+        $service = Service::findOrFail($id);
+        $this->decide($service, Service::STATUS_ACTIVE, null);
+
+        return back()->with('Success_message', 'تم نشر الخدمة وإبلاغ المستقل.');
+    }
+
+    public function reject(Request $request, $id)
+    {
+        $service = Service::findOrFail($id);
+        $data = $request->validate(['note' => 'required|string|max:500'], ['note.required' => 'اكتب سبب عدم القبول ليعرف المستقل ما يعدّله']);
+        $this->decide($service, Service::STATUS_REJECTED, $data['note']);
+
+        return back()->with('Success_message', 'تم تسجيل عدم القبول وإبلاغ المستقل.');
+    }
+
+    private function decide(Service $service, int $status, ?string $note): void
+    {
+        $service->forceFill(['status' => $status, 'review_note' => $note, 'reviewed_at' => now(), 'reviewed_by' => Auth::id()])->save();
+        \Illuminate\Support\Facades\Cache::forget('admin-menu-badges');
+        $service->user?->notify(new \App\Notifications\RequestUpdateNotification(
+            $status === Service::STATUS_ACTIVE
+                ? \App\Support\Msg::t('requests.service_published', ['title' => $service->name])
+                : \App\Support\Msg::t('requests.service_rejected', ['title' => $service->name, 'reason' => $note]),
+            $status === Service::STATUS_ACTIVE ? '/service/' . $service->id . '-' . $service->slug : '/service/index',
+            'request_updates'
+        ));
     }
 
     public function store(Request $request)
@@ -120,19 +162,14 @@ class ServiceController extends Controller
                     'price' => $data['price'],
                     'tags' => $data['tags'],
                 ]);
-                if ($service->status == 0) {
-                    if ($data['status'] == 1) {
-                        //// Update Db
-                        /// And Send Notification
-                        $service->update([
-                            'status' => $data['status'],
-                        ]);
-                        Notification::send($user, new AcceptJobFromAdmin($service['user_id'], $id, $this->CustomeSlug($data['name']), $data['name']));
-                    }
-                } else {
-                    $service->update([
-                        'status' => $data['status'],
-                    ]);
+                // Publishing from the edit page works like «نشر الخدمة» on the list (the freelancer is told);
+                // a rejection needs a reason, so it is done from the list.
+                $newStatus = (int) ($data['status'] ?? $service->status);
+                if ($newStatus === Service::STATUS_ACTIVE && ! $service->isActive()) {
+                    $this->decide($service->fresh(), Service::STATUS_ACTIVE, null);
+                } elseif ($newStatus === Service::STATUS_PENDING && $service->isActive()) { // unpublish (a rejected one stays rejected)
+                    $service->forceFill(['status' => Service::STATUS_PENDING])->save();
+                    \Illuminate\Support\Facades\Cache::forget('admin-menu-badges');
                 }
                 return $this->success_message('تم تعديل  الخدمة بنجاح ');
             }

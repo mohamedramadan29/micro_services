@@ -104,13 +104,12 @@ class ProductOrderController extends Controller
             abort(403, 'هذا المنتج غير رقمي أو لا يوجد ملف للتنزيل.');
         }
 
-        $filePath = public_path('assets/uploads/digital_products/' . $order->product->digital_file);
-
-        if (!file_exists($filePath)) {
+        $filePath = \App\Support\DigitalFiles::path($order->product->digital_file);
+        if (! $filePath) {
             abort(404, 'الملف غير موجود.');
         }
 
-        return Response::download($filePath, $order->product->name . '.' . pathinfo($order->product->digital_file, PATHINFO_EXTENSION))
+        return Response::download($filePath, \App\Support\DigitalFiles::downloadName($order->product->name, $order->product->digital_file))
             ->deleteFileAfterSend(false);
     }
 

@@ -13,34 +13,32 @@
                 <div class="col-lg-8 col-12">
                     <div class="modal-content" id="registermodal">
                         <div class="modal-header">
-                            <h4> {{ __('login.login') }} </h4>
+                            <h1 class="nf-auth-title">{{ __('login.login') }}</h1>
 
                         </div>
                         <div class="modal-body">
                            
                             <div class="social_login">
-                                <h4>  {{ __('login.login_socialmedia') }} </h4>
-                                <a class="google_login" href="{{ route('auth.google.redirect', 'google') }}"> <i
-                                        class="bi bi-google"></i> </a>
+                                <p>{{ __('login.login_socialmedia') }}</p>
+                                <a aria-label="تسجيل الدخول باستخدام Google" class="google_login" href="{{ route('auth.google.redirect', 'google') }}"> @include('website.partials.google-mark')<span>Google</span> </a>
 
                             </div>
-                            <hr>
-                            <br>
+                            <div class="nf-auth-divider"><span>أو بالبريد الإلكتروني</span></div>
                             <div class="login-form">
                                 <form method="post" action="{{ url('login') }}">
                                     @csrf
                                     <div class="form-group">
-                                        <label> {{ __('login.email') }} </label>
-                                        <input type="email" class="form-control" name="email"
+                                        <label for="auth-email"> {{ __('login.email') }} </label>
+                                        <input id="auth-email" required type="email" class="form-control" name="email" autocomplete="email" dir="ltr"
                                             value="{{ old('email') }}">
                                     </div>
 
                                     <div class="form-group">
-                                        <label> {{ __('login.password') }} </label>
-                                        <input type="password" class="form-control" placeholder="*******" name="password">
+                                        <label for="auth-password"> {{ __('login.password') }} </label>
+                                        <input id="auth-password" required type="password" class="form-control" placeholder="*******" name="password" autocomplete="current-password">
                                     </div>
                                     <div class="form-group">
-                                        {!! NoCaptcha::display() !!}
+                                        {!! NoCaptcha::display(['data-size' => 'compact']) !!}
                                         @if ($errors->has('g-recaptcha-response'))
                                             <span class="help-block">
                                                 <strong class="text-danger">{{ $errors->first('g-recaptcha-response') }}</strong>

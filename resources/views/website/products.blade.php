@@ -61,7 +61,7 @@
                                     <h4 class="_ser_title"><a href="{{ url('product/' . $product['slug']) }}">
                                             {{ $product['name'] }} </a>
                                     </h4>
-                                    <p style="color: #595656;font-size: 14px;padding-bottom: 10px;">
+                                    <p style="color: #53575e;font-size: 14px;padding-bottom: 10px;">
                                         {!! \Illuminate\Support\Str::words($product['description'], 12) !!}
                                     </p>
                                 </div>

@@ -1,472 +1,66 @@
 <!-- main-sidebar -->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
-<aside class="app-sidebar sidebar-scroll">
+<aside class="app-sidebar sidebar-scroll rf-admin-nav">
     <div class="main-sidebar-header active">
-        <a class="desktop-logo logo-light active" href="{{ url('/' . ($page = 'admin/dashboard')) }}">
-            لوحة التحكم
-            {{-- <img --}} {{-- src="{{ URL::asset('assets/admin/img/brand/logo.png') }}" class="main-logo" alt="logo">
-            --}}
-        </a>
-        <a class="desktop-logo logo-dark active" href="{{ url('/' . ($page = 'index')) }}"><img
-                src="{{ URL::asset('assets/admin/img/brand/logo_tabrat.png') }}" class="main-logo dark-theme"
-                alt="logo"></a>
-        <a class="logo-icon mobile-logo icon-light active" href="{{ url('/' . ($page = 'index')) }}"><img
-                src="{{ URL::asset('assets/admin/img/logo_tabrat.png') }}" class="logo-icon" alt="logo"></a>
-        <a class="logo-icon mobile-logo icon-dark active" href="{{ url('/' . ($page = 'index')) }}"><img
-                src="{{ URL::asset('assets/admin/img/logo_tabrat.png') }}" class="logo-icon dark-theme" alt="logo"></a>
+        <a class="desktop-logo logo-light active" href="{{ route('admin.dashboard') }}">لوحة تحكم نفّذها</a>
+        <a class="desktop-logo logo-dark active" href="{{ route('admin.dashboard') }}"><img
+                src="{{ URL::asset('assets/website/img/logo.png') }}" class="main-logo dark-theme" alt="نفّذها"></a>
+        <a class="logo-icon mobile-logo icon-light active" href="{{ route('admin.dashboard') }}"><img
+                src="{{ URL::asset('assets/website/img/logo.png') }}" class="logo-icon" alt="نفّذها"></a>
+        <a class="logo-icon mobile-logo icon-dark active" href="{{ route('admin.dashboard') }}"><img
+                src="{{ URL::asset('assets/website/img/logo.png') }}" class="logo-icon dark-theme" alt="نفّذها"></a>
     </div>
     <div class="main-sidemenu">
-        <div class="app-sidebar__user clearfix">
-            <div class="dropdown user-pro-body">
-                <div class="">
-
-                    <img alt="user-img" class="avatar avatar-xl brround"
-                        src="{{ URL::asset('assets/admin/img/logo_tabrat.png') }}"><span
-                        class="avatar-status profile-status bg-green"></span>
-
-
-                </div>
-                <div class="user-info">
-                    <h4 class="font-weight-semibold mt-3 mb-0"> {{ Auth::user()->name }} </h4>
-                    <span class="mb-0 text-muted"> {{ Auth::user()->email }} </span>
-                </div>
+        <div class="rf-an-user">
+            <img alt="" class="avatar avatar-md brround" src="{{ Auth::user()->avatarUrl(128) }}">
+            <div>
+                <strong>{{ Auth::user()->name }}</strong>
+                <small>{{ \App\Support\StaffPermissions::ROLES[\App\Support\StaffPermissions::role(Auth::user()) ?? 'manager'] ?? '' }}</small>
             </div>
         </div>
-        <ul class="side-menu">
-            <li class="side-item side-item-category"> الرئيسية</li>
-            <li class="slide">
-                <a class="side-menu__item" href="{{ url('/' . ($page = 'admin/dashboard')) }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24">
-                        <path d="M0 0h24v24H0V0z" fill="none" />
-                        <path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3" />
-                        <path
-                            d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z" />
-                    </svg>
-                    <span class="side-menu__label">الرئيسية </span></a>
-            </li>
-            @if (Auth::user()->account_type == 'admin')
-            <li class="side-item side-item-category"> طلبات السحب في الموقع </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-money-bill"></i>
-                    <span class="side-menu__label"> طلبات السحب في الموقع </span><i
-                        class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/withdraws') }}"> طلبات السحب </a></li>
-                </ul>
-            </li>
-            <li class="side-item side-item-category"> محتوى الواجهة </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-paint-brush"></i>
-                    <span class="side-menu__label"> محتوى الواجهة </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ route('admin.home-cards.index') }}"> الصفحة الرئيسية ← إدارة المربعات </a></li>
-                    <li><a class="slide-item" href="{{ route('admin.content.index') }}"> إدارة محتوى الواجهة </a></li>
-                    <li><a class="slide-item" href="{{ route('admin.landing.index') }}"> صفحات الهبوط </a></li>
-                    <li><a class="slide-item" href="{{ route('admin.media.index') }}"> مكتبة الصور والخلفيات </a></li>
-                    <li><a class="slide-item" href="{{ route('admin.seo.index') }}"> SEO والكلمات المفتاحية </a></li>
-                    <li><a class="slide-item" href="{{ route('admin.analytics.index') }}"> إحصائيات رحلة الزوار </a></li>
-                </ul>
-            </li>
-            <li class="side-item side-item-category"> صفحة الخدمات </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-folder-open"></i>
-                    <span class="side-menu__label"> الخدمات والمجموعات </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ route('admin.catalog.services') }}"> الخدمات </a></li>
-                    <li><a class="slide-item" href="{{ route('admin.catalog.groups') }}"> المجموعات </a></li>
-                    <li><a class="slide-item" href="{{ route('admin.content.index', ['page' => 'services']) }}"> نصوص صفحة الخدمات </a></li>
-                </ul>
-            </li>
 
-            <li class="side-item side-item-category"> الكورسات </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-file-signature"></i>
-                    <span class="side-menu__label"> الكورسات </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/courses') }}"> ادارة الكورسات </a></li>
-                </ul>
-            </li>
+        @if (Auth::user()->account_type == 'admin')
+            @php($adminMenu = \App\Support\AdminMenu::build(request()))
+            <div class="rf-an-search">
+                <i class="fa fa-search"></i>
+                <input type="search" id="rf-an-filter" placeholder="ابحث في القائمة…" autocomplete="off" aria-label="ابحث في القائمة">
+            </div>
 
-            <li class="side-item side-item-category"> الكورسات الجديدة </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-graduation-cap"></i>
-                    <span class="side-menu__label"> الكورسات الجديدة </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ route('admin.new-courses.index') }}"> ادارة الكورسات </a></li>
-                </ul>
-            </li>
+            <ul class="side-menu" data-server-active="1">
+                <li class="slide">
+                    <a class="side-menu__item {{ request()->is('admin/dashboard') ? 'active rf-an-current' : '' }}" href="{{ route('admin.dashboard') }}">
+                        <i class="fa fa-home rf-an-icon"></i>
+                        <span class="side-menu__label">الرئيسية والتقارير</span>
+                    </a>
+                </li>
 
-            <li class="side-item side-item-category"> صفحات الكورسات العامة </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-file-signature"></i>
-                    <span class="side-menu__label"> صفحات الكورسات العامة </span><i
-                        class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/public-courses/index') }}"> ادارة صفحات
-                            الكورسات </a></li>
-                </ul>
-            </li>
-
-
-            <li class="side-item side-item-category"> الخدمات </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-file-signature"></i>
-                    <span class="side-menu__label"> الخدمات </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/services') }}"> الخدمات </a></li>
-                </ul>
-            </li>
-
-            <li class="side-item side-item-category"> المنتجات </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-box"></i>
-                    <span class="side-menu__label"> المنتجات </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/products') }}"> المنتجات </a></li>
-                </ul>
-            </li>
-
-            <li class="side-item side-item-category"> الطلبات </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-shopping-basket"></i>
-                    <span class="side-menu__label"> الطلبات </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/orders') }}"> الطلبات </a></li>
-                </ul>
-            </li>
-
-            <li class="side-item side-item-category"> طلبات شراء الخدمات  </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-shopping-basket"></i>
-                    <span class="side-menu__label"> طلبات شراء الخدمات </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/service-orders/index') }}"> مشاهدة الكل </a></li>
-                </ul>
-            </li>
-
-              <li class="side-item side-item-category"> اعمال نفذها  </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-shopping-basket"></i>
-                    <span class="side-menu__label"> اعمال نفذها  </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/nafizha-portfolio') }}">  جميع الاعمال  </a></li>
-                </ul>
-            </li>
-
-            <li class="side-item side-item-category"> العقارات </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-building"></i>
-                    <span class="side-menu__label"> العقارات </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/properities') }}"> العقارات </a></li>
-                </ul>
-            </li>
-
-            <li class="side-item side-item-category"> خدمات الصيانة </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-wrench"></i>
-                    <span class="side-menu__label"> خدمات الصيانة </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/properity-maintain') }}"> خدمات الصيانة </a>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="side-item side-item-category"> الوظائف </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-wrench"></i>
-                    <span class="side-menu__label"> الوظائف </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/jobs') }}"> الوظائف</a>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="side-item side-item-category"> الدعم الفني </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-box"></i>
-                    <span class="side-menu__label"> الدعم الفني </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/tickets') }}"> الدعم الفني </a></li>
-                </ul>
-            </li>
-
-            <li class="side-item side-item-category"> رسائل تواصل المستخدمين </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-comments"></i>
-                    <span class="side-menu__label"> رسائل تواصل المستخدمين </span><i
-                        class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/chats') }}"> رسائل تواصل المستخدمين </a></li>
-                </ul>
-            </li>
-
-            <li class="side-item side-item-category"> الاستشارين </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-user"></i>
-                    <span class="side-menu__label"> جميع الاستشارين </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/consultants') }}"> مشاهدة الكل </a></li>
-                </ul>
-            </li>
-
-            <li class="side-item side-item-category"> المستخدمين</li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-users"></i>
-                    <span class="side-menu__label"> بيانات المستخدمين </span><i
-                        class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/users') }}"> المستخدمين </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="side-item side-item-category"> المدونة </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-file-signature"></i>
-                    <span class="side-menu__label"> المدونة </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/blog_category') }}"> الاقسام </a>
-                    </li>
-                    <li><a class="slide-item" href="{{ url('admin/blogs') }}"> التدوينات </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="side-item side-item-category"> الباقات </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-file-signature"></i>
-                    <span class="side-menu__label"> الباقات </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/packages') }}"> ادارة الباقات </a>
-                    </li>
-                    <li><a class="slide-item" href="{{ url('admin/package-titles') }}"> تصنيف الباقات </a>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="side-item side-item-category"> تقيمات العملاء </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fa fa-file-signature"></i>
-                    <span class="side-menu__label"> تقيمات العملاء </span><i class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/reviews') }}"> تقيمات العملاء </a>
-                    </li>
-                </ul>
-            </li>
-
-
-            <li class="side-item side-item-category"> الاعدادات</li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="bx bx-cog"></i>
-                    <span class="side-menu__label"> الاعدادات الشخصية </span><i
-                        class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/update_admin_password') }}"> تعديل كلمة المرور
+                @foreach ($adminMenu as $group)
+                    <li class="slide rf-an-group {{ $group['active'] ? 'is-expanded active' : '' }}">
+                        <a class="side-menu__item {{ $group['active'] ? 'active' : '' }}" data-toggle="slide" href="#">
+                            <i class="fa {{ $group['icon'] }} rf-an-icon"></i>
+                            <span class="side-menu__label">{{ $group['label'] }}</span>
+                            @if ($group['badge'] > 0 && ! $group['active'])
+                                <span class="rf-an-badge" title="بانتظار الفريق">{{ $group['badge'] }}</span>
+                            @endif
+                            <i class="angle fe fe-chevron-down"></i>
                         </a>
+                        <ul class="slide-menu">
+                            @foreach ($group['items'] as $item)
+                                <li class="{{ $item['active'] ? 'active' : '' }}">
+                                    <a class="slide-item {{ $item['active'] ? 'active rf-an-current' : '' }}" href="{{ $item['href'] }}" @if ($item['active']) aria-current="page" @endif>
+                                        {{ $item['label'] }}
+                                        @if ($item['badge'] > 0)
+                                            <span class="rf-an-badge">{{ $item['badge'] }}</span>
+                                        @endif
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
                     </li>
-                    <li><a class="slide-item" href="{{ url('admin/update_admin_details') }}"> تعديل البيانات </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="side-item side-item-category"> الاعدادت العامة </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="bx bx-cog"></i>
-                    <span class="side-menu__label"> الاعدادات العامة للموقع </span><i
-                        class="angle fe fe-chevron-down"></i></a>
-                <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('admin/public_settings') }}"> الاعدادات العامه للموقع
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            {{-- ======================== طلبات الخدمات ======================== --}}
-            <li class="side-item side-item-category"> طلبات الخدمات </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fas fa-clipboard-list"></i>
-                    <span class="side-menu__label"> نظام الطلبات </span>
-                    <i class="angle fe fe-chevron-down"></i>
-                </a>
-                <ul class="slide-menu">
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.contracts.index') }}">
-                            <i class="fas fa-file-contract ml-1"></i> مشروعك ما بيوقف: العقود والخلافات
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.notification-texts.index') }}">
-                            <i class="fas fa-comment-dots ml-1"></i> نصوص الإشعارات
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.notification-log.index') }}">
-                            <i class="fas fa-bell ml-1"></i> سجل الإشعارات (وصل / فشل)
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.contract-policy.index') }}">
-                            <i class="fas fa-sliders-h ml-1"></i> سياسة المشاريع (المهل والقوالب)
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.staff.index') }}">
-                            <i class="fas fa-user-shield ml-1"></i> أدوار الموظفين
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.requests.index', ['tab' => 'active']) }}">
-                            <i class="fas fa-bolt ml-1"></i> الطلبات النشطة
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.requests.index', ['tab' => 'inquiries']) }}">
-                            <i class="fas fa-question-circle ml-1"></i> استفسارات الأسعار
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.requests.index', ['tab' => 'followup']) }}">
-                            <i class="fas fa-bell ml-1"></i> تنبيهات المتابعة
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.requests.index', ['tab' => 'completed']) }}">
-                            <i class="fas fa-check-circle ml-1"></i> تم تنفيذ الطلبات
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.requests.index', ['tab' => 'not_completed']) }}">
-                            <i class="fas fa-times-circle ml-1"></i> لم يتم تنفيذ الطلبات
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.freelancers.index') }}">
-                            <i class="fas fa-user-check ml-1"></i> المستقلون والاعتماد
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.site-tests.index') }}">
-                            <i class="fas fa-tachometer-alt ml-1"></i> اختبارات المواقع
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.help-requests.index') }}">
-                            <i class="fas fa-life-ring ml-1"></i> طلبات المساعدة
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.requests.guide') }}">
-                            <i class="fas fa-book-open ml-1"></i> دليل الاستخدام
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.clients.index') }}">
-                            <i class="fas fa-users ml-1"></i> العملاء وتصنيفاتهم
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.request-forms.index') }}">
-                            <i class="fas fa-tools ml-1"></i> نماذج الخدمات
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            {{-- ======================== السوشيال ميديا ======================== --}}
-            <li class="side-item side-item-category"> السوشيال ميديا </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="">
-                    <i style="font-size: 22px;margin-left: 10px" class="fas fa-share-alt"></i>
-                    <span class="side-menu__label"> إدارة السوشيال ميديا </span>
-                    <i class="angle fe fe-chevron-down"></i>
-                </a>
-                <ul class="slide-menu">
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.social.index') }}">
-                            <i class="fas fa-tachometer-alt ml-1"></i> لوحة التحكم
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.social.post.create') }}">
-                            <i class="fas fa-plus-circle ml-1"></i> بوست جديد
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.social.scheduled') }}">
-                            <i class="fas fa-calendar-alt ml-1"></i> البوستات المجدولة
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.social.published') }}">
-                            <i class="fas fa-check-double ml-1"></i> البوستات المنشورة
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.social.accounts') }}">
-                            <i class="fas fa-link ml-1"></i> ربط الحسابات
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            {{-- ======================== البريد الإلكتروني ======================== --}}
-            <li class="side-item side-item-category"> البريد الإلكتروني </li>
-            <li class="slide">
-                <a class="side-menu__item" data-toggle="slide" href="#">
-                    <i style="font-size: 22px;margin-left: 10px" class="fas fa-envelope"></i>
-                    <span class="side-menu__label"> إدارة البريد الإلكتروني </span>
-                    <i class="angle fe fe-chevron-down"></i>
-                </a>
-                <ul class="slide-menu">
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.email.analytics') }}">
-                            <i class="fas fa-chart-bar ml-1"></i> التقارير
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.email.campaigns.index') }}">
-                            <i class="fas fa-bullhorn ml-1"></i> الحملات البريدية
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.email.lists.index') }}">
-                            <i class="fas fa-list ml-1"></i> القوائم البريدية
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.email.templates.index') }}">
-                            <i class="fas fa-file-code ml-1"></i> قوالب الإيميلات
-                        </a>
-                    </li>
-                    <li>
-                        <a class="slide-item" href="{{ route('admin.email.gmail.settings') }}">
-                            <i class="fab fa-google ml-1"></i> إعدادات Gmail API
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            @endif
-
-        </ul>
+                @endforeach
+            </ul>
+            <p class="rf-an-empty" id="rf-an-empty" hidden>لا توجد صفحة بهذا الاسم</p>
+        @endif
     </div>
 </aside>
 <!-- main-sidebar -->

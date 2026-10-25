@@ -1,221 +1,152 @@
 @extends('website.layouts.master')
-@section('title')
-{{ $service['name'] }}
-@endsection
+@php
+    use App\Models\admin\Service;
+    $tags = collect(explode(',', (string) $service->tags))->map(fn ($t) => trim($t))->filter();
+    $sellerUrl = $seller?->user_name && $seller->isApprovedFreelancer() ? url('user/' . $seller->user_name) : null;
+    $canBuy = $service->isActive() && ! $isOwner;
+@endphp
+@section('title'){{ $service->name }} | نفّذها@endsection
+@section('meta_description'){{ \Illuminate\Support\Str::limit(strip_tags((string) $service->description), 160) }}@endsection
+@section('og_title'){{ $service->name }} — {{ \App\Support\Money::format($service->price) }}@endsection
+@section('og_image'){{ asset('assets/uploads/services/' . $service->image) }}@endsection
 @section('content')
-
-<!-- ============================ Main Section Start ================================== -->
-<section class="gray-bg text-right" dir="rtl">
+<section class="rf-pp rf-pw rf-sd" dir="rtl">
     <div class="container">
-        <div class="main_hero_section" style="margin-bottom: 30px">
-            <div>
-                <h4> {{ $service['name'] }} </h4>
+        @unless ($service->isActive())
+            <div class="rf-pp-preview" role="status">
+                <i class="bi bi-eye-slash" aria-hidden="true"></i>
+                <div><strong>هذه الخدمة لا تظهر للعملاء ({{ Service::STATUSES[(int) $service->status] ?? '' }}).</strong>
+                    @if ($isOwner && $service->review_note) ملاحظة الفريق: {{ $service->review_note }} @endif
+                    @if ($isOwner) <a href="{{ url('service/update/' . $service->id) }}">تعديل الخدمة</a>@endif</div>
             </div>
-            <div>
-                <a class="btn btn-global-button" href="{{ url('service/add') }}"> اضف خدمتك الان <i
-                        class="fa fa-plus"></i>
-                </a>
-            </div>
-        </div>
-        <div class="row">
-            <!-- Item Wrap Start -->
-            <div class="col-lg-8 col-md-12 col-sm-12">
-                <div class="_job_detail_box">
-                    <div class="_wrap_box_slice">
-                        <div class="_job_detail_single">
-                            <p>
-                                {{ $service['description'] }}
-                            </p>
+        @endunless
+
+        <nav class="rf-pp-trail" aria-label="مسار الصفحة">
+            <a href="{{ route('services.index') }}">الخدمات</a>
+            @if ($service->subcategory)<span aria-hidden="true">‹</span> <a href="{{ url('services/' . $service->subcategory->slug) }}">{{ $service->subcategory->name }}</a>@endif
+            <span aria-hidden="true">‹</span> <span>{{ $service->name }}</span>
+        </nav>
+
+        <div class="rf-pp-layout">
+            <div class="rf-pp-main">
+                <article class="rf-pp-card">
+                    <h1 class="rf-pw-title">{{ $service->name }}</h1>
+                    <p class="rf-pw-meta">
+                        @if ($service->subcategory || $service->category)<span><i class="bi bi-folder2" aria-hidden="true"></i> {{ $service->subcategory?->name ?? $service->category?->name }}</span>@endif
+                        @if ((int) $service->users_num_buy > 0)<span><i class="bi bi-bag-check" aria-hidden="true"></i> اشتراها {{ (int) $service->users_num_buy }}</span>@endif
+                        <span><i class="bi bi-calendar3" aria-hidden="true"></i> {{ $service->created_at?->translatedFormat('F Y') }}</span>
+                    </p>
+                    <figure class="rf-pw-stage">
+                        <img src="{{ asset('assets/uploads/services/' . $service->image) }}" alt="{{ $service->name }}">
+                    </figure>
+
+                    <h2>تفاصيل الخدمة</h2>
+                    <p class="rf-pp-bio">{{ $service->description }}</p>
+
+                    @if ($tags->isNotEmpty())
+                        <h3>كلمات مفتاحية</h3>
+                        <ul class="rf-pp-skills rf-sd-tags">
+                            @foreach ($tags as $tag)<li><span>{{ $tag }}</span></li>@endforeach
+                        </ul>
+                    @endif
+                </article>
+
+                @if ($more_servicess->isNotEmpty())
+                    <section class="rf-pp-card" aria-labelledby="sd-more">
+                        <h2 id="sd-more">خدمات مشابهة</h2>
+                        <div class="rf-pp-works">
+                            @foreach ($more_servicess as $serv)
+                                <a class="rf-pp-work" href="{{ $serv->url() }}">
+                                    <span class="rf-pp-work-img"><img src="{{ asset('assets/uploads/services/' . $serv->image) }}" alt="" loading="lazy"></span>
+                                    <strong>{{ $serv->name }}</strong>
+                                    <small>{{ $serv->user?->name }} · <b class="rf-sd-mini-price">{{ \App\Support\Money::show($serv->price) }}</b></small>
+                                </a>
+                            @endforeach
                         </div>
-                        <div class="_job_detail_single">
-                            <h4> المهارات </h4>
-                            @php
-                            $skills = explode(',', $service['tags']);
-                            @endphp
-                            <ul class="skilss">
-                                @foreach ($skills as $skill)
-                                <li><a href="javascript:void(0);"> {{ $skill }} </a></li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- Award & Experience -->
-                    <div class="_wrap_box_slice">
-                        <div class="_job_detail_single">
-                            <h4> خدمات مقترحة </h4>
-                            <div class="row">
-                                @foreach ($more_servicess as $serv)
-                                <!-- Single Item -->
-                                <div class="col-lg-4 col-md-6 col-sm-12">
-                                    <div class="ser_110">
-                                        <div class="ser_110_thumb">
-                                            <a href="{{ url('service/' . $serv['id'] . '-' . $serv['slug']) }}"
-                                                class="ser_100_link"><img
-                                                    src=" {{ asset('assets/uploads/services/' . $serv['image']) }}"
-                                                    class="img-fluid" alt=""></a>
-                                        </div>
-                                        <div class="ser_110_footer bott">
-                                            <div class="_110_foot_left">
-                                                <div class="ser_110_caption">
-                                                    <div class="ser_rev098">
-                                                        @for ($i = 0; $i < 5; $i++) @if ($i < $serv['rate']) <i
-                                                            class="fa fa-star filled"></i>
-                                                            @else
-                                                            <i class="fa fa-star"></i>
-                                                            @endif
-                                                            @endfor
-                                                    </div>
-                                                    <div class="ser_title098">
-                                                        <h4 class="_ser_title"><a
-                                                                href="{{ url('service/' . $serv['id'] . '-' . $serv['slug']) }}">
-                                                                {{ $serv['name'] }} </a>
-                                                        </h4>
-                                                    </div>
-                                                    <div class="_oi0po price_section"><i class="fa fa-bolt"></i>
-                                                        سعر الخدمة <strong class="theme-cl">
-                                                            {{ \App\Support\Money::show($serv['price']) }} </strong>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    </section>
+                @endif
             </div>
 
-            <div class="col-lg-4 col-md-12 col-sm-12">
-                <div class="_jb_summary light_box">
-                    <div class="_jb_summary_largethumb service_details_section">
-                        <img src="{{ asset('assets/uploads/services/' . $service['image']) }}" class="img-fluid" alt="">
+            <aside class="rf-pp-side">
+                <div class="rf-pp-card rf-sd-buy">
+                    <div class="rf-sd-price">
+                        <small>سعر الخدمة</small>
+                        <strong>{{ \App\Support\Money::show($service->price) }}</strong>
                     </div>
-                    <div class="_jb_summary_thumb">
-                        <img style="width: 75px;height: 75px;border-radius: 100%;border: 2px solid #ccc;"
-                            src="{{ optional($service['user'])->avatarUrl(128) }}"
-                            class="img-fluid circle" alt="">
-                    </div>
-                    <div class="_jb_summary_caption">
-                        <h4> {{ $service['user']['name'] }} </h4>
-                        <span>{{ $service['user']['job_title'] }}</span>
-                    </div>
-                    <div class="_jb_summary_body">
-                        @if ($service['user_id'] != \Illuminate\Support\Facades\Auth::id())
-                        <div class="_view_dis_908 d-flex justify-content-center">
-                            <button type="button" class="btn flw_btn btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
-                                شراء الخدمة الان
-                            </button>
-
-                            <!-- Modal -->
-                            <div class="modal fade buy_services_model" id="exampleModal" tabindex="-1"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel"> شراء
-                                                الخدمة </h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <ul>
-                                                <li> منصة نفذها تضمن حقوقك بنسبة 100% .</li>
-                                                <li> لا تتردد ابداً في التواصل معنا إذا احتجت أي مساعدة وسنسعد
-                                                    بخدمتك.
-                                                </li>
-                                                <li> يمكنك التواصل مع مقدم الخدمة إذا احتجت أي استفسار قبل طلب
-                                                    الخدمة.
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="modal-footer">
-
-                                            <button type="button" style="background-color: #404040;"
-                                                class="btn btn-secondary" data-bs-dismiss="modal">رجوع
-                                            </button>
-
-                                            @if (Auth::check())
-                                            <form method="post" action="{{ url('create_order') }}">
-                                                <input type="hidden" name="service_id" value="{{ $service['id'] }}">
-                                                <input type="hidden" name="service_name" value="{{ $service['name'] }}">
-                                                <input type="hidden" name="service_price"
-                                                    value="{{ $service['price'] }}">
-                                                <input type="hidden" name="qty" value="1">
-                                                <input type="hidden" name="user_serv" value="{{ $service['user_id'] }}">
-                                                @csrf
-                                                <button type="submit" class="btn btn-primary"> شراء الخدمة الان
-                                                    <i class="bi bi-cart"></i></button>
-                                            </form>
-                                            @else
-                                            <a href="{{ url('login') }}" type="button" class="btn btn-primary">شراء
-                                                الخدمة الان </a>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            @if (\Illuminate\Support\Facades\Auth::id())
-                            <form action="{{ url('conversation/start') }}" method="post">
+                    @if ($isOwner)
+                        <a href="{{ url('service/update/' . $service->id) }}" class="btn btn-primary w-100"><i class="bi bi-pencil" aria-hidden="true"></i> تعديل الخدمة</a>
+                        <a href="{{ url('service/index') }}" class="btn btn-light w-100 mt-2">خدماتي المعروضة</a>
+                    @elseif ($canBuy)
+                        @auth
+                            <form method="post" action="{{ url('create_order') }}">
                                 @csrf
-                                <input type="hidden" name="service_id" value="{{ $service['id'] }}">
-                                <input type="hidden" name="sender_id" value="{{ Auth::id() }}">
-                                <input type="hidden" name="receiver_id" value="{{ $service['user_id'] }}">
-                                <button type="submit" class="btn msg_btn btn-sm"> تواصل معي</button>
+                                <input type="hidden" name="service_id" value="{{ $service->id }}">
+                                <button type="submit" class="btn btn-primary w-100 rf-sd-pay"><i class="bi bi-lightning-charge" aria-hidden="true"></i> اطلب الخدمة الآن</button>
                             </form>
+                        @else
+                            <a href="{{ url('login') }}" class="btn btn-primary w-100"><i class="bi bi-lightning-charge" aria-hidden="true"></i> سجّل دخولك لطلب الخدمة</a>
+                        @endauth
+                        <form method="post" action="{{ url('cart/add') }}" class="mt-2">
+                            @csrf
+                            <input type="hidden" name="service_id" value="{{ $service->id }}">
+                            <button type="submit" class="btn btn-light w-100"><i class="bi bi-cart-plus" aria-hidden="true"></i> أضف إلى السلة</button>
+                        </form>
+                        <ul class="rf-pp-promise">
+                            <li><i class="bi bi-credit-card" aria-hidden="true"></i> الدفع عبر EasyKash بالجنيه المصري</li>
+                            <li><i class="bi bi-chat-dots" aria-hidden="true"></i> تتواصل مع المستقل داخل نفّذها بعد الطلب</li>
+                            <li><i class="bi bi-life-preserver" aria-hidden="true"></i> فريق نفّذها معك لو احتجت مساعدة</li>
+                        </ul>
+                    @endif
+                </div>
+
+                @if ($seller)
+                    <div class="rf-pp-card rf-pw-owner">
+                        <img src="{{ $seller->avatarUrl(256) }}" alt="" width="72" height="72">
+                        <div>
+                            <strong>{{ $seller->name }}</strong>
+                            @if ($seller->job_title)<small>{{ $seller->job_title }}</small>@endif
+                            <span class="rf-pw-rate">
+                                @if ($seller->ratingLabel())@include('website.freelancers.partials.stars', ['value' => $seller->rate]) {{ $seller->ratingLabel() }} ·@endif
+                                {{ $seller->completedProjects() }} مشروع منجز
+                            </span>
+                        </div>
+                        @if ($sellerUrl)<a href="{{ $sellerUrl }}" class="btn btn-light w-100 mt-3">عرض ملفه وأعماله</a>@endif
+                        @if ($canBuy)
+                            @auth
+                                <form action="{{ url('conversation/start') }}" method="post" class="w-100 mt-2">
+                                    @csrf
+                                    <input type="hidden" name="service_id" value="{{ $service->id }}">
+                                    <input type="hidden" name="receiver_id" value="{{ $service->user_id }}">
+                                    <button type="submit" class="btn btn-light w-100"><i class="bi bi-chat-dots" aria-hidden="true"></i> اسأل المستقل قبل الطلب</button>
+                                </form>
                             @else
-                            <a href="{{ url('register') }}" class="btn msg_btn btn-sm"> تواصل معي </a>
-                            @endif
-                        </div>
+                                <a href="{{ url('login') }}" class="btn btn-light w-100 mt-2"><i class="bi bi-chat-dots" aria-hidden="true"></i> اسأل المستقل قبل الطلب</a>
+                            @endauth
                         @endif
-                        <div class="_view_dis_908">
-                            <ul class="exlio_list">
-                                <li> <span class="text-success">
-                                        <div class="ser_rev098">
-                                            @for ($i = 0; $i < 5; $i++) @if ($service['rate']> $i)
-                                                <i class="fa fa-star filled"></i>
-                                                @else
-                                                <i class="fa fa-star"></i>
-                                                @endif
-                                                @endfor
-
-                                        </div>
-                                    </span> التقييمات
-                                </li>
-                                {{-- <li>المشترين <span class="text-warning"> {{$service['users_num_buy']}} </span></li>
-                                --}}
-                                {{-- <li> طلبات جاري تنفيذها <span class="text-info">1</span></li> --}}
-                                <li> سعر الخدمة <span class="" style="font-size: 17px;color: #3fb699;">
-                                        {{ \App\Support\Money::show($service['price']) }}</span>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
+                @endif
+
+                <div class="rf-pp-card rf-pp-facts">
+                    <a class="btn btn-light w-100" target="_blank" rel="noopener" href="https://wa.me/?text={{ rawurlencode($service->name . ' — ' . $service->url()) }}"><i class="bi bi-whatsapp" aria-hidden="true"></i> مشاركة على واتساب</a>
+                    <button type="button" class="rf-pp-share" data-url="{{ $service->url() }}"><i class="bi bi-link-45deg" aria-hidden="true"></i> <span>نسخ رابط الخدمة</span></button>
                 </div>
-
-                <div class="_jb_summary light_box p-4">
-                    <h4> مشاركة الخدمة </h4>
-                    <!-- AddToAny BEGIN -->
-                    <div class="a2a_kit a2a_kit_size_32 a2a_default_style" style="float: right">
-                        <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
-                        <a class="a2a_button_facebook"></a>
-                        <a class="a2a_button_linkedin"></a>
-                        <a class="a2a_button_whatsapp"></a>
-                        <a class="a2a_button_telegram"></a>
-                        <a class="a2a_button_x"></a>
-                    </div>
-                    <script async src="https://static.addtoany.com/menu/page.js"></script>
-                    <!-- AddToAny END -->
-                </div>
-
-            </div>
-
+            </aside>
         </div>
     </div>
 </section>
-<!-- ============================ Main Section End ================================== -->
-
+<script>
+    (function () {
+        var btn = document.querySelector('.rf-pp-share');
+        if (btn) btn.addEventListener('click', function () {
+            var url = btn.getAttribute('data-url'), label = btn.querySelector('span'), text = label.textContent;
+            var done = function () { label.textContent = 'تم نسخ الرابط'; setTimeout(function () { label.textContent = text; }, 2000); };
+            if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, function () { window.prompt('انسخ الرابط', url); });
+            else window.prompt('انسخ الرابط', url);
+        });
+        // One click on «اطلب الخدمة الآن» (it leaves for the payment page).
+        document.querySelectorAll('.rf-sd-pay').forEach(function (b) {
+            b.form.addEventListener('submit', function () { b.disabled = true; b.textContent = 'جاري التحويل للدفع…'; });
+        });
+    })();
+</script>
 @endsection

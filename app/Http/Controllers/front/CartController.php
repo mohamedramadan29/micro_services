@@ -27,7 +27,7 @@ class CartController extends Controller
     {
         $cartData = $request->all();
         // Name, price and seller always come from the service itself, never from the form.
-        $service = Service::where('id', $cartData['service_id'] ?? 0)->firstOrFail();
+        $service = Service::active()->where('id', $cartData['service_id'] ?? 0)->firstOrFail();
         if (Auth::check() && (int) $service->user_id === (int) Auth::id()) {
             return redirect()->back()->withErrors('لا يمكنك اضافة خدمتك الخاصة الي السله');
         }
