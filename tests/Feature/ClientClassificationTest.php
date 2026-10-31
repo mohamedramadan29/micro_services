@@ -182,7 +182,37 @@ class ClientClassificationTest extends TestCase
 
         $this->actingAs($this->admin)->get(route('admin.clients.show', $client))
             ->assertOk()->assertSee($request->number)->assertSee('عميل عم يسأل')->assertSee('بانتظار ردنا');
-        $this->actingAs($this->admin)->get(route('admin.clients.show', User::factory()->create()))->assertNotFound();
+    }
+
+    public function test_a_new_client_without_requests_has_a_profile_and_is_listed(): void
+    {
+        // Bug 2026-10-31: admin/clients/{id} was a 404 for a client who had just registered.
+        $new = User::factory()->create(['name' => 'عميل سجّل اليوم', 'phone' => '+201011112222']);
+        \App\Models\Suggestion::create(['submission_key' => (string) \Illuminate\Support\Str::uuid(), 'reference_code' => 'SUG-1001', 'user_id' => $new->id,
+            'user_role' => 'client', 'title' => 'اقتراح العميل الجديد', 'description' => 'شرح', 'status' => 'new']);
+        $withRequest = User::factory()->create(['name' => 'عميل له طلب']);
+        $this->request($withRequest);
+
+        $this->actingAs($this->admin)->get(route('admin.clients.show', $new))->assertOk()
+            ->assertSee('عميل سجّل اليوم')->assertSee('مسجّل بلا طلبات بعد')->assertSee('لم يرسل أي طلب خدمة بعد')
+            ->assertSee('+201011112222')->assertSee('نشط')->assertSee('اقتراح العميل الجديد');
+
+        // «كل العملاء» lists him (by registration date) and the new section counts only him.
+        $this->actingAs($this->admin)->get(route('admin.clients.index'))->assertOk()->assertSee('عميل سجّل اليوم')->assertSee('عميل له طلب');
+        $this->actingAs($this->admin)->get(route('admin.clients.index', ['category' => 'no_requests']))->assertOk()
+            ->assertSee('عميل سجّل اليوم')->assertDontSee('عميل له طلب');
+        $this->actingAs($this->admin)->get(route('admin.clients.index', ['category' => 'first_time']))->assertDontSee('عميل سجّل اليوم');
+        $this->actingAs($this->admin)->get(route('admin.clients.index', ['q' => 'سجّل اليوم']))->assertSee('عميل سجّل اليوم');
+
+        // A freelancer goes to his own page; an admin account has no client profile.
+        $freelancer = User::factory()->freelancer()->create();
+        $this->actingAs($this->admin)->get(route('admin.clients.show', $freelancer))->assertRedirect(route('admin.freelancers.show', $freelancer));
+        $this->actingAs($this->admin)->get(route('admin.clients.show', User::factory()->admin()->create()))->assertNotFound();
+        // A search sent as an array never breaks the page (here or on any other search page).
+        foreach ([route('admin.clients.index'), route('admin.help-requests.index'), route('admin.freelancers.index'), route('admin.site-tests.index'),
+                  route('admin.contracts.index'), route('admin.catalog.services'), route('freelancers.index')] as $page) {
+            $this->actingAs($this->admin)->get($page . '?q[]=x')->assertOk();
+        }
     }
 
     public function test_team_messages_are_private_to_the_client_and_the_team(): void

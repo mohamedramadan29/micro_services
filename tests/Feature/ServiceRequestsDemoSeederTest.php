@@ -24,7 +24,7 @@ class ServiceRequestsDemoSeederTest extends TestCase
 
         $client = User::where('email', 'demo-client@nafizha.test')->firstOrFail();
         $this->assertSame(5, ServiceRequest::where('user_id', $client->id)->count());
-        $this->assertSame(2, ServiceForm::published()->count());
+        $this->assertSame(2, ServiceForm::published()->whereHas('subCategory', fn ($q) => $q->where('status', 1))->count()); // + the hidden companies form
         foreach ([ServiceRequest::STATUS_OPEN, ServiceRequest::STATUS_INQUIRY, ServiceRequest::STATUS_COMPLETED, ServiceRequest::STATUS_NOT_COMPLETED] as $status) {
             $this->assertTrue(ServiceRequest::where('status', $status)->exists(), "missing $status");
         }

@@ -1,46 +1,19 @@
 @extends('website.layouts.master')
 @section('title')
-    تغير كلمة المرور
+    تغيير كلمة المرور
 @endsection
 @section('content')
-    <!-- ============================ Page Title Start================================== -->
-    <div class="page-title" style="height: 350px;text-align: right">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-
-                    <h2 class="ipt-title"> تغير كلمة المرور </h2>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ============================ Page Title End ================================== -->
 
     <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg text-right" dir="rtl">
+    <section class="gray-bg text-right register_page" dir="rtl">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-2 col-0"></div>
-                <div class="col-lg-8 col-12">
-                    <div class="modal-content" id="registermodal">
+            <div class="nf-auth-grid">
+                <div class="modal-content nf-sheet" id="registermodal">
                         <div class="modal-header">
-                            <h4> تغير كلمة المرور </h4>
+                            <h1 class="nf-auth-title">تغيير كلمة المرور</h1>
 
                         </div>
                         <div class="modal-body">
-                            @if (Session::has('Success_message'))
-                                @php
-                                    emotify('success', \Illuminate\Support\Facades\Session::get('Success_message'));
-                                @endphp
-                            @endif
-                            @if ($errors->any())
-                                @foreach ($errors->all() as $error)
-                                    @php
-                                        emotify('error', $error);
-                                    @endphp
-                                @endforeach
-                            @endif
                             <div class="login-form">
                                 <form action="{{url('user/update_forget_password')}}" method="post">
                                     <input type="hidden" name="code" value="{{ $code }}">
@@ -67,7 +40,7 @@
 
 
                                     <div class="form-group">
-                                        <button type="submit" class="btn dark-2 btn-md full-width pop-login">
+                                        <button type="submit" class="btn btn-primary dark-2 btn-md full-width pop-login">
                                             ارسال
                                         </button>
                                     </div>
@@ -76,9 +49,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-2 col-0"></div>
-
+                @include('website.partials.auth-aside')
             </div>
         </div>
     </section>

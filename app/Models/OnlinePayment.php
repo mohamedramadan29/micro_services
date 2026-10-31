@@ -18,6 +18,7 @@ class OnlinePayment extends Model
     public const PURPOSE_COURSE = 'course';
     public const PURPOSE_BALANCE = 'balance';
     public const PURPOSE_CONTRACT_STAGE = 'contract_stage'; // service 3: funding contract stages
+    public const PURPOSE_BUSINESS = 'business_quote'; // «نفّذها للأعمال»: a company pays its accepted quote
 
     public const STATUS_PENDING = 'pending';     // sent to EasyKash, not paid (yet)
     public const STATUS_PAID = 'paid';           // confirmed by EasyKash and acted on

@@ -36,7 +36,12 @@ class ServicesPageController extends Controller
         // Freelancers' published ready-made services per sub-service (a third choice in the dialog).
         $readyCounts = \App\Models\admin\Service::active()->selectRaw('sub_cat_id, COUNT(*) as total')->groupBy('sub_cat_id')->pluck('total', 'sub_cat_id');
 
-        return view('website.services-catalog.index', compact('groups', 'preview', 'withForm', 'readyCounts'));
+        // Approved freelancers listed in the directory per sub-service (the «المستقلين» choice in the dialog).
+        $freelancerCounts = \Illuminate\Support\Facades\DB::table('freelancer_specializations')
+            ->whereIn('user_id', \App\Models\User::listedFreelancers()->select('id'))
+            ->selectRaw('sub_category_id, COUNT(*) as total')->groupBy('sub_category_id')->pluck('total', 'sub_category_id');
+
+        return view('website.services-catalog.index', compact('groups', 'preview', 'withForm', 'readyCounts', 'freelancerCounts'));
     }
 
     /** Guests choosing «ساعدوني أختار» log in first, then come back with the form open. */

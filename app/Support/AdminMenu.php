@@ -37,6 +37,11 @@ class AdminMenu
                 ['نماذج الخدمات', 'admin.request-forms.index', ['admin/request-forms*'], null],
                 ['دليل الاستخدام', 'admin.requests.guide', ['admin/requests-guide*'], null],
             ]],
+            ['نفّذها للأعمال (الشركات)', 'fa-building', [
+                ['طلبات الشركات', 'admin.business.requests', ['admin/business/requests*'], 'business'],
+                ['مشاريع الشركات', 'admin.business.projects', ['admin/business/projects*'], 'business_reviews'],
+                ['إعدادات قسم الشركات', 'admin.business.settings', ['admin/business/settings*'], null],
+            ]],
             ['المشاريع بمراحل', 'fa-file-contract', [
                 ['العقود والخلافات', 'admin.contracts.index', ['admin/contracts*'], 'disputes'],
                 ['سياسة المشاريع (المهل والقوالب)', 'admin.contract-policy.index', ['admin/contract-policy*'], null],
@@ -52,6 +57,7 @@ class AdminMenu
                 ['تذاكر الدعم الفني', 'admin/tickets', ['admin/tickets*', 'admin/ticket/*'], 'tickets'],
                 ['رسائل المستخدمين', 'admin/chats', ['admin/chats*', 'admin/chat/*'], null],
                 ['تقييمات العملاء', 'admin.reviews.index', ['admin/reviews*', 'admin/review/*'], 'reviews'],
+                ['الاقتراحات', 'admin.suggestions.index', ['admin/suggestions', 'admin/suggestions/SUG-*', 'admin/suggestions/export'], 'suggestions'],
             ]],
             ['الخدمات والمنتجات', 'fa-th-large', [
                 ['الخدمات (صفحة الخدمات)', 'admin.catalog.services', ['admin/catalog/services*', 'admin/sub-categories*'], null],
@@ -94,6 +100,7 @@ class AdminMenu
             ['الإعدادات', 'fa-cog', [
                 ['الإعدادات العامة للموقع', 'admin/public_settings', ['admin/public_settings*'], null],
                 ['إعدادات اختبار المواقع', 'admin.site-tests.settings', ['admin/site-tests/settings*'], null],
+                ['إعدادات الاقتراحات', 'admin.suggestions.settings', ['admin/suggestions/settings*'], null],
                 ['إعدادات Gmail API', 'admin.email.gmail.settings', ['admin/email/gmail*'], null],
                 ['تعديل بياناتي', 'admin/update_admin_details', ['admin/update_admin_details*'], null],
                 ['تغيير كلمة المرور', 'admin/update_admin_password', ['admin/update_admin_password*'], null],
@@ -150,6 +157,13 @@ class AdminMenu
                 ->whereIn('status', [ServiceRequest::STATUS_OPEN, ServiceRequest::STATUS_INQUIRY])->count()
                 + RequestPayment::where('status', RequestPayment::STATUS_CONFLICT)->count(),
             'help' => HelpRequest::where('status', HelpRequest::STATUS_NEW)->count(),
+            'suggestions' => \App\Models\Suggestion::where('status', \App\Models\Suggestion::STATUS_NEW)->count(),
+            'business' => \App\Models\BusinessRequest::where('status', \App\Models\BusinessRequest::STATUS_NEW)->count(),
+            // Projects where the client asked for changes and the team has not sent a new version yet.
+            'business_reviews' => \App\Models\BusinessDelivery::where('status', \App\Models\BusinessDelivery::STATUS_CHANGES)
+                ->whereNotExists(fn ($q) => $q->from('business_deliveries as newer')
+                    ->whereColumn('newer.version', '>', 'business_deliveries.version')
+                    ->where(fn ($same) => $same->whereColumn('newer.root_id', 'business_deliveries.id')->orWhereColumn('newer.root_id', 'business_deliveries.root_id')))->count(),
             'disputes' => ContractDispute::whereIn('status', [ContractDispute::STATUS_OPEN, ContractDispute::STATUS_AWAITING])->count(),
             'withdraws' => WithDraw::where('status', 0)->count(),
             'tickets' => Ticket::where('status', 1)->count(),

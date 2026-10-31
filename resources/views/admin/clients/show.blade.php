@@ -29,11 +29,28 @@
                         @foreach ($classification['tags'] as $tag)
                             <span class="cl-tag cl-tag-{{ $tag }}">{{ C::CATEGORIES[$tag]['label'] }}</span>
                         @endforeach
+                        @if (! $classification['contacts'])
+                            <span class="cl-tag cl-tag-no_requests">مسجّل بلا طلبات بعد</span>
+                        @endif
                     </div>
+                    @php
+                        $state = match (true) {
+                            (string) $user->block_status === '0' => ['محظور', 'badge-danger'],
+                            (int) $user->status !== 1 => ['غير مفعّل', 'badge-secondary'],
+                            default => ['نشط', 'badge-success'],
+                        };
+                    @endphp
                     <dl class="mb-0">
-                        <dt>البريد</dt><dd dir="ltr" class="text-right">{{ $user->email }}</dd>
+                        <dt>البريد</dt>
+                        <dd dir="ltr" class="text-right">{{ $user->email }}
+                            <span class="badge {{ $user->email_verified_at ? 'badge-success' : 'badge-warning' }}" dir="rtl">{{ $user->email_verified_at ? 'مؤكد' : 'غير مؤكد' }}</span>
+                        </dd>
                         <dt>الهاتف</dt><dd dir="ltr" class="text-right">{{ $user->phone ?: ($latestContact?->contact_phone ?? '—') }}</dd>
-                        <dt>آخر تواصل</dt><dd>{{ $classification['last_activity']?->format('Y-m-d H:i') }}</dd>
+                        @if ($user->whatsapp)<dt>واتساب</dt><dd dir="ltr" class="text-right">{{ $user->whatsapp }}</dd>@endif
+                        <dt>حالة الحساب</dt><dd><span class="badge {{ $state[1] }}">{{ $state[0] }}</span></dd>
+                        <dt>تاريخ التسجيل</dt><dd>{{ $user->created_at?->format('Y-m-d H:i') ?? '—' }}</dd>
+                        <dt>آخر تواصل</dt><dd>{{ $classification['last_activity']?->format('Y-m-d H:i') ?? 'لم يتواصل بعد' }}</dd>
+                        <dt>الرصيد</dt><dd>{{ \App\Support\Money::format($user->balance ?? 0) }}</dd>
                     </dl>
                 </div>
             </div>
@@ -50,6 +67,9 @@
             <div class="card">
                 <div class="card-header"><h6 class="mb-0">سجل الطلبات والاستفسارات</h6></div>
                 <div class="card-body">
+                    @if ($requests->isEmpty())
+                        <p class="cl-muted mb-0">سجّل هذا العميل {{ $user->created_at?->diffForHumans() }} ولم يرسل أي طلب خدمة بعد. يمكنك التواصل معه على بريده أو هاتفه ليبدأ.</p>
+                    @else
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead><tr><th>الطلب</th><th>الحالة</th><th>العروض</th><th>آخر رسالة مع الفريق</th><th></th></tr></thead>
@@ -80,6 +100,7 @@
                             </tbody>
                         </table>
                     </div>
+                    @endif
                 </div>
             </div>
 
@@ -104,6 +125,46 @@
                                 </tbody>
                             </table>
                         </div>
+                    @endif
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><h6 class="mb-0">طلبات «ساعدوني أختار» ({{ $helpRequests->count() }})</h6></div>
+                <div class="card-body">
+                    @if ($helpRequests->isEmpty())
+                        <p class="cl-muted mb-0">لم يطلب مساعدة من الفريق.</p>
+                    @else
+                        <ul class="list-unstyled mb-0">
+                            @foreach ($helpRequests as $help)
+                                <li class="border-bottom py-2 d-flex justify-content-between align-items-center" style="gap: 8px">
+                                    <span><strong dir="ltr">{{ $help->number }}</strong> · {{ $help->serviceLabel() }} · <span class="cl-muted">{{ $help->created_at->format('Y-m-d') }}</span></span>
+                                    <span><span class="badge badge-light">{{ $help->statusLabel() }}</span>
+                                        <a href="{{ route('admin.help-requests.show', $help) }}" class="btn btn-sm btn-primary">فتح</a></span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><h6 class="mb-0">اقتراحاته لتطوير المنصة ({{ $suggestions->count() }})</h6></div>
+                <div class="card-body">
+                    @if ($suggestions->isEmpty())
+                        <p class="cl-muted mb-0">لم يرسل اقتراحات.</p>
+                    @else
+                        <ul class="list-unstyled mb-0">
+                            @foreach ($suggestions as $suggestion)
+                                <li class="border-bottom py-2 d-flex justify-content-between align-items-center" style="gap: 8px">
+                                    <span><strong dir="ltr">{{ $suggestion->reference_code }}</strong> · {{ $suggestion->title }} · <span class="cl-muted">{{ $suggestion->created_at->format('Y-m-d') }}</span></span>
+                                    <span><span class="badge badge-light">{{ $suggestion->statusLabel() }}</span>
+                                        @if (\App\Support\StaffPermissions::canSuggestions(auth()->user(), 'view'))
+                                            <a href="{{ route('admin.suggestions.show', $suggestion) }}" class="btn btn-sm btn-primary">فتح</a>
+                                        @endif</span>
+                                </li>
+                            @endforeach
+                        </ul>
                     @endif
                 </div>
             </div>

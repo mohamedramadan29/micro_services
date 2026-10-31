@@ -1,93 +1,21 @@
-@extends('website.layouts.master')
-@section('title')
-    الرسائل
-@endsection
-@section('content')
-    <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
-
-        <div class="container-fluid">
-            <div class="row m-0">
-                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
-                    <div class="dashboard-navbar">
-
-                        @include('website.user.partials.account-head')
-
-                        @include('website.layouts.dashboard-sidebar')
-
-                    </div>
+@extends('website.user.layouts.account')
+@section('title')المحادثات@endsection
+@section('account_title')المحادثات@endsection
+@section('account')
+    <div class="rf-acc-card">
+        <h3>المحادثات</h3>
+        @forelse ($conversations as $conversation)
+            @php $otherUser = $conversation->sender_id == Auth::id() ? $conversation->receiver : $conversation->sender; @endphp
+            <a class="rf-acc-row rf-ch-row" href="{{ url('chat-main/' . $conversation->id) }}">
+                <img src="{{ $otherUser?->avatarUrl(128) ?? asset('assets/uploads/user.png') }}" alt="" width="44" height="44" loading="lazy">
+                <div>
+                    <strong>{{ $otherUser?->name ?? 'مستخدم محذوف' }}</strong>
+                    <small>{{ \Illuminate\Support\Str::limit($conversation->lastMessage?->body ?? 'لا توجد رسائل بعد', 90) }}</small>
                 </div>
-                <!-- Item Wrap Start -->
-                <!-- Item Wrap Start -->
-                <div class="col-xl-9 col-lg-8 col-md-12 col-sm-12">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <!-- Breadcrumbs -->
-                            <div class="bredcrumb_wrap">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                                        <li class="breadcrumb-item"><a href="{{ url('dashboard') }}"> حسابي </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"> الرسائل </li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tickets_page">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <!-- Convershion -->
-                                <div class="messages-container margin-top-0">
-                                    <div class="messages-headline d-flex">
-                                        <h4> الرسائل </h4>
-                                    </div>
-
-                                    <div class="tickets">
-                                        @forelse ($conversations as $conversation)
-                                            @php
-                                                // تحديد الشخص الآخر في المحادثة
-                                                $otherUser =
-                                                    $conversation->sender_id == Auth::id()
-                                                        ? $conversation->receiver
-                                                        : $conversation->sender;
-
-                                            @endphp
-                                            <a href="{{ url('chat-main/' . $conversation['id']) }}">
-                                                <div class="ticket">
-                                                    <div class="ticket_logo">
-                                                        <img style="width: 50px; height:50px; border-radius:50%;" src="{{ optional($otherUser)->avatarUrl(128) ?? asset('assets/uploads/user.png') }}"
-                                                            alt="User Image">
-                                                    </div>
-                                                    <div>
-                                                        <h4>{{ $otherUser?->name ?? 'مستخدم محذوف' }}</h4>
-                                                        <p class="mb-1 text-muted">{{ \Illuminate\Support\Str::limit($conversation->lastMessage?->body ?? 'لا توجد رسائل بعد', 90) }}</p>
-                                                        @if ($conversation->lastMessage)
-                                                            <div class="ticket_details">
-                                                                <p><i class="bi bi-clock-fill"></i> {{ $conversation->lastMessage->created_at?->diffForHumans() }}</p>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                            </a>
-                                        @empty
-                                            <p>لا توجد محادثات.</p>
-                                        @endforelse
-
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-
-            </div>
-        </div>
-    </section>
-    <!-- ============================ Main Section End ================================== -->
+                @if ($conversation->lastMessage)<span class="rf-ch-time">{{ $conversation->lastMessage->created_at?->diffForHumans() }}</span>@endif
+            </a>
+        @empty
+            <p class="rf-acc-empty">لا توجد محادثات بعد. تبدأ المحادثة من صفحة أي خدمة جاهزة بزر «اسأل المستقل قبل الطلب».</p>
+        @endforelse
+    </div>
 @endsection

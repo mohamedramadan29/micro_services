@@ -75,6 +75,10 @@ class AccountMenu
             if ($has['bought']) {
                 $requests[] = $item('خدمات اشتريتها', url('purches'), 'bi bi-bag-check-fill', ['purches']);
             }
+            // «نفّذها للأعمال»: once the account has a company request or project.
+            if ($has['business']) {
+                $requests[] = $item('نفّذها للأعمال (شركتي)', route('business.mine'), 'bi bi-buildings-fill', ['business.mine', 'business.requests.*', 'business.projects.*'], $has['business_reviews']);
+            }
             $sections[] = ['title' => 'طلباتي ومشاريعي', 'items' => $requests];
         }
 
@@ -83,6 +87,7 @@ class AccountMenu
             $item('مشتريات المنتجات', url('my/products/purches'), 'bi bi-cart-check-fill', ['my/products/purches']),
             $item('المحادثات', url('chats'), 'bi bi-chat-dots-fill', ['chats', 'chat-main/*']),
             $item('الدعم الفني (تذاكري)', url('tickets'), 'bi bi-life-preserver', ['tickets', 'ticket/*']),
+            $item('اقتراحاتي', route('suggestions.mine'), 'bi bi-lightbulb-fill', ['suggestions.mine', 'suggestions.show']),
         ];
         $sections[] = ['title' => 'الرصيد والتواصل', 'items' => $money];
 
@@ -126,6 +131,9 @@ class AccountMenu
 
         return [
             'contracts' => $safe(fn () => Contract::involving($user)->exists()),
+            'business' => $safe(fn () => \App\Models\BusinessRequest::where('user_id', $user->id)->exists()),
+            'business_reviews' => (int) $safe(fn () => \App\Models\BusinessDelivery::where('status', \App\Models\BusinessDelivery::STATUS_PENDING)
+                ->whereHas('project', fn ($q) => $q->where('user_id', $user->id))->count()),
             'portfolio' => $safe(fn () => UserPortfolio::where('user_id', $user->id)->exists()),
             'services' => $safe(fn () => Service::where('user_id', $user->id)->exists()),
             'sold' => $safe(fn () => OrderDetail::where('user_seller', $user->id)->exists()),

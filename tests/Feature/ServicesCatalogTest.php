@@ -38,10 +38,11 @@ class ServicesCatalogTest extends TestCase
     {
         $this->seed(ServicesCatalogSeeder::class);
 
-        $this->assertSame(6, Category::count());
+        // Active groups/services only: the hidden companies form group («نفّذها للأعمال», status 0) is not part of the catalog.
+        $this->assertSame(6, Category::where('status', 1)->count());
         // The brief's 41 + «تحسين سرعة المواقع» (client, 2026-10-16).
-        $this->assertSame(42, SubCategory::count());
-        $this->assertSame([15, 6, 5, 11, 4, 1], Category::ordered()->withCount('subCategories')->pluck('sub_categories_count')->all());
+        $this->assertSame(42, SubCategory::where('status', 1)->count());
+        $this->assertSame([15, 6, 5, 11, 4, 1], Category::where('status', 1)->ordered()->withCount('subCategories')->pluck('sub_categories_count')->all());
         $this->assertTrue(SubCategory::where('name', 'إنتاج بودكاست')->exists());
     }
 
@@ -77,6 +78,31 @@ class ServicesCatalogTest extends TestCase
         $html = $this->get(route('services.index'))->getContent();
         $this->assertStringContainsString(json_encode(url('/products')), $html);
         $this->assertStringContainsString(json_encode('شوف العروض', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT), $html);
+    }
+
+    public function test_a_chosen_service_offers_request_ready_services_and_freelancers_not_help(): void
+    {
+        $logo = $this->service('تصميم الشعارات');
+        \App\Models\ServiceForm::create(['sub_category_id' => $logo->id, 'status' => \App\Models\ServiceForm::STATUS_PUBLISHED]);
+        // Two listed freelancers in this service; a pending one and one without a photo are not counted.
+        foreach ([true, true, false] as $listed) {
+            $freelancer = User::factory()->freelancer()->create(['professional_photo' => $listed ? 'photo.jpg' : null]);
+            $freelancer->specializations()->attach($logo->id);
+        }
+        User::factory()->pendingFreelancer()->create(['professional_photo' => 'p.jpg'])->specializations()->attach($logo->id);
+
+        $html = $this->get(route('services.index'))->assertOk()->getContent();
+
+        $this->assertStringContainsString('"freelancers":2', $html);
+        $this->assertStringContainsString(json_encode(route('freelancers.index', ['service' => $logo->id])), $html);
+        $this->assertStringContainsString('شوف المستقلين في الخدمة دي', $html);
+        // «ساعدوني أختار» is no longer a second path for a chosen service: only a hidden fallback
+        // (for a service that cannot be requested yet) and the page's general button remain.
+        $this->assertStringNotContainsString('المسار الثاني', $html);
+        $this->assertStringContainsString('data-help-fallback hidden', $html);
+        $this->assertStringContainsString("modalEl.querySelector('[data-help-fallback]').hidden = !!service.url", $html);
+        // The directory link really shows those freelancers.
+        $this->get(route('freelancers.index', ['service' => $logo->id]))->assertOk();
     }
 
     public function test_help_requests_need_a_logged_in_user(): void

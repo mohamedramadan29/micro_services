@@ -20,6 +20,9 @@
         // Freelancers' published ready-made services in this sub-service (third choice in the dialog).
         'ready' => (int) ($readyCounts[$service->id] ?? 0),
         'ready_url' => url('services/' . $service->slug),
+        // Approved freelancers who work in this sub-service (directory filtered on it).
+        'freelancers' => (int) ($freelancerCounts[$service->id] ?? 0),
+        'freelancers_url' => route('freelancers.index', ['service' => $service->id]),
     ]))->keyBy('id');
     $readyPage = SiteContent::first('ready.page');
     $openHelp = auth()->check() && (request()->boolean('help') || ($errors->any() && old('_help')));
@@ -134,22 +137,15 @@
                         <a class="rf-sv-btn rf-sv-btn-primary rf-sv-btn-block" data-request-link href="#"><span data-request-text>{{ $choice['request_button'] }}</span> <i class="bi bi-check2"></i></a>
                         <p class="rf-sv-no-request" data-no-request hidden>{{ $choice['no_request_text'] }}</p>
                         <a class="rf-sv-btn rf-sv-btn-outline rf-sv-btn-block mt-2" data-ready-link href="#" hidden><i class="bi bi-bag-check" aria-hidden="true"></i> <span>{{ $choice['ready_button'] }}</span> (<span data-ready-count></span>)</a>
-                        <div class="rf-sv-paths">
-                            <div class="rf-sv-path">
-                                <small>{{ $choice['path_one_label'] }}</small>
-                                <strong>{{ $choice['request_title'] }}</strong>
-                                <span>{{ $choice['request_text'] }}</span>
-                            </div>
-                            <div class="rf-sv-path">
-                                <small>{{ $choice['path_two_label'] }}</small>
-                                <strong>{{ $choice['help_title'] }}</strong>
-                                <span>{{ $choice['help_text'] }}</span>
-                                @auth
-                                    <button type="button" class="rf-sv-btn rf-sv-btn-outline" data-to-help>{{ $choice['help_button'] }}</button>
-                                @else
-                                    <a class="rf-sv-btn rf-sv-btn-outline" data-help-login href="{{ route('services.help.login') }}">{{ $choice['help_button'] }}</a>
-                                @endauth
-                            </div>
+                        <a class="rf-sv-btn rf-sv-btn-outline rf-sv-btn-block mt-2" data-freelancers-link href="#" hidden><i class="bi bi-people" aria-hidden="true"></i> <span>{{ $choice['freelancers_button'] }}</span> (<span data-freelancers-count></span>)</a>
+                        {{-- The client already chose a service, so «ساعدوني أختار» is not offered here; only when this
+                             service cannot be requested directly yet is the team's help the way to ask for it. --}}
+                        <div data-help-fallback hidden>
+                            @auth
+                                <button type="button" class="rf-sv-btn rf-sv-btn-primary rf-sv-btn-block mt-2" data-to-help>{{ $choice['help_button'] }}</button>
+                            @else
+                                <a class="rf-sv-btn rf-sv-btn-primary rf-sv-btn-block mt-2" data-help-login href="{{ route('services.help.login') }}">{{ $choice['help_button'] }}</a>
+                            @endauth
                         </div>
                     </div>
 
@@ -245,11 +241,18 @@
                         link.href = service.url;
                         modalEl.querySelector('[data-request-text]').textContent = service.button;
                     }
+                    modalEl.querySelector('[data-help-fallback]').hidden = !!service.url;
                     var ready = modalEl.querySelector('[data-ready-link]');
                     ready.hidden = !service.ready;
                     if (service.ready) {
                         ready.href = service.ready_url;
                         ready.querySelector('[data-ready-count]').textContent = service.ready;
+                    }
+                    var freelancers = modalEl.querySelector('[data-freelancers-link]');
+                    freelancers.hidden = !service.freelancers;
+                    if (service.freelancers) {
+                        freelancers.href = service.freelancers_url;
+                        freelancers.querySelector('[data-freelancers-count]').textContent = service.freelancers;
                     }
                 }
             };

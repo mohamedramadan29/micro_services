@@ -1,98 +1,23 @@
-@extends('website.layouts.master')
-@section('title')
-    تذاكري
-@endsection
-@section('content')
-    <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
-        <div class="container-fluid">
-            <div class="row m-0">
-                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
-                    <div class="dashboard-navbar">
-
-                        @include('website.user.partials.account-head')
-
-                        @include('website.layouts.dashboard-sidebar')
-
-
-                    </div>
+@extends('website.user.layouts.account')
+@section('title')تذاكري@endsection
+@section('account_title')الدعم الفني (تذاكري)@endsection
+@section('account')
+    <div class="rf-acc-card">
+        <h3>تذاكري <a href="{{ url('ticket/create') }}"><i class="bi bi-plus-lg" aria-hidden="true"></i> تذكرة جديدة</a></h3>
+        @forelse ($tickets as $ticket)
+            <div class="rf-acc-row">
+                <div>
+                    <a href="{{ url('ticket/' . $ticket->id) }}"><strong>{{ $ticket->title }}</strong></a>
+                    <small>تذكرة رقم <span class="rf-acc-num">{{ $ticket->id }}</span> · {{ $ticket->created_at?->diffForHumans() }}</small>
                 </div>
-                <!-- Item Wrap Start -->
-                <!-- Item Wrap Start -->
-                <div class="col-xl-9 col-lg-8 col-md-12 col-sm-12">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <!-- Breadcrumbs -->
-                            <div class="bredcrumb_wrap">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                                        <li class="breadcrumb-item"><a href="{{ url('dashboard') }}"> حسابي </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"> تذاكري </li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tickets_page">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <!-- Convershion -->
-                                <div class="messages-container margin-top-0">
-                                    <div class="messages-headline d-flex">
-                                        <h4> تذاكري </h4>
-                                        <a href="{{ url('ticket/create') }}" class="message-action"> تذكرة جديدة </a>
-                                    </div>
-
-                                    <div class="tickets">
-                                        @forelse ($tickets as $ticket)
-                                            <a href="{{ url('ticket/' . $ticket['id']) }}">
-                                                <div class="ticket">
-                                                    <div class="ticket_logo">
-                                                        <i class="bi bi-ticket"></i>
-                                                    </div>
-                                                    <div>
-                                                        <h4> {{ $ticket['title'] }} </h4>
-                                                        <div class="ticket_details">
-                                                            <p>
-                                                                <i class="bi bi-ticket-fill"></i>
-                                                                {{ $ticket['id'] }}
-                                                            </p>
-                                                            <p>
-                                                                <i class="bi bi-clock-fill"></i>
-                                                                {{ $ticket->created_at->diffForHumans() }}
-                                                            </p>
-                                                            <p>
-                                                                <i class="bi bi-check-circle-fill"></i>
-                                                                @if ($ticket['re-send'] == 0)
-                                                                    لا يتوفر رد
-                                                                @elseif($ticket['re-send'] == 1)
-                                                                    يتوفر رد
-                                                                @endif
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                            </a>
-                                            @empty
-                                            <div class="alert alert-info">
-                                                لا يوجد تذاكر بعد
-                                            </div>
-                                        @endforelse
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-
+                @if ((int) $ticket['re-send'] === 1)
+                    <span class="rf-acc-pill ok">وصل رد الفريق</span>
+                @else
+                    <span class="rf-acc-pill warn">بانتظار رد الفريق</span>
+                @endif
             </div>
-        </div>
-    </section>
-    <!-- ============================ Main Section End ================================== -->
+        @empty
+            <p class="rf-acc-empty">لا توجد تذاكر بعد. عندك مشكلة أو سؤال؟ <a href="{{ url('ticket/create') }}">افتح تذكرة</a> وفريق نفّذها يرد عليك.</p>
+        @endforelse
+    </div>
 @endsection

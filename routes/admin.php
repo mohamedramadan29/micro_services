@@ -499,6 +499,41 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('help-requests/{helpRequest}', 'update')->name('admin.help-requests.update');
             Route::post('help-requests/{helpRequest}/notes', 'addNote')->name('admin.help-requests.notes');
         });
+        // «نفّذها للأعمال» (client file «قسم الشركات», phase 1).
+        Route::controller(\App\Http\Controllers\admin\BusinessAdminController::class)->prefix('business')->group(function () {
+            Route::get('requests', 'requests')->name('admin.business.requests');
+            Route::get('requests/{businessRequest}', 'showRequest')->where('businessRequest', 'BIZ-[0-9]+')->name('admin.business.requests.show');
+            Route::post('requests/{businessRequest}', 'updateRequest')->where('businessRequest', 'BIZ-[0-9]+')->name('admin.business.requests.update');
+            Route::post('requests/{businessRequest}/note', 'note')->where('businessRequest', 'BIZ-[0-9]+')->name('admin.business.requests.note');
+            Route::post('requests/{businessRequest}/quote', 'quote')->where('businessRequest', 'BIZ-[0-9]+')->name('admin.business.requests.quote');
+            Route::post('requests/{businessRequest}/decision', 'decideForClient')->where('businessRequest', 'BIZ-[0-9]+')->name('admin.business.requests.decision');
+            Route::post('requests/{businessRequest}/payment', 'payment')->where('businessRequest', 'BIZ-[0-9]+')->name('admin.business.requests.payment');
+            Route::post('requests/{businessRequest}/account', 'linkAccount')->where('businessRequest', 'BIZ-[0-9]+')->name('admin.business.requests.account');
+            Route::post('requests/{businessRequest}/convert', 'convert')->where('businessRequest', 'BIZ-[0-9]+')->name('admin.business.requests.convert');
+            Route::get('projects', 'projects')->name('admin.business.projects');
+            Route::get('projects/{businessProject}', 'showProject')->where('businessProject', 'BPR-[0-9]+')->name('admin.business.projects.show');
+            Route::post('projects/{businessProject}', 'updateProject')->where('businessProject', 'BPR-[0-9]+')->name('admin.business.projects.update');
+            Route::post('projects/{businessProject}/note', 'projectNote')->where('businessProject', 'BPR-[0-9]+')->name('admin.business.projects.note');
+            Route::post('projects/{businessProject}/tasks', 'saveTask')->where('businessProject', 'BPR-[0-9]+')->name('admin.business.tasks.store');
+            Route::post('projects/{businessProject}/tasks/{task}', 'saveTask')->where('businessProject', 'BPR-[0-9]+')->whereNumber('task')->name('admin.business.tasks.update');
+            Route::post('projects/{businessProject}/tasks/{task}/move', 'moveTask')->where('businessProject', 'BPR-[0-9]+')->whereNumber('task')->name('admin.business.tasks.move');
+            Route::post('projects/{businessProject}/tasks/{task}/delete', 'deleteTask')->where('businessProject', 'BPR-[0-9]+')->whereNumber('task')->name('admin.business.tasks.destroy');
+            Route::post('projects/{businessProject}/deliveries', 'deliver')->where('businessProject', 'BPR-[0-9]+')->name('admin.business.deliveries.store');
+            Route::get('settings', 'settings')->name('admin.business.settings');
+        });
+        // Suggestions (client file «نظام الاقتراحات»); abilities checked in the controller.
+        Route::controller(\App\Http\Controllers\admin\SuggestionAdminController::class)->group(function () {
+            Route::get('suggestions', 'index')->name('admin.suggestions.index');
+            Route::get('suggestions/export', 'export')->name('admin.suggestions.export');
+            Route::get('suggestions/settings', 'settings')->name('admin.suggestions.settings');
+            Route::post('suggestions/settings/categories', 'saveCategory')->name('admin.suggestions.categories.store');
+            Route::post('suggestions/settings/categories/{category}', 'saveCategory')->name('admin.suggestions.categories.update');
+            Route::post('suggestions/settings/categories/{category}/delete', 'deleteCategory')->name('admin.suggestions.categories.destroy');
+            Route::get('suggestions/{suggestion}', 'show')->where('suggestion', 'SUG-[0-9]+')->name('admin.suggestions.show');
+            Route::post('suggestions/{suggestion}', 'update')->where('suggestion', 'SUG-[0-9]+')->name('admin.suggestions.update');
+            Route::post('suggestions/{suggestion}/notes', 'addNote')->where('suggestion', 'SUG-[0-9]+')->name('admin.suggestions.notes');
+            Route::post('suggestions/{suggestion}/duplicate', 'linkDuplicate')->where('suggestion', 'SUG-[0-9]+')->name('admin.suggestions.duplicate');
+        });
 
         #################### Freelancer applications and directory ####################
         Route::controller(\App\Http\Controllers\admin\FreelancerAdminController::class)->group(function () {
@@ -509,6 +544,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('freelancers/{freelancer}/photo', 'photo')->name('admin.freelancers.photo');
             Route::post('freelancers/{freelancer}/decide', 'decide')->name('admin.freelancers.decide');
             Route::post('freelancers/{freelancer}/feature', 'feature')->name('admin.freelancers.feature');
+            Route::post('freelancers/{freelancer}/delete', 'destroy')->name('admin.freelancers.destroy');
         });
         Route::controller(\App\Http\Controllers\admin\FreelancerWorkController::class)->group(function () {
             Route::get('freelancer-works', 'index')->name('admin.freelancer-works.index');

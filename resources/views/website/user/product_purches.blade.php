@@ -1,110 +1,28 @@
-@extends('website.layouts.master')
-@section('title')
-    مشتريات المنتجات
-@endsection
-@section('content')
-    <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
-        <div class="container-fluid">
-            <div class="row m-0">
-
-                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
-                    <div class="dashboard-navbar">
-
-                        @include('website.user.partials.account-head')
-                        @include('website.layouts.dashboard-sidebar')
-
-                    </div>
+@extends('website.user.layouts.account')
+@section('title')مشتريات المنتجات@endsection
+@section('account_title')مشتريات المنتجات@endsection
+@section('account')
+    @php $paidTone = fn ($s) => $s === 'تم الدفع' ? 'ok' : (in_array($s, ['فشل الدفع', 'ملغي'], true) ? 'bad' : 'info'); @endphp
+    <div class="rf-acc-card">
+        <h3>مشتريات المنتجات <a href="{{ url('products') }}">المنتجات</a></h3>
+        @forelse ($purches as $purch)
+            <div class="rf-acc-row">
+                <div>
+                    @if ($purch->product)<a href="{{ url('product/' . $purch->product->slug) }}"><strong>{{ $purch->product_name }}</strong></a>@else<strong>{{ $purch->product_name }}</strong>@endif
+                    <small>
+                        {{ $purch->created_at?->translatedFormat('j F Y') }}
+                        @if ($purch->country || $purch->city || $purch->address) · <i class="bi bi-truck" aria-hidden="true"></i> {{ collect([$purch->country, $purch->city, $purch->address])->filter()->implode('، ') }}@endif
+                    </small>
                 </div>
-
-                <!-- Item Wrap Start -->
-                <div class="col-xl-9 col-lg-8 col-md-12 col-sm-12">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <!-- Breadcrumbs -->
-                            <div class="bredcrumb_wrap">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"> مشتريات المنتجات </li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-
-                            <!-- Single Wrap -->
-                            <div class="_dashboard_content">
-                                <!-- Single Wrap -->
-                                <div class="_dashboard_content">
-                                    <div class="_dashboard_content_header">
-                                        <div class="_dashboard__header_flex">
-                                            <h4><i class="bi bi-cart-check"></i> مشتريات المنتجات </h4>
-                                        </div>
-                                    </div>
-
-                                    <div class="_dashboard_content_body project_page">
-                                        <div class="row">
-                                            <!-- Single Item -->
-                                            @if ($purches->count() > 0)
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                            <tr style="border-color: #eeeeef">
-                                                                <th style="border-color: #eeeeef">المنتج</th>
-                                                                <th style="border-color: #eeeeef">السعر</th>
-                                                                <th style="border-color: #eeeeef"> الدولة </th>
-                                                                <th style="border-color: #eeeeef"> المدينة </th>
-                                                                <th style="border-color: #eeeeef"> العنوان </th>
-                                                                <th style="border-color: #eeeeef"> الحالة</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($purches as $purch)
-                                                                <tr>
-                                                                    <td>{{ $purch->product_name }}</td>
-                                                                    <td>{{ \App\Support\Money::show($purch->price) }}</td>
-                                                                    <td>{{ $purch->country }}</td>
-                                                                    <td>{{ $purch->city }}</td>
-                                                                    <td>{{ $purch->address }}</td>
-                                                                    <td>
-
-                                                                        @if ($purch->order_status === 'تم الدفع' && $purch->product?->type == 'digital' && $purch->product?->digital_file)
-                                                                            <a href="{{ route('download.product', $purch->id) }}"
-                                                                                class="btn btn-success">
-                                                                                <i class="bi bi-download"></i> تنزيل الملف
-                                                                                الرقمي
-                                                                            </a>
-                                                                        @else
-                                                                            {{ $purch->order_status }}
-                                                                        @endif
-
-
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            @else
-                                                <div class="alert alert-info">
-                                                    لا يوجد لديك مشتريات في الوقت الحالي
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
+                <span class="rf-acc-num">{{ \App\Support\Money::show($purch->price) }}</span>
+                @if ($purch->order_status === 'تم الدفع' && $purch->product?->type == 'digital' && $purch->product?->digital_file)
+                    <a href="{{ route('download.product', $purch->id) }}" class="btn btn-primary btn-sm"><i class="bi bi-download" aria-hidden="true"></i> تنزيل الملف</a>
+                @else
+                    <span class="rf-acc-pill {{ $paidTone($purch->order_status) }}">{{ $purch->order_status }}</span>
+                @endif
             </div>
-    </section>
-    <!-- ============================ Main Section End ================================== -->
-
+        @empty
+            <p class="rf-acc-empty">لا توجد مشتريات منتجات بعد. <a href="{{ url('products') }}">تصفح المنتجات</a></p>
+        @endforelse
+    </div>
 @endsection

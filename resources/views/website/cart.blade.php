@@ -1,141 +1,83 @@
 @extends('website.layouts.master')
-@section('title')
-    سلة المشتريات
-@endsection
+@php
+    // A service that was hidden or removed after it was added is shown but never counted (checkout skips it too).
+    $available = fn ($item) => $item->serviceData && $item->serviceData->isActive() && (float) $item->serviceData->price > 0
+        && ! (auth()->check() && (int) $item->serviceData->user_id === (int) auth()->id());
+    $payable = $items->filter($available);
+    $total = $payable->sum(fn ($item) => (float) $item->serviceData->price);
+@endphp
+@section('title')سلة المشتريات | نفّذها@endsection
 @section('content')
-    <!-- ============================ Page Title Start================================== -->
-    <div class="page-title" style="height: 350px;text-align: right">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-
-                    <h2 class="ipt-title"> الرئيسية </h2>
-                    <span class="ipn-subtitle"> سلة المشتريات  </span>
-
-                </div>
+<section class="rf-pp rf-sl rf-ct" dir="rtl">
+    <div class="container">
+        <nav class="rf-pp-trail" aria-label="مسار الصفحة">
+            <a href="{{ url('/') }}">الرئيسية</a> <span aria-hidden="true">‹</span> <span>سلة المشتريات</span>
+        </nav>
+        <header class="rf-sl-head">
+            <div>
+                <h1>سلة المشتريات</h1>
+                <p>الخدمات الجاهزة التي اخترتها. تدفع مرة واحدة عبر EasyKash بالجنيه المصري.</p>
             </div>
-        </div>
+        </header>
+
+        @if ($errors->any())
+            <div class="alert alert-danger" role="alert">@foreach ($errors->all() as $error)<div>{{ $error }}</div>@endforeach</div>
+        @endif
+
+        @if ($items->isEmpty())
+            <div class="rf-pp-card rf-sl-empty">
+                <i class="bi bi-cart3" aria-hidden="true"></i>
+                <strong>سلتك فارغة.</strong>
+                <p>تصفح الخدمات الجاهزة وأضف ما يناسبك.</p>
+                <a href="{{ route('services.ready') }}" class="btn btn-primary">تصفح الخدمات الجاهزة</a>
+            </div>
+        @else
+            <div class="rf-pp-layout">
+                <div class="rf-pp-main">
+                    <ul class="rf-pp-card rf-ct-list">
+                        @foreach ($items as $item)
+                            @php $service = $item->serviceData; $ok = $available($item); @endphp
+                            <li class="rf-ct-row {{ $ok ? '' : 'off' }}">
+                                @if ($service)
+                                    <a href="{{ $service->url() }}" class="rf-ct-img"><img src="{{ asset('assets/uploads/services/' . $service->image) }}" alt="" loading="lazy"></a>
+                                @endif
+                                <div class="rf-ct-text">
+                                    <strong>@if ($service)<a href="{{ $service->url() }}" class="rf-fl-link">{{ $service->name }}</a>@else{{ $item->service_name }}@endif</strong>
+                                    @if ($item->userData)<small><i class="bi bi-person" aria-hidden="true"></i> {{ $item->userData->name }}</small>@endif
+                                    @unless ($ok)<span class="rf-acc-pill bad">غير متاحة للشراء الآن</span>@endunless
+                                </div>
+                                <span class="rf-ct-price">@if ($service){{ \App\Support\Money::show($service->price) }}@endif</span>
+                                <form method="post" action="{{ url('cart/delete') }}" onsubmit="return confirm('حذف الخدمة من السلة؟')">
+                                    @csrf
+                                    <input type="hidden" name="cartId" value="{{ $item->id }}">
+                                    <button type="submit" class="rf-ct-remove" aria-label="حذف {{ $service->name ?? $item->service_name }} من السلة"><i class="bi bi-trash3" aria-hidden="true"></i></button>
+                                </form>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <aside class="rf-pp-side">
+                    <div class="rf-pp-card rf-sd-buy">
+                        <dl class="rf-ct-sum">
+                            <div><dt>عدد الخدمات</dt><dd>{{ $payable->count() }}</dd></div>
+                            <div class="total"><dt>المجموع</dt><dd>{{ \App\Support\Money::show($total) }}</dd></div>
+                        </dl>
+                        @if ($payable->isEmpty())
+                            <p class="rf-ct-note">لا توجد في السلة خدمة متاحة للشراء.</p>
+                        @elseif (auth()->check())
+                            <a href="{{ url('checkout') }}" class="btn btn-primary w-100"><i class="bi bi-credit-card" aria-hidden="true"></i> إتمام الشراء</a>
+                        @else
+                            <a href="{{ url('login') }}" class="btn btn-primary w-100"><i class="bi bi-box-arrow-in-left" aria-hidden="true"></i> سجّل دخولك لإتمام الشراء</a>
+                        @endif
+                        <ul class="rf-pp-promise">
+                            <li><i class="bi bi-credit-card" aria-hidden="true"></i> بطاقة، فوري أو محفظة عبر EasyKash</li>
+                            <li><i class="bi bi-chat-dots" aria-hidden="true"></i> تتواصل مع المستقل داخل نفّذها بعد الطلب</li>
+                        </ul>
+                    </div>
+                    <a href="{{ route('services.ready') }}" class="btn btn-light w-100 mt-3">أضف خدمات أخرى</a>
+                </aside>
+            </div>
+        @endif
     </div>
-    <!-- ============================ Page Title End ================================== -->
-
-    <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg text-right" dir="rtl">
-        <div class="container">
-            <div class="card">
-
-                <div class="card-body cart_details">
-                    @if($count_items > 0)
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th> الخدمة</th>
-                                {{--                                <th> مرات الطلب</th>--}}
-                                <th> التكلفة</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @php
-                                $sub_total = 0;
-                            @endphp
-                            @foreach($items as $item)
-                                @php
-                                    $sub_total = $sub_total + $item['serviceData']['price'];
-                                @endphp
-                                <tr>
-                                    <td>
-                                        <div class="serv_data">
-                                            <div class="image">
-                                                <a href="{{url('service/'.$item['serviceData']['id'].'-'.$item['serviceData']['slug'])}}">
-                                                    <img
-                                                            src="{{asset('assets/uploads/services/'.$item['serviceData']['image'])}}"
-                                                            alt="">
-                                                </a>
-                                            </div>
-                                            <div class="info">
-                                                <h4>
-                                                    <a href="{{url('service/'.$item['serviceData']['id'].'-'.$item['serviceData']['slug'])}}"> {{$item['serviceData']['name']}} </a>
-                                                </h4>
-                                                <p><a href="{{url('user/'.$item['userData']['user_name'])}}"> <i
-                                                                class="fa fa-user"></i> {{$item['userData']['name']}}
-                                                    </a></p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    {{--                                    <td>--}}
-                                    {{--                                        <select class="" name="quantity">--}}
-                                    {{--                                            <option value="1">1</option>--}}
-                                    {{--                                            <option value="2">2</option>--}}
-                                    {{--                                            <option value="3">3</option>--}}
-                                    {{--                                            <option value="4">4</option>--}}
-                                    {{--                                            <option value="5">5</option>--}}
-                                    {{--                                            <option value="6">6</option>--}}
-                                    {{--                                            <option value="7">7</option>--}}
-                                    {{--                                            <option value="8">8</option>--}}
-                                    {{--                                            <option value="9">9</option>--}}
-                                    {{--                                            <option value="10">10</option>--}}
-                                    {{--                                        </select>--}}
-                                    {{--                                    </td>--}}
-                                    <td>
-                                        {{ \App\Support\Money::show($item['serviceData']['price']) }}
-                                    </td>
-                                    <td>
-                                        <form method="post" action="{{url('cart/delete')}}">
-                                            @csrf
-                                            <input type="hidden" name="cartId" value="{{$item['id']}}">
-                                            <button type="submit"
-                                                    onclick="return confirm(' هل انت متاكد من حذف الخدمة !!  ')"
-                                                    class="btn btn-danger btn-sm"> حذف
-                                            </button>
-                                        </form>
-
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th> المجموع الكلي</th>
-                                <th> {{ \App\Support\Money::show($sub_total) }}
-
-                                </th>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <td>
-                                    @if(\Illuminate\Support\Facades\Auth::check())
-                                        <a href="{{url('checkout')}}" style="padding: 10px" type="submit"
-                                           class="btn btn-primary btn-sm"> اتمام
-                                            الشراء
-                                        </a>
-                                    @else
-                                        <a href="{{url('login')}}" style="padding: 10px" type="submit"
-                                           class="btn global_button btn-sm"> اتمام
-                                            الشراء
-                                        </a>
-                                    @endif
-
-                                </td>
-                            </tr>
-                            </thead>
-                        </table>
-                    @else
-                        <div class="empty_cart">
-                            <img src="{{asset('assets/website/img/cart.png')}}">
-                            <h4> لا يوجد اي خدمات في سلة المشتريات </h4>
-                            <a href="{{url('services')}}" class="btn btn-primary"> مشاهدة الخدمات </a>
-
-
-                        </div>
-                    @endif
-
-                </div>
-            </div>
-
-        </div>
-    </section>
-    <!-- ============================ Main Section End ================================== -->
-
+</section>
 @endsection

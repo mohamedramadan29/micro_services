@@ -7,10 +7,8 @@
     <!-- ============================ Main Section Start ================================== -->
     <section class="gray-bg text-right register_page" dir="rtl">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-2 col-0"></div>
-                <div class="col-lg-8 col-12">
-                    <div class="modal-content" id="registermodal">
+            <div class="nf-auth-grid">
+                <div class="modal-content nf-sheet" id="registermodal">
                         <div class="modal-header">
                             <h1 class="nf-auth-title">  {{ __('login.new_register') }} </h1>
                         </div>
@@ -95,9 +93,7 @@
                                     class="theme-cl">  {{ __('login.login') }} </a></div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-2 col-0"></div>
-
+                @include('website.partials.auth-aside')
             </div>
         </div>
     </section>

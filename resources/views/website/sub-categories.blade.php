@@ -1,82 +1,45 @@
 @extends('website.layouts.master')
-@section('title')
-    {{ $category['name'] }}
-@endsection
+@section('title'){{ $category->name }} | نفّذها@endsection
+@section('meta_description'){{ \Illuminate\Support\Str::limit(strip_tags((string) $category->description), 160) }}@endsection
 @section('content')
-    <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg text-right profile_page" dir="rtl">
-        <div class="container">
+<section class="rf-pp rf-sl rf-sg" dir="rtl">
+    <div class="container">
+        <nav class="rf-pp-trail" aria-label="مسار الصفحة">
+            <a href="{{ url('/') }}">الرئيسية</a> <span aria-hidden="true">‹</span>
+            <a href="{{ url('categories') }}">أقسام الخدمات</a> <span aria-hidden="true">‹</span> <span>{{ $category->name }}</span>
+        </nav>
+        <header class="rf-sl-head">
+            <div>
+                <h1>{{ $category->name }}</h1>
+                <p>@if ($category->description){{ $category->description }} @endif{{ $sub_categories->count() }} خدمة في هذا القسم.</p>
+            </div>
+        </header>
 
-            <div class="row">
-                <!-- Item Wrap Start -->
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <!-- Filter Search -->
-                            <div class="_filt_tag786">
-                                <div class="_tag782">
-                                    <div class="_tag780"> {{ count($sub_categories) }} اقسام فرعيه</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <!-- Single Item -->
-                        @foreach ($sub_categories as $category)
-                            <div class="col-lg-3 col-md-6 col-sm-12">
-                                <div class="ser_110" style="min-height:365px">
-                                    <div class="ser_110_thumb">
-                                        <a href="{{ url('services/' . $category['slug']) }}" class="ser_100_link">
-                                            <img src=" {{ asset('assets/uploads/service_category/' . $category['image']) }}"
-                                                class="img-fluid" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="ser_110_footer">
-                                        <div class="_110_foot_left">
-                                            <div>
-                                                <h5>
-                                                    <a href="{{ url('services/' . $category['slug']) }}">
-                                                        {{ Str::limit($category['name'], 40, '...') }} </a>
-                                                </h5>
-                                                <span> عدد الخدمات :: {{ $category->CountServices() }} </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            {{ $sub_categories->links() }}
-                        </div>
-                    </div>
+        @if ($sub_categories->isEmpty())
+            <div class="rf-pp-card rf-sl-empty">
+                <i class="bi bi-grid" aria-hidden="true"></i>
+                <strong>لا توجد خدمات في هذا القسم الآن.</strong>
+                <p></p>
+                <a href="{{ route('services.index') }}" class="btn btn-light">كل الخدمات</a>
+            </div>
+        @else
+            <ul class="rf-sg-list rf-pp-card">
+                @foreach ($sub_categories as $sub)
+                    @include('website.partials.catalog-service-row', ['sub' => $sub, 'group' => null, 'hasForm' => isset($withForm[$sub->id]), 'ready' => (int) ($readyCounts[$sub->id] ?? 0)])
+                @endforeach
+            </ul>
+        @endif
 
-                </div>
-
+        <div class="rf-pp-card rf-wk-cta">
+            <div>
+                <strong>مش متأكد أي خدمة تناسبك؟</strong>
+                <span>اكتب لنا ما تحتاجه وفريق نفّذها يساعدك تختار.</span>
+            </div>
+            <div class="rf-wk-cta-actions">
+                <a href="{{ url('/services?help=1') }}" class="btn btn-primary">ساعدوني أختار</a>
+                <a href="{{ route('projects.new') }}" class="btn btn-light">انشر مشروعك</a>
             </div>
         </div>
-    </section>
-    <!-- ============================ Main Section End ================================== -->
-
-    <!-- ============================ Call To Action Start ================================== -->
-    <section class="call-to-act" style="background:#818489 url({{ asset('assets/website/img/landing-bg.png') }}) no-repeat">
-        <div class="container">
-            <div class="row justify-content-center">
-
-                <div class="col-lg-7 col-md-8">
-                    <div class="clt-caption text-center mb-4">
-                        <h2 class="text-light"> هل أنت جاهز لبدء مشروعك الخاص ؟ </h2>
-                    </div>
-                    <div class="inner-flexible-box subscribe-box">
-                        <div class="input-group">
-                            <button class="btn btn-primary start_job"> ابدا الان</button>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- ============================ Call To Action End ================================== -->
+    </div>
+</section>
 @endsection

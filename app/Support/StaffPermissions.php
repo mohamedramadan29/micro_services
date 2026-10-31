@@ -21,7 +21,38 @@ class StaffPermissions
         // Client file «المربعات الخمسة»: site content roles.
         'content' => 'محرر محتوى (يعدّل نصوص الواجهة كمسودة، والنشر للمدير)',
         'analyst' => 'دعم / تحليلات (اطلاع على الطلبات والتقارير دون تعديل)',
+        // Client file «نظام الاقتراحات»: one who handles suggestions (no settings).
+        'suggestions' => 'مسؤول الاقتراحات (يدير الاقتراحات ويصدّرها؛ باقي اللوحة اطلاع فقط)',
     ];
+
+    /**
+     * Suggestions box (client file «نظام الاقتراحات»): separate abilities view | manage (statuses,
+     * notes, assignment, duplicates) | export (CSV with contact data) | settings (types).
+     */
+    public const SUGGESTION_ABILITIES = [
+        'manager' => ['view', 'manage', 'export', 'settings'],
+        'suggestions' => ['view', 'manage', 'export'],
+        'analyst' => ['view'],
+    ];
+
+    public static function canSuggestions(?User $user, string $ability): bool
+    {
+        return in_array($ability, self::SUGGESTION_ABILITIES[self::role($user)] ?? [], true);
+    }
+
+    /** Active admins who may do $ability on suggestions (notified of new ones, offered as assignees). */
+    public static function suggestionStaff(string $ability = 'manage')
+    {
+        $roles = array_keys(array_filter(self::SUGGESTION_ABILITIES, fn ($abilities) => in_array($ability, $abilities, true)));
+
+        return User::activeAdmins()->where(function ($q) use ($roles) {
+            // null / unknown admin_role = manager (see role()).
+            if (in_array('manager', $roles, true)) {
+                $q->whereNull('admin_role')->orWhereNotIn('admin_role', array_keys(self::ROLES));
+            }
+            $q->orWhereIn('admin_role', $roles);
+        });
+    }
 
     /**
      * Managed site content: 'publish' (manager: everything, incl. destinations, publishing and rollback),

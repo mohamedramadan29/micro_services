@@ -9,18 +9,7 @@
                 <div class="row m-0">
                     <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
                         <div class="dashboard-navbar">
-                            <div class="d-user-avater">
-                                @if (Auth::user()->image != '')
-                                    <img src="{{ Auth::user()->avatarUrl(128) }}"
-                                        class="img-fluid rounded" alt="">
-                                @else
-                                    <img src="{{ asset('assets/website/img/avatar.png') }}" class="img-fluid rounded"
-                                        alt="">
-                                @endif
-                                <h4> {{ Auth::user()->user_name }} </h4>
-                                <span> {{ Auth::user()->email }} </span>
-                            </div>
-
+                            @include('website.user.partials.account-head')
                             @include('website.layouts.dashboard-sidebar')
 
                         </div>
@@ -35,9 +24,9 @@
                                 <div class="bredcrumb_wrap">
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                                            <li class="breadcrumb-item"><a href="{{ url('dashboard') }}"> حسابي </a></li>
-                                            <li class="breadcrumb-item active" aria-current="page"> الرسائل</li>
+                                            <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">لوحتي</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('chats') }}">المحادثات</a></li>
+                                            <li class="breadcrumb-item active" aria-current="page">محادثة</li>
                                         </ol>
                                     </nav>
                                 </div>

@@ -549,7 +549,7 @@
                                 <div class="_110_foot_left">
                                     <div>
                                         <h5>
-                                            <a href="{{ url('category/' . $category['slug']) }}"> {{ $category['name'] }}
+                                            <a href="{{ url('category/service/' . $category['slug']) }}"> {{ $category['name'] }}
                                             </a>
                                         </h5>
 

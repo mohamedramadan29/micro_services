@@ -25,6 +25,7 @@ class OnlinePaymentService
         OnlinePayment::PURPOSE_COURSE => Purposes\CoursePurpose::class,
         OnlinePayment::PURPOSE_BALANCE => Purposes\BalancePurpose::class,
         OnlinePayment::PURPOSE_CONTRACT_STAGE => Purposes\ContractStagePurpose::class,
+        OnlinePayment::PURPOSE_BUSINESS => Purposes\BusinessQuotePurpose::class,
     ];
 
     public function __construct(private PaymentGateway $gateway)

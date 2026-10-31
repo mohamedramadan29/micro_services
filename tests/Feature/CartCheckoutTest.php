@@ -68,7 +68,7 @@ class CartCheckoutTest extends TestCase
         $this->site->update(['price' => '1000']);
 
         $this->actingAs($this->buyer)->get('cart')->assertOk()->assertSee('1,300 ج.م')->assertDontSee('الرسوم');
-        $this->actingAs($this->buyer)->get('checkout')->assertOk()->assertSee('1,300 ج.م')->assertSee('ادفع واتمم الطلب')->assertDontSee('PayPal');
+        $this->actingAs($this->buyer)->get('checkout')->assertOk()->assertSee('1,300 ج.م')->assertSee('ادفع وأتمّ الطلب')->assertDontSee('PayPal');
 
         $this->actingAs($this->buyer)->post('checkout/order')->assertRedirect('https://pay.test/1');
         $payment = OnlinePayment::sole();

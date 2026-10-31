@@ -1,108 +1,34 @@
-@extends('website.layouts.master')
-@section('title')
-    تفاصيل التذكرة
-@endsection
-@section('content')
-    <!-- ============================ Main Section Start ================================== -->
-    <section class="gray-bg pt-4 text-right profile_page" dir="rtl">
-        <div class="container-fluid">
-            <div class="row m-0">
-                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
-                    <div class="dashboard-navbar">
-
-                        @include('website.user.partials.account-head')
-
-                        @include('website.layouts.dashboard-sidebar')
-
-
+@extends('website.user.layouts.account')
+@section('title')تفاصيل التذكرة@endsection
+@section('account_parent')<li class="breadcrumb-item"><a href="{{ url('tickets') }}">تذاكري</a></li>@endsection
+@section('account_title')تذكرة رقم {{ $ticket_id }}@endsection
+@section('account')
+    @php $me = Auth::user(); @endphp
+    <div class="rf-acc-card">
+        <h3>تذكرة رقم {{ $ticket_id }} <a href="{{ url('tickets') }}">كل التذاكر</a></h3>
+        <ol class="rf-tk-thread">
+            @foreach ($messages as $message)
+                @php $mine = $message['sender_type'] == 'user'; @endphp
+                <li class="{{ $mine ? 'me' : 'team' }}">
+                    <img src="{{ $mine ? $me->avatarUrl(128) : asset('assets/website/img/favicon.png') }}" alt="" width="36" height="36">
+                    <div>
+                        <strong>{{ $mine ? 'أنت' : 'فريق دعم نفّذها' }}</strong>
+                        <p>{{ $message['content'] }}</p>
+                        @if ($message['file'])
+                            <a href="{{ asset('assets/uploads/tickets/' . $message['file']) }}" target="_blank" rel="noopener" class="rf-tk-file"><i class="bi bi-paperclip" aria-hidden="true"></i> عرض المرفق</a>
+                        @endif
+                        @if (! empty($message['created_at']))<small>{{ \Illuminate\Support\Carbon::parse($message['created_at'])->diffForHumans() }}</small>@endif
                     </div>
-                </div>
-                <!-- Item Wrap Start -->
-                <!-- Item Wrap Start -->
-                <div class="col-xl-9 col-lg-8 col-md-12 col-sm-12">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <!-- Breadcrumbs -->
-                            <div class="bredcrumb_wrap">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="{{ url('/') }}"> الرئيسية </a></li>
-                                        <li class="breadcrumb-item"><a href="{{ url('dashboard') }}"> حسابي </a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"> تفاصيل التذكرة </li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tickets_page">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <div class="messages-container margin-top-0">
-                                    <div class="messages-headline">
-                                        <h4> تفاصيل التذكرة </h4>
-                                    </div>
-
-                                    <div class="messages-container-inner">
-                                        <!-- Message Content -->
-                                        <div class="dash-msg-content">
-                                            @foreach ($messages as $message)
-                                                <div
-                                                    class="message-plunch {{ $message['sender_type'] == 'user' ? 'me' : '' }}">
-                                                    <div class="dash-msg-avatar">
-                                                        @if ($message['sender_type'] == 'user' && Auth::user()->image != '')
-                                                            <img src="{{ optional(Auth::user())->avatarUrl(128) }}"
-                                                                class="img-fluid rounded" alt="">
-                                                        @else
-                                                            <img src="{{ asset('assets/website/img/favicon.png') }}"
-                                                                class="img-fluid rounded" alt="">
-                                                        @endif
-                                                    </div>
-
-                                                    <div class="dash-msg-text">
-                                                        <h6 class="user_name">
-                                                            {{ $message['sender_type'] == 'user' ? Auth::user()->user_name : 'فريق دعم نفذها' }}
-                                                        </h6>
-                                                        <p> {{ $message['content'] }} </p>
-                                                        @if ($message['file'])
-                                                            <a href="{{ asset('assets/uploads/tickets/' . $message['file']) }}"
-                                                                target="_blank">
-                                                                <button class="btn btn-primary btn-sm mt-2">
-                                                                    <i class="bi bi-file-earmark-pdf"></i> عرض الملف
-                                                                </button>
-                                                            </a>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            @endforeach
-
-                                            <div class="clearfix"></div>
-                                            <form method="POST" action="{{ url('message/create/' . $ticket_id) }}"
-                                                enctype="multipart/form-data">
-                                                @csrf
-                                                <div class="message-reply">
-
-                                                    <textarea name="message" required class="form-control with-light" placeholder=" اكتب رسالتك  "></textarea>
-                                                    <div class="form-group mt-2">
-                                                        <label for="file">إضافة ملف</label>
-                                                        <input type="file" name="file" class="form-control"
-                                                            accept="image/*">
-                                                    </div>
-                                                    <button type="submit" class="btn dark-2"> ارسال <i
-                                                            class="bi bi-send"></i> </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-    <!-- ============================ Main Section End ================================== -->
+                </li>
+            @endforeach
+        </ol>
+        <form method="POST" action="{{ url('message/create/' . $ticket_id) }}" enctype="multipart/form-data" class="rf-tk-form rf-tk-reply">
+            @csrf
+            <label for="tk-reply">ردك</label>
+            <textarea id="tk-reply" name="message" rows="4" required class="form-control" placeholder="اكتب رسالتك"></textarea>
+            <label for="tk-file">إرفاق صورة (اختياري)</label>
+            <input id="tk-file" type="file" name="file" class="form-control" accept="image/*">
+            <button type="submit" class="btn btn-primary mt-3"><i class="bi bi-send" aria-hidden="true"></i> إرسال</button>
+        </form>
+    </div>
 @endsection

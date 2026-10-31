@@ -42,7 +42,9 @@ class FreelancerAdminController extends Controller
         $counts = User::where('account_type', User::TYPE_FREELANCER)->selectRaw('freelancer_status, COUNT(*) as total')->groupBy('freelancer_status')->pluck('total', 'freelancer_status');
         $counts['ready'] = User::readyForReview()->count();
 
-        return view('admin.freelancers.index', compact('freelancers', 'status', 'counts'));
+        $canDelete = \App\Support\StaffPermissions::isManager(auth()->user());
+
+        return view('admin.freelancers.index', compact('freelancers', 'status', 'counts', 'canDelete'));
     }
 
     public function show(User $freelancer)
@@ -51,7 +53,28 @@ class FreelancerAdminController extends Controller
         $freelancer->load('specializations:id,name');
         $portfolio = UserPortfolio::where('user_id', $freelancer->id)->latest('id')->limit(12)->get();
 
-        return view('admin.freelancers.show', compact('freelancer', 'portfolio'));
+        $canDelete = \App\Support\StaffPermissions::isManager(auth()->user());
+        $deleteBlockers = $canDelete ? app(\App\Services\Admin\UserDeletion::class)->blockers($freelancer) : [];
+
+        return view('admin.freelancers.show', compact('freelancer', 'portfolio', 'canDelete', 'deleteBlockers'));
+    }
+
+    /**
+     * Permanent deletion (user request 2026-10-31, for test accounts). Manager only; refused, with the
+     * reason, while the freelancer has money or project history (UserDeletion::blockers) — block him instead.
+     */
+    public function destroy(User $freelancer, \App\Services\Admin\UserDeletion $deletion)
+    {
+        abort_unless($freelancer->isFreelancer(), 404);
+        abort_unless(\App\Support\StaffPermissions::isManager(auth()->user()), 403, 'حذف الحسابات للمدير فقط');
+
+        if ($reasons = $deletion->blockers($freelancer)) {
+            return back()->withErrors(['delete' => 'لا يمكن حذف «' . $freelancer->name . '»: ' . implode('، ', $reasons) . '. يمكنك حظره من «كل المستخدمين» بدلًا من الحذف.']);
+        }
+        $name = $freelancer->name;
+        $deletion->delete($freelancer);
+
+        return redirect()->route('admin.freelancers.index')->with('success', 'حُذف المستقل «' . $name . '» وكل بياناته نهائيًا');
     }
 
     /** The admin opened a WhatsApp chat with the number and got an answer. */

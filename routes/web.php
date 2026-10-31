@@ -100,6 +100,30 @@ Route::group(
         Route::get('projects/diagnose/result', [\App\Http\Controllers\front\DiagnoseController::class, 'result'])->name('diagnose.result');
         Route::get('projects/new', [\App\Http\Controllers\front\ProjectPostController::class, 'create'])->name('projects.new');
         Route::post('projects/new', [\App\Http\Controllers\front\ProjectPostController::class, 'store'])->middleware('throttle:10,60')->name('projects.store');
+        // «نفّذها للأعمال | للشركات» (client file «قسم الشركات», phase 1): the free path is open to visitors.
+        Route::controller(\App\Http\Controllers\front\BusinessController::class)->group(function () {
+            Route::get('business', 'index')->name('business.index');
+            Route::post('business/free', 'storeFree')->middleware('throttle:30,60')->name('business.free');
+            Route::middleware(['auth', 'account.type'])->group(function () {
+                Route::get('business/request', 'guided')->name('business.guided');
+                Route::post('business/request', 'storeGuided')->middleware('throttle:30,60')->name('business.guided.store');
+                Route::get('my/business', 'mine')->name('business.mine');
+                Route::get('my/business/requests/{businessRequest}', 'showRequest')->where('businessRequest', 'BIZ-[0-9]+')->name('business.requests.show');
+                Route::post('my/business/requests/{businessRequest}/decide', 'decide')->where('businessRequest', 'BIZ-[0-9]+')->name('business.requests.decide');
+                Route::post('my/business/requests/{businessRequest}/pay', 'pay')->where('businessRequest', 'BIZ-[0-9]+')->name('business.requests.pay');
+                Route::get('my/business/projects/{businessProject}', 'showProject')->where('businessProject', 'BPR-[0-9]+')->name('business.projects.show');
+                Route::post('my/business/deliveries/{delivery}/review', 'review')->whereNumber('delivery')->name('business.deliveries.review');
+                Route::get('business/files/request/{file}', 'requestFile')->whereNumber('file')->name('business.files.request');
+                Route::get('business/files/delivery/{file}', 'deliveryFile')->whereNumber('file')->name('business.files.delivery');
+            });
+        });
+        // «شاركنا اقتراحك» (client file «نظام الاقتراحات»): visitors may send too; flood limit here, 5 saved suggestions per hour in the controller.
+        Route::get('suggestions', [\App\Http\Controllers\front\SuggestionController::class, 'create'])->name('suggestions.create');
+        Route::post('suggestions', [\App\Http\Controllers\front\SuggestionController::class, 'store'])->middleware('throttle:30,60')->name('suggestions.store');
+        Route::middleware('auth')->group(function () {
+            Route::get('my/suggestions', [\App\Http\Controllers\front\SuggestionController::class, 'mine'])->name('suggestions.mine');
+            Route::get('my/suggestions/{code}', [\App\Http\Controllers\front\SuggestionController::class, 'show'])->where('code', 'SUG-[0-9]+')->name('suggestions.show');
+        });
         Route::middleware('auth')->group(function () {
             Route::get('services/help', [ServicesPageController::class, 'helpLogin'])->name('services.help.login');
             Route::post('services/help', [ServicesPageController::class, 'storeHelp'])->middleware('throttle:5,60')->name('services.help.store');

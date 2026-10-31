@@ -2,6 +2,9 @@
     $footer = \App\Support\SiteContent::first('footer.main');
     $footerLinks = \App\Support\SiteContent::items('footer.links');
     $footerSocial = \App\Support\SiteContent::items('footer.social');
+    // «ساهم في تطوير نفّذها» (client file «نظام الاقتراحات»): text and visibility from the content admin.
+    $suggest = \App\Support\SiteContent::first('suggestions.footer');
+    $showSuggest = ($suggest['show'] ?? '1') !== '0' && filled($suggest['button']);
     $floatingWhatsapp = preg_replace('/\D/', '', (string) $footer['whatsapp']);
 @endphp
 <footer class="dark-footer skin-dark-footer text-right" dir="rtl">
@@ -36,7 +39,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-4">
+                <div class="{{ $showSuggest ? 'col-lg-3 col-md-6' : 'col-lg-6 col-md-4' }}">
                     <div class="footer-widget">
                         <h4 class="widget-title"> {{ $footer['social_title'] ?: __('public.follow_us') }} </h4>
                         <ul class="footer-bottom-social">
@@ -47,6 +50,18 @@
                         </ul>
                     </div>
                 </div>
+                @if ($showSuggest)
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget nf-footer-suggest">
+                            @if ($suggest['title'])<h4 class="widget-title">{{ $suggest['title'] }}</h4>@endif
+                            @if ($suggest['text'])<p>{{ $suggest['text'] }}</p>@endif
+                            <a href="{{ route('suggestions.create') }}" class="btn nf-footer-suggest-btn"
+                               aria-label="{{ $suggest['button'] }} — {{ $suggest['title'] ?: 'ساهم في تطوير نفّذها' }}">
+                                <i class="bi bi-lightbulb" aria-hidden="true"></i> {{ $suggest['button'] }}
+                            </a>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -95,7 +110,6 @@
 <script src="{{ \App\Support\AssetVersion::url('assets/website/js/phone-picker.js') }}"></script>
 <script src="{{ \App\Support\AssetVersion::url('assets/website/js/interface.js') }}" defer></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
 
 @notifyJs
 @toastifyJs

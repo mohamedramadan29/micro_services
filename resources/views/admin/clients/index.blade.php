@@ -1,7 +1,10 @@
 @extends('admin.layouts.master')
-@php use App\Services\ServiceRequests\ClientClassifier as C; @endphp
+@php
+    use App\Services\ServiceRequests\ClientClassifier as C;
+    $categoryLabel = $category ? (C::CATEGORIES[$category]['label'] ?? 'مسجّلون بلا طلبات بعد') : null;
+@endphp
 @section('title')
-    العملاء{{ $category ? ' — ' . C::CATEGORIES[$category]['label'] : '' }}
+    العملاء{{ $categoryLabel ? ' — ' . $categoryLabel : '' }}
 @endsection
 @section('css')
     @include('admin.clients.partials.style')
@@ -19,11 +22,11 @@
     <div class="row row-sm">
         <div class="col-lg-8">
             <div class="card">
-                <div class="card-header"><h6 class="mb-0">قائمة العملاء {{ $category ? '— ' . C::CATEGORIES[$category]['label'] : '' }} ({{ $clients->total() }})</h6></div>
+                <div class="card-header"><h6 class="mb-0">قائمة العملاء {{ $categoryLabel ? '— ' . $categoryLabel : '' }} ({{ $clients->total() }})</h6></div>
                 <div class="card-body">
                     <form method="GET" class="mb-3 d-flex" style="gap: 8px">
                         @if ($category)<input type="hidden" name="category" value="{{ $category }}">@endif
-                        <input type="search" name="q" value="{{ request('q') }}" class="form-control" placeholder="ابحث بالاسم أو الهاتف أو البريد">
+                        <input type="search" name="q" value="{{ $search }}" class="form-control" placeholder="ابحث بالاسم أو الهاتف أو البريد">
                         <select name="service" class="form-control" style="max-width: 220px">
                             <option value="">كل الخدمات</option>
                             @foreach ($services as $item)
@@ -45,9 +48,15 @@
                                                 @foreach ($row['tags'] as $tag)
                                                     <span class="cl-tag cl-tag-{{ $tag }}">{{ C::CATEGORIES[$tag]['label'] }}</span>
                                                 @endforeach
+                                                @if (! empty($row['new_account']))
+                                                    <span class="cl-tag cl-tag-no_requests">مسجّل بلا طلبات بعد</span>
+                                                @endif
                                             </div>
                                         </td>
-                                        <td>{{ $row['last_activity']?->diffForHumans() }}</td>
+                                        <td>
+                                            {{ $row['last_activity']?->diffForHumans() ?? '—' }}
+                                            @if (! empty($row['new_account']))<small class="d-block cl-muted">تاريخ التسجيل</small>@endif
+                                        </td>
                                         <td>{{ $row['requests'] }}</td>
                                         <td><a href="{{ route('admin.clients.show', $row['user']) }}" class="btn btn-sm btn-primary">ملف العميل</a></td>
                                     </tr>
@@ -66,11 +75,17 @@
             <div class="card">
                 <div class="card-header"><h6 class="mb-0">التصنيفات (بالترتيب المطلوب)</h6></div>
                 <div class="list-group list-group-flush cl-cats">
-                    <a href="{{ route('admin.clients.index', array_filter(['q' => request('q'), 'service' => $service])) }}" class="list-group-item list-group-item-action {{ $category ? '' : 'active' }}">
+                    <a href="{{ route('admin.clients.index', array_filter(['q' => $search, 'service' => $service])) }}" class="list-group-item list-group-item-action {{ $category ? '' : 'active' }}">
                         <span class="cl-num">∗</span><span class="flex-fill">كل العملاء</span><span class="badge badge-light">{{ $total }}</span>
                     </a>
+                    @php($noRequests = \App\Http\Controllers\admin\ClientController::NO_REQUESTS)
+                    <a href="{{ route('admin.clients.index', array_filter(['category' => $noRequests, 'q' => $search])) }}" class="list-group-item list-group-item-action {{ $category === $noRequests ? 'active' : '' }}">
+                        <span class="cl-num">+</span>
+                        <span class="flex-fill">مسجّلون بلا طلبات بعد<br><small class="{{ $category === $noRequests ? '' : 'cl-muted' }}">حسابات عملاء جديدة لم ترسل أي طلب؛ تابعهم ليبدؤوا</small></span>
+                        <span class="badge badge-light">{{ $counts[$noRequests] }}</span>
+                    </a>
                     @foreach (C::CATEGORIES as $key => $meta)
-                        <a href="{{ route('admin.clients.index', array_filter(['category' => $key, 'q' => request('q'), 'service' => $service])) }}" class="list-group-item list-group-item-action {{ $category === $key ? 'active' : '' }}">
+                        <a href="{{ route('admin.clients.index', array_filter(['category' => $key, 'q' => $search, 'service' => $service])) }}" class="list-group-item list-group-item-action {{ $category === $key ? 'active' : '' }}">
                             <span class="cl-num">{{ $loop->iteration }}</span>
                             <span class="flex-fill">{{ $meta['label'] }}<br><small class="{{ $category === $key ? '' : 'cl-muted' }}">{{ $meta['hint'] }}{{ $key === 'repeat' ? ' (' . $threshold . ' طلبات أو أكثر)' : '' }}</small></span>
                             <span class="badge badge-light">{{ $counts[$key] }}</span>

@@ -1,31 +1,15 @@
 @extends('website.layouts.master')
-@section('title')
-    سياسة الخصوصية لمنصة نفذها
-@endsection
+@section('title')سياسة الخصوصية لمنصة نفّذها | نفّذها@endsection
 @section('content')
-    <!-- End Navigation -->
-    <div class="clearfix"></div>
-    <!-- ============================ Page Title Start================================== -->
-    <div class="page-title" style="height: 400px; text-align: right">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-
-                    <h2 class="ipt-title"> سياسة الخصوصية لمنصة نفذها
-                    </h2>
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ============================ Page Title End ================================== -->
-
-    <!-- ============================ Main Section Start ================================== -->
-    <div class="text-right privacy_page" dir="rtl">
-        <div class="container">
-            <!-- Single blog Grid -->
-            <div class="data">
+<section class="rf-pp rf-legal" dir="rtl">
+    <div class="container">
+        <nav class="rf-pp-trail" aria-label="مسار الصفحة">
+            <a href="{{ url('/') }}">الرئيسية</a> <span aria-hidden="true">‹</span> <span>سياسة الخصوصية</span>
+        </nav>
+        <header class="rf-sl-head">
+            <div><h1>سياسة الخصوصية لمنصة نفّذها</h1></div>
+        </header>
+        <article class="rf-pp-card rf-legal-body">
                 <p>
                     خصوصيتك هي إحدى أولوياتنا القصوى في منصة "نفذها". تهدف هذه السياسة إلى شرح كيفية جمع المعلومات
                     واستخدامها وحمايتها عند استخدامك لخدماتنا.
@@ -118,11 +102,7 @@
                     </li>
                 </ul>
                 </p>
-
-
-            </div>
-
-        </div>
+        </article>
     </div>
-    <!-- ============================ Main Section End ================================== -->
+</section>
 @endsection

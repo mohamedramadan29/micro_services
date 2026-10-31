@@ -129,6 +129,25 @@
                     @if ($f->freelancer_reviewed_at)<small class="text-muted d-block mt-2">آخر قرار {{ $f->freelancer_reviewed_at->format('Y-m-d H:i') }}</small>@endif
                 </div>
             </div>
+
+            @if ($canDelete)
+                <div class="card border-danger">
+                    <div class="card-header"><h6 class="mb-0 text-danger">حذف الحساب نهائيًا</h6></div>
+                    <div class="card-body">
+                        @if ($deleteBlockers)
+                            <p class="mb-2">لا يمكن حذف هذا الحساب: {{ implode('، ', $deleteBlockers) }}.</p>
+                            <small class="text-muted">احظره من <a href="{{ url('admin/users?q=' . urlencode($f->email)) }}">كل المستخدمين</a> بدلًا من الحذف، حتى يبقى سجلّ المدفوعات والمشاريع سليمًا.</small>
+                        @else
+                            <p class="text-muted mb-2">يُحذف الحساب مع عروضه ومحادثاته وخدماته الجاهزة وأعماله وتخصصاته. لا يمكن التراجع.</p>
+                            <form method="POST" action="{{ route('admin.freelancers.destroy', $f) }}"
+                                  onsubmit="return confirm('حذف المستقل «{{ addslashes($f->name) }}» نهائيًا؟ لا يمكن التراجع.')">
+                                @csrf
+                                <button class="btn btn-outline-danger btn-block"><i class="fas fa-trash"></i> حذف المستقل</button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 @endsection

@@ -31,6 +31,7 @@ class DashboardStats
     public const PURPOSES = [
         OnlinePayment::PURPOSE_REQUEST => 'طلبات الخدمات',
         OnlinePayment::PURPOSE_CONTRACT_STAGE => 'مراحل المشاريع',
+        OnlinePayment::PURPOSE_BUSINESS => 'نفّذها للأعمال (الشركات)',
         OnlinePayment::PURPOSE_SERVICE_ORDER => 'شراء خدمات',
         OnlinePayment::PURPOSE_PRODUCT_ORDER => 'منتجات',
         OnlinePayment::PURPOSE_PACKAGE => 'باقات',

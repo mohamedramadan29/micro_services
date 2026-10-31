@@ -120,6 +120,49 @@ class RequestSubmission
             'project_title.max' => 'عنوان المشروع طويل (150 حرفًا كحد أقصى)',
             'done_before.required_if' => 'اكتب ما أُنجز في المشروع قبل توقفه وما تبقّى',
         ];
+        $data = $this->answersValidator($request, $visible, $rules, $messages)->validate();
+        $data['visible'] = $visible;
+
+        return $data;
+    }
+
+    /**
+     * Only the form's answers (questions + their files), for other flows that reuse a form built in
+     * «نماذج الخدمات» (the companies' guided request). Returns `answers`, `answer_files`, `visible`.
+     */
+    public function validateAnswers(Request $request): array
+    {
+        $visible = $this->visibleQuestionIds((array) $request->input('answers', []));
+        $data = $this->answersValidator($request, $visible, [], [])->validate();
+        $data['visible'] = $visible;
+
+        return $data;
+    }
+
+    /**
+     * The validated answers as a snapshot list (section, label, type, value) — the question may change
+     * later, the answer keeps what the client saw. File questions carry the uploaded files under `files`.
+     */
+    public function answerRows(array $data, Request $request): array
+    {
+        $answers = (array) ($data['answers'] ?? []);
+        $rows = [];
+        foreach ($data['visible'] as $id) {
+            $question = $this->questions[$id];
+            $value = $this->normalize($question, $answers[$id] ?? null);
+            $files = $question->type === Q::TYPE_FILE ? (array) $request->file("answer_files.$id", []) : [];
+            if ($value === null && ! $files) {
+                continue;
+            }
+            $rows[] = ['question_id' => $question->id, 'section' => $question->section?->title, 'label' => $question->label,
+                'type' => $question->type, 'value' => $value, 'files' => $files];
+        }
+
+        return $rows;
+    }
+
+    private function answersValidator(Request $request, array $visible, array $rules, array $messages): \Illuminate\Validation\Validator
+    {
         $attributes = [];
 
         foreach ($visible as $id) {
@@ -146,10 +189,7 @@ class RequestSubmission
             }
         });
 
-        $data = $validator->validate();
-        $data['visible'] = $visible;
-
-        return $data;
+        return $validator;
     }
 
     private function addQuestionRules(Q $question, array &$rules, array &$messages): void

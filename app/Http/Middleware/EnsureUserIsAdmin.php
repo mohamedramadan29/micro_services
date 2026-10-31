@@ -23,15 +23,21 @@ class EnsureUserIsAdmin
         // Roles of the client file «المربعات الخمسة»: the analyst only looks; the content
         // editor changes site content only (texts as drafts; publishing is the manager's).
         $role = \App\Support\StaffPermissions::role($user);
-        if (in_array($role, ['analyst', 'content'], true)) {
+        // The suggestions handler (client file «نظام الاقتراحات») writes only in his own box.
+        if (in_array($role, ['analyst', 'content', 'suggestions'], true)) {
             $route = (string) $request->route()?->getName();
             $uri = (string) $request->route()?->uri();
             // Legacy pages that change data on a plain link (send a campaign, delete, activate).
             $changesOnGet = (bool) preg_match('#(^|/)(delete|destroy|send|active)(/|$)#', $uri);
             $contentRoute = str_starts_with($route, 'admin.content.') || str_starts_with($route, 'admin.media.') || str_starts_with($route, 'admin.notification-texts.')
                 || (str_starts_with($route, 'admin.landing.') && ! preg_match('/\.(publish|unpublish|destroy|delete)$/', $route));
+            $ownRoute = match ($role) {
+                'content' => $contentRoute,
+                'suggestions' => str_starts_with($route, 'admin.suggestions.'),
+                default => false,
+            };
             $writing = ! $request->isMethodSafe() || $changesOnGet;
-            if ($writing && ! in_array($route, ['logout', 'admin.logout'], true) && ($role === 'analyst' || ! $contentRoute)) {
+            if ($writing && ! in_array($route, ['logout', 'admin.logout'], true) && ! $ownRoute) {
                 abort(403, 'دورك لا يسمح بهذا الإجراء');
             }
         }

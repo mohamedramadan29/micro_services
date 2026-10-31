@@ -65,23 +65,29 @@ class FrontController extends Controller
         return view('website.service-details', compact('service', 'more_servicess', 'seller', 'isOwner'));
     }
 
+    /** Service groups (same records as /services), each with its active services. */
     public function categories()
     {
-        $categories = Category::with('subCategories')->where('status', 1)->paginate(12);
-        // dd($categories);
-        return view('website.categories', compact('categories'));
+        $categories = Category::ordered()->where('status', 1)
+            ->with(['subCategories' => fn ($q) => $q->ordered()->where('status', 1)])
+            ->get()
+            ->filter(fn (Category $group) => $group->subCategories->isNotEmpty())
+            ->values();
+        $readyCounts = Service::active()->selectRaw('sub_cat_id, COUNT(*) as total')->groupBy('sub_cat_id')->pluck('total', 'sub_cat_id');
+
+        return view('website.categories', compact('categories', 'readyCounts'));
     }
 
+    /** One group: its services with «اطلب الخدمة» and the ready-made services count. */
     public function sub_categories($slug)
     {
-        $category = Category::where('slug', $slug)->first();
-        $category_id = $category['id'];
-        if ($category) {
-            $sub_categories = SubCategory::where('parent_id', $category_id)->where('status',1)->paginate(12);
-            return view('website.sub-categories', compact('category', 'sub_categories'));
-        } else {
-            abort(404);
-        }
+        $category = Category::where('slug', $slug)->where('status', 1)->firstOrFail();
+        $sub_categories = SubCategory::where('parent_id', $category->id)->where('status', 1)->ordered()->get();
+        $withForm = \App\Models\ServiceForm::published()->whereIn('sub_category_id', $sub_categories->pluck('id'))->pluck('sub_category_id')->flip();
+        $readyCounts = Service::active()->whereIn('sub_cat_id', $sub_categories->pluck('id'))
+            ->selectRaw('sub_cat_id, COUNT(*) as total')->groupBy('sub_cat_id')->pluck('total', 'sub_cat_id');
+
+        return view('website.sub-categories', compact('category', 'sub_categories', 'withForm', 'readyCounts'));
     }
 
     public function category_services(Request $request, $slug)
@@ -209,15 +215,28 @@ class FrontController extends Controller
     }
 
 
+    /**
+     * The site search (homepage hero): catalog services to request + published ready-made services.
+     * `search` is the query key the homepage form sends.
+     */
     public function search(Request $request)
     {
+        $search = trim((string) $request->string('search'));
+        $like = '%' . str_replace(['%', '_'], ['\%', '\_'], $search) . '%';
 
-        if ($request->isMethod('get')) {
-            $search = $request->input('search');
-            $services = Service::with('category', 'user')->where('name', 'like', '%' . $search . '%')->paginate(12);
-            $categories = Category::with('parents')->withCount('services')->where('status', '1')->get();
-            return view('website.search', compact('services', 'search', 'categories'));
-        }
+        $catalog = $search === '' ? collect() : SubCategory::where('status', 1)
+            ->whereHas('category', fn ($q) => $q->where('status', 1))
+            ->where(fn ($q) => $q->where('name', 'like', $like)->orWhere('description', 'like', $like))
+            ->with('category:id,name')->ordered()->take(8)->get();
+        $withForm = \App\Models\ServiceForm::published()->whereIn('sub_category_id', $catalog->pluck('id'))->pluck('sub_category_id')->flip();
+
+        $services = Service::active()
+            ->with(['subcategory:id,name', 'user:id,name,user_name,image,professional_photo,rate,rating_count'])
+            ->when($search !== '', fn ($query) => $query->where(fn ($q) => $q->where('name', 'like', $like)
+                ->orWhere('tags', 'like', $like)->orWhere('description', 'like', $like)))
+            ->latest('id')->paginate(12)->withQueryString();
+
+        return view('website.search', compact('services', 'search', 'catalog', 'withForm'));
     }
 
     public function getConsultantsByCategory(Request $request)

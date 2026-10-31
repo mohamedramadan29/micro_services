@@ -7,6 +7,7 @@
     .cl-tag-never_completed { background: #f6f6f6; color: #6b7785; }
     .cl-tag-asking { background: #fff4e5; color: #9a5b13; }
     .cl-tag-answering { background: #fdecea; color: #b42318; }
+    .cl-tag-no_requests { background: #fff8e1; color: #8a6100; }
     .cl-cats .list-group-item { display: flex; align-items: center; gap: 10px; }
     .cl-cats .list-group-item.active { background: #3fb697; border-color: #3fb697; }
     .cl-num { width: 26px; height: 26px; border-radius: 50%; border: 1px solid currentColor; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }

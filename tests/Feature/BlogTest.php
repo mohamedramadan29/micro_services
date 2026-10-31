@@ -107,4 +107,37 @@ class BlogTest extends TestCase
 
         $this->assertSame(['مقال قديم محدّث', '2025-01-15'], [$post->fresh()->name, (string) $post->fresh()->publish_date]);
     }
+
+    public function test_admins_add_a_section_and_an_article_from_the_admin_pages(): void
+    {
+        // Check 2026-10-31: the admin creates the blog from zero (sections, then articles) and it shows on /blog.
+        $image = fn () => \Illuminate\Http\UploadedFile::fake()->image('cover.jpg', 800, 450);
+        $seo = ['meta_title' => 'عنوان', 'meta_url_final' => null, 'meta_description' => 'وصف', 'meta_keywords' => 'تسويق'];
+
+        $this->actingAs($this->admin)->get('admin/blog_category/add')->assertOk();
+        $this->actingAs($this->admin)->post('admin/blog_category/add', ['name' => 'ريادة الأعمال', 'description' => 'نصائح للمشاريع', 'status' => 1, 'image' => $image()] + $seo)
+            ->assertSessionHasNoErrors();
+        $section = BlogCategory::where('name', 'ريادة الأعمال')->firstOrFail();
+
+        $this->actingAs($this->admin)->get('admin/blog/add')->assertOk()->assertSee('ريادة الأعمال');
+        $this->actingAs($this->admin)->post('admin/blog/add', ['name' => 'كيف تبدأ مشروعك', 'category_id' => $section->id, 'desc' => '<p>خطوات البداية</p>',
+            'publish_date' => now()->toDateString(), 'status' => 1, 'image' => $image()] + $seo)->assertSessionHasNoErrors();
+        $article = Blog::where('name', 'كيف تبدأ مشروعك')->firstOrFail();
+
+        $this->get(route('blogCategories'))->assertOk()->assertSee('كيف تبدأ مشروعك')->assertSee('ريادة الأعمال');
+        $this->get(route('blogDetails', $article->slug))->assertOk()->assertSee('خطوات البداية', false);
+
+        // Edited and deleted from the admin too.
+        $this->actingAs($this->admin)->post('admin/blog/update/' . $article->id, ['name' => 'كيف تبدأ مشروعك بخطوات واضحة', 'category_id' => $section->id,
+            'desc' => '<p>خطوات</p>', 'publish_date' => now()->toDateString(), 'status' => 1] + $seo)->assertSessionHasNoErrors();
+        $this->assertSame('كيف تبدأ مشروعك بخطوات واضحة', $article->fresh()->name);
+        $this->actingAs($this->admin)->post('admin/blog/delete/' . $article->id);
+        $this->assertNull(Blog::find($article->id));
+
+        foreach ([public_path('assets/uploads/Blogs/' . $article->image), public_path('assets/uploads/BlogCategory/' . $section->image)] as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
+    }
 }

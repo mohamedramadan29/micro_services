@@ -45,7 +45,16 @@
                                         {!! $freelancer->isReadyForReview() ? '<span class="badge badge-success">جاهز للمراجعة</span>' : '<span class="badge badge-light">لم يكمل بياناته</span>' !!}
                                     @endif
                                     @if ($freelancer->is_featured)<span class="badge badge-info">موثوق</span>@endif</td>
-                                <td><a href="{{ route('admin.freelancers.show', $freelancer) }}" class="btn btn-sm btn-light">مراجعة</a></td>
+                                <td class="text-nowrap">
+                                    <a href="{{ route('admin.freelancers.show', $freelancer) }}" class="btn btn-sm btn-light">مراجعة</a>
+                                    @if ($canDelete)
+                                        <form method="POST" action="{{ route('admin.freelancers.destroy', $freelancer) }}" class="d-inline"
+                                              onsubmit="return confirm('حذف المستقل «{{ addslashes($freelancer->name) }}» نهائيًا مع عروضه ومحادثاته وأعماله؟ لا يمكن التراجع.')">
+                                            @csrf
+                                            <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i> حذف</button>
+                                        </form>
+                                    @endif
+                                </td>
                             </tr>
                         @empty
                             <tr><td colspan="6" class="text-center text-muted">لا يوجد مستقلون.</td></tr>
